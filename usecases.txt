@@ -1,0 +1,16 @@
+User stories
+MTLY-001: As a user I want to create a persistently stored metric and assign it a name
+    * A non-guessable read-only link for viewing the metric's current value will be generated
+    * An non-guessable admin link with a decently sized secret will be generated to allow modifying the metric's value
+MTLY-002: As a user I want to view a metric's current value
+    * By calling the metric's read-only link, its current value is displayed as a tally list
+MTLY-003: As a user I want to record an increment to a previously created metric caused by a certain event in my life
+    * By calling the metric's admin link, a page which offers to create an increment will be shown
+    * The following information will be stored
+      - Time of when increment was called
+      - User supplied event date (defaults to 'now')
+      - Set of tags describing the real live event
+MTLY-004: As a user I want to display the metric's development for certain range of time
+MTLY-005: As a user I want to be able to remove wrongly/accidently added incrementation events
+MTLY-020: As a user I want to easily share a metric's value using a badge image
+MTLY-021: As a user I want to easily share a badge via twitter/fb/insta/whatever
