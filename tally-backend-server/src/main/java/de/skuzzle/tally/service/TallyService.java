@@ -50,7 +50,7 @@ public class TallyService {
 
         final LocalDateTime createDate = dateTimeProvider.getNow().map(LocalDateTime::from)
                 .orElseThrow(IllegalStateException::new);
-        increment.setCreateDate(createDate);
+        increment.setCreateDateUTC(createDate);
 
         tallySheet.getIncrements().add(increment);
         return repository.save(tallySheet);

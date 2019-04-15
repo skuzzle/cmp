@@ -4,7 +4,7 @@ org.springframework.cloud.contract.spec.Contract.make {
     name("getExistingTallySheet")
     request {
         method GET()
-        url $(consumer(~/\/public\/[a-z]+/), producer(execute('existingTallySheetPublicUri()')))
+        url '/public/publicKey'
         headers {}
     }
     response {
@@ -15,18 +15,15 @@ org.springframework.cloud.contract.spec.Contract.make {
                 producer(regex('[a-zA-Z0-9]+'))
             ),
             name: 'existing',
-            publicKey: $(
-                consumer('12345678'), 
-                producer(regex('[a-zA-Z0-9]{8}'))
-            ),
+            publicKey: 'publicKey',
             adminKey: null,
-            createDate: $(
-                consumer('1987-12-09T11:11:00'),
-                producer(regex('\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d+'))
+            createDateUTC: $(
+                consumer('1987-09-12T11:11:00'),
+                producer(regex(isoDateTime()))
             ),
-            lastModifiedDate: $(
-                consumer('1987-12-09T11:11:00'),
-                producer(regex('\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d+'))
+            lastModifiedDateUTC: $(
+                consumer('1987-09-12T11:11:00'),
+                producer(regex(isoDateTime()))
             ),
             increments: []
         ])

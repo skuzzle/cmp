@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="fragments/head :: head"></head>
+<body>
+<section class="section">
+    <div class="container">
+        <div class="columns is-centered">
+
+            <div class="column">
+                <h1 class="title">
+                    Create your new Tally-Sheet!
+                </h1>
+                <p class="subtitle">
+                    My first website with <strong>Bulma</strong>!
+                </p>
+
+                <form method="post" th:action="@{/tally}" >
+                    <div class="field has-addons">
+                        <div class="control">
+                            <input class="input" name="name" type="text" placeholder="Name your tally sheet" required="true" autofocus="true">
+                        </div>
+                        <div class="control">
+                            <input type="submit" class="button is-info" value="New Tally"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

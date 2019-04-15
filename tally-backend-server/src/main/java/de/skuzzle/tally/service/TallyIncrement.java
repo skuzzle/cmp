@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
@@ -16,8 +17,8 @@ public class TallyIncrement {
     @NotNull
     private String description;
 
-    @DateTimeFormat(iso = ISO.DATE_TIME)
-    private LocalDateTime createDate;
+    @JsonFormat(pattern = TallySheet.DATE_FORMAT)
+    private LocalDateTime createDateUTC;
 
     public TallyIncrement() {
     }
@@ -38,11 +39,11 @@ public class TallyIncrement {
         this.description = description;
     }
 
-    void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
+    void setCreateDateUTC(LocalDateTime createDateUTC) {
+        this.createDateUTC = createDateUTC;
     }
 
-    public LocalDateTime getCreateDate() {
-        return this.createDate;
+    public LocalDateTime getCreateDateUTC() {
+        return this.createDateUTC;
     }
 }

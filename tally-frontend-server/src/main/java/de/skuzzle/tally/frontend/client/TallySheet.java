@@ -19,8 +19,8 @@ public class TallySheet {
     private String publicKey;
     @NotNull
     private List<TallyIncrement> increments;
-    private LocalDateTime createDate;
-    private LocalDateTime lastModifiedDate;
+    private LocalDateTime createDateUTC;
+    private LocalDateTime lastModifiedDateUTC;
 
     public String getName() {
         return this.name;
@@ -70,11 +70,11 @@ public class TallySheet {
         this.increments = increments;
     }
 
-    public LocalDateTime getLastModifiedDate() {
-        return this.lastModifiedDate;
+    public LocalDateTime getLastModifiedDateUTC() {
+        return this.lastModifiedDateUTC;
     }
 
-    public LocalDateTime getCreateDate() {
-        return this.createDate;
+    public LocalDateTime getCreateDateUTC() {
+        return this.createDateUTC;
     }
 }

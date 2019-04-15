@@ -39,6 +39,7 @@ public class TallyRestController {
     }
 
     @DeleteMapping("/admin/{key}")
+    @ResponseStatus(HttpStatus.OK)
     public void deleteTallySheet(@PathVariable String key) {
         tallyService.deleteTallySheet(key);
     }

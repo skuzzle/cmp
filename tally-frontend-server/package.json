@@ -1,0 +1,23 @@
+{
+  "name": "tally-css",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sass/main.css",
+  "scripts": {
+    "build": "node-sass --output-style compressed src/main/sass -o target/classes/static/css",
+    "watch": "nodemon -e scss -x \"npm run build\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Simon Taddiken",
+  "license": "MIT",
+  "devDependencies": {
+    "node-sass": "^4.9.3",
+    "nodemon": "^1.18.4"
+  },
+  "dependencies": {
+    "bulma": "^0.7.4",
+    "bulma-badge": "^3.0.0",
+    "bulma-divider": "^2.0.1",
+    "bulma-timeline": "^3.0.0"
+  }
+}

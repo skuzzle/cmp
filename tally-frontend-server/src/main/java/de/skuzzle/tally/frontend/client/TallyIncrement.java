@@ -12,7 +12,7 @@ public class TallyIncrement {
 
     @NotNull
     private String description;
-    private LocalDateTime createDate;
+    private LocalDateTime createDateUTC;
 
     public TallyIncrement() {
     }
@@ -33,11 +33,11 @@ public class TallyIncrement {
         this.description = description;
     }
 
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
+    public void setCreateDateUTC(LocalDateTime createDateUTC) {
+        this.createDateUTC = createDateUTC;
     }
 
-    public LocalDateTime getCreateDate() {
-        return this.createDate;
+    public LocalDateTime getCreateDateUTC() {
+        return this.createDateUTC;
     }
 }

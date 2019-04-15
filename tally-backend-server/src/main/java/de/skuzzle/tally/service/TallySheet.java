@@ -6,16 +6,19 @@ import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @Document
 public class TallySheet {
+
+    static final String DATE_FORMAT = "yyyy-MM-dd'T'hh:mm:ss";
 
     @Id
     private String id;
@@ -25,19 +28,21 @@ public class TallySheet {
     @NotEmpty
     private String name;
     @NotEmpty
+    @Indexed
     private String adminKey;
     @NotEmpty
+    @Indexed
     private String publicKey;
     @NotNull
     private List<TallyIncrement> increments;
 
     // dates in UTC+0
     @CreatedDate
-    @DateTimeFormat(iso = ISO.DATE_TIME)
-    private LocalDateTime createDate;
+    @JsonFormat(pattern = TallySheet.DATE_FORMAT)
+    private LocalDateTime createDateUTC;
     @LastModifiedDate
-    @DateTimeFormat(iso = ISO.DATE_TIME)
-    private LocalDateTime lastModifiedDate;
+    @JsonFormat(pattern = TallySheet.DATE_FORMAT)
+    private LocalDateTime lastModifiedDateUTC;
 
     public String getName() {
         return this.name;
@@ -87,19 +92,19 @@ public class TallySheet {
         this.increments = increments;
     }
 
-    public LocalDateTime getLastModifiedDate() {
-        return this.lastModifiedDate;
+    public LocalDateTime getLastModifiedDateUTC() {
+        return this.lastModifiedDateUTC;
     }
 
-    void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
+    void setLastModifiedDateUTC(LocalDateTime lastModifiedDate) {
+        this.lastModifiedDateUTC = lastModifiedDate;
     }
 
-    public LocalDateTime getCreateDate() {
-        return this.createDate;
+    public LocalDateTime getCreateDateUTC() {
+        return this.createDateUTC;
     }
 
-    void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
+    void setCreateDateUTC(LocalDateTime createDate) {
+        this.createDateUTC = createDate;
     }
 }

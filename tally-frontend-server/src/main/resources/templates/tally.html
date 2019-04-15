@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments/head :: head"></head>
+<body>
+<section class="section">
+    <div class="container">
+        <div class="columns is-centered">
+
+            <div class="column">
+                <h1 class="title">
+                    <span th:text="${tally.name}">Sheet name</span>
+
+                    <span class="subtitle">
+                        <a th:href="@{/tally/{publicKey}(publicKey=${tally.publicKey})}" th:text="${tally.publicKey}">Read-Only:
+                            http://tally.io/123547</a>
+                    </span>
+                </h1>
+                <p class="subtitle" th:text="'Count: ' + ${tally.increments.size()}">
+                    Count: 17
+                </p>
+                <form method="post" th:action="@{/tally/{adminKey}(adminKey=${tally.adminKey})}">
+                    <div class="field has-addons">
+                        <div class="control">
+                            <input class="input" name="description" type="text" placeholder="Description" required="true">
+                        </div>
+                        <div class="control">
+                            <input type="submit" class="button is-info" value="Increment"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

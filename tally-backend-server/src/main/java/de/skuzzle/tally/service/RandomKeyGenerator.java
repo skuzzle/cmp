@@ -18,6 +18,7 @@ class RandomKeyGenerator {
             final char c = chars[idx];
             result.append(c);
         }
+
         return result.toString();
     }
 

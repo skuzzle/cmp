@@ -27,8 +27,8 @@ public class TallyServiceIntegrationTest {
             softly.assertThat(sheet.getAdminKey()).isNotEmpty();
             softly.assertThat(sheet.getName()).isEqualTo("test");
             softly.assertThat(sheet.getPublicKey()).isNotEmpty();
-            softly.assertThat(sheet.getLastModifiedDate()).isNotNull();
-            softly.assertThat(sheet.getCreateDate()).isNotNull();
+            softly.assertThat(sheet.getLastModifiedDateUTC()).isNotNull();
+            softly.assertThat(sheet.getCreateDateUTC()).isNotNull();
         });
     }
 
@@ -58,7 +58,7 @@ public class TallyServiceIntegrationTest {
         final TallyIncrement validIncrement = new TallyIncrement();
         validIncrement.setTags(ImmutableSet.of("pizza"));
         validIncrement.setDescription("test");
-        validIncrement.setCreateDate(LocalDateTime.now());
+        validIncrement.setCreateDateUTC(LocalDateTime.now());
 
         final TallySheet tallySheet = tallyService.createNewTallySheet("increment");
         assertThatExceptionOfType(AccessDeniedException.class)
@@ -90,7 +90,7 @@ public class TallyServiceIntegrationTest {
         final TallyIncrement validIncrement = new TallyIncrement();
         validIncrement.setTags(ImmutableSet.of("pizza"));
         validIncrement.setDescription("test");
-        validIncrement.setCreateDate(LocalDateTime.now());
+        validIncrement.setCreateDateUTC(LocalDateTime.now());
 
         assertThatExceptionOfType(AccessDeniedException.class)
                 .isThrownBy(() -> tallyService.increment("1234", validIncrement));
@@ -108,7 +108,7 @@ public class TallyServiceIntegrationTest {
         assertSoftly(softly -> {
             softly.assertThat(updated.getVersion()).isNotEqualTo(tallySheet.getVersion());
             softly.assertThat(updated.getIncrements()).hasSize(1);
-            softly.assertThat(updated.getIncrements()).first().extracting(TallyIncrement::getCreateDate).isNotNull();
+            softly.assertThat(updated.getIncrements()).first().extracting(TallyIncrement::getCreateDateUTC).isNotNull();
         });
     }
 }
