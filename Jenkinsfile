@@ -9,7 +9,7 @@ pipeline {
     stage('Build') {
       steps {
         sh 'mvn versions:set -DnewVersion=${BUILD_NUMBER}'
-        sh 'mvn clean verify -Pcreate-image'
+        sh 'mvn clean install -Pcreate-image'
       }
     }
   }
