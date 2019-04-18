@@ -45,7 +45,7 @@
     <div class="container">
         <div class="columns is-centered">
             <div class="column has-text-centered is-4">
-                <p class="title is-size-1" th:text="${tally.increments.size()}">1234</p>
+                <p class="title is-size-0" th:text="${tally.increments.size()}">1234</p>
 
             </div>
         </div>
@@ -83,7 +83,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="increment : ${tally.increments}">
+                    <tr th:each="increment : ${tally.getHistory(10)}">
                         <td><time class="is-date-utc" th:text="${increment.createDateUTC}"></time></td>
                         <td th:text="${increment.description}"></td>
                     </tr>

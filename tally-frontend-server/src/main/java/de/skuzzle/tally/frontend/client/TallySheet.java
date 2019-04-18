@@ -1,6 +1,9 @@
 package de.skuzzle.tally.frontend.client;
 
+import com.google.common.collect.Lists;
+
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
@@ -84,5 +87,9 @@ public class TallySheet {
 
     public boolean hasIncrements() {
         return !increments.isEmpty();
+    }
+
+    public List<TallyIncrement> getHistory(int max) {
+        return Lists.reverse(getIncrements()).subList(0, Math.min(getIncrements().size(), max));
     }
 }
