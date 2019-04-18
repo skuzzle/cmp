@@ -59,7 +59,7 @@
                 <form method="post" th:action="@{/{adminKey}(adminKey=${tally.adminKey})}">
                     <div class="field has-addons">
                         <div class="control is-expanded">
-                            <input class="input" name="description" type="text" placeholder="Description" required="true">
+                            <input class="input" name="description" type="text" placeholder="Description" required="true" autofocus="true">
                         </div>
                         <div class="control">
                             <input type="submit" class="button is-info" value="Increment"/>
