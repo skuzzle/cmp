@@ -25,22 +25,22 @@ public class TallyController {
         this.client = client;
     }
 
-    @PostMapping("/tally")
+    @PostMapping("/_create")
     public String createTallySheet(@RequestParam("name") String name) {
         final TallySheet tallySheet = client.createNewTallySheet(name).orElseThrow();
-        return "redirect:/tally/" + tallySheet.getAdminKey();
+        return "redirect:/" + tallySheet.getAdminKey();
     }
 
-    @PostMapping("/tally/{adminKey}")
+    @PostMapping("/{adminKey}")
     public String incrementTallySheet(@PathVariable("adminKey") String adminKey, @RequestParam("description") String description) {
         final TallyIncrement increment = new TallyIncrement();
         increment.setDescription(description);
         increment.setTags(new HashSet<>());
         final TallySheet tallySheet = client.increment(adminKey, increment).orElseThrow();
-        return "redirect:/tally/" + tallySheet.getAdminKey();
+        return "redirect:/" + tallySheet.getAdminKey();
     }
 
-    @GetMapping("/tally/{key}")
+    @GetMapping("/{key}")
     public ModelAndView showTallySheet(@PathVariable("key") String key) {
         final TallySheet tallySheet = client.getTallySheet(key).orElseThrow();
 

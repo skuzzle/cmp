@@ -1,26 +1,64 @@
 <!DOCTYPE html>
 <html>
-<head th:replace="fragments/head :: head"></head>
+<head th:replace="fragments/head :: head">
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Tally</title>
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <script defer src="https://code.jquery.com/jquery-3.4.0.slim.min.js"></script>
+
+    <link rel="stylesheet" href="../../../../target/classes/static/css/main.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="@{/favicon.ico}"/>
+</head>
 <body>
+<nav class="navbar">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item is-size-4" th:href="@{/}">
+                tally.io
+            </a>
+        </div>
+    </div>
+</nav>
+
+<section class="hero is-info is-bold">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title is-capitalized	" th:text="${tally.name}">
+                Pizza Count 2018
+            </h1>
+            <h2 class="subtitle">
+                <a th:href="@{/{publicKey}(publicKey=${tally.publicKey})}" th:text="'Share:   ' + ${tally.publicKey}" href="#">Share:
+                    http://tally.io/123547</a>
+            </h2>
+        </div>
+    </div>
+</section>
+
+<div class="notification is-danger is-bold" th:if="${tally.admin}">
+    You are viewing your tally sheet using its admin link. If you want to share this sheet, use the read-only link. Everyone who knows the admin link
+    will be able to update/delete this tally sheet!
+</div>
+
 <section class="section">
     <div class="container">
         <div class="columns is-centered">
+            <div class="column has-text-centered is-4">
+                <p class="title is-size-1" th:text="${tally.increments.size()}">1234</p>
 
-            <div class="column">
-                <h1 class="title">
-                    <span th:text="${tally.name}">Sheet name</span>
+            </div>
+        </div>
+    </div>
+</section>
 
-                    <span class="subtitle">
-                        <a th:href="@{/tally/{publicKey}(publicKey=${tally.publicKey})}" th:text="${tally.publicKey}">Read-Only:
-                            http://tally.io/123547</a>
-                    </span>
-                </h1>
-                <p class="subtitle" th:text="'Count: ' + ${tally.increments.size()}">
-                    Count: 17
-                </p>
-                <form method="post" th:action="@{/tally/{adminKey}(adminKey=${tally.adminKey})}">
+<section class="section" th:if="${tally.admin}">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-4">
+                <form method="post" th:action="@{/{adminKey}(adminKey=${tally.adminKey})}">
                     <div class="field has-addons">
-                        <div class="control">
+                        <div class="control is-expanded">
                             <input class="input" name="description" type="text" placeholder="Description" required="true">
                         </div>
                         <div class="control">
@@ -28,6 +66,29 @@
                         </div>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section" th:if="${tally.hasIncrements()}">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-8">
+                <table class="table is-fullwidth">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="increment : ${tally.increments}">
+                        <td><time class="is-date-utc" th:text="${increment.createDateUTC}"></time></td>
+                        <td th:text="${increment.description}"></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

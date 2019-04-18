@@ -77,4 +77,12 @@ public class TallySheet {
     public LocalDateTime getCreateDateUTC() {
         return this.createDateUTC;
     }
+
+    public boolean isAdmin() {
+        return adminKey != null;
+    }
+
+    public boolean hasIncrements() {
+        return !increments.isEmpty();
+    }
 }

@@ -1,22 +1,73 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
-<head th:replace="fragments/head :: head"></head>
+<head th:replace="fragments/head :: head">
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Tally</title>
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <script defer src="https://code.jquery.com/jquery-3.4.0.slim.min.js"></script>
+
+    <link rel="stylesheet" href="../../../../target/classes/static/css/main.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="@{/favicon.ico}"/>
+</head>
 <body>
+<section class="hero is-info is-bold">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">
+                Your Tally Sheet
+            </h1>
+            <h2 class="subtitle">
+                Create and share public counters
+            </h2>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="columns is-centered is-8">
+            <div class="column is-one-fifth">
+                <div class="card">
+                    <div class="card-content has-text-centered">
+                        Col 1
+                    </div>
+                </div>
+            </div>
+            <div class="column is-one-fifth">
+                <div class="card">
+                    <div class="card-content has-text-centered">
+                        Col 2
+                    </div>
+                </div>
+            </div>
+            <div class="column is-one-fifth">
+                <div class="card">
+                    <div class="card-content has-text-centered">
+                        Col 3
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <section class="section">
     <div class="container">
         <div class="columns is-centered">
 
-            <div class="column">
+            <div class="column is-one-third">
                 <h1 class="title">
-                    Create your new Tally-Sheet!
+                    Create your new tally sheet!
                 </h1>
                 <p class="subtitle">
-                    My first website with <strong>Bulma</strong>!
+                    Give your tally sheet a short descriptive name (like Pizza Counter 2018).
                 </p>
 
-                <form method="post" th:action="@{/tally}" >
+                <form method="post" th:action="@{/_create}" >
                     <div class="field has-addons">
-                        <div class="control">
+                        <div class="control is-expanded">
                             <input class="input" name="name" type="text" placeholder="Name your tally sheet" required="true" autofocus="true">
                         </div>
                         <div class="control">
