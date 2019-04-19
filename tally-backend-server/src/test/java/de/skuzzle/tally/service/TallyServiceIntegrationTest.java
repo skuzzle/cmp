@@ -50,7 +50,7 @@ public class TallyServiceIntegrationTest {
 
     @Test
     void testGetTallySheetUnknown() throws Exception {
-        assertThatExceptionOfType(AccessDeniedException.class).isThrownBy(() -> tallyService.getTallySheet("1234"));
+        assertThatExceptionOfType(TallySheetNotAvailableException.class).isThrownBy(() -> tallyService.getTallySheet("1234"));
     }
 
     @Test
@@ -61,19 +61,19 @@ public class TallyServiceIntegrationTest {
         validIncrement.setCreateDateUTC(LocalDateTime.now());
 
         final TallySheet tallySheet = tallyService.createNewTallySheet("increment");
-        assertThatExceptionOfType(AccessDeniedException.class)
+        assertThatExceptionOfType(TallySheetNotAvailableException.class)
                 .isThrownBy(() -> tallyService.increment(tallySheet.getPublicKey(), validIncrement));
     }
 
     @Test
     void testDeleteUnknownAdminKey() throws Exception {
-        assertThatExceptionOfType(AccessDeniedException.class).isThrownBy(() -> tallyService.deleteTallySheet("1234"));
+        assertThatExceptionOfType(TallySheetNotAvailableException.class).isThrownBy(() -> tallyService.deleteTallySheet("1234"));
     }
 
     @Test
     void testDeleteWithPublicKey() throws Exception {
         final TallySheet tallySheet = tallyService.createNewTallySheet("deleteMe");
-        assertThatExceptionOfType(AccessDeniedException.class)
+        assertThatExceptionOfType(TallySheetNotAvailableException.class)
                 .isThrownBy(() -> tallyService.deleteTallySheet(tallySheet.getPublicKey()));
     }
 
@@ -81,7 +81,7 @@ public class TallyServiceIntegrationTest {
     void testDeleteWithAdminKey() throws Exception {
         final TallySheet tallySheet = tallyService.createNewTallySheet("deleteMe");
         tallyService.deleteTallySheet(tallySheet.getAdminKey());
-        assertThatExceptionOfType(AccessDeniedException.class)
+        assertThatExceptionOfType(TallySheetNotAvailableException.class)
                 .isThrownBy(() -> tallyService.getTallySheet(tallySheet.getPublicKey()));
     }
 
@@ -92,7 +92,7 @@ public class TallyServiceIntegrationTest {
         validIncrement.setDescription("test");
         validIncrement.setCreateDateUTC(LocalDateTime.now());
 
-        assertThatExceptionOfType(AccessDeniedException.class)
+        assertThatExceptionOfType(TallySheetNotAvailableException.class)
                 .isThrownBy(() -> tallyService.increment("1234", validIncrement));
     }
 

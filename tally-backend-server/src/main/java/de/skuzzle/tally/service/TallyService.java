@@ -41,12 +41,12 @@ public class TallyService {
             return publicTallySheet;
         }
         return repository.findByAdminKey(publicKey)
-                .orElseThrow(() -> new AccessDeniedException(publicKey));
+                .orElseThrow(() -> new TallySheetNotAvailableException(publicKey));
     }
 
     public TallySheet increment(String adminKey, TallyIncrement increment) {
         final TallySheet tallySheet = repository.findByAdminKey(adminKey)
-                .orElseThrow(() -> new AccessDeniedException(adminKey));
+                .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
 
         final LocalDateTime createDate = dateTimeProvider.getNow().map(LocalDateTime::from)
                 .orElseThrow(IllegalStateException::new);
@@ -58,7 +58,7 @@ public class TallyService {
 
     public void deleteTallySheet(String adminKey) {
         final TallySheet tallySheet = repository.findByAdminKey(adminKey)
-                .orElseThrow(() -> new AccessDeniedException(adminKey));
+                .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
         repository.delete(tallySheet);
     }
 

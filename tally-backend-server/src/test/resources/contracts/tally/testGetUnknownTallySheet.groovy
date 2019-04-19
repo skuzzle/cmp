@@ -8,7 +8,7 @@ org.springframework.cloud.contract.spec.Contract.make {
         headers {}
     }
     response {
-        status FORBIDDEN()
+        status NOT_FOUND()
         headers {}
     }
 }

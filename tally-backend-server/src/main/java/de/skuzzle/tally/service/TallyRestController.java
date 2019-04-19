@@ -5,8 +5,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
 import de.skuzzle.tally.ratelimit.ApiRateLimiter;
+import de.skuzzle.tally.ratelimit.RateLimitExceededException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,8 +29,7 @@ public class TallyRestController {
     }
 
     @GetMapping("/public/{key}")
-    public TallySheet getTally(@PathVariable String key, HttpServletRequest request) {
-        rateLimiter.throttle(request);
+    public TallySheet getTally(@PathVariable String key) {
         return tallyService.getTallySheet(key);
     }
 
@@ -51,4 +53,36 @@ public class TallyRestController {
         rateLimiter.throttle(request);
         tallyService.deleteTallySheet(key);
     }
+
+    @ExceptionHandler(RateLimitExceededException.class)
+    public ResponseEntity<ErrorResponse> onRateLimitExceeded(RateLimitExceededException e) {
+        final ErrorResponse body = new ErrorResponse(e.getMessage(), e.getClass().getName());
+        return new ResponseEntity<>(body, HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
+    }
+
+    @ExceptionHandler(TallySheetNotAvailableException.class)
+    public ResponseEntity<ErrorResponse> onTallySheetNotAvailable(TallySheetNotAvailableException e) {
+        final ErrorResponse body = new ErrorResponse(e.getMessage(), e.getClass().getName());
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    private static class ErrorResponse {
+        private final String message;
+        private final String origin;
+
+        public ErrorResponse(String message, String origin) {
+            this.message = message;
+            this.origin = origin;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public String getOrigin() {
+            return origin;
+        }
+
+    }
+
 }
