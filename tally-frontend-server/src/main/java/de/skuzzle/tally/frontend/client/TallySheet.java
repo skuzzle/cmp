@@ -4,7 +4,9 @@ import com.google.common.collect.Lists;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -90,6 +92,9 @@ public class TallySheet {
     }
 
     public List<TallyIncrement> getHistory(int max) {
-        return Lists.reverse(getIncrements()).subList(0, Math.min(getIncrements().size(), max));
+        return getIncrements().stream()
+                .sorted(Comparator.comparing(TallyIncrement::getCreateDateUTC).reversed())
+                .limit(max)
+                .collect(Collectors.toList());
     }
 }
