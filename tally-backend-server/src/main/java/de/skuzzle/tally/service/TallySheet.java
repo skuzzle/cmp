@@ -18,7 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Document
 public class TallySheet {
 
-    static final String DATE_FORMAT = "yyyy-MM-dd'T'hh:mm:ss";
+    static final String DATE_FORMAT = "yyyy-MM-dd'T'hh:mm:ss'Z'";
 
     @Id
     private String id;

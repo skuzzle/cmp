@@ -18,12 +18,12 @@ org.springframework.cloud.contract.spec.Contract.make {
             publicKey: 'publicKey',
             adminKey: 'adminKey',
             createDateUTC: $(
-                consumer('1987-09-12T11:11:00'),
-                producer(regex(isoDateTime()))
+                consumer('1987-09-12T11:11:00Z'),
+                producer(regex(iso8601WithOffset()))
             ),
             lastModifiedDateUTC: $(
-                consumer('1987-09-12T11:11:00'),
-                producer(regex(isoDateTime()))
+                consumer('1987-09-12T11:11:00Z'),
+                producer(regex(iso8601WithOffset()))
             ),
             increments: []
         ])
