@@ -1,4 +1,4 @@
-package de.skuzzle.tally.ratelimit;
+package de.skuzzle.tally.service;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -11,21 +11,20 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.TimeUnit;
 
-@Component
 public class ApiRateLimiter {
 
     private static final Logger logger = LoggerFactory.getLogger(ApiRateLimiter.class);
 
     private final LoadingCache<String, RateLimiter> limiterCache;
 
-    ApiRateLimiter() {
+    ApiRateLimiter(double rateLimit) {
         this.limiterCache = CacheBuilder.newBuilder()
                 .expireAfterAccess(2, TimeUnit.MINUTES)
                 .build(new CacheLoader<String, RateLimiter>() {
                     @Override
                     public RateLimiter load(String clientIp) throws Exception {
                         logger.debug("Create new rate limiter for ip '{}'", clientIp);
-                        return RateLimiter.create(10);
+                        return RateLimiter.create(rateLimit);
                     }
                 });
     }

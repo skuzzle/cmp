@@ -1,4 +1,4 @@
-package de.skuzzle.tally.ratelimit;
+package de.skuzzle.tally.service;
 
 public class RateLimitExceededException extends RuntimeException {
 }
