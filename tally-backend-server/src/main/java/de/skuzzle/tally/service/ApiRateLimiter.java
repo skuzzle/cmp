@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.TimeUnit;
 
-public class ApiRateLimiter {
+class ApiRateLimiter {
 
     private static final Logger logger = LoggerFactory.getLogger(ApiRateLimiter.class);
 
