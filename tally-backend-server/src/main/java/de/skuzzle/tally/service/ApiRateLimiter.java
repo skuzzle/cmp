@@ -20,6 +20,7 @@ class ApiRateLimiter {
     ApiRateLimiter(double rateLimit) {
         this.limiterCache = CacheBuilder.newBuilder()
                 .expireAfterAccess(2, TimeUnit.MINUTES)
+                .recordStats()
                 .build(new CacheLoader<String, RateLimiter>() {
                     @Override
                     public RateLimiter load(String clientIp) throws Exception {
