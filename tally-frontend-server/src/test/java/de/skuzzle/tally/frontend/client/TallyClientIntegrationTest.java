@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
 import org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,6 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.NONE, properties = "tally.backend.url=http://localhost:6565")
 @AutoConfigureStubRunner(ids = "de.skuzzle.tally:tally-backend:+:stubs:6565",
         stubsMode = StubRunnerProperties.StubsMode.LOCAL)
@@ -26,9 +26,13 @@ public class TallyClientIntegrationTest {
 
     @Test
     void testCreateTallySheet() {
-        final var response = tallyClient.createNewTallySheet("name").orElseThrow(AssertionError::new);
-        assertThat(response.getCreateDateUTC()).isEqualTo(LocalDateTime.of(1987,9,12,11,11,0));
-        assertThat(response.getLastModifiedDateUTC()).isEqualTo(LocalDateTime.of(1987,9,12,11,11,0));
+        final var apiResponse = tallyClient.createNewTallySheet("name");
+        assertThat(apiResponse.isSuccess()).isTrue();
+        assertThat(apiResponse.getStatus()).isEqualTo(HttpStatus.CREATED);
+
+        final TallySheet tallySheet = apiResponse.tallySheet().orElseThrow();
+        assertThat(tallySheet.getCreateDateUTC()).isEqualTo(LocalDateTime.of(1987,9,12,11,11,0));
+        assertThat(tallySheet.getLastModifiedDateUTC()).isEqualTo(LocalDateTime.of(1987,9,12,11,11,0));
     }
 
     @Test
@@ -37,21 +41,30 @@ public class TallyClientIntegrationTest {
         increment.setDescription("Description");
         increment.setTags(Set.of("tag1", "tag2"));
 
-        final var response = tallyClient.increment("adminKey", increment).orElseThrow(AssertionError::new);
-        assertThat(response.getCreateDateUTC()).isEqualTo(LocalDateTime.of(1987,9,12,11,11,0));
-        assertThat(response.getLastModifiedDateUTC()).isEqualTo(LocalDateTime.of(1987,9,12,11,11,0));
+        final var apiResponse = tallyClient.increment("adminKey", increment);
+        assertThat(apiResponse.getStatus()).isEqualTo(HttpStatus.OK);
+
+        final TallySheet tallySheet = apiResponse.tallySheet().orElseThrow();
+        assertThat(tallySheet.getCreateDateUTC()).isEqualTo(LocalDateTime.of(1987,9,12,11,11,0));
+        assertThat(tallySheet.getLastModifiedDateUTC()).isEqualTo(LocalDateTime.of(1987,9,12,11,11,0));
     }
 
     @Test
     void testGetUnknownTallySheet() {
-        final var response = tallyClient.getTallySheet("unknownPublicKey");
-        assertThat(response).isEmpty();
+        final var apiResponse = tallyClient.getTallySheet("unknownPublicKey");
+        assertThat(apiResponse.isError()).isTrue();
+
+        final ErrorResponse errorResponse = apiResponse.error().orElseThrow();
+        assertThat(apiResponse.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(errorResponse.getMessage()).isEqualTo("unknownPublicKey");
+        assertThat(errorResponse.getOrigin()).isEqualTo("de.skuzzle.tally.service.TallySheetNotAvailableException");
     }
 
     @Test
     void testGetExistingTallySheet() {
-        final var response = tallyClient.getTallySheet("publicKey");
-        assertThat(response).isNotEmpty();
+        final var apiResponse = tallyClient.getTallySheet("publicKey");
+        assertThat(apiResponse.getStatus()).isEqualTo(HttpStatus.OK);
+        assertThat(apiResponse.isSuccess());
     }
 
     @Test

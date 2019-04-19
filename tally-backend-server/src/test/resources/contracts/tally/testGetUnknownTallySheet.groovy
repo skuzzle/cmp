@@ -10,5 +10,9 @@ org.springframework.cloud.contract.spec.Contract.make {
     response {
         status NOT_FOUND()
         headers {}
+        body([
+                message: "unknownPublicKey",
+                origin: "de.skuzzle.tally.service.TallySheetNotAvailableException"
+        ])
     }
 }
