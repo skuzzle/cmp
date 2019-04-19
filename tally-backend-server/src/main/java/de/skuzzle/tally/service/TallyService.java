@@ -3,9 +3,9 @@ package de.skuzzle.tally.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.data.auditing.DateTimeProvider;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -51,6 +51,7 @@ public class TallyService {
         final LocalDateTime createDate = dateTimeProvider.getNow().map(LocalDateTime::from)
                 .orElseThrow(IllegalStateException::new);
         increment.setCreateDateUTC(createDate);
+        increment.setId(UUID.randomUUID().toString());
 
         tallySheet.getIncrements().add(increment);
         return repository.save(tallySheet);

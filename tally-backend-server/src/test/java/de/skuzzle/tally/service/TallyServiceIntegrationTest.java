@@ -109,6 +109,8 @@ public class TallyServiceIntegrationTest {
             softly.assertThat(updated.getVersion()).isNotEqualTo(tallySheet.getVersion());
             softly.assertThat(updated.getIncrements()).hasSize(1);
             softly.assertThat(updated.getIncrements()).first().extracting(TallyIncrement::getCreateDateUTC).isNotNull();
+            softly.assertThat(updated.getIncrements()).first().extracting(TallyIncrement::getId).isNotNull();
+
         });
     }
 }

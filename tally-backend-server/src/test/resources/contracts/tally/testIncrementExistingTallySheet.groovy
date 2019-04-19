@@ -33,6 +33,7 @@ org.springframework.cloud.contract.spec.Contract.make {
             ),
             increments: [
                 [
+                    id: regex(uuid()),
                     description: regex('\\w+'),
                     tags: [ 'tag1', 'tag2' ],
                     createDateUTC: $(
