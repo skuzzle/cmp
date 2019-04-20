@@ -1,4 +1,4 @@
-package contracts
+package contracts.tally
 
 org.springframework.cloud.contract.spec.Contract.make {
     name("deleteUnknownTallySheet")

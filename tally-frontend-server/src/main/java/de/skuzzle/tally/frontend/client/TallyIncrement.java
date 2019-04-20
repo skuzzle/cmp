@@ -17,6 +17,7 @@ public class TallyIncrement {
     @NotNull
     private String description;
     private LocalDateTime createDateUTC;
+    private LocalDateTime incrementDateUTC;
 
     public TallyIncrement() {
     }
@@ -52,4 +53,13 @@ public class TallyIncrement {
     public LocalDateTime getCreateDateUTC() {
         return this.createDateUTC;
     }
+
+    public LocalDateTime getIncrementDateUTC() {
+        return incrementDateUTC;
+    }
+
+    public void setIncrementDateUTC(LocalDateTime incrementDateUTC) {
+        this.incrementDateUTC = incrementDateUTC;
+    }
 }
+

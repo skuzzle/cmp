@@ -1,12 +1,8 @@
 package de.skuzzle.tally.service;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Set;
-
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class TallyIncrement {
 
@@ -18,8 +14,12 @@ public class TallyIncrement {
     @NotNull
     private String description;
 
-    @JsonFormat(pattern = TallySheet.DATE_FORMAT)
+    //@JsonFormat(pattern = TallySheet.DATE_FORMAT)
     private LocalDateTime createDateUTC;
+
+    @NotNull
+    //@JsonFormat(pattern = TallySheet.DATE_FORMAT)
+    private LocalDateTime incrementDateUTC;
 
     public TallyIncrement() {
     }
@@ -54,5 +54,13 @@ public class TallyIncrement {
 
     public LocalDateTime getCreateDateUTC() {
         return this.createDateUTC;
+    }
+
+    public LocalDateTime getIncrementDateUTC() {
+        return incrementDateUTC;
+    }
+
+    public void setIncrementDateUTC(LocalDateTime incrementDateUTC) {
+        this.incrementDateUTC = incrementDateUTC;
     }
 }

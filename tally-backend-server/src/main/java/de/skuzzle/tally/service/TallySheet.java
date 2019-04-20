@@ -18,7 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Document
 public class TallySheet {
 
-    static final String DATE_FORMAT = "yyyy-MM-dd'T'hh:mm:ss'Z'";
+    public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
     @Id
     private String id;
@@ -38,10 +38,10 @@ public class TallySheet {
 
     // dates in UTC+0
     @CreatedDate
-    @JsonFormat(pattern = TallySheet.DATE_FORMAT)
+    //@JsonFormat(pattern = TallySheet.DATE_FORMAT)
     private LocalDateTime createDateUTC;
     @LastModifiedDate
-    @JsonFormat(pattern = TallySheet.DATE_FORMAT)
+    //@JsonFormat(pattern = TallySheet.DATE_FORMAT)
     private LocalDateTime lastModifiedDateUTC;
 
     public String getName() {

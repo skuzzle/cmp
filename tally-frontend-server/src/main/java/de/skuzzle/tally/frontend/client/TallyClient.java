@@ -17,9 +17,9 @@ public class TallyClient {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    public TallyClient(RestTemplate restTemplate) {
+    public TallyClient(RestTemplate restTemplate, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
-        this.objectMapper = new ObjectMapper();
+        this.objectMapper = objectMapper;
     }
 
     public TallyApiResponse createNewTallySheet(String name) {
