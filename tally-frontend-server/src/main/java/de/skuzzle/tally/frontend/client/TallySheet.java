@@ -93,7 +93,7 @@ public class TallySheet {
 
     public List<TallyIncrement> getHistory(int max) {
         return getIncrements().stream()
-                .sorted(Comparator.comparing(TallyIncrement::getCreateDateUTC).reversed())
+                .sorted(Comparator.comparing(TallyIncrement::getIncrementDateUTC).reversed())
                 .limit(max)
                 .collect(Collectors.toList());
     }

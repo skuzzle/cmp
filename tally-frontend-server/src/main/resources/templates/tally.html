@@ -46,7 +46,6 @@
         <div class="columns is-centered">
             <div class="column has-text-centered is-4">
                 <p class="title is-size-0" th:text="${tally.increments.size()}">1234</p>
-
             </div>
         </div>
     </div>
@@ -57,6 +56,11 @@
         <div class="columns is-centered">
             <div class="column is-4">
                 <form method="post" th:action="@{/{adminKey}(adminKey=${tally.adminKey})}">
+                    <div class="field">
+                        <div class="control is-expanded">
+                            <input class="input" name="incrementDateUTC" type="date" required="true" autofocus="true"  >
+                        </div>
+                    </div>
                     <div class="field has-addons">
                         <div class="control is-expanded">
                             <input class="input" name="description" type="text" placeholder="Description" required="true" autofocus="true"  >
@@ -84,7 +88,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="increment : ${tally.getHistory(10)}">
-                        <td><time class="is-date-utc" th:text="${increment.createDateUTC}"></time></td>
+                        <td><time class="is-date-utc" th:text="${increment.incrementDateUTC}"></time></td>
                         <td th:text="${increment.description}"></td>
                     </tr>
                     </tbody>
