@@ -16,7 +16,7 @@ public class Graph {
 
     private final List<Dataset> datasets;
     private final List<String> labels;
-    private final int pointRadius = 4;
+    private final int pointRadius = 0;
 
     private Graph(Collection<TallyIncrement> history) {
         final Timeline timeline = new Timeline();
