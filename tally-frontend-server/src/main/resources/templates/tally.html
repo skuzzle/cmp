@@ -45,7 +45,13 @@
     <div class="container">
         <div class="columns is-centered">
             <div class="column has-text-centered is-4">
-                <p class="title is-size-0" th:text="${tally.increments.size()}">1234</p>
+                <div style="position:relative">
+                    <p class="title is-size-0" th:text="${tally.increments.size()}">1234</p>
+
+                    <div style="position:absolute;bottom:0px;left:0;right:0">
+                        <canvas class="is-tally-graph" th:data-public-key="${tally.publicKey}"/>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -97,5 +103,10 @@
         </div>
     </div>
 </section>
+<script th:inline="javascript">
+/*<![CDATA[*/
+    var GRAPH_DATA = [[${graph}]];
+/*]]>*/
+</script>
 </body>
 </html>

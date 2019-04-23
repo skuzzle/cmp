@@ -53,6 +53,7 @@ public class TallyController {
     public ModelAndView showTallySheet(@PathVariable("key") String key) {
         final TallyApiResponse response = client.getTallySheet(key);
         final TallySheet tallySheet = response.tallySheet().orElseThrow();
-        return new ModelAndView("tally", ImmutableMap.of("tally", tallySheet));
+        final Graph graph = Graph.fromHistory(tallySheet.getIncrements());
+        return new ModelAndView("tally", ImmutableMap.of("tally", tallySheet, "graph", graph));
     }
 }

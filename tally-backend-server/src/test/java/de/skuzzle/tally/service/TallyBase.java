@@ -1,19 +1,14 @@
 package de.skuzzle.tally.service;
 
-import com.mongodb.client.MongoClient;
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.web.context.WebApplicationContext;
 
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
-
-import javax.swing.plaf.metal.MetalTabbedPaneUI;
-
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
