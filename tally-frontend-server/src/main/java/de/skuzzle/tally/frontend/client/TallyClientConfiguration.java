@@ -21,17 +21,19 @@ public class TallyClientConfiguration {
         this.objectMapper = objectMapper;
     }
 
-    @Bean
-    public RestTemplate restTemplate() {
+    public RestTemplate restTemplate(String baseUrl) {
         final var jacksonMessageConverter = new MappingJackson2HttpMessageConverter(objectMapper);
         final var restTemplate = new RestTemplate(Arrays.asList(jacksonMessageConverter));
-        final var uriBuilderFactory = new DefaultUriBuilderFactory(tallyProperties.getUrl());
+        final var uriBuilderFactory = new DefaultUriBuilderFactory(baseUrl);
         restTemplate.setUriTemplateHandler(uriBuilderFactory);
         return restTemplate;
     }
 
     @Bean
     public TallyClient tallyClient() {
-        return new TallyClient(restTemplate(), objectMapper);
+        return new TallyClient(
+                restTemplate(tallyProperties.getUrl()),
+                restTemplate(tallyProperties.getHealthUrl()),
+                objectMapper);
     }
 }

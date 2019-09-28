@@ -7,10 +7,9 @@ import java.util.UUID;
 
 import com.google.common.base.Preconditions;
 
-public final class TallyIncrement {
+public final class TallyIncrement implements Comparable<TallyIncrement> {
 
     private final String id;
-
     private final Set<String> tags;
     private final String description;
     private final LocalDateTime createDateUTC;
@@ -18,6 +17,12 @@ public final class TallyIncrement {
 
     private TallyIncrement(String id, Set<String> tags, String description, LocalDateTime createDateUTC,
             LocalDateTime incrementDateUTC) {
+        Preconditions.checkArgument(id != null, "id must not be null");
+        Preconditions.checkArgument(description != null, "description must not be null");
+        Preconditions.checkArgument(createDateUTC != null, "createDateUTC must not be null");
+        Preconditions.checkArgument(incrementDateUTC != null, "incrementDateUTC must not be null");
+        Preconditions.checkArgument(tags != null, "tags must not be null");
+
         this.id = id;
         this.tags = tags;
         this.description = description;
@@ -27,9 +32,6 @@ public final class TallyIncrement {
 
     public static TallyIncrement newIncrement(String description, LocalDateTime incrementDateUTC,
             Collection<String> tags) {
-        Preconditions.checkArgument(description != null, "description must not be null");
-        Preconditions.checkArgument(incrementDateUTC != null, "incrementDateUTC must not be null");
-        Preconditions.checkArgument(tags != null, "tags must not be null");
 
         return new TallyIncrement(
                 UUID.randomUUID().toString(),
@@ -57,6 +59,11 @@ public final class TallyIncrement {
 
     public LocalDateTime getIncrementDateUTC() {
         return incrementDateUTC;
+    }
+
+    @Override
+    public int compareTo(TallyIncrement o) {
+        return incrementDateUTC.compareTo(o.incrementDateUTC);
     }
 
 }

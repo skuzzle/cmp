@@ -1,6 +1,5 @@
 package de.skuzzle.tally.service;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -19,20 +18,17 @@ public class TallyService {
     }
 
     public TallySheet createNewTallySheet(String name) {
-        final TallySheet tallySheet = new TallySheet();
-        tallySheet.setName(name);
-        tallySheet.setIncrements(new ArrayList<>());
-        tallySheet.setAdminKey(randomKeyGenerator.generateAdminKey());
-        tallySheet.setPublicKey(randomKeyGenerator.generatePublicKey(PUBLIC_KEY_LENGTH));
-        return repository.save(tallySheet);
+        return repository.save(TallySheet.newTallySheet(
+                name,
+                randomKeyGenerator.generateAdminKey(),
+                randomKeyGenerator.generatePublicKey(PUBLIC_KEY_LENGTH)));
     }
 
     public TallySheet getTallySheet(String publicKey) {
         final Optional<TallySheet> byPublicKey = repository.findByPublicKey(publicKey);
         if (byPublicKey.isPresent()) {
             final TallySheet publicTallySheet = byPublicKey.get();
-            publicTallySheet.setAdminKey(null);
-            return publicTallySheet;
+            return publicTallySheet.withWipedAdminKey();
         }
         return repository.findByAdminKey(publicKey)
                 .orElseThrow(() -> new TallySheetNotAvailableException(publicKey));

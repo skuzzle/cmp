@@ -1,11 +1,10 @@
 package de.skuzzle.tally.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -24,16 +23,12 @@ public class TallySheet {
     @Version
     private int version;
 
-    @NotEmpty
-    private String name;
-    @NotEmpty
+    private final String name;
     @Indexed
     private String adminKey;
-    @NotEmpty
     @Indexed
-    private String publicKey;
-    @NotNull
-    private List<TallyIncrement> increments;
+    private final String publicKey;
+    private final List<TallyIncrement> increments;
 
     // dates in UTC+0
     @CreatedDate
@@ -41,68 +36,56 @@ public class TallySheet {
     @LastModifiedDate
     private LocalDateTime lastModifiedDateUTC;
 
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
+    TallySheet(String name, String adminKey, String publicKey, List<TallyIncrement> increments) {
+        Preconditions.checkArgument(name != null, "name must not be null");
+        Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
+        Preconditions.checkArgument(publicKey != null, "publicKey must not be null");
+        Preconditions.checkArgument(increments != null, "increments must not be null");
         this.name = name;
+        this.adminKey = adminKey;
+        this.publicKey = publicKey;
+        this.increments = increments;
     }
 
-    public int getVersion() {
-        return this.version;
-    }
-
-    public void setVersion(int version) {
-        this.version = version;
+    public static TallySheet newTallySheet(String name, String adminKey, String publicKey) {
+        return new TallySheet(name, adminKey, publicKey, new ArrayList<>());
     }
 
     public String getId() {
         return this.id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public int getVersion() {
+        return this.version;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     public Optional<String> getAdminKey() {
         return Optional.ofNullable(this.adminKey);
     }
 
-    public void setAdminKey(String adminKey) {
-        this.adminKey = adminKey;
+    public TallySheet withWipedAdminKey() {
+        this.adminKey = null;
+        return this;
     }
 
     public String getPublicKey() {
         return this.publicKey;
     }
 
-    public void setPublicKey(String publicKey) {
-        this.publicKey = publicKey;
-    }
-
     public List<TallyIncrement> getIncrements() {
-        return this.increments;
-    }
-
-    public void setIncrements(List<TallyIncrement> increments) {
-        this.increments = increments;
+        return Collections.unmodifiableList(this.increments);
     }
 
     public LocalDateTime getLastModifiedDateUTC() {
         return this.lastModifiedDateUTC;
     }
 
-    void setLastModifiedDateUTC(LocalDateTime lastModifiedDate) {
-        this.lastModifiedDateUTC = lastModifiedDate;
-    }
-
     public LocalDateTime getCreateDateUTC() {
         return this.createDateUTC;
-    }
-
-    void setCreateDateUTC(LocalDateTime createDate) {
-        this.createDateUTC = createDate;
     }
 
     public void incrementWith(TallyIncrement increment) {

@@ -16,11 +16,23 @@ public class TallyClient {
     private static final Logger logger = LoggerFactory.getLogger(TallyClient.class);
 
     private final RestTemplate restTemplate;
+    private final RestTemplate restTemplateHealth;
     private final ObjectMapper objectMapper;
 
-    public TallyClient(RestTemplate restTemplate, ObjectMapper objectMapper) {
+    public TallyClient(RestTemplate restTemplate, RestTemplate restTemplateHealth, ObjectMapper objectMapper) {
         this.restTemplate = restTemplate;
+        this.restTemplateHealth = restTemplateHealth;
         this.objectMapper = objectMapper;
+    }
+
+    public boolean isHealthy() {
+        try {
+            restTemplateHealth.getForEntity("/actuator/health", Object.class);
+            return true;
+        } catch (final Exception e) {
+            logger.error("Backend seems not be available", e);
+            return false;
+        }
     }
 
     public TallyResult createNewTallySheet(String name) {

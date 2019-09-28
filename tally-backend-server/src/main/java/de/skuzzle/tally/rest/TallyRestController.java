@@ -1,5 +1,7 @@
 package de.skuzzle.tally.rest;
 
+import java.net.URI;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -33,26 +35,34 @@ public class TallyRestController {
     }
 
     @GetMapping("/public/{key}")
-    public RestTallyResponse getTally(@PathVariable String key) {
+    public ResponseEntity<RestTallyResponse> getTally(@PathVariable String key, HttpServletRequest request) {
+        rateLimiter.blockIfRateLimitIsExceeded(request);
         final TallySheet tallySheet = tallyService.getTallySheet(key);
-        return RestTallyResponse.of(RestTallySheet.fromDomainObject(tallySheet));
+        final RestTallyResponse response = RestTallyResponse.of(RestTallySheet.fromDomainObject(tallySheet));
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/{name}")
     @ResponseStatus(HttpStatus.CREATED)
-    public RestTallyResponse createTally(@PathVariable @NotEmpty String name, HttpServletRequest request) {
+    public ResponseEntity<RestTallyResponse> createTally(@PathVariable @NotEmpty String name,
+            HttpServletRequest request) {
         rateLimiter.blockIfRateLimitIsExceeded(request);
         final TallySheet tallySheet = tallyService.createNewTallySheet(name);
-        return RestTallyResponse.of(RestTallySheet.fromDomainObject(tallySheet));
+        final RestTallyResponse response = RestTallyResponse.of(RestTallySheet.fromDomainObject(tallySheet));
+        return ResponseEntity.created(URI.create("/public/" + tallySheet.getAdminKey().orElseThrow()))
+                .body(response);
     }
 
     @PostMapping("/admin/{key}")
     @ResponseStatus(HttpStatus.OK)
-    public RestTallyResponse increment(@PathVariable String key, @RequestBody @Valid RestTallyIncrement increment,
+    public ResponseEntity<RestTallyResponse> increment(@PathVariable String key,
+            @RequestBody @Valid RestTallyIncrement increment,
             HttpServletRequest request) {
         rateLimiter.blockIfRateLimitIsExceeded(request);
         final TallySheet tallySheet = tallyService.increment(key, increment.toDomainObject());
-        return RestTallyResponse.of(RestTallySheet.fromDomainObject(tallySheet));
+        final RestTallyResponse response = RestTallyResponse.of(RestTallySheet.fromDomainObject(tallySheet));
+        return ResponseEntity.ok()
+                .body(response);
     }
 
     @DeleteMapping("/admin/{key}")

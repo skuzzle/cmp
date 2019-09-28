@@ -1,20 +1,17 @@
 package de.skuzzle.tally.frontend.client;
 
-import org.assertj.core.api.LocalDateTimeAssert;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.time.LocalDateTime;
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
 import org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties;
 import org.springframework.http.HttpStatus;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.time.LocalDateTime;
-import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE, properties = "tally.backend.url=http://localhost:6565")
 @AutoConfigureStubRunner(ids = "de.skuzzle.tally:tally-backend:+:stubs:6565",
@@ -31,8 +28,8 @@ public class TallyClientIntegrationTest {
         assertThat(apiResponse.getStatus()).isEqualTo(HttpStatus.CREATED);
 
         final TallySheet tallySheet = apiResponse.tallySheet().orElseThrow();
-        assertThat(tallySheet.getCreateDateUTC()).isEqualTo(LocalDateTime.of(1987,9,12,11,11,0, 123000000));
-        assertThat(tallySheet.getLastModifiedDateUTC()).isEqualTo(LocalDateTime.of(1987,9,12,11,11,0, 123000000));
+        assertThat(tallySheet.getCreateDateUTC()).isEqualTo(LocalDateTime.of(1987, 9, 12, 11, 11, 0, 123000000));
+        assertThat(tallySheet.getLastModifiedDateUTC()).isEqualTo(LocalDateTime.of(1987, 9, 12, 11, 11, 0, 123000000));
     }
 
     @Test
@@ -46,9 +43,10 @@ public class TallyClientIntegrationTest {
         assertThat(apiResponse.getStatus()).isEqualTo(HttpStatus.OK);
 
         final TallySheet tallySheet = apiResponse.tallySheet().orElseThrow();
-        assertThat(tallySheet.getCreateDateUTC()).isEqualTo(LocalDateTime.of(1987,9,12,11,11,0, 123000000));
-        assertThat(tallySheet.getLastModifiedDateUTC()).isEqualTo(LocalDateTime.of(1987,9,12,11,11,0, 123000000));
-        assertThat(tallySheet.getIncrements()).first().extracting(TallyIncrement::getIncrementDateUTC).isEqualTo(LocalDateTime.of(2019, 04, 12, 11, 21, 32, 123000000));
+        assertThat(tallySheet.getCreateDateUTC()).isEqualTo(LocalDateTime.of(1987, 9, 12, 11, 11, 0, 123000000));
+        assertThat(tallySheet.getLastModifiedDateUTC()).isEqualTo(LocalDateTime.of(1987, 9, 12, 11, 11, 0, 123000000));
+        assertThat(tallySheet.getIncrements()).first().extracting(TallyIncrement::getIncrementDateUTC)
+                .isEqualTo(LocalDateTime.of(2019, 04, 12, 11, 21, 32, 123000000));
     }
 
     @Test

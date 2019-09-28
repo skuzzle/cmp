@@ -1,6 +1,8 @@
 package de.skuzzle.tally.service;
 
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,8 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.mockito.Mockito.anyInt;
-import static org.mockito.Mockito.when;
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
 @SpringBootTest
 public class TallyBase {

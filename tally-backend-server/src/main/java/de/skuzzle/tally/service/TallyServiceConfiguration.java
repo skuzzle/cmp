@@ -15,5 +15,4 @@ public class TallyServiceConfiguration {
     public DateTimeProvider mongoUtcDateTimeProvider() {
         return UTCDateTimeProvider.getInstance();
     }
-
 }
