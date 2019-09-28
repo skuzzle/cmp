@@ -93,11 +93,17 @@ public class TallySheet {
         return this.createDateUTC;
     }
 
+    public boolean deleteIncrementWithId(String incrementId) {
+        Preconditions.checkArgument(incrementId != null, "incrementId must not be null");
+        return this.increments.removeIf(increment -> increment.getId().equals(incrementId));
+    }
+
     public void incrementWith(TallyIncrement increment) {
         Preconditions.checkArgument(increment != null, "increment must not be null");
+        final boolean idExists = increments.stream().anyMatch(existing -> existing.getId().equals(increment.getId()));
+        Preconditions.checkArgument(!idExists, "Increment with id %s already exists in tally sheet with id %s",
+                increment.getId(), getId());
+
         this.increments.add(increment);
-        // TODO: insert sorted instead of sorting whole list?
-        // sort during 'add' to improve query speed
-        Collections.sort(increments);
     }
 }

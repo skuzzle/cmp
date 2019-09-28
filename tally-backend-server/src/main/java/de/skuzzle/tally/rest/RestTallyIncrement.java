@@ -12,11 +12,13 @@ import de.skuzzle.tally.service.TallyIncrement;
 
 public class RestTallyIncrement {
 
+    private final String id;
     private final String description;
     private final Set<String> tags;
     private final LocalDateTime incrementDateUTC;
 
-    public RestTallyIncrement(String description, Collection<String> tags, LocalDateTime incrementDateUTC) {
+    public RestTallyIncrement(String id, String description, Collection<String> tags, LocalDateTime incrementDateUTC) {
+        this.id = id;
         this.description = description;
         this.tags = Set.copyOf(tags);
         this.incrementDateUTC = incrementDateUTC;
@@ -31,6 +33,7 @@ public class RestTallyIncrement {
     public static RestTallyIncrement fromDomainObject(TallyIncrement tallyIncrement) {
         Preconditions.checkArgument(tallyIncrement != null, "tallyIncrement must not be null");
         return new RestTallyIncrement(
+                tallyIncrement.getId(),
                 tallyIncrement.getDescription(),
                 tallyIncrement.getTags(),
                 tallyIncrement.getIncrementDateUTC());
@@ -38,6 +41,10 @@ public class RestTallyIncrement {
 
     public TallyIncrement toDomainObject() {
         return TallyIncrement.newIncrement(description, incrementDateUTC, tags);
+    }
+
+    public String getId() {
+        return this.id;
     }
 
     public String getDescription() {

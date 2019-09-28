@@ -3,6 +3,9 @@ package de.skuzzle.tally.service;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,14 +27,26 @@ public class TallyBase {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    private TallySheet existingTallySheet;
+    private final TallyIncrement increment = TallyIncrement.newIncrementWithId("incrementId",
+            "Increment",
+            LocalDateTime.now(),
+            Collections.emptySet());
 
     @BeforeEach
     public void setup() {
         mongoTemplate.dropCollection(TallySheet.class);
-        when(randomKeyGenerator.generateAdminKey()).thenReturn("adminKey");
-        when((randomKeyGenerator.generatePublicKey(anyInt()))).thenReturn("publicKey");
-        this.existingTallySheet = tallyService.createNewTallySheet("existing");
+        when(randomKeyGenerator.generateAdminKey())
+                .thenReturn("adminKey")
+                .thenReturn("adminKey2")
+                .thenReturn("adminKey3");
+        when((randomKeyGenerator.generatePublicKey(anyInt())))
+                .thenReturn("publicKey")
+                .thenReturn("publicKey2")
+                .thenReturn("publicKey3");
+        tallyService.createNewTallySheet("existing");
+        tallyService.createNewTallySheet("existing2");
+        tallyService.increment("adminKey2", increment);
+
         RestAssuredMockMvc.webAppContextSetup(webAppCtx);
     }
 

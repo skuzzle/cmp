@@ -30,6 +30,16 @@ public final class TallyIncrement implements Comparable<TallyIncrement> {
         this.incrementDateUTC = incrementDateUTC;
     }
 
+    public static TallyIncrement newIncrementWithId(String id, String description, LocalDateTime incrementDateUTC,
+            Collection<String> tags) {
+        return new TallyIncrement(
+                id,
+                Set.copyOf(tags),
+                description,
+                UTCDateTimeProvider.getInstance().getNowLocal(),
+                incrementDateUTC);
+    }
+
     public static TallyIncrement newIncrement(String description, LocalDateTime incrementDateUTC,
             Collection<String> tags) {
 

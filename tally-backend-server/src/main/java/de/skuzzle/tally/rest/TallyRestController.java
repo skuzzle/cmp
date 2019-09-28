@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.skuzzle.tally.rest.ratelimit.ApiRateLimiter;
 import de.skuzzle.tally.rest.ratelimit.RateLimitExceededException;
+import de.skuzzle.tally.service.IncrementNotAvailableException;
 import de.skuzzle.tally.service.TallyService;
 import de.skuzzle.tally.service.TallySheet;
 import de.skuzzle.tally.service.TallySheetNotAvailableException;
@@ -72,14 +73,21 @@ public class TallyRestController {
         tallyService.deleteTallySheet(key);
     }
 
+    @DeleteMapping("/admin/{key}/increment/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteIncrement(@PathVariable String key, @PathVariable String id, HttpServletRequest request) {
+        rateLimiter.blockIfRateLimitIsExceeded(request);
+        tallyService.deleteIncrement(key, id);
+    }
+
     @ExceptionHandler(RateLimitExceededException.class)
     public ResponseEntity<RestTallyResponse> onRateLimitExceeded(RateLimitExceededException e) {
         final RestTallyResponse body = RestTallyResponse.failure(e.getMessage(), e.getClass().getName());
         return new ResponseEntity<>(body, HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
     }
 
-    @ExceptionHandler(TallySheetNotAvailableException.class)
-    public ResponseEntity<RestTallyResponse> onTallySheetNotAvailable(TallySheetNotAvailableException e) {
+    @ExceptionHandler(value = { TallySheetNotAvailableException.class, IncrementNotAvailableException.class })
+    public ResponseEntity<RestTallyResponse> onTallySheetNotAvailable(Exception e) {
         final RestTallyResponse body = RestTallyResponse.failure(e.getMessage(), e.getClass().getName());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }

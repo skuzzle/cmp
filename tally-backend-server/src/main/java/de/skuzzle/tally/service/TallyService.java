@@ -48,4 +48,14 @@ public class TallyService {
         repository.delete(tallySheet);
     }
 
+    public void deleteIncrement(String adminKey, String incrementId) {
+        final TallySheet tallySheet = repository.findByAdminKey(adminKey)
+                .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
+        if (tallySheet.deleteIncrementWithId(incrementId)) {
+            repository.save(tallySheet);
+        } else {
+            throw new IncrementNotAvailableException(incrementId);
+        }
+    }
+
 }

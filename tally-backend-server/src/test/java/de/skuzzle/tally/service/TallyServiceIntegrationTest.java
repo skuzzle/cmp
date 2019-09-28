@@ -103,16 +103,45 @@ public class TallyServiceIntegrationTest {
             softly.assertThat(updated.getIncrements()).hasSize(1);
             softly.assertThat(updated.getIncrements()).first().extracting(TallyIncrement::getCreateDateUTC).isNotNull();
             softly.assertThat(updated.getIncrements()).first().extracting(TallyIncrement::getId).isNotNull();
-
         });
+    }
+
+    @Test
+    void testDeleteIncrementSuccessfully() throws Exception {
+        final TallySheet tallySheet = tallyService.createNewTallySheet("incrementMe");
+        final TallyIncrement validIncrement = TallyIncrement.newIncrement("test", LocalDateTime.now(), Set.of("pizza"));
+
+        tallyService.increment(tallySheet.getAdminKey().orElseThrow(), validIncrement);
+        tallyService.deleteIncrement(tallySheet.getAdminKey().orElseThrow(), validIncrement.getId());
+
+        final TallySheet updated = tallyService.getTallySheet(tallySheet.getAdminKey().orElseThrow());
+        assertThat(updated.getIncrements()).isEmpty();
+    }
+
+    @Test
+    void testDeleteUnknownIncrement() throws Exception {
+        final TallySheet tallySheet = tallyService.createNewTallySheet("incrementMe");
+
+        assertThatExceptionOfType(IncrementNotAvailableException.class)
+                .isThrownBy(() -> tallyService.deleteIncrement(tallySheet.getAdminKey().orElseThrow(), "foo"));
+    }
+
+    @Test
+    void testDeleteIncrementWithPublicKey() throws Exception {
+        final TallySheet tallySheet = tallyService.createNewTallySheet("incrementMe");
+        final TallyIncrement validIncrement = TallyIncrement.newIncrement("test", LocalDateTime.now(), Set.of("pizza"));
+
+        assertThatExceptionOfType(TallySheetNotAvailableException.class)
+                .isThrownBy(() -> tallyService.increment(tallySheet.getPublicKey(), validIncrement));
     }
 
     @Test
     void testRetrieveIncrementedTallySheet() throws Exception {
         final TallySheet tallySheet = tallyService.createNewTallySheet("incrementMe");
-        final TallyIncrement validIncrement = TallyIncrement.newIncrement("test", LocalDateTime.now(), Set.of("pizza"));
-        tallyService.increment(tallySheet.getAdminKey().orElseThrow(), validIncrement);
-        tallyService.increment(tallySheet.getAdminKey().orElseThrow(), validIncrement);
+        tallyService.increment(tallySheet.getAdminKey().orElseThrow(),
+                TallyIncrement.newIncrement("test", LocalDateTime.now(), Set.of("pizza")));
+        tallyService.increment(tallySheet.getAdminKey().orElseThrow(),
+                TallyIncrement.newIncrement("test", LocalDateTime.now(), Set.of("pizza")));
 
         final TallySheet updated = tallyService.getTallySheet(tallySheet.getPublicKey());
         assertThat(updated.getIncrements()).hasSize(2);
