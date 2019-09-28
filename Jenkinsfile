@@ -1,8 +1,8 @@
 pipeline {
   agent {
     docker {
-      image 'maven:3.6-jdk-12'
-      args '-v /home/jenkins/.m2:/var/maven/.m2 -e MAVEN_CONFIG=/var/maven/.m2 -e MAVEN_OPTS=-Duser.home=/var/maven'
+      image 'localhost/maven-docker:jdk11'
+      args '-v $HOME/.m2:/root/.m2 -m 1G -v /var/run/docker.sock:/var/run/docker.sock -u 0:0 --group-add docker -e MAVEN_OPTS="-Xmx300m"'
     }
   }
   stages {
