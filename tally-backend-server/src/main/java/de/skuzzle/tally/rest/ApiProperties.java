@@ -6,13 +6,13 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "tally.api")
 class ApiProperties {
-    private double requestsPerMinute;
+    private double requestsPerSecond;
 
-    public double getRequestsPerMinute() {
-        return requestsPerMinute;
+    public double getRequestsPerSecond() {
+        return requestsPerSecond;
     }
 
-    public void setRequestsPerMinute(double requestsPerMinute) {
-        this.requestsPerMinute = requestsPerMinute;
+    public void setRequestsPerSecond(double requestsPerSecond) {
+        this.requestsPerSecond = requestsPerSecond;
     }
 }
