@@ -80,6 +80,11 @@ public class TallySheet {
         return Collections.unmodifiableList(this.increments);
     }
 
+    public IncrementQueryResult selectIncrements(IncrementQuery query) {
+        Preconditions.checkArgument(query != null, "query must not be null");
+        return query.select(getIncrements());
+    }
+
     public LocalDateTime getLastModifiedDateUTC() {
         return this.lastModifiedDateUTC;
     }
@@ -91,5 +96,8 @@ public class TallySheet {
     public void incrementWith(TallyIncrement increment) {
         Preconditions.checkArgument(increment != null, "increment must not be null");
         this.increments.add(increment);
+        // TODO: insert sorted instead of sorting whole list?
+        // sort during 'add' to improve query speed
+        Collections.sort(increments);
     }
 }
