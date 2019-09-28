@@ -15,10 +15,16 @@ public class TallyClientConfiguration {
 
     private final TallyProperties tallyProperties;
     private final ObjectMapper objectMapper;
+    private final ClientId clientId;
 
-    public TallyClientConfiguration(TallyProperties tallyProperties, ObjectMapper objectMapper) {
+    public TallyClientConfiguration(TallyProperties tallyProperties, ObjectMapper objectMapper, ClientId clientId) {
         this.tallyProperties = tallyProperties;
         this.objectMapper = objectMapper;
+        this.clientId = clientId;
+    }
+
+    private ClientIdInterceptor idInterceptor() {
+        return new ClientIdInterceptor(clientId);
     }
 
     public RestTemplate restTemplate(String baseUrl) {
@@ -26,6 +32,7 @@ public class TallyClientConfiguration {
         final var restTemplate = new RestTemplate(Arrays.asList(jacksonMessageConverter));
         final var uriBuilderFactory = new DefaultUriBuilderFactory(baseUrl);
         restTemplate.setUriTemplateHandler(uriBuilderFactory);
+        restTemplate.getInterceptors().add(idInterceptor());
         return restTemplate;
     }
 

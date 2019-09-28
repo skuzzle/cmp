@@ -11,11 +11,11 @@ public class RemoteIpClientIdentificator implements ClientIdentificator<HttpServ
     }
 
     private String getClientIP(HttpServletRequest request) {
-        final String xfHeader = request.getHeader("X-Forwarded-For");
-        if (xfHeader == null) {
+        final String xrealIp = request.getHeader("X-Real-IP");
+        if (xrealIp == null) {
             return request.getRemoteAddr();
         }
-        return xfHeader.split(",")[0];
+        return xrealIp;
     }
 
 }

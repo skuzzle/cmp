@@ -13,7 +13,7 @@ import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRun
 import org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties;
 import org.springframework.http.HttpStatus;
 
-@SpringBootTest(webEnvironment = WebEnvironment.NONE, properties = "tally.backend.url=http://localhost:6565")
+@SpringBootTest(webEnvironment = WebEnvironment.MOCK, properties = "tally.backend.url=http://localhost:6565")
 @AutoConfigureStubRunner(ids = "de.skuzzle.tally:tally-backend:+:stubs:6565",
         stubsMode = StubRunnerProperties.StubsMode.LOCAL)
 public class TallyClientIntegrationTest {
