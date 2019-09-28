@@ -12,16 +12,6 @@
     <link rel="shortcut icon" type="image/x-icon" href="@{/favicon.ico}"/>
 </head>
 <body>
-<nav class="navbar">
-    <div class="container">
-        <div class="navbar-brand">
-            <a class="navbar-item is-size-4" th:href="@{/}">
-                tally.io
-            </a>
-        </div>
-    </div>
-</nav>
-
 <section class="hero is-info is-bold">
     <div class="hero-body">
         <div class="container">
@@ -29,14 +19,14 @@
                 Pizza Count 2018
             </h1>
             <h2 class="subtitle">
-                <a th:href="@{/{publicKey}(publicKey=${tally.publicKey})}" th:text="'Share:   ' + ${tally.publicKey}" href="#">Share:
+                <a th:href="@{/{publicKey}(publicKey=${tally.publicKey})}" th:text="'Share: ' + ${tally.publicKey}" href="#">Share:
                     http://tally.io/123547</a>
             </h2>
         </div>
     </div>
 </section>
 
-<div class="notification is-danger is-bold" th:if="${tally.admin}">
+<div class="notification is-danger is-radiusless" th:if="${tally.admin}">
     You are viewing your tally sheet using its admin link. If you want to share this sheet, use the read-only link. Everyone who knows the admin link
     will be able to update/delete this tally sheet!
 </div>

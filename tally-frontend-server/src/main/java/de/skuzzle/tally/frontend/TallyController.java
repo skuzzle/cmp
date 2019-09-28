@@ -1,7 +1,7 @@
 package de.skuzzle.tally.frontend;
 
 import com.google.common.collect.ImmutableMap;
-import de.skuzzle.tally.frontend.client.TallyApiResponse;
+import de.skuzzle.tally.frontend.client.TallyResult;
 import de.skuzzle.tally.frontend.client.TallyClient;
 import de.skuzzle.tally.frontend.client.TallyIncrement;
 import de.skuzzle.tally.frontend.client.TallySheet;
@@ -29,7 +29,7 @@ public class TallyController {
 
     @PostMapping("/_create")
     public String createTallySheet(@RequestParam("name") String name) {
-        final TallyApiResponse response = client.createNewTallySheet(name);
+        final TallyResult response = client.createNewTallySheet(name);
         final TallySheet tallySheet = response.tallySheet().orElseThrow();
 
         return "redirect:/" + tallySheet.getAdminKey();
@@ -44,14 +44,14 @@ public class TallyController {
         increment.setDescription(description);
         increment.setTags(new HashSet<>());
         increment.setIncrementDateUTC(incrementDateUTC);
-        final TallyApiResponse response = client.increment(adminKey, increment);
+        final TallyResult response = client.increment(adminKey, increment);
         final TallySheet tallySheet = response.tallySheet().orElseThrow();
         return "redirect:/" + tallySheet.getAdminKey();
     }
 
     @GetMapping("/{key}")
     public ModelAndView showTallySheet(@PathVariable("key") String key) {
-        final TallyApiResponse response = client.getTallySheet(key);
+        final TallyResult response = client.getTallySheet(key);
         final TallySheet tallySheet = response.tallySheet().orElseThrow();
         final Graph graph = Graph.fromHistory(tallySheet.getIncrements());
         return new ModelAndView("tally", ImmutableMap.of("tally", tallySheet, "graph", graph));

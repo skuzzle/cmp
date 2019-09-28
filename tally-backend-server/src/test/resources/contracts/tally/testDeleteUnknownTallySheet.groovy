@@ -11,8 +11,10 @@ org.springframework.cloud.contract.spec.Contract.make {
         status NOT_FOUND()
         headers {}
         body([
+            error: [
                 message: "unknownAdminKey",
                 origin: "de.skuzzle.tally.service.TallySheetNotAvailableException"
+            ]
         ])
     }
 }

@@ -1,4 +1,4 @@
-package de.skuzzle.tally.service;
+package de.skuzzle.tally.rest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -15,34 +15,42 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.skuzzle.tally.service.TallyService;
+import de.skuzzle.tally.service.TallySheet;
+import de.skuzzle.tally.service.TallySheetNotAvailableException;
+
 @RestController
 public class TallyRestController {
 
     private final TallyService tallyService;
     private final ApiRateLimiter rateLimiter;
 
-    public TallyRestController(TallyService tallyService, ApiRateLimiter rateLimiter) {
+    TallyRestController(TallyService tallyService, ApiRateLimiter rateLimiter) {
         this.tallyService = tallyService;
         this.rateLimiter = rateLimiter;
     }
 
     @GetMapping("/public/{key}")
-    public TallySheet getTally(@PathVariable String key) {
-        return tallyService.getTallySheet(key);
+    public RestTallyResponse getTally(@PathVariable String key) {
+        final TallySheet tallySheet = tallyService.getTallySheet(key);
+        return RestTallyResponse.of(RestTallySheet.fromDomainObject(tallySheet));
     }
 
     @PostMapping("/{name}")
     @ResponseStatus(HttpStatus.CREATED)
-    public TallySheet createTally(@PathVariable @NotEmpty String name, HttpServletRequest request) {
+    public RestTallyResponse createTally(@PathVariable @NotEmpty String name, HttpServletRequest request) {
         rateLimiter.throttle(request);
-        return tallyService.createNewTallySheet(name);
+        final TallySheet tallySheet = tallyService.createNewTallySheet(name);
+        return RestTallyResponse.of(RestTallySheet.fromDomainObject(tallySheet));
     }
 
     @PostMapping("/admin/{key}")
     @ResponseStatus(HttpStatus.OK)
-    public TallySheet increment(@PathVariable String key, @RequestBody @Valid TallyIncrement increment, HttpServletRequest request) {
+    public RestTallyResponse increment(@PathVariable String key, @RequestBody @Valid RestTallyIncrement increment,
+            HttpServletRequest request) {
         rateLimiter.throttle(request);
-        return tallyService.increment(key, increment);
+        final TallySheet tallySheet = tallyService.increment(key, increment.toDomainObject());
+        return RestTallyResponse.of(RestTallySheet.fromDomainObject(tallySheet));
     }
 
     @DeleteMapping("/admin/{key}")
@@ -53,34 +61,16 @@ public class TallyRestController {
     }
 
     @ExceptionHandler(RateLimitExceededException.class)
-    public ResponseEntity<ErrorResponse> onRateLimitExceeded(RateLimitExceededException e) {
-        final ErrorResponse body = new ErrorResponse(e.getMessage(), e.getClass().getName());
-        return new ResponseEntity<>(body, HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
+    public ResponseEntity<RestTallyResponse> onRateLimitExceeded(RateLimitExceededException e) {
+        final RestTallyResponse body = RestTallyResponse.failure(e.getMessage(), e.getClass().getName());
+        return new ResponseEntity<>(body,
+                HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
     }
 
     @ExceptionHandler(TallySheetNotAvailableException.class)
-    public ResponseEntity<ErrorResponse> onTallySheetNotAvailable(TallySheetNotAvailableException e) {
-        final ErrorResponse body = new ErrorResponse(e.getMessage(), e.getClass().getName());
+    public ResponseEntity<RestTallyResponse> onTallySheetNotAvailable(TallySheetNotAvailableException e) {
+        final RestTallyResponse body = RestTallyResponse.failure(e.getMessage(), e.getClass().getName());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-    }
-
-    private static class ErrorResponse {
-        private final String message;
-        private final String origin;
-
-        public ErrorResponse(String message, String origin) {
-            this.message = message;
-            this.origin = origin;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public String getOrigin() {
-            return origin;
-        }
-
     }
 
 }

@@ -1,55 +1,54 @@
 package de.skuzzle.tally.service;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Set;
+import java.util.UUID;
 
-public class TallyIncrement {
+import com.google.common.base.Preconditions;
 
-    private String id;
+public final class TallyIncrement {
 
-    @NotNull
-    private Set<String> tags;
+    private final String id;
 
-    @NotNull
-    private String description;
+    private final Set<String> tags;
+    private final String description;
+    private final LocalDateTime createDateUTC;
+    private final LocalDateTime incrementDateUTC;
 
-    //@JsonFormat(pattern = TallySheet.DATE_FORMAT)
-    private LocalDateTime createDateUTC;
+    private TallyIncrement(String id, Set<String> tags, String description, LocalDateTime createDateUTC,
+            LocalDateTime incrementDateUTC) {
+        this.id = id;
+        this.tags = tags;
+        this.description = description;
+        this.createDateUTC = createDateUTC;
+        this.incrementDateUTC = incrementDateUTC;
+    }
 
-    @NotNull
-    //@JsonFormat(pattern = TallySheet.DATE_FORMAT)
-    private LocalDateTime incrementDateUTC;
+    public static TallyIncrement newIncrement(String description, LocalDateTime incrementDateUTC,
+            Collection<String> tags) {
+        Preconditions.checkArgument(description != null, "description must not be null");
+        Preconditions.checkArgument(incrementDateUTC != null, "incrementDateUTC must not be null");
+        Preconditions.checkArgument(tags != null, "tags must not be null");
 
-    public TallyIncrement() {
+        return new TallyIncrement(
+                UUID.randomUUID().toString(),
+                Set.copyOf(tags),
+                description,
+                UTCDateTimeProvider.getInstance().getNowLocal(),
+                incrementDateUTC);
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public Set<String> getTags() {
         return this.tags;
     }
 
-    public void setTags(Set<String> tags) {
-        this.tags = tags;
-    }
-
     public String getDescription() {
         return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    void setCreateDateUTC(LocalDateTime createDateUTC) {
-        this.createDateUTC = createDateUTC;
     }
 
     public LocalDateTime getCreateDateUTC() {
@@ -60,7 +59,4 @@ public class TallyIncrement {
         return incrementDateUTC;
     }
 
-    public void setIncrementDateUTC(LocalDateTime incrementDateUTC) {
-        this.incrementDateUTC = incrementDateUTC;
-    }
 }

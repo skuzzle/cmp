@@ -16,7 +16,6 @@ public class Graph {
 
     private final List<Dataset> datasets;
     private final List<String> labels;
-    private final int pointRadius = 0;
 
     private Graph(Collection<TallyIncrement> history) {
         final Timeline timeline = new Timeline();
@@ -51,10 +50,6 @@ public class Graph {
         return labels;
     }
 
-    public int getPointRadius() {
-        return pointRadius;
-    }
-
     static class Timeline {
         private LocalDateTime min = LocalDateTime.now();
         private LocalDateTime max = LocalDateTime.now();
@@ -84,9 +79,14 @@ public class Graph {
 
     static class Dataset {
         private final List<Point> data;
+        private final int pointRadius = 0;
 
         Dataset(List<Point> data) {
             this.data = data;
+        }
+
+        public int getPointRadius() {
+            return pointRadius;
         }
 
         public List<Point> getData() {

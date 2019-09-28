@@ -1,46 +1,21 @@
 package de.skuzzle.tally.frontend.client;
 
-import org.springframework.http.HttpStatus;
+class TallyApiResponse {
 
-import java.util.Optional;
-
-public class TallyApiResponse {
-
-    private final HttpStatus status;
     private final TallySheet tallySheet;
-    private final ErrorResponse errorResponse;
+    private final ErrorResponse error;
 
-    public TallyApiResponse(HttpStatus status, TallySheet tallySheet, ErrorResponse errorResponse) {
-        this.status = status;
+    public TallyApiResponse(TallySheet tallySheet, ErrorResponse error) {
         this.tallySheet = tallySheet;
-        this.errorResponse = errorResponse;
+        this.error = error;
     }
 
-    public static TallyApiResponse success(HttpStatus status, TallySheet tallySheet) {
-        return new TallyApiResponse(status, tallySheet, null);
+    public TallySheet getTallySheet() {
+        return this.tallySheet;
     }
 
-    public static TallyApiResponse fail(HttpStatus status, ErrorResponse errorResponse) {
-        return new TallyApiResponse(status, null, errorResponse);
+    public ErrorResponse getError() {
+        return this.error;
     }
 
-    public HttpStatus getStatus() {
-        return status;
-    }
-
-    public boolean isSuccess() {
-        return tallySheet != null;
-    }
-
-    public boolean isError() {
-        return errorResponse != null;
-    }
-
-    public Optional<TallySheet> tallySheet() {
-        return Optional.ofNullable(tallySheet);
-    }
-
-    public Optional<ErrorResponse> error() {
-        return Optional.ofNullable(errorResponse);
-    }
 }

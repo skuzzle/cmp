@@ -3,31 +3,13 @@ package de.skuzzle.tally.frontend.client;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 public class TallyIncrement {
 
-    @NotEmpty
-    private String id;
-
-    @NotNull
     private Set<String> tags;
-
-    @NotNull
     private String description;
-    private LocalDateTime createDateUTC;
     private LocalDateTime incrementDateUTC;
 
     public TallyIncrement() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public Set<String> getTags() {
@@ -46,14 +28,6 @@ public class TallyIncrement {
         this.description = description;
     }
 
-    public void setCreateDateUTC(LocalDateTime createDateUTC) {
-        this.createDateUTC = createDateUTC;
-    }
-
-    public LocalDateTime getCreateDateUTC() {
-        return this.createDateUTC;
-    }
-
     public LocalDateTime getIncrementDateUTC() {
         return incrementDateUTC;
     }
@@ -62,4 +36,3 @@ public class TallyIncrement {
         this.incrementDateUTC = incrementDateUTC;
     }
 }
-

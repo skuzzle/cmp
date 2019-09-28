@@ -2,23 +2,22 @@ package de.skuzzle.tally.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.DateTimeFormat;
+
+import com.google.common.base.Preconditions;
 
 @Document
 public class TallySheet {
-
-    public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
     @Id
     private String id;
@@ -38,10 +37,8 @@ public class TallySheet {
 
     // dates in UTC+0
     @CreatedDate
-    //@JsonFormat(pattern = TallySheet.DATE_FORMAT)
     private LocalDateTime createDateUTC;
     @LastModifiedDate
-    //@JsonFormat(pattern = TallySheet.DATE_FORMAT)
     private LocalDateTime lastModifiedDateUTC;
 
     public String getName() {
@@ -68,8 +65,8 @@ public class TallySheet {
         this.id = id;
     }
 
-    public String getAdminKey() {
-        return this.adminKey;
+    public Optional<String> getAdminKey() {
+        return Optional.ofNullable(this.adminKey);
     }
 
     public void setAdminKey(String adminKey) {
@@ -106,5 +103,10 @@ public class TallySheet {
 
     void setCreateDateUTC(LocalDateTime createDate) {
         this.createDateUTC = createDate;
+    }
+
+    public void incrementWith(TallyIncrement increment) {
+        Preconditions.checkArgument(increment != null, "increment must not be null");
+        this.increments.add(increment);
     }
 }

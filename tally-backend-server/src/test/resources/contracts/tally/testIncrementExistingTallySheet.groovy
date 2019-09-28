@@ -32,34 +32,27 @@ org.springframework.cloud.contract.spec.Contract.make {
     response {
         status OK()
         body([
-            id: $(
-                consumer('5c9dc2ce8691ff4f8c1b2d54'),
-                producer(regex('[a-zA-Z0-9]+'))
-            ),
-            name: 'existing',
-            publicKey: 'publicKey',
-            adminKey: 'adminKey',
-            createDateUTC: $(
-                consumer('1987-09-12T11:11:00.123'),
-                producer(regex(Helpers.isoDateTimeWithNanos()))
-            ),
-            lastModifiedDateUTC: $(
-                consumer('1987-09-12T11:11:00.123'),
-                producer(regex(Helpers.isoDateTimeWithNanos()))
-            ),
-            increments: [
-                [
-                    id: regex(uuid()),
-                    description: regex('\\w+'),
-                    tags: [ 'tag1', 'tag2' ],
-                    createDateUTC: $(
-                        consumer('1987-09-12T11:11:00.123'),
-                        producer(regex(Helpers.isoDateTimeWithNanos()))
-                    ),
-                    incrementDateUTC: $(
-                            consumer('2019-04-12T11:21:32.123'),
-                            producer(regex(Helpers.isoDateTimeWithNanos()))
-                    )
+            tallySheet: [
+                name: 'existing',
+                publicKey: 'publicKey',
+                adminKey: 'adminKey',
+                createDateUTC: $(
+                    consumer('1987-09-12T11:11:00.123'),
+                    producer(regex(Helpers.isoDateTimeWithNanos()))
+                ),
+                lastModifiedDateUTC: $(
+                    consumer('1987-09-12T11:11:00.123'),
+                    producer(regex(Helpers.isoDateTimeWithNanos()))
+                ),
+                increments: [
+                    [
+                        description: regex('\\w+'),
+                        tags: [ 'tag1', 'tag2' ],
+                        incrementDateUTC: $(
+                                consumer('2019-04-12T11:21:32.123'),
+                                producer(regex(Helpers.isoDateTimeWithNanos()))
+                        )
+                    ]
                 ]
             ]
         ])

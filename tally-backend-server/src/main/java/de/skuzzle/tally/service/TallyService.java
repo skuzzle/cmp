@@ -1,11 +1,8 @@
 package de.skuzzle.tally.service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.UUID;
 
-import org.springframework.data.auditing.DateTimeProvider;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,13 +12,10 @@ public class TallyService {
 
     private final TallyRepository repository;
     private final RandomKeyGenerator randomKeyGenerator;
-    private final DateTimeProvider dateTimeProvider;
 
-    public TallyService(TallyRepository repository, RandomKeyGenerator randomKeyGenerator,
-            DateTimeProvider dateTimeProvider) {
+    TallyService(TallyRepository repository, RandomKeyGenerator randomKeyGenerator) {
         this.repository = repository;
         this.randomKeyGenerator = randomKeyGenerator;
-        this.dateTimeProvider = dateTimeProvider;
     }
 
     public TallySheet createNewTallySheet(String name) {
@@ -48,12 +42,7 @@ public class TallyService {
         final TallySheet tallySheet = repository.findByAdminKey(adminKey)
                 .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
 
-        final LocalDateTime createDate = dateTimeProvider.getNow().map(LocalDateTime::from)
-                .orElseThrow(IllegalStateException::new);
-        increment.setCreateDateUTC(createDate);
-        increment.setId(UUID.randomUUID().toString());
-
-        tallySheet.getIncrements().add(increment);
+        tallySheet.incrementWith(increment);
         return repository.save(tallySheet);
     }
 

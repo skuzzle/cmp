@@ -1,15 +1,16 @@
-package de.skuzzle.tally.service;
+package de.skuzzle.tally.rest;
+
+import java.util.concurrent.TimeUnit;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.RateLimiter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.concurrent.TimeUnit;
 
 class ApiRateLimiter {
 
@@ -17,15 +18,15 @@ class ApiRateLimiter {
 
     private final LoadingCache<String, RateLimiter> limiterCache;
 
-    ApiRateLimiter(double rateLimit) {
+    ApiRateLimiter(double requestsPerMinute) {
         this.limiterCache = CacheBuilder.newBuilder()
-                .expireAfterAccess(2, TimeUnit.MINUTES)
+                .expireAfterAccess(1, TimeUnit.MINUTES)
                 .recordStats()
                 .build(new CacheLoader<String, RateLimiter>() {
                     @Override
                     public RateLimiter load(String clientIp) throws Exception {
                         logger.debug("Create new rate limiter for ip '{}'", clientIp);
-                        return RateLimiter.create(rateLimit);
+                        return RateLimiter.create(requestsPerMinute);
                     }
                 });
     }
