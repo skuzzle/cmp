@@ -79,4 +79,15 @@ public class TallyClientIntegrationTest {
         assertThat(success).isTrue();
     }
 
+    @Test
+    void testDeleteIncrement() throws Exception {
+        final var success = tallyClient.deleteIncrement("adminKey2", "incrementId");
+        assertThat(success).isTrue();
+    }
+
+    @Test
+    void testDeleteUnknownIncrement() throws Exception {
+        final var success = tallyClient.deleteIncrement("adminKey", "unknownIncrementId");
+        assertThat(success).isFalse();
+    }
 }

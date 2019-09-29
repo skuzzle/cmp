@@ -87,6 +87,18 @@ public class TallyClient {
         }
     }
 
+    public boolean deleteIncrement(String adminKey, String incrementId) {
+        Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
+        Preconditions.checkArgument(incrementId != null, "incrementId must not be null");
+        try {
+            restTemplate.delete("/admin/{key}/increment/{id}", adminKey, incrementId);
+            return true;
+        } catch (final Exception e) {
+            logger.error("Error deleting increment {} from sheet with key '{}'", incrementId, adminKey, e);
+            return false;
+        }
+    }
+
     private TallyApiResponse error(String errorResponseBody) {
         try {
             return objectMapper.readValue(errorResponseBody, TallyApiResponse.class);
