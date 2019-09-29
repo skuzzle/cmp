@@ -1,5 +1,7 @@
 package de.skuzzle.tally.service;
 
+import static java.util.Comparator.comparing;
+
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -61,7 +63,7 @@ public class IncrementQuery {
                 .filter(increment -> increment.getIncrementDateUTC().isBefore(until))
                 .skip(start)
                 .limit(maxResults)
-                .sorted()
+                .sorted(comparing(TallyIncrement::getIncrementDateUTC))
                 .collect(Collectors.toList());
 
         return new IncrementQueryResult(increments, this, allIncrements.size());

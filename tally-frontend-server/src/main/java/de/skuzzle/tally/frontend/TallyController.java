@@ -5,6 +5,8 @@ import de.skuzzle.tally.frontend.client.TallyResult;
 import de.skuzzle.tally.frontend.client.TallyClient;
 import de.skuzzle.tally.frontend.client.TallyIncrement;
 import de.skuzzle.tally.frontend.client.TallySheet;
+import de.skuzzle.tally.frontend.graphs.Graph;
+
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
