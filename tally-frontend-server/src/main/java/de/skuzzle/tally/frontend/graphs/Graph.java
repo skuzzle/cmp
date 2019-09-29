@@ -16,8 +16,8 @@ public class Graph {
     private final List<String> labels;
 
     private Graph(Collection<TallyIncrement> history) {
-        final Timeline timeline = MonthBucketTimeline.initializeFrom(history.stream()
-                .map(TallyIncrement::getIncrementDateUTC));
+        final Timeline timeline = new MonthBucketTimeline(history.stream()
+                .map(TallyIncrement::getIncrementDateUTC).collect(Collectors.toList()));
 
         final List<String> labels = new ArrayList<>(history.size());
         final List<Point> data = history.stream()

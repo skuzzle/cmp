@@ -1,7 +1,7 @@
 package de.skuzzle.tally.frontend.graphs;
 
 import java.time.LocalDateTime;
-import java.util.stream.Stream;
+import java.util.Collection;
 
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Ints;
@@ -10,25 +10,27 @@ public class MonthBucketTimeline implements Timeline {
 
     private LocalDateTime min = LocalDateTime.now();
     private LocalDateTime max = LocalDateTime.now();
-    private int[] buckets;
+    private final int[] buckets;
 
-    private MonthBucketTimeline() {
-        // hidden
+    public MonthBucketTimeline(Collection<LocalDateTime> instants) {
+        instants.forEach(this::extend);
+
+        final long months = 12 + (max.getYear() - min.getYear()) * 12;
+        buckets = new int[Ints.saturatedCast(months)];
+        instants.forEach(this::fillBucket);
     }
 
-    public static MonthBucketTimeline initializeFrom(Stream<LocalDateTime> instants) {
-        final MonthBucketTimeline result = new MonthBucketTimeline();
-        instants.forEach(result::extend);
-        final long months = 12 + (result.max.getYear() - result.min.getYear()) * 12;
-        result.buckets = new int[Ints.saturatedCast(months)];
-        return result;
+    private void fillBucket(LocalDateTime instant) {
+        final int yearModifier = instant.getYear() - min.getYear();
+        final int bucket = instant.getMonth().getValue() + 12 * yearModifier;
+        ++buckets[bucket];
     }
 
-    private MonthBucketTimeline extend(LocalDateTime date) {
-        if (date.compareTo(min) < 0) {
-            min = date;
-        } else if (date.compareTo(max) > 0) {
-            max = date;
+    private MonthBucketTimeline extend(LocalDateTime instant) {
+        if (instant.compareTo(min) < 0) {
+            min = instant;
+        } else if (instant.compareTo(max) > 0) {
+            max = instant;
         }
         return this;
     }
@@ -40,7 +42,7 @@ public class MonthBucketTimeline implements Timeline {
 
         final int yearModifier = instant.getYear() - min.getYear();
         final int bucket = instant.getMonth().getValue() + 12 * yearModifier;
-        final int y = ++buckets[bucket];
+        final int y = buckets[bucket];
         return new Point(bucket, y);
     }
 
