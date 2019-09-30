@@ -1,12 +1,9 @@
 package de.skuzzle.tally.frontend.graphs;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.google.common.collect.ImmutableList;
 
 import de.skuzzle.tally.frontend.client.TallyIncrement;
 
@@ -16,20 +13,13 @@ public class Graph {
     private final List<String> labels;
 
     private Graph(Collection<TallyIncrement> history) {
-        final Timeline timeline = new MonthBucketTimeline(history.stream()
-                .map(TallyIncrement::getIncrementDateUTC).collect(Collectors.toList()));
-
-        final List<String> labels = new ArrayList<>(history.size());
-        final List<Point> data = history.stream()
+        this.labels = history.stream()
                 .sorted(Comparator.comparing(TallyIncrement::getIncrementDateUTC))
-                .map(increment -> {
-                    final Point point = timeline.classify(increment.getIncrementDateUTC());
-                    labels.add(increment.getDescription());
-                    return point;
-                })
+                .map(TallyIncrement::getDescription)
                 .collect(Collectors.toList());
-        this.datasets = ImmutableList.of(new Dataset(data));
-        this.labels = labels;
+
+        final Dataset monthly = Dataset.create(history, MonthBucketTimeline::new);
+        datasets = List.of(monthly);
     }
 
     public static Graph fromHistory(Collection<TallyIncrement> history) {
