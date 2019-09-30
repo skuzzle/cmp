@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         yAxes: [{
             type: "linear",
             stacked: true,
-            display: false,
+            display: true,
             scaleLabel: {
                 display: false
             },
@@ -37,7 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 display: false
             },
             ticks: {
-                display: false
+                display: true,
+                precision: 0,
+                stepSize: 1
             }
         }],
     };
