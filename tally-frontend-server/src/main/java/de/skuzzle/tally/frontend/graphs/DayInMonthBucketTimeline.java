@@ -5,22 +5,21 @@ import java.util.Collection;
 
 import com.google.common.base.Preconditions;
 
-public class MonthBucketTimeline implements Timeline {
+public class DayInMonthBucketTimeline implements Timeline {
 
     private final TimeRange range;
     private final int[] buckets;
 
-    public MonthBucketTimeline(Collection<LocalDateTime> instants) {
+    public DayInMonthBucketTimeline(Collection<LocalDateTime> instants) {
         this.range = TimeRange.from(instants);
 
-        final int bucketCount = 12 + (range.max().getYear() - range.min().getYear()) * 12;
+        final int bucketCount = range.min().getMonth().maxLength();
         buckets = new int[bucketCount];
         instants.forEach(this::fillBucket);
     }
 
     private void fillBucket(LocalDateTime instant) {
-        final int yearModifier = instant.getYear() - range.min().getYear();
-        final int bucket = (instant.getMonth().getValue() - 1) + 12 * yearModifier;
+        final int bucket = instant.getDayOfMonth() - 1;
         ++buckets[bucket];
     }
 
@@ -29,8 +28,7 @@ public class MonthBucketTimeline implements Timeline {
         Preconditions.checkArgument(range.contains(instant),
                 "Given date %s should be contained in %s", instant, range);
 
-        final int yearModifier = instant.getYear() - range.min().getYear();
-        final int bucket = (instant.getMonth().getValue() - 1) + 12 * yearModifier;
+        final int bucket = instant.getDayOfMonth() - 1;
         final int y = buckets[bucket];
         return new Point(bucket, y);
     }

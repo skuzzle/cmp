@@ -3,6 +3,8 @@ package de.skuzzle.tally.frontend.graphs;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Iterator;
+import java.util.function.Function;
+import java.util.stream.StreamSupport;
 
 public class TimeRange {
 
@@ -12,6 +14,12 @@ public class TimeRange {
     private TimeRange(LocalDateTime min, LocalDateTime max) {
         this.min = min;
         this.max = max;
+    }
+
+    public static <T> TimeRange extractFrom(Iterable<T> elements, Function<? super T, LocalDateTime> extractor) {
+        final Iterable<LocalDateTime> instants = StreamSupport.stream(elements.spliterator(), false)
+                .map(extractor)::iterator;
+        return from(instants);
     }
 
     public static TimeRange from(Iterable<LocalDateTime> instants) {
@@ -27,6 +35,10 @@ public class TimeRange {
             }
         }
         return new TimeRange(min, max);
+    }
+
+    public boolean isOneMonth() {
+        return min.getMonth().equals(max.getMonth());
     }
 
     public Duration length() {

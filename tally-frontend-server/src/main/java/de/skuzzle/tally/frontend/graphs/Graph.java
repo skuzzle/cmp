@@ -18,7 +18,7 @@ public class Graph {
                 .map(TallyIncrement::getDescription)
                 .collect(Collectors.toList());
 
-        final Dataset monthly = Dataset.create(history, MonthBucketTimeline::new);
+        final Dataset monthly = Dataset.create(history, MonthInYearBucketTimeline::new);
         datasets = List.of(monthly);
     }
 
