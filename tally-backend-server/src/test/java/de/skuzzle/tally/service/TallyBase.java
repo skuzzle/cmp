@@ -43,8 +43,8 @@ public class TallyBase {
                 .thenReturn("publicKey")
                 .thenReturn("publicKey2")
                 .thenReturn("publicKey3");
-        tallyService.createNewTallySheet("existing");
-        tallyService.createNewTallySheet("existing2");
+        tallyService.createNewTallySheet("user1", "existing");
+        tallyService.createNewTallySheet("user1", "existing2");
         tallyService.increment("adminKey2", increment);
 
         RestAssuredMockMvc.webAppContextSetup(webAppCtx);

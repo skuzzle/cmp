@@ -17,8 +17,9 @@ public class TallyService {
         this.randomKeyGenerator = randomKeyGenerator;
     }
 
-    public TallySheet createNewTallySheet(String name) {
+    public TallySheet createNewTallySheet(String userId, String name) {
         return repository.save(TallySheet.newTallySheet(
+                userId,
                 name,
                 randomKeyGenerator.generateAdminKey(),
                 randomKeyGenerator.generatePublicKey(PUBLIC_KEY_LENGTH)));

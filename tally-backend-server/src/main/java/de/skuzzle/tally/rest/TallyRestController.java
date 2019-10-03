@@ -48,7 +48,7 @@ public class TallyRestController {
     public ResponseEntity<RestTallyResponse> createTally(@PathVariable @NotEmpty String name,
             HttpServletRequest request) {
         rateLimiter.blockIfRateLimitIsExceeded(request);
-        final TallySheet tallySheet = tallyService.createNewTallySheet(name);
+        final TallySheet tallySheet = tallyService.createNewTallySheet("unknown", name);
         final RestTallyResponse response = RestTallyResponse.of(RestTallySheet.fromDomainObject(tallySheet));
         return ResponseEntity.created(URI.create("/public/" + tallySheet.getAdminKey().orElseThrow()))
                 .body(response);

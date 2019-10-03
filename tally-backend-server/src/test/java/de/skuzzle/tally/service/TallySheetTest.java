@@ -61,7 +61,7 @@ public class TallySheetTest {
     }
 
     private TallySheet createWithIncrements(int count, LocalDateTime from, LocalDateTime until) {
-        final TallySheet sheet = TallySheet.newTallySheet("name", "adminKey", "publicKey");
+        final TallySheet sheet = TallySheet.newTallySheet("userId", "name", "adminKey", "publicKey");
         final long days = ChronoUnit.DAYS.between(from, until);
         final long avgBetween = days / count;
         for (int i = 0; i < count; i++) {

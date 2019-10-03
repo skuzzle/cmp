@@ -20,11 +20,12 @@ public class TallyServiceIntegrationTest {
 
     @Test
     void testCreateTallySheet() throws Exception {
-        final TallySheet sheet = tallyService.createNewTallySheet("test");
+        final TallySheet sheet = tallyService.createNewTallySheet("user", "test");
         assertSoftly(softly -> {
             softly.assertThat(sheet.getIncrements()).isEmpty();
             softly.assertThat(sheet.getAdminKey()).isNotEmpty();
             softly.assertThat(sheet.getName()).isEqualTo("test");
+            softly.assertThat(sheet.getUserId()).isEqualTo("user");
             softly.assertThat(sheet.getPublicKey()).isNotEmpty();
             softly.assertThat(sheet.getLastModifiedDateUTC()).isNotNull();
             softly.assertThat(sheet.getCreateDateUTC()).isNotNull();
@@ -33,7 +34,7 @@ public class TallyServiceIntegrationTest {
 
     @Test
     void testGetTallySheetByAdminKey() throws Exception {
-        final TallySheet sheet = tallyService.createNewTallySheet("test");
+        final TallySheet sheet = tallyService.createNewTallySheet("user", "test");
         final TallySheet tallySheet = tallyService.getTallySheet(sheet.getAdminKey().orElseThrow());
         assertThat(tallySheet.getName()).isEqualTo("test");
         assertThat(tallySheet.getAdminKey()).isEqualTo(sheet.getAdminKey());
@@ -41,7 +42,7 @@ public class TallyServiceIntegrationTest {
 
     @Test
     void testGetTallySheetByPublicKey() throws Exception {
-        final TallySheet sheet = tallyService.createNewTallySheet("test");
+        final TallySheet sheet = tallyService.createNewTallySheet("user", "test");
         final TallySheet tallySheet = tallyService.getTallySheet(sheet.getPublicKey());
         assertThat(tallySheet.getName()).isEqualTo("test");
         assertThat(tallySheet.getAdminKey()).isEqualTo(Optional.empty());
@@ -57,7 +58,7 @@ public class TallyServiceIntegrationTest {
     void testIncrementWithPublicKey() throws Exception {
         final TallyIncrement validIncrement = TallyIncrement.newIncrement("test", LocalDateTime.now(), Set.of("pizza"));
 
-        final TallySheet tallySheet = tallyService.createNewTallySheet("increment");
+        final TallySheet tallySheet = tallyService.createNewTallySheet("user", "increment");
         assertThatExceptionOfType(TallySheetNotAvailableException.class)
                 .isThrownBy(() -> tallyService.increment(tallySheet.getPublicKey(), validIncrement));
     }
@@ -70,14 +71,14 @@ public class TallyServiceIntegrationTest {
 
     @Test
     void testDeleteWithPublicKey() throws Exception {
-        final TallySheet tallySheet = tallyService.createNewTallySheet("deleteMe");
+        final TallySheet tallySheet = tallyService.createNewTallySheet("user", "deleteMe");
         assertThatExceptionOfType(TallySheetNotAvailableException.class)
                 .isThrownBy(() -> tallyService.deleteTallySheet(tallySheet.getPublicKey()));
     }
 
     @Test
     void testDeleteWithAdminKey() throws Exception {
-        final TallySheet tallySheet = tallyService.createNewTallySheet("deleteMe");
+        final TallySheet tallySheet = tallyService.createNewTallySheet("user", "deleteMe");
         tallyService.deleteTallySheet(tallySheet.getAdminKey().orElseThrow());
         assertThatExceptionOfType(TallySheetNotAvailableException.class)
                 .isThrownBy(() -> tallyService.getTallySheet(tallySheet.getPublicKey()));
@@ -93,7 +94,7 @@ public class TallyServiceIntegrationTest {
 
     @Test
     void testIncrement() throws Exception {
-        final TallySheet tallySheet = tallyService.createNewTallySheet("incrementMe");
+        final TallySheet tallySheet = tallyService.createNewTallySheet("user", "incrementMe");
         final TallyIncrement validIncrement = TallyIncrement.newIncrement("test", LocalDateTime.now(), Set.of("pizza"));
 
         final TallySheet updated = tallyService.increment(tallySheet.getAdminKey().orElseThrow(), validIncrement);
@@ -108,7 +109,7 @@ public class TallyServiceIntegrationTest {
 
     @Test
     void testDeleteIncrementSuccessfully() throws Exception {
-        final TallySheet tallySheet = tallyService.createNewTallySheet("incrementMe");
+        final TallySheet tallySheet = tallyService.createNewTallySheet("user", "incrementMe");
         final TallyIncrement validIncrement = TallyIncrement.newIncrement("test", LocalDateTime.now(), Set.of("pizza"));
 
         tallyService.increment(tallySheet.getAdminKey().orElseThrow(), validIncrement);
@@ -120,7 +121,7 @@ public class TallyServiceIntegrationTest {
 
     @Test
     void testDeleteUnknownIncrement() throws Exception {
-        final TallySheet tallySheet = tallyService.createNewTallySheet("incrementMe");
+        final TallySheet tallySheet = tallyService.createNewTallySheet("user", "incrementMe");
 
         assertThatExceptionOfType(IncrementNotAvailableException.class)
                 .isThrownBy(() -> tallyService.deleteIncrement(tallySheet.getAdminKey().orElseThrow(), "foo"));
@@ -128,7 +129,7 @@ public class TallyServiceIntegrationTest {
 
     @Test
     void testDeleteIncrementWithPublicKey() throws Exception {
-        final TallySheet tallySheet = tallyService.createNewTallySheet("incrementMe");
+        final TallySheet tallySheet = tallyService.createNewTallySheet("user", "incrementMe");
         final TallyIncrement validIncrement = TallyIncrement.newIncrement("test", LocalDateTime.now(), Set.of("pizza"));
 
         assertThatExceptionOfType(TallySheetNotAvailableException.class)
@@ -137,7 +138,7 @@ public class TallyServiceIntegrationTest {
 
     @Test
     void testRetrieveIncrementedTallySheet() throws Exception {
-        final TallySheet tallySheet = tallyService.createNewTallySheet("incrementMe");
+        final TallySheet tallySheet = tallyService.createNewTallySheet("user", "incrementMe");
         tallyService.increment(tallySheet.getAdminKey().orElseThrow(),
                 TallyIncrement.newIncrement("test", LocalDateTime.now(), Set.of("pizza")));
         tallyService.increment(tallySheet.getAdminKey().orElseThrow(),

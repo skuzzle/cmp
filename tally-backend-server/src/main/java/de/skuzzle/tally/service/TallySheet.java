@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -23,6 +24,9 @@ public class TallySheet {
     @Version
     private int version;
 
+    @Indexed
+    private final String userId;
+
     private final String name;
     @Indexed
     private String adminKey;
@@ -36,19 +40,21 @@ public class TallySheet {
     @LastModifiedDate
     private LocalDateTime lastModifiedDateUTC;
 
-    TallySheet(String name, String adminKey, String publicKey, List<TallyIncrement> increments) {
+    TallySheet(String userId, String name, String adminKey, String publicKey, List<TallyIncrement> increments) {
+        Preconditions.checkArgument(userId != null, "userId must not be null");
         Preconditions.checkArgument(name != null, "name must not be null");
         Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
         Preconditions.checkArgument(publicKey != null, "publicKey must not be null");
         Preconditions.checkArgument(increments != null, "increments must not be null");
+        this.userId = userId;
         this.name = name;
         this.adminKey = adminKey;
         this.publicKey = publicKey;
         this.increments = increments;
     }
 
-    public static TallySheet newTallySheet(String name, String adminKey, String publicKey) {
-        return new TallySheet(name, adminKey, publicKey, new ArrayList<>());
+    public static TallySheet newTallySheet(String userId, String name, String adminKey, String publicKey) {
+        return new TallySheet(userId, name, adminKey, publicKey, new ArrayList<>());
     }
 
     public String getId() {
@@ -57,6 +63,10 @@ public class TallySheet {
 
     public int getVersion() {
         return this.version;
+    }
+
+    public String getUserId() {
+        return this.userId;
     }
 
     public String getName() {
@@ -100,10 +110,30 @@ public class TallySheet {
 
     public void incrementWith(TallyIncrement increment) {
         Preconditions.checkArgument(increment != null, "increment must not be null");
-        final boolean idExists = increments.stream().anyMatch(existing -> existing.getId().equals(increment.getId()));
+        final boolean idExists = firstIndexOf(increments, other -> other.getId().equals(increment.getId())) >= 0;
         Preconditions.checkArgument(!idExists, "Increment with id %s already exists in tally sheet with id %s",
                 increment.getId(), getId());
 
         this.increments.add(increment);
+    }
+
+    public void updateIncrement(TallyIncrement increment) {
+        Preconditions.checkArgument(increment != null, "increment must not be null");
+        final int idx = firstIndexOf(increments, other -> other.getId().equals(increment.getId()));
+        final boolean idExists = idx >= 0;
+        Preconditions.checkArgument(idExists, "Increment with id %s does not exist in tally sheet with id %s",
+                increment.getId(), getId());
+
+        this.increments.set(idx, increment);
+    }
+
+    private <T> int firstIndexOf(List<T> list, Predicate<? super T> p) {
+        for (int i = 0; i < list.size(); i++) {
+            final T element = list.get(i);
+            if (p.test(element)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
