@@ -3,7 +3,9 @@ package de.skuzzle.tally.frontend;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -42,10 +44,15 @@ public class TallyController {
     @PostMapping("/{adminKey}")
     public String incrementTallySheet(@PathVariable("adminKey") String adminKey,
             @RequestParam("description") String description,
+            @RequestParam("tags") String tags,
             @RequestParam("incrementDateUTC") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate incrementDate) {
 
+        final Set<String> tagSet = Arrays.stream(tags.split(","))
+                .map(String::trim)
+                .filter(tag -> !tag.isEmpty())
+                .collect(Collectors.toSet());
         final RestTallyIncrement increment = RestTallyIncrement.createNew(description,
-                LocalDateTime.of(incrementDate, LocalTime.now()), new HashSet<>());
+                LocalDateTime.of(incrementDate, LocalTime.now()), tagSet);
 
         final TallyResult response = client.increment(adminKey, increment);
         final RestTallySheet tallySheet = response.tallySheet().orElseThrow();

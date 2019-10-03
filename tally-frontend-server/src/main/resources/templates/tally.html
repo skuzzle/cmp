@@ -36,7 +36,7 @@
         <div class="columns is-centered">
             <div class="column has-text-centered is-4">
                 <div style="position:relative">
-                    <p class="title is-size-0" th:text="${increments.entries.size()}">1234</p>
+                    <p class="title is-size-0" th:text="${increments.total}">1234</p>
 
                     <div style="position:absolute;bottom:0px;left:0;right:0">
                         <canvas class="is-tally-graph" th:data-public-key="${tally.publicKey}"/>
@@ -56,6 +56,11 @@
                         <div class="control is-expanded">
                             <input class="input" name="incrementDateUTC" type="date" required="true" autofocus="true"  >
                         </div>
+                    </div>
+                    <div class="field">
+	                    <div class="control is-expanded">
+	                        <input class="input" name="tags" type="text" placeholder="Tags, comma separated" autofocus="true"  >
+	                    </div>
                     </div>
                     <div class="field has-addons">
                         <div class="control is-expanded">
@@ -80,14 +85,21 @@
                     <tr>
                         <th>Date</th>
                         <th>Description</th>
-                        <th></th>
+                        <th>Tags</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="increment : ${increments.entries}">
-                        <td><time class="is-date-utc" th:text="${increment.incrementDateUTC}"></time></td>
+                        <td>
+                            <a th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}" class="delete" title="Delete this increment">Delete</a>
+                            <time class="is-date-utc" th:text="${increment.incrementDateUTC}"></time>
+                        </td>
                         <td th:text="${increment.description}"></td>
-                        <td><a th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}" class="delete" title="Delete this increment">Delete</a></td>
+                        <td>
+                            <div class="tags">
+                                <span class="tag" th:each="tag : ${increment.tags}" th:text="${tag}"></span>
+                            </div>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
