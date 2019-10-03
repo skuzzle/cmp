@@ -5,11 +5,20 @@ import java.util.Set;
 
 public class TallyIncrement {
 
+    private String id;
     private Set<String> tags;
     private String description;
     private LocalDateTime incrementDateUTC;
 
     public TallyIncrement() {
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Set<String> getTags() {

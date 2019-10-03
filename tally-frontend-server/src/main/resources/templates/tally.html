@@ -80,12 +80,14 @@
                     <tr>
                         <th>Date</th>
                         <th>Description</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="increment : ${tally.getHistory(10)}">
                         <td><time class="is-date-utc" th:text="${increment.incrementDateUTC}"></time></td>
                         <td th:text="${increment.description}"></td>
+                        <td><a th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}" class="delete" title="Delete this increment">Delete</a></td>
                     </tr>
                     </tbody>
                 </table>

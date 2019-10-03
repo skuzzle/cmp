@@ -1,11 +1,9 @@
 package de.skuzzle.tally.frontend;
 
-import com.google.common.collect.ImmutableMap;
-import de.skuzzle.tally.frontend.client.TallyResult;
-import de.skuzzle.tally.frontend.client.TallyClient;
-import de.skuzzle.tally.frontend.client.TallyIncrement;
-import de.skuzzle.tally.frontend.client.TallySheet;
-import de.skuzzle.tally.frontend.graphs.Graph;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.HashSet;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -15,10 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.HashSet;
+import com.google.common.collect.ImmutableMap;
+
+import de.skuzzle.tally.frontend.client.TallyClient;
+import de.skuzzle.tally.frontend.client.TallyIncrement;
+import de.skuzzle.tally.frontend.client.TallyResult;
+import de.skuzzle.tally.frontend.client.TallySheet;
+import de.skuzzle.tally.frontend.graphs.Graph;
 
 @Controller
 public class TallyController {
@@ -39,8 +40,8 @@ public class TallyController {
 
     @PostMapping("/{adminKey}")
     public String incrementTallySheet(@PathVariable("adminKey") String adminKey,
-                                      @RequestParam("description") String description,
-                                      @RequestParam("incrementDateUTC") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate incrementDate) {
+            @RequestParam("description") String description,
+            @RequestParam("incrementDateUTC") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate incrementDate) {
         final TallyIncrement increment = new TallyIncrement();
         final LocalDateTime incrementDateUTC = LocalDateTime.of(incrementDate, LocalTime.now());
         increment.setDescription(description);
@@ -57,5 +58,11 @@ public class TallyController {
         final TallySheet tallySheet = response.tallySheet().orElseThrow();
         final Graph graph = Graph.fromHistory(tallySheet.getIncrements());
         return new ModelAndView("tally", ImmutableMap.of("tally", tallySheet, "graph", graph));
+    }
+
+    @GetMapping(path = "/{key}/increment/{incrementId}", params = "action=delete")
+    public String deleteIncrement(@PathVariable String key, @PathVariable String incrementId) {
+        client.deleteIncrement(key, incrementId);
+        return "redirect:/" + key;
     }
 }
