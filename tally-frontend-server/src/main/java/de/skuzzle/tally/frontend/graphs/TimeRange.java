@@ -37,7 +37,7 @@ public class TimeRange {
         return new TimeRange(min, max);
     }
 
-    public boolean isOneMonth() {
+    public boolean isSingleMonth() {
         return min.getMonth().equals(max.getMonth());
     }
 

@@ -39,8 +39,12 @@ public class RestTallyIncrement {
                 tallyIncrement.getIncrementDateUTC());
     }
 
-    public TallyIncrement toDomainObject() {
+    public TallyIncrement toDomainObjectWithoutId() {
         return TallyIncrement.newIncrement(description, incrementDateUTC, tags);
+    }
+
+    public TallyIncrement toDomainObjectWithId() {
+        return TallyIncrement.newIncrementWithId(id, description, incrementDateUTC, tags);
     }
 
     public String getId() {

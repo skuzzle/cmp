@@ -27,25 +27,24 @@ public class TallyClientIntegrationTest {
         assertThat(apiResponse.isSuccess()).isTrue();
         assertThat(apiResponse.getStatus()).isEqualTo(HttpStatus.CREATED);
 
-        final TallySheet tallySheet = apiResponse.tallySheet().orElseThrow();
+        final RestTallySheet tallySheet = apiResponse.tallySheet().orElseThrow();
         assertThat(tallySheet.getCreateDateUTC()).isEqualTo(LocalDateTime.of(1987, 9, 12, 11, 11, 0, 123000000));
         assertThat(tallySheet.getLastModifiedDateUTC()).isEqualTo(LocalDateTime.of(1987, 9, 12, 11, 11, 0, 123000000));
     }
 
     @Test
     void incrementTallySheet() {
-        final var increment = new TallyIncrement();
-        increment.setDescription("Description");
-        increment.setTags(Set.of("tag1", "tag2"));
-        increment.setIncrementDateUTC(LocalDateTime.of(2019, 04, 12, 11, 21, 32, 123000000));
+        final var increment = RestTallyIncrement.createNew("Description",
+                LocalDateTime.of(2019, 04, 12, 11, 21, 32, 123000000), Set.of("tag1", "tag2"));
 
         final var apiResponse = tallyClient.increment("adminKey", increment);
         assertThat(apiResponse.getStatus()).isEqualTo(HttpStatus.OK);
 
-        final TallySheet tallySheet = apiResponse.tallySheet().orElseThrow();
+        final RestTallySheet tallySheet = apiResponse.tallySheet().orElseThrow();
+        final RestIncrements increments = apiResponse.increments().orElseThrow();
         assertThat(tallySheet.getCreateDateUTC()).isEqualTo(LocalDateTime.of(1987, 9, 12, 11, 11, 0, 123000000));
         assertThat(tallySheet.getLastModifiedDateUTC()).isEqualTo(LocalDateTime.of(1987, 9, 12, 11, 11, 0, 123000000));
-        assertThat(tallySheet.getIncrements()).first().extracting(TallyIncrement::getIncrementDateUTC)
+        assertThat(increments.getEntries()).first().extracting(RestTallyIncrement::getIncrementDateUTC)
                 .isEqualTo(LocalDateTime.of(2019, 04, 12, 11, 21, 32, 123000000));
     }
 
@@ -54,7 +53,7 @@ public class TallyClientIntegrationTest {
         final var apiResponse = tallyClient.getTallySheet("unknownPublicKey");
         assertThat(apiResponse.isError()).isTrue();
 
-        final ErrorResponse errorResponse = apiResponse.error().orElseThrow();
+        final RestErrorMessage errorResponse = apiResponse.error().orElseThrow();
         assertThat(apiResponse.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
         assertThat(errorResponse.getMessage()).isEqualTo("unknownPublicKey");
         assertThat(errorResponse.getOrigin()).isEqualTo("de.skuzzle.tally.service.TallySheetNotAvailableException");

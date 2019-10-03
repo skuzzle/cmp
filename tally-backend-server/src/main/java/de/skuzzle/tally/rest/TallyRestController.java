@@ -83,7 +83,7 @@ public class TallyRestController {
             @RequestBody @Valid RestTallyIncrement increment,
             HttpServletRequest request) {
         rateLimiter.blockIfRateLimitIsExceeded(request);
-        final TallySheet tallySheet = tallyService.increment(key, increment.toDomainObject());
+        final TallySheet tallySheet = tallyService.increment(key, increment.toDomainObjectWithoutId());
 
         final RestIncrements increments = RestIncrements.all(tallySheet.getIncrements());
         final RestTallySheet restTallySheet = RestTallySheet.fromDomainObject(tallySheet);

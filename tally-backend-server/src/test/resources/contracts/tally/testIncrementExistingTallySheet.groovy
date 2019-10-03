@@ -19,6 +19,7 @@ org.springframework.cloud.contract.spec.Contract.make {
         method POST()
         url '/adminKey/increment'
         body([
+                id: null,
                 incrementDateUTC: $(
                         consumer(regex(Helpers.isoDateTimeWithNanos())),
                         producer("2019-04-12T11:21:32.123")),

@@ -15,10 +15,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.collect.ImmutableMap;
 
+import de.skuzzle.tally.frontend.client.RestIncrements;
+import de.skuzzle.tally.frontend.client.RestTallyIncrement;
+import de.skuzzle.tally.frontend.client.RestTallySheet;
 import de.skuzzle.tally.frontend.client.TallyClient;
-import de.skuzzle.tally.frontend.client.TallyIncrement;
 import de.skuzzle.tally.frontend.client.TallyResult;
-import de.skuzzle.tally.frontend.client.TallySheet;
 import de.skuzzle.tally.frontend.graphs.Graph;
 
 @Controller
@@ -33,7 +34,7 @@ public class TallyController {
     @PostMapping("/_create")
     public String createTallySheet(@RequestParam("name") String name) {
         final TallyResult response = client.createNewTallySheet(name);
-        final TallySheet tallySheet = response.tallySheet().orElseThrow();
+        final RestTallySheet tallySheet = response.tallySheet().orElseThrow();
 
         return "redirect:/" + tallySheet.getAdminKey();
     }
@@ -42,22 +43,27 @@ public class TallyController {
     public String incrementTallySheet(@PathVariable("adminKey") String adminKey,
             @RequestParam("description") String description,
             @RequestParam("incrementDateUTC") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate incrementDate) {
-        final TallyIncrement increment = new TallyIncrement();
-        final LocalDateTime incrementDateUTC = LocalDateTime.of(incrementDate, LocalTime.now());
-        increment.setDescription(description);
-        increment.setTags(new HashSet<>());
-        increment.setIncrementDateUTC(incrementDateUTC);
+
+        final RestTallyIncrement increment = RestTallyIncrement.createNew(description,
+                LocalDateTime.of(incrementDate, LocalTime.now()), new HashSet<>());
+
         final TallyResult response = client.increment(adminKey, increment);
-        final TallySheet tallySheet = response.tallySheet().orElseThrow();
+        final RestTallySheet tallySheet = response.tallySheet().orElseThrow();
         return "redirect:/" + tallySheet.getAdminKey();
     }
 
     @GetMapping("/{key}")
     public ModelAndView showTallySheet(@PathVariable("key") String key) {
         final TallyResult response = client.getTallySheet(key);
-        final TallySheet tallySheet = response.tallySheet().orElseThrow();
-        final Graph graph = Graph.fromHistory(tallySheet.getIncrements());
-        return new ModelAndView("tally", ImmutableMap.of("tally", tallySheet, "graph", graph));
+
+        final RestTallySheet tallySheet = response.tallySheet().orElseThrow();
+        final RestIncrements increments = response.increments().orElseThrow();
+
+        final Graph graph = Graph.fromHistory(increments.getEntries());
+        return new ModelAndView("tally", ImmutableMap.of(
+                "tally", tallySheet,
+                "increments", increments,
+                "graph", graph));
     }
 
     @GetMapping(path = "/{key}/increment/{incrementId}", params = "action=delete")

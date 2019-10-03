@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import de.skuzzle.tally.frontend.client.TallyIncrement;
+import de.skuzzle.tally.frontend.client.RestTallyIncrement;
 
 public class Dataset {
     private final List<Point> data;
@@ -15,13 +15,13 @@ public class Dataset {
         this.data = data;
     }
 
-    public static Dataset create(Collection<TallyIncrement> history, TimelineFactory tlFactory) {
+    public static Dataset create(Collection<RestTallyIncrement> history, TimelineFactory tlFactory) {
         final List<LocalDateTime> instants = history.stream()
-                .map(TallyIncrement::getIncrementDateUTC)
+                .map(RestTallyIncrement::getIncrementDateUTC)
                 .collect(Collectors.toList());
         final Timeline timeline = tlFactory.createTimelineFrom(instants);
         final List<Point> data = history.stream()
-                .map(TallyIncrement::getIncrementDateUTC)
+                .map(RestTallyIncrement::getIncrementDateUTC)
                 .sorted()
                 .map(timeline::classify)
                 .collect(Collectors.toList());

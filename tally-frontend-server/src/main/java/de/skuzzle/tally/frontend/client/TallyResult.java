@@ -1,27 +1,30 @@
 package de.skuzzle.tally.frontend.client;
 
-import org.springframework.http.HttpStatus;
-
 import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
 
 public class TallyResult {
 
     private final HttpStatus status;
-    private final TallySheet tallySheet;
-    private final ErrorResponse errorResponse;
+    private final RestTallySheet tallySheet;
+    private final RestIncrements increments;
+    private final RestErrorMessage errorResponse;
 
-    public TallyResult(HttpStatus status, TallySheet tallySheet, ErrorResponse errorResponse) {
+    TallyResult(HttpStatus status, RestTallySheet tallySheet, RestIncrements increments,
+            RestErrorMessage errorResponse) {
         this.status = status;
         this.tallySheet = tallySheet;
+        this.increments = increments;
         this.errorResponse = errorResponse;
     }
 
-    public static TallyResult success(HttpStatus status, TallySheet tallySheet) {
-        return new TallyResult(status, tallySheet, null);
+    public static TallyResult success(HttpStatus status, RestTallyResponse response) {
+        return new TallyResult(status, response.getTallySheet(), response.getIncrements(), null);
     }
 
-    public static TallyResult fail(HttpStatus status, ErrorResponse errorResponse) {
-        return new TallyResult(status, null, errorResponse);
+    public static TallyResult fail(HttpStatus status, RestErrorMessage errorResponse) {
+        return new TallyResult(status, null, null, errorResponse);
     }
 
     public HttpStatus getStatus() {
@@ -36,11 +39,15 @@ public class TallyResult {
         return errorResponse != null;
     }
 
-    public Optional<TallySheet> tallySheet() {
+    public Optional<RestTallySheet> tallySheet() {
         return Optional.ofNullable(tallySheet);
     }
 
-    public Optional<ErrorResponse> error() {
+    public Optional<RestIncrements> increments() {
+        return Optional.ofNullable(increments);
+    }
+
+    public Optional<RestErrorMessage> error() {
         return Optional.ofNullable(errorResponse);
     }
 }

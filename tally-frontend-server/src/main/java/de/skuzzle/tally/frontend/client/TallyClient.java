@@ -38,13 +38,13 @@ public class TallyClient {
     public TallyResult createNewTallySheet(String name) {
         Preconditions.checkArgument(name != null, "name must not be null");
         try {
-            final ResponseEntity<TallyApiResponse> response = restTemplate.postForEntity("/{name}", null,
-                    TallyApiResponse.class, name);
-            return TallyResult.success(response.getStatusCode(), response.getBody().getTallySheet());
+            final ResponseEntity<RestTallyResponse> response = restTemplate.postForEntity("/{name}", null,
+                    RestTallyResponse.class, name);
+            return TallyResult.success(response.getStatusCode(), response.getBody());
         } catch (final HttpStatusCodeException e) {
             logger.debug("HTTP error while calling backend 'POST /{}", name, e);
-            final TallyApiResponse response = error(e.getResponseBodyAsString());
-            return TallyResult.fail(e.getStatusCode(), response.getError());
+            final RestErrorMessage error = error(e.getResponseBodyAsString());
+            return TallyResult.fail(e.getStatusCode(), error);
         }
     }
 
@@ -52,27 +52,27 @@ public class TallyClient {
         Preconditions.checkArgument(publicKey != null, "publicKey must not be null");
 
         try {
-            final ResponseEntity<TallyApiResponse> response = restTemplate.getForEntity("/{key}",
-                    TallyApiResponse.class, publicKey);
-            return TallyResult.success(response.getStatusCode(), response.getBody().getTallySheet());
+            final ResponseEntity<RestTallyResponse> response = restTemplate.getForEntity("/{key}",
+                    RestTallyResponse.class, publicKey);
+            return TallyResult.success(response.getStatusCode(), response.getBody());
         } catch (final HttpStatusCodeException e) {
             logger.debug("HTTP error while calling backend 'GET /{}", publicKey, e);
-            final TallyApiResponse response = error(e.getResponseBodyAsString());
-            return TallyResult.fail(e.getStatusCode(), response.getError());
+            final RestErrorMessage error = error(e.getResponseBodyAsString());
+            return TallyResult.fail(e.getStatusCode(), error);
         }
     }
 
-    public TallyResult increment(String adminKey, TallyIncrement increment) {
+    public TallyResult increment(String adminKey, RestTallyIncrement increment) {
         Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
         Preconditions.checkArgument(increment != null, "increment must not be null");
         try {
-            final ResponseEntity<TallyApiResponse> response = restTemplate.postForEntity("/{key}/increment", increment,
-                    TallyApiResponse.class, adminKey);
-            return TallyResult.success(response.getStatusCode(), response.getBody().getTallySheet());
+            final ResponseEntity<RestTallyResponse> response = restTemplate.postForEntity("/{key}/increment", increment,
+                    RestTallyResponse.class, adminKey);
+            return TallyResult.success(response.getStatusCode(), response.getBody());
         } catch (final HttpStatusCodeException e) {
             logger.debug("HTTP error while calling backend 'POST /{}/increment", adminKey, e);
-            final TallyApiResponse response = error(e.getResponseBodyAsString());
-            return TallyResult.fail(e.getStatusCode(), response.getError());
+            final RestErrorMessage error = error(e.getResponseBodyAsString());
+            return TallyResult.fail(e.getStatusCode(), error);
         }
     }
 
@@ -99,12 +99,12 @@ public class TallyClient {
         }
     }
 
-    private TallyApiResponse error(String errorResponseBody) {
+    private RestErrorMessage error(String errorResponseBody) {
         try {
-            return objectMapper.readValue(errorResponseBody, TallyApiResponse.class);
+            return objectMapper.readValue(errorResponseBody, RestTallyResponse.class).getError();
         } catch (final IOException e) {
             logger.error("Error while deserializing exception response: {}", errorResponseBody, e);
-            return new TallyApiResponse(null, new ErrorResponse(e.getMessage(), e.getClass().getName()));
+            return new RestErrorMessage(e.getMessage(), e.getClass().getName());
         }
     }
 
