@@ -1,12 +1,14 @@
 package de.skuzzle.tally.rest;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,8 +43,8 @@ public class TallyRestController {
 
     @GetMapping("/{key}")
     public ResponseEntity<RestTallyResponse> getTally(@PathVariable String key,
-            @RequestParam(required = false) LocalDateTime from,
-            @RequestParam(required = false) LocalDateTime until,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate until,
             @RequestParam(required = false, defaultValue = "-1") int start,
             @RequestParam(required = false, defaultValue = "-1") int max,
             HttpServletRequest request) {
@@ -50,8 +52,8 @@ public class TallyRestController {
         final TallySheet tallySheet = tallyService.getTallySheet(key);
 
         final IncrementQueryResult incrementQueryResult = tallySheet.selectIncrements(IncrementQuery.all()
-                .from(from == null ? LocalDateTime.MIN : from)
-                .until(until == null ? LocalDateTime.MAX : until)
+                .from(from == null ? LocalDateTime.MIN : from.atStartOfDay())
+                .until(until == null ? LocalDateTime.MAX : until.atStartOfDay())
                 .start(start < 0 ? 0 : start)
                 .maxResults(max < 0 ? Integer.MAX_VALUE : max));
 
