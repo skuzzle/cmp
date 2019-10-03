@@ -15,7 +15,7 @@
     "nodemon": "^1.18.4"
   },
   "dependencies": {
-    "bulma": "^0.7.4",
+    "bulma": "^0.7.5",
     "bulma-badge": "^3.0.0",
     "bulma-divider": "^2.0.1",
     "bulma-timeline": "^3.0.0"
