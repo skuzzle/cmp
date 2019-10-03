@@ -17,6 +17,8 @@
 	<name>tally-parent</name>
 
 	<properties>
+		<application.version.number>${project.version}</application.version.number>
+		
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>11</java.version>
@@ -44,7 +46,7 @@
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
-				<version>26.0-jre</version>
+				<version>28.0-jre</version>
 			</dependency>
 			<dependency>
 				<groupId>nl.jqno.equalsverifier</groupId>
@@ -52,7 +54,11 @@
 				<scope>test</scope>
 				<version>2.4.8</version>
 			</dependency>
-
+			<dependency>
+				<groupId>org.springframework.metrics</groupId>
+				<artifactId>spring-metrics</artifactId>
+				<version>0.5.1.RELEASE</version>
+			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
@@ -65,6 +71,7 @@
 				<version>${spring-cloud.version}</version>
 				<scope>test</scope>
 			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
