@@ -41,7 +41,7 @@ public class TallySheet {
     private LocalDateTime lastModifiedDateUTC;
 
     TallySheet(String userId, String name, String adminKey, String publicKey, List<TallyIncrement> increments) {
-        Preconditions.checkArgument(userId != null, "userId must not be null");
+        // HINT: userId may be null here for existing sheets
         Preconditions.checkArgument(name != null, "name must not be null");
         Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
         Preconditions.checkArgument(publicKey != null, "publicKey must not be null");
@@ -54,6 +54,7 @@ public class TallySheet {
     }
 
     public static TallySheet newTallySheet(String userId, String name, String adminKey, String publicKey) {
+        Preconditions.checkArgument(userId != null, "userId must not be null");
         return new TallySheet(userId, name, adminKey, publicKey, new ArrayList<>());
     }
 
