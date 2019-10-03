@@ -27,6 +27,10 @@ public class IncrementQueryResult {
         return this.originalQuery;
     }
 
+    public int getStart() {
+        return originalQuery.start();
+    }
+
     public int getTotal() {
         return this.total;
     }

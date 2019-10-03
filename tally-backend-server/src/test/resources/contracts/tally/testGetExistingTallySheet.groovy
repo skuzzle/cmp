@@ -34,8 +34,12 @@ org.springframework.cloud.contract.spec.Contract.make {
                 lastModifiedDateUTC: $(
                     consumer('1987-09-12T11:11:00.123'),
                     producer(regex(Helpers.isoDateTimeWithNanos()))
-                ),
-                increments: []
+                )
+            ],
+            increments: [
+                entries: [],
+                total: 0,
+                start: 0
             ]
         ])
         headers {

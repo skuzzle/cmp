@@ -1,7 +1,6 @@
 package de.skuzzle.tally.rest;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import com.google.common.base.Preconditions;
 
@@ -12,18 +11,16 @@ public class RestTallySheet {
     private final String name;
     private final String adminKey;
     private final String publicKey;
-    private final List<RestTallyIncrement> increments;
 
     // dates in UTC+0
     private final LocalDateTime createDateUTC;
     private final LocalDateTime lastModifiedDateUTC;
 
-    public RestTallySheet(String name, String adminKey, String publicKey, List<RestTallyIncrement> increments,
+    public RestTallySheet(String name, String adminKey, String publicKey,
             LocalDateTime createDateUTC, LocalDateTime lastModifiedDateUTC) {
         this.name = name;
         this.adminKey = adminKey;
         this.publicKey = publicKey;
-        this.increments = increments;
         this.createDateUTC = createDateUTC;
         this.lastModifiedDateUTC = lastModifiedDateUTC;
     }
@@ -33,7 +30,6 @@ public class RestTallySheet {
         return new RestTallySheet(tallySheet.getName(),
                 tallySheet.getAdminKey().orElse(null),
                 tallySheet.getPublicKey(),
-                RestTallyIncrement.fromDomainObjects(tallySheet.getIncrements()),
                 tallySheet.getCreateDateUTC(),
                 tallySheet.getLastModifiedDateUTC());
     }
@@ -48,10 +44,6 @@ public class RestTallySheet {
 
     public String getPublicKey() {
         return this.publicKey;
-    }
-
-    public List<RestTallyIncrement> getIncrements() {
-        return this.increments;
     }
 
     public LocalDateTime getCreateDateUTC() {

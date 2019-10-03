@@ -50,6 +50,10 @@ public class IncrementQuery {
         return this;
     }
 
+    public int start() {
+        return start;
+    }
+
     public IncrementQuery maxResults(int maxResults) {
         Preconditions.checkArgument(maxResults >= 0, "maxResults must be >= 0");
         this.maxResults = maxResults;
