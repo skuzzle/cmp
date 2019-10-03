@@ -91,7 +91,7 @@
                     <tbody>
                     <tr th:each="increment : ${increments.entries}">
                         <td>
-                            <a th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}" class="delete" title="Delete this increment">Delete</a>
+                            <a th:if="${tally.admin}" th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}" class="delete" title="Delete this increment">Delete</a>
                             <time class="is-date-utc" th:text="${increment.incrementDateUTC}"></time>
                         </td>
                         <td th:text="${increment.description}"></td>
