@@ -52,11 +52,11 @@ public class TallyClient {
         Preconditions.checkArgument(publicKey != null, "publicKey must not be null");
 
         try {
-            final ResponseEntity<TallyApiResponse> response = restTemplate.getForEntity("/public/{key}",
+            final ResponseEntity<TallyApiResponse> response = restTemplate.getForEntity("/{key}",
                     TallyApiResponse.class, publicKey);
             return TallyResult.success(response.getStatusCode(), response.getBody().getTallySheet());
         } catch (final HttpStatusCodeException e) {
-            logger.debug("HTTP error while calling backend 'GET /public/{}", publicKey, e);
+            logger.debug("HTTP error while calling backend 'GET /{}", publicKey, e);
             final TallyApiResponse response = error(e.getResponseBodyAsString());
             return TallyResult.fail(e.getStatusCode(), response.getError());
         }
@@ -66,11 +66,11 @@ public class TallyClient {
         Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
         Preconditions.checkArgument(increment != null, "increment must not be null");
         try {
-            final ResponseEntity<TallyApiResponse> response = restTemplate.postForEntity("/admin/{key}", increment,
+            final ResponseEntity<TallyApiResponse> response = restTemplate.postForEntity("/{key}/increment", increment,
                     TallyApiResponse.class, adminKey);
             return TallyResult.success(response.getStatusCode(), response.getBody().getTallySheet());
         } catch (final HttpStatusCodeException e) {
-            logger.debug("HTTP error while calling backend 'POST /admin/{}", adminKey, e);
+            logger.debug("HTTP error while calling backend 'POST /{}/increment", adminKey, e);
             final TallyApiResponse response = error(e.getResponseBodyAsString());
             return TallyResult.fail(e.getStatusCode(), response.getError());
         }
@@ -79,7 +79,7 @@ public class TallyClient {
     public boolean deleteTallySheet(String adminKey) {
         Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
         try {
-            restTemplate.delete("/admin/{key}", adminKey);
+            restTemplate.delete("/{key}", adminKey);
             return true;
         } catch (final Exception e) {
             logger.error("Error deleting tally sheet with key '{}'", adminKey, e);
@@ -91,7 +91,7 @@ public class TallyClient {
         Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
         Preconditions.checkArgument(incrementId != null, "incrementId must not be null");
         try {
-            restTemplate.delete("/admin/{key}/increment/{id}", adminKey, incrementId);
+            restTemplate.delete("/{key}/increment/{id}", adminKey, incrementId);
             return true;
         } catch (final Exception e) {
             logger.error("Error deleting increment {} from sheet with key '{}'", incrementId, adminKey, e);

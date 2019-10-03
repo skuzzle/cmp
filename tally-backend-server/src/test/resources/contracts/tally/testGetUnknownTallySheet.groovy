@@ -4,7 +4,7 @@ org.springframework.cloud.contract.spec.Contract.make {
     name("getUnknownTallySheet")
     request {
         method GET()
-        url '/public/unknownPublicKey'
+        url '/unknownPublicKey'
         headers {}
     }
     response {

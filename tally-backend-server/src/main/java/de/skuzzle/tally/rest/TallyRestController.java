@@ -35,7 +35,7 @@ public class TallyRestController {
         this.rateLimiter = rateLimiter;
     }
 
-    @GetMapping("/public/{key}")
+    @GetMapping("/{key}")
     public ResponseEntity<RestTallyResponse> getTally(@PathVariable String key, HttpServletRequest request) {
         rateLimiter.blockIfRateLimitIsExceeded(request);
         final TallySheet tallySheet = tallyService.getTallySheet(key);
@@ -54,7 +54,7 @@ public class TallyRestController {
                 .body(response);
     }
 
-    @PostMapping("/admin/{key}")
+    @PostMapping("/{key}/increment")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<RestTallyResponse> increment(@PathVariable String key,
             @RequestBody @Valid RestTallyIncrement increment,
@@ -66,14 +66,14 @@ public class TallyRestController {
                 .body(response);
     }
 
-    @DeleteMapping("/admin/{key}")
+    @DeleteMapping("/{key}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteTallySheet(@PathVariable String key, HttpServletRequest request) {
         rateLimiter.blockIfRateLimitIsExceeded(request);
         tallyService.deleteTallySheet(key);
     }
 
-    @DeleteMapping("/admin/{key}/increment/{id}")
+    @DeleteMapping("/{key}/increment/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteIncrement(@PathVariable String key, @PathVariable String id, HttpServletRequest request) {
         rateLimiter.blockIfRateLimitIsExceeded(request);

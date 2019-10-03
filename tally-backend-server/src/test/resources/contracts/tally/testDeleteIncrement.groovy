@@ -17,7 +17,7 @@ org.springframework.cloud.contract.spec.Contract.make {
     name("deleteIncrement")
     request {
         method DELETE()
-        url '/admin/adminKey2/increment/incrementId'
+        url '/adminKey2/increment/incrementId'
     }
     response {
         status OK()

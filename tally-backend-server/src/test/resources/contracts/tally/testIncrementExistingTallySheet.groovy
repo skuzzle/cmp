@@ -17,7 +17,7 @@ org.springframework.cloud.contract.spec.Contract.make {
     name("incrementExistingTallySheet")
     request {
         method POST()
-        url '/admin/adminKey'
+        url '/adminKey/increment'
         body([
                 incrementDateUTC: $(
                         consumer(regex(Helpers.isoDateTimeWithNanos())),
