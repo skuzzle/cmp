@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 class ClientId {
 
     static final String REQUEST_ID = "X-Request-ID";
+    static final String REAL_IP = "X-Real-IP";
+    static final String FORWARTED_FOR = "X-Forwarded-For";
 
     private final HttpServletRequest request;
 
@@ -19,7 +21,7 @@ class ClientId {
     }
 
     public String getForwardedFor() {
-        return Optional.ofNullable(request.getHeader("X-Forwarded-For"))
+        return Optional.ofNullable(request.getHeader(FORWARTED_FOR))
                 .map(header -> header.split(",")[0])
                 .orElseGet(request::getRemoteAddr);
     }
@@ -38,7 +40,7 @@ class ClientId {
     }
 
     public String getRealIp() {
-        return Optional.ofNullable(request.getHeader("X-Real-IP"))
+        return Optional.ofNullable(request.getHeader(REAL_IP))
                 .orElseGet(request::getRemoteAddr);
     }
 
