@@ -4,6 +4,9 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+
 @Service
 public class TallyService {
 
@@ -11,13 +14,19 @@ public class TallyService {
 
     private final TallyRepository repository;
     private final RandomKeyGenerator randomKeyGenerator;
+    private final MeterRegistry meterRegistry;
 
-    TallyService(TallyRepository repository, RandomKeyGenerator randomKeyGenerator) {
+    TallyService(TallyRepository repository, RandomKeyGenerator randomKeyGenerator, MeterRegistry meterRegistry) {
         this.repository = repository;
         this.randomKeyGenerator = randomKeyGenerator;
+        this.meterRegistry = meterRegistry;
     }
 
     public TallySheet createNewTallySheet(String userId, String name) {
+        Counter.builder("created_tally")
+                .tag("user_id", userId)
+                .register(meterRegistry)
+                .increment();
         return repository.save(TallySheet.newTallySheet(
                 userId,
                 name,
@@ -39,6 +48,10 @@ public class TallyService {
         final TallySheet tallySheet = repository.findByAdminKey(adminKey)
                 .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
 
+        Counter.builder("incremented_tally")
+                .tag("user_id", tallySheet.getUserId())
+                .register(meterRegistry)
+                .increment();
         tallySheet.incrementWith(increment);
         return repository.save(tallySheet);
     }
