@@ -9,12 +9,7 @@ pipeline {
     stage('Build') {
       steps {
         sh 'mvn -B versions:set -DnewVersion=${BUILD_NUMBER}'
-        sh 'mvn -B clean package -DskipTests'
-      }
-    }
-    stage('Run Tests') {
-      steps {
-        sh 'mvn -B verify'
+        sh 'mvn -B clean install'
       }
     }
     stage('Build images') {
