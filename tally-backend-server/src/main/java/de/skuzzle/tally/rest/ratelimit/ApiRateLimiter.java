@@ -28,7 +28,8 @@ public class ApiRateLimiter<T> {
                 .build(new CacheLoader<ApiClient, RateLimiter>() {
                     @Override
                     public RateLimiter load(ApiClient clientIp) throws Exception {
-                        logger.debug("Create new rate limiter for client '{}'", clientIp);
+                        logger.debug("Create new rate limiter for client '{}' with {} QPS", clientIp,
+                                requestsPerSecond);
                         return RateLimiter.create(requestsPerSecond);
                     }
                 });
