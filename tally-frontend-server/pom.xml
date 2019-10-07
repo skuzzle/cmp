@@ -44,9 +44,19 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>junit</groupId>
+					<artifactId>junit</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -107,11 +117,29 @@
 						<artifactId>dockerfile-maven-plugin</artifactId>
 						<configuration>
 							<repository>skuzzle/${project.artifactId}</repository>
-							<tag>${project.version}</tag>
-							<buildArgs>
-								<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
-							</buildArgs>
 						</configuration>
+						<executions>
+							<execution>
+								<id>explicit-version</id>
+								<phase>install</phase>
+								<goals>
+									<goal>build</goal>
+								</goals>
+								<configuration>
+							<tag>${project.version}</tag>
+						</configuration>
+							</execution>
+							<execution>
+								<id>latest-version</id>
+								<phase>install</phase>
+								<goals>
+									<goal>build</goal>
+								</goals>
+								<configuration>
+									<tag>latest</tag>
+								</configuration>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>

@@ -1,55 +1,66 @@
 package de.skuzzle.tally.service;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Set;
+import java.util.UUID;
 
-public class TallyIncrement {
+import com.google.common.base.Preconditions;
 
-    private String id;
+public final class TallyIncrement implements Comparable<TallyIncrement> {
 
-    @NotNull
-    private Set<String> tags;
+    private final String id;
+    private final Set<String> tags;
+    private final String description;
+    private final LocalDateTime createDateUTC;
+    private final LocalDateTime incrementDateUTC;
 
-    @NotNull
-    private String description;
+    private TallyIncrement(String id, Set<String> tags, String description, LocalDateTime createDateUTC,
+            LocalDateTime incrementDateUTC) {
+        Preconditions.checkArgument(id != null, "id must not be null");
+        Preconditions.checkArgument(description != null, "description must not be null");
+        Preconditions.checkArgument(createDateUTC != null, "createDateUTC must not be null");
+        Preconditions.checkArgument(incrementDateUTC != null, "incrementDateUTC must not be null");
+        Preconditions.checkArgument(tags != null, "tags must not be null");
 
-    //@JsonFormat(pattern = TallySheet.DATE_FORMAT)
-    private LocalDateTime createDateUTC;
+        this.id = id;
+        this.tags = tags;
+        this.description = description;
+        this.createDateUTC = createDateUTC;
+        this.incrementDateUTC = incrementDateUTC;
+    }
 
-    @NotNull
-    //@JsonFormat(pattern = TallySheet.DATE_FORMAT)
-    private LocalDateTime incrementDateUTC;
+    public static TallyIncrement newIncrementWithId(String id, String description, LocalDateTime incrementDateUTC,
+            Collection<String> tags) {
+        return new TallyIncrement(
+                id,
+                Set.copyOf(tags),
+                description,
+                UTCDateTimeProvider.getInstance().getNowLocal(),
+                incrementDateUTC);
+    }
 
-    public TallyIncrement() {
+    public static TallyIncrement newIncrement(String description, LocalDateTime incrementDateUTC,
+            Collection<String> tags) {
+
+        return new TallyIncrement(
+                UUID.randomUUID().toString(),
+                Set.copyOf(tags),
+                description,
+                UTCDateTimeProvider.getInstance().getNowLocal(),
+                incrementDateUTC);
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public Set<String> getTags() {
         return this.tags;
     }
 
-    public void setTags(Set<String> tags) {
-        this.tags = tags;
-    }
-
     public String getDescription() {
         return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    void setCreateDateUTC(LocalDateTime createDateUTC) {
-        this.createDateUTC = createDateUTC;
     }
 
     public LocalDateTime getCreateDateUTC() {
@@ -60,7 +71,9 @@ public class TallyIncrement {
         return incrementDateUTC;
     }
 
-    public void setIncrementDateUTC(LocalDateTime incrementDateUTC) {
-        this.incrementDateUTC = incrementDateUTC;
+    @Override
+    public int compareTo(TallyIncrement o) {
+        return incrementDateUTC.compareTo(o.incrementDateUTC);
     }
+
 }

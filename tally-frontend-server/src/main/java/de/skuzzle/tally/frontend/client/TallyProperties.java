@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 class TallyProperties {
 
     private String url;
+    private String healthUrl;
 
     public String getUrl() {
         return this.url;
@@ -16,4 +17,13 @@ class TallyProperties {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    public String getHealthUrl() {
+        return this.healthUrl;
+    }
+
+    public void setHealthUrl(String healthUrl) {
+        this.healthUrl = healthUrl;
+    }
+
 }

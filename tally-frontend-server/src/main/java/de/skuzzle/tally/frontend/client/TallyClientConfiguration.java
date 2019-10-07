@@ -1,37 +1,46 @@
 package de.skuzzle.tally.frontend.client;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
-import java.util.Arrays;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 public class TallyClientConfiguration {
 
     private final TallyProperties tallyProperties;
     private final ObjectMapper objectMapper;
+    private final ClientId clientId;
 
-    public TallyClientConfiguration(TallyProperties tallyProperties, ObjectMapper objectMapper) {
+    public TallyClientConfiguration(TallyProperties tallyProperties, ObjectMapper objectMapper, ClientId clientId) {
         this.tallyProperties = tallyProperties;
         this.objectMapper = objectMapper;
+        this.clientId = clientId;
     }
 
-    @Bean
-    public RestTemplate restTemplate() {
+    private ClientIdInterceptor idInterceptor() {
+        return new ClientIdInterceptor(clientId);
+    }
+
+    public RestTemplate restTemplate(String baseUrl) {
         final var jacksonMessageConverter = new MappingJackson2HttpMessageConverter(objectMapper);
         final var restTemplate = new RestTemplate(Arrays.asList(jacksonMessageConverter));
-        final var uriBuilderFactory = new DefaultUriBuilderFactory(tallyProperties.getUrl());
+        final var uriBuilderFactory = new DefaultUriBuilderFactory(baseUrl);
         restTemplate.setUriTemplateHandler(uriBuilderFactory);
+        restTemplate.getInterceptors().add(idInterceptor());
         return restTemplate;
     }
 
     @Bean
     public TallyClient tallyClient() {
-        return new TallyClient(restTemplate(), objectMapper);
+        return new TallyClient(
+                restTemplate(tallyProperties.getUrl()),
+                restTemplate(tallyProperties.getHealthUrl()),
+                objectMapper);
     }
 }

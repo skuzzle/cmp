@@ -17,8 +17,9 @@ org.springframework.cloud.contract.spec.Contract.make {
     name("incrementExistingTallySheet")
     request {
         method POST()
-        url '/admin/adminKey'
+        url '/adminKey/increment'
         body([
+                id: null,
                 incrementDateUTC: $(
                         consumer(regex(Helpers.isoDateTimeWithNanos())),
                         producer("2019-04-12T11:21:32.123")),
@@ -32,35 +33,30 @@ org.springframework.cloud.contract.spec.Contract.make {
     response {
         status OK()
         body([
-            id: $(
-                consumer('5c9dc2ce8691ff4f8c1b2d54'),
-                producer(regex('[a-zA-Z0-9]+'))
-            ),
-            name: 'existing',
-            publicKey: 'publicKey',
-            adminKey: 'adminKey',
-            createDateUTC: $(
-                consumer('1987-09-12T11:11:00.123'),
-                producer(regex(Helpers.isoDateTimeWithNanos()))
-            ),
-            lastModifiedDateUTC: $(
-                consumer('1987-09-12T11:11:00.123'),
-                producer(regex(Helpers.isoDateTimeWithNanos()))
-            ),
+            tallySheet: [
+                name: 'existing',
+                publicKey: 'publicKey',
+                adminKey: 'adminKey',
+                createDateUTC: $(
+                    consumer('1987-09-12T11:11:00.123'),
+                    producer(regex(Helpers.isoDateTimeWithNanos()))
+                ),
+                lastModifiedDateUTC: $(
+                    consumer('1987-09-12T11:11:00.123'),
+                    producer(regex(Helpers.isoDateTimeWithNanos()))
+                )
+            ],
             increments: [
-                [
-                    id: regex(uuid()),
+                total: 1,
+                start: 0,
+                entries: [[
                     description: regex('\\w+'),
                     tags: [ 'tag1', 'tag2' ],
-                    createDateUTC: $(
-                        consumer('1987-09-12T11:11:00.123'),
-                        producer(regex(Helpers.isoDateTimeWithNanos()))
-                    ),
                     incrementDateUTC: $(
                             consumer('2019-04-12T11:21:32.123'),
                             producer(regex(Helpers.isoDateTimeWithNanos()))
                     )
-                ]
+                ]]
             ]
         ])
         headers {

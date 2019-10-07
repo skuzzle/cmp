@@ -12,16 +12,6 @@
     <link rel="shortcut icon" type="image/x-icon" href="@{/favicon.ico}"/>
 </head>
 <body>
-<nav class="navbar">
-    <div class="container">
-        <div class="navbar-brand">
-            <a class="navbar-item is-size-4" th:href="@{/}">
-                tally.io
-            </a>
-        </div>
-    </div>
-</nav>
-
 <section class="hero is-info is-bold">
     <div class="hero-body">
         <div class="container">
@@ -29,14 +19,14 @@
                 Pizza Count 2018
             </h1>
             <h2 class="subtitle">
-                <a th:href="@{/{publicKey}(publicKey=${tally.publicKey})}" th:text="'Share:   ' + ${tally.publicKey}" href="#">Share:
+                <a th:href="@{/{publicKey}(publicKey=${tally.publicKey})}" th:text="'Share: ' + ${tally.publicKey}" href="#">Share:
                     http://tally.io/123547</a>
             </h2>
         </div>
     </div>
 </section>
 
-<div class="notification is-danger is-bold" th:if="${tally.admin}">
+<div class="notification is-danger is-radiusless" th:if="${tally.admin}">
     You are viewing your tally sheet using its admin link. If you want to share this sheet, use the read-only link. Everyone who knows the admin link
     will be able to update/delete this tally sheet!
 </div>
@@ -45,7 +35,13 @@
     <div class="container">
         <div class="columns is-centered">
             <div class="column has-text-centered is-4">
-                <p class="title is-size-0" th:text="${tally.increments.size()}">1234</p>
+                <div style="position:relative">
+                    <p class="title is-size-0" th:text="${increments.total}">1234</p>
+
+                    <div style="position:absolute;bottom:0px;left:0;right:0">
+                        <canvas class="is-tally-graph" th:data-public-key="${tally.publicKey}"/>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -61,9 +57,15 @@
                             <input class="input" name="incrementDateUTC" type="date" required="true" autofocus="true"  >
                         </div>
                     </div>
+                    <div class="field">
+                        <div class="control is-expanded">
+                            <input class="input" name="description" type="text" placeholder="Description" title="Increment description" required="true" autofocus="true"  >
+                        </div>
+
+                    </div>
                     <div class="field has-addons">
                         <div class="control is-expanded">
-                            <input class="input" name="description" type="text" placeholder="Description" required="true" autofocus="true"  >
+                            <input class="input" name="tags" type="text" placeholder="Tags, comma separated" title="Comma separated tags, leading and trailing spaces will be trimmed" autofocus="true"  >
                         </div>
                         <div class="control">
                             <input type="submit" class="button is-info" value="Increment"/>
@@ -75,7 +77,7 @@
     </div>
 </section>
 
-<section class="section" th:if="${tally.hasIncrements()}">
+<section class="section" th:if="${!increments.empty}">
     <div class="container">
         <div class="columns is-centered">
             <div class="column is-8">
@@ -84,12 +86,21 @@
                     <tr>
                         <th>Date</th>
                         <th>Description</th>
+                        <th>Tags</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="increment : ${tally.getHistory(10)}">
-                        <td><time class="is-date-utc" th:text="${increment.incrementDateUTC}"></time></td>
+                    <tr th:each="increment : ${increments.entries}">
+                        <td>
+                            <a th:if="${tally.admin}" th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}" class="delete" title="Delete this increment">Delete</a>
+                            <time class="is-date-utc" th:text="${increment.incrementDateUTC}"></time>
+                        </td>
                         <td th:text="${increment.description}"></td>
+                        <td>
+                            <div class="tags">
+                                <span class="tag" th:each="tag : ${increment.tags}" th:text="${tag}"></span>
+                            </div>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -97,5 +108,10 @@
         </div>
     </div>
 </section>
+<script th:inline="javascript">
+/*<![CDATA[*/
+    var GRAPH_DATA = [[${graph}]];
+/*]]>*/
+</script>
 </body>
 </html>

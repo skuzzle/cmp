@@ -1,12 +1,11 @@
 package de.skuzzle.tally.service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Optional;
-import java.util.UUID;
 
-import org.springframework.data.auditing.DateTimeProvider;
 import org.springframework.stereotype.Service;
+
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 
 @Service
 public class TallyService {
@@ -15,30 +14,31 @@ public class TallyService {
 
     private final TallyRepository repository;
     private final RandomKeyGenerator randomKeyGenerator;
-    private final DateTimeProvider dateTimeProvider;
+    private final MeterRegistry meterRegistry;
 
-    public TallyService(TallyRepository repository, RandomKeyGenerator randomKeyGenerator,
-            DateTimeProvider dateTimeProvider) {
+    TallyService(TallyRepository repository, RandomKeyGenerator randomKeyGenerator, MeterRegistry meterRegistry) {
         this.repository = repository;
         this.randomKeyGenerator = randomKeyGenerator;
-        this.dateTimeProvider = dateTimeProvider;
+        this.meterRegistry = meterRegistry;
     }
 
-    public TallySheet createNewTallySheet(String name) {
-        final TallySheet tallySheet = new TallySheet();
-        tallySheet.setName(name);
-        tallySheet.setIncrements(new ArrayList<>());
-        tallySheet.setAdminKey(randomKeyGenerator.generateAdminKey());
-        tallySheet.setPublicKey(randomKeyGenerator.generatePublicKey(PUBLIC_KEY_LENGTH));
-        return repository.save(tallySheet);
+    public TallySheet createNewTallySheet(String userId, String name) {
+        Counter.builder("created_tally")
+                .tag("user_id", userId)
+                .register(meterRegistry)
+                .increment();
+        return repository.save(TallySheet.newTallySheet(
+                userId,
+                name,
+                randomKeyGenerator.generateAdminKey(),
+                randomKeyGenerator.generatePublicKey(PUBLIC_KEY_LENGTH)));
     }
 
     public TallySheet getTallySheet(String publicKey) {
         final Optional<TallySheet> byPublicKey = repository.findByPublicKey(publicKey);
         if (byPublicKey.isPresent()) {
             final TallySheet publicTallySheet = byPublicKey.get();
-            publicTallySheet.setAdminKey(null);
-            return publicTallySheet;
+            return publicTallySheet.withWipedAdminKey();
         }
         return repository.findByAdminKey(publicKey)
                 .orElseThrow(() -> new TallySheetNotAvailableException(publicKey));
@@ -48,12 +48,11 @@ public class TallyService {
         final TallySheet tallySheet = repository.findByAdminKey(adminKey)
                 .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
 
-        final LocalDateTime createDate = dateTimeProvider.getNow().map(LocalDateTime::from)
-                .orElseThrow(IllegalStateException::new);
-        increment.setCreateDateUTC(createDate);
-        increment.setId(UUID.randomUUID().toString());
-
-        tallySheet.getIncrements().add(increment);
+        Counter.builder("incremented_tally")
+                .tag("user_id", tallySheet.getUserId())
+                .register(meterRegistry)
+                .increment();
+        tallySheet.incrementWith(increment);
         return repository.save(tallySheet);
     }
 
@@ -61,6 +60,16 @@ public class TallyService {
         final TallySheet tallySheet = repository.findByAdminKey(adminKey)
                 .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
         repository.delete(tallySheet);
+    }
+
+    public void deleteIncrement(String adminKey, String incrementId) {
+        final TallySheet tallySheet = repository.findByAdminKey(adminKey)
+                .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
+        if (tallySheet.deleteIncrementWithId(incrementId)) {
+            repository.save(tallySheet);
+        } else {
+            throw new IncrementNotAvailableException(incrementId);
+        }
     }
 
 }

@@ -1,110 +1,139 @@
 package de.skuzzle.tally.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.DateTimeFormat;
+
+import com.google.common.base.Preconditions;
 
 @Document
 public class TallySheet {
-
-    public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
     @Id
     private String id;
     @Version
     private int version;
 
-    @NotEmpty
-    private String name;
-    @NotEmpty
+    @Indexed
+    private final String userId;
+
+    private final String name;
     @Indexed
     private String adminKey;
-    @NotEmpty
     @Indexed
-    private String publicKey;
-    @NotNull
-    private List<TallyIncrement> increments;
+    private final String publicKey;
+    private final List<TallyIncrement> increments;
 
     // dates in UTC+0
     @CreatedDate
-    //@JsonFormat(pattern = TallySheet.DATE_FORMAT)
     private LocalDateTime createDateUTC;
     @LastModifiedDate
-    //@JsonFormat(pattern = TallySheet.DATE_FORMAT)
     private LocalDateTime lastModifiedDateUTC;
 
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
+    TallySheet(String userId, String name, String adminKey, String publicKey, List<TallyIncrement> increments) {
+        Preconditions.checkArgument(userId != null, "userId must not be null");
+        Preconditions.checkArgument(name != null, "name must not be null");
+        Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
+        Preconditions.checkArgument(publicKey != null, "publicKey must not be null");
+        Preconditions.checkArgument(increments != null, "increments must not be null");
+        this.userId = userId;
         this.name = name;
+        this.adminKey = adminKey;
+        this.publicKey = publicKey;
+        this.increments = increments;
     }
 
-    public int getVersion() {
-        return this.version;
-    }
-
-    public void setVersion(int version) {
-        this.version = version;
+    public static TallySheet newTallySheet(String userId, String name, String adminKey, String publicKey) {
+        return new TallySheet(userId, name, adminKey, publicKey, new ArrayList<>());
     }
 
     public String getId() {
         return this.id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public int getVersion() {
+        return this.version;
     }
 
-    public String getAdminKey() {
-        return this.adminKey;
+    public String getUserId() {
+        return this.userId;
     }
 
-    public void setAdminKey(String adminKey) {
-        this.adminKey = adminKey;
+    public String getName() {
+        return this.name;
+    }
+
+    public Optional<String> getAdminKey() {
+        return Optional.ofNullable(this.adminKey);
+    }
+
+    public TallySheet withWipedAdminKey() {
+        this.adminKey = null;
+        return this;
     }
 
     public String getPublicKey() {
         return this.publicKey;
     }
 
-    public void setPublicKey(String publicKey) {
-        this.publicKey = publicKey;
-    }
-
     public List<TallyIncrement> getIncrements() {
-        return this.increments;
+        return Collections.unmodifiableList(this.increments);
     }
 
-    public void setIncrements(List<TallyIncrement> increments) {
-        this.increments = increments;
+    public IncrementQueryResult selectIncrements(IncrementQuery query) {
+        Preconditions.checkArgument(query != null, "query must not be null");
+        return query.select(getIncrements());
     }
 
     public LocalDateTime getLastModifiedDateUTC() {
         return this.lastModifiedDateUTC;
     }
 
-    void setLastModifiedDateUTC(LocalDateTime lastModifiedDate) {
-        this.lastModifiedDateUTC = lastModifiedDate;
-    }
-
     public LocalDateTime getCreateDateUTC() {
         return this.createDateUTC;
     }
 
-    void setCreateDateUTC(LocalDateTime createDate) {
-        this.createDateUTC = createDate;
+    public boolean deleteIncrementWithId(String incrementId) {
+        Preconditions.checkArgument(incrementId != null, "incrementId must not be null");
+        return this.increments.removeIf(increment -> increment.getId().equals(incrementId));
+    }
+
+    public void incrementWith(TallyIncrement increment) {
+        Preconditions.checkArgument(increment != null, "increment must not be null");
+        final boolean idExists = firstIndexOf(increments, other -> other.getId().equals(increment.getId())) >= 0;
+        Preconditions.checkArgument(!idExists, "Increment with id %s already exists in tally sheet with id %s",
+                increment.getId(), getId());
+
+        this.increments.add(increment);
+    }
+
+    public void updateIncrement(TallyIncrement increment) {
+        Preconditions.checkArgument(increment != null, "increment must not be null");
+        final int idx = firstIndexOf(increments, other -> other.getId().equals(increment.getId()));
+        final boolean idExists = idx >= 0;
+        Preconditions.checkArgument(idExists, "Increment with id %s does not exist in tally sheet with id %s",
+                increment.getId(), getId());
+
+        this.increments.set(idx, increment);
+    }
+
+    private <T> int firstIndexOf(List<T> list, Predicate<? super T> p) {
+        for (int i = 0; i < list.size(); i++) {
+            final T element = list.get(i);
+            if (p.test(element)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

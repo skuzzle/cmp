@@ -23,22 +23,24 @@ org.springframework.cloud.contract.spec.Contract.make {
     response {
         status CREATED()
         body([
-            id: $(
-                consumer('5c9dc2ce8691ff4f8c1b2d54'),
-                producer(regex('[a-zA-Z0-9]+'))
-            ),
-            name: fromRequest().path(0),
-            publicKey: 'publicKey',
-            adminKey: 'adminKey',
-            createDateUTC: $(
-                consumer('1987-09-12T11:11:00.123'),
-                producer(regex(Helpers.isoDateTimeWithNanos()))
-            ),
-            lastModifiedDateUTC: $(
-                consumer('1987-09-12T11:11:00.123'),
-                producer(regex(Helpers.isoDateTimeWithNanos()))
-            ),
-            increments: []
+            tallySheet: [
+                name: fromRequest().path(0),
+                publicKey: 'publicKey3',
+                adminKey: 'adminKey3',
+                createDateUTC: $(
+                    consumer('1987-09-12T11:11:00.123'),
+                    producer(regex(Helpers.isoDateTimeWithNanos()))
+                ),
+                lastModifiedDateUTC: $(
+                    consumer('1987-09-12T11:11:00.123'),
+                    producer(regex(Helpers.isoDateTimeWithNanos()))
+                )
+            ],
+            increments: [
+                total: 0,
+                start: 0,
+                entries: []
+            ]
         ])
         headers {
             contentType(applicationJson())

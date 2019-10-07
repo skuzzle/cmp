@@ -1,16 +1,10 @@
 package de.skuzzle.tally;
 
-import de.skuzzle.tally.service.TallySheet;
-import org.junit.Test;
-
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.chrono.Chronology;
 import java.time.format.DateTimeFormatter;
-import java.time.format.ResolverStyle;
 import java.time.temporal.TemporalAccessor;
+
+import org.junit.jupiter.api.Test;
 
 public class LearningTest {
 
