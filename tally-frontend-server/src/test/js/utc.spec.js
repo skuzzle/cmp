@@ -1,14 +1,9 @@
-import { registerPrototype, utcToLocal } from 'utc.js'
+import { registerPrototype, utcToLocal, utcString } from 'utc.js'
 
-test("Prototype should be registered", () => {
-	registerPrototype();
-	expect(Date.prototype.toInputString).toBeDefined();
-})
 
 test("Get Date as UTC", () => {
-	registerPrototype();
 	const sampleUTC = new Date(Date.UTC(2019, 10, 7, 17, 42, 0));
-	const formatted = sampleUTC.toInputString();
+	const formatted = utcString(sampleUTC);
 	expect(formatted).toBe("2019-11-07");
 })
 

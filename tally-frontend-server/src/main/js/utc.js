@@ -8,18 +8,13 @@ export function utcToLocal(dateString) {
     });
 }
 
-export function registerPrototype() {
-	if (!Date.prototype.toInputString) {
-	    Date.prototype.toInputString = function() {
-	    	return `${this.getUTCFullYear()}-${pad(this.getUTCMonth() + 1)}-${pad(this.getUTCDate())}`
-	    };
-	}
-	
-	function pad(number) {
-		if (number < 10) {
-			return '0' + number;
-		}
-		return number;
-	}
+export function utcString(date) {
+	return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())}`
 }
 
+function pad(number) {
+	if (number < 10) {
+		return '0' + number;
+	}
+	return number;
+}

@@ -1,6 +1,8 @@
+import { utcString } from './utc.js'
+
 export class InputNow extends HTMLInputElement {
 	constructor() {
 		super();
-		this.value = new Date().toInputString();
+		this.value = utcString(new Date());
 	}
 }
