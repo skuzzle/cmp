@@ -39,7 +39,7 @@
                     <p class="title is-size-0" th:text="${increments.total}">1234</p>
 
                     <div style="position:absolute;bottom:0px;left:0;right:0">
-                        <canvas class="is-tally-graph" th:data-public-key="${tally.publicKey}"/>
+                        <canvas class="is-tally-graph" th:data-public-key="${tally.publicKey}"></canvas>
                     </div>
                 </div>
             </div>
@@ -54,18 +54,18 @@
                 <form method="post" th:action="@{/{adminKey}(adminKey=${tally.adminKey})}">
                     <div class="field">
                         <div class="control is-expanded">
-                            <input is="input-now" class="input" name="incrementDateUTC" type="date" required="true" autofocus="true"  >
+                            <input is="input-now" class="input" name="incrementDateUTC" type="date" title="The increment date" required="true" autofocus="true"  >
                         </div>
                     </div>
                     <div class="field">
                         <div class="control is-expanded">
-                            <input class="input" name="description" type="text" placeholder="Description" title="Increment description" required="true" autofocus="true"  >
+                            <input class="input" name="description" type="text" placeholder="Description" title="Increment description (optional)" autofocus="true"  >
                         </div>
 
                     </div>
                     <div class="field has-addons">
                         <div class="control is-expanded">
-                            <input class="input" name="tags" type="text" placeholder="Tags, comma separated" title="Comma separated tags, leading and trailing spaces will be trimmed" autofocus="true"  >
+                            <input class="input" name="tags" type="text" placeholder="Tags, comma separated" title="Comma separated tags, leading and trailing spaces will be trimmed (optional)" autofocus="true"  >
                         </div>
                         <div class="control">
                             <input type="submit" class="button is-info" value="Increment"/>
