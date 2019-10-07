@@ -1,15 +1,13 @@
 import { registerPrototype, utcToLocal } from './utc';
 import { DateLabel } from './date-label';
+import { InputNow } from './input-now';
 
 registerPrototype();
 customElements.define("date-label", DateLabel, { extends: 'time' });
+customElements.define("input-now", InputNow, { extends: 'input' });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const nowString = new Date().toInputString();
-    document.querySelectorAll('input[type=date]').forEach(dateInput => {
-        dateInput.value = nowString;
-    });
-    
+   
     Chart.defaults.global.legend.display=false;
     Chart.defaults.global.tooltips.enabled=false;
     Chart.defaults.global.scales = {

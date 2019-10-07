@@ -54,7 +54,7 @@
                 <form method="post" th:action="@{/{adminKey}(adminKey=${tally.adminKey})}">
                     <div class="field">
                         <div class="control is-expanded">
-                            <input class="input" name="incrementDateUTC" type="date" required="true" autofocus="true"  >
+                            <input is="input-now" class="input" name="incrementDateUTC" type="date" required="true" autofocus="true"  >
                         </div>
                     </div>
                     <div class="field">
