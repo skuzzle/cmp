@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head :: head">
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -93,7 +93,7 @@
                     <tr th:each="increment : ${increments.entries}">
                         <td>
                             <a th:if="${tally.admin}" th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}" class="delete" title="Delete this increment">Delete</a>
-                            <time class="is-date-utc" th:text="${increment.incrementDateUTC}"></time>
+                            <time is="date-label" th:text="${increment.incrementDateUTC}">2019-09-09</time>
                         </td>
                         <td th:text="${increment.description}"></td>
                         <td>

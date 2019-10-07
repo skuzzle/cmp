@@ -1,3 +1,13 @@
+export function utcToLocal(dateString) {
+    const dateUtc = new Date(dateString + "Z");
+    return dateUtc.toLocaleDateString([], {
+    	day: '2-digit',
+    	month: '2-digit',
+    	year: 'numeric'
+    		
+    });
+}
+
 export function registerPrototype() {
 	if (!Date.prototype.toInputString) {
 	    Date.prototype.toInputString = function() {

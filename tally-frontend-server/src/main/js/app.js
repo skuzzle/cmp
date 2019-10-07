@@ -1,13 +1,10 @@
-import {registerPrototype} from './utc';
+import { registerPrototype, utcToLocal } from './utc';
+import { DateLabel } from './date-label';
 
 registerPrototype();
+customElements.define("date-label", DateLabel, { extends: 'time' });
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.is-date-utc').forEach(dateField => {
-        const dateUtc = new Date(dateField.textContent + "Z");
-        dateField.textContent = dateUtc.toLocaleDateString();
-    });
-
     const nowString = new Date().toInputString();
     document.querySelectorAll('input[type=date]').forEach(dateInput => {
         dateInput.value = nowString;
