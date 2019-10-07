@@ -3,22 +3,26 @@
 	"version": "1.0.0",
 	"description": "",
 	"scripts": {
-		"build": "parcel build --public-url ./ -d target/classes/static src/main/js/** src/main/css/**",
-        "start": "parcel       --public-url ./ -d target/classes/static src/main/js/** src/main/css/**",
-        "watch": "parcel watch --public-url ./ -d target/classes/static src/main/js/** src/main/css/**",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"build": "parcel build --public-url ./ -d target/classes/static src/main/js/app.js src/main/css/**",
+		"start": "parcel       --public-url ./ -d target/classes/static src/main/js/app.js src/main/css/**",
+		"watch": "parcel watch --public-url ./ -d target/classes/static src/main/js/app.js src/main/css/**",
+		"test": "jest"
 	},
 	"author": "Simon Taddiken",
 	"license": "MIT",
 	"devDependencies": {
-		"node-sass": "^4.9.3",
-		"@babel/core": "^7.0.0-0",
+		"@babel/core": "^7.6.2",
 		"@babel/plugin-proposal-async-generator-functions": "^7.2.0",
+		"@babel/preset-env": "^7.6.2",
+		"babel-jest": "^24.9.0",
 		"babel-preset-env": "^1.7.0",
-		"parcel": "^1.11.0"
+		"jest": "^24.9.0",
+		"node-sass": "^4.9.3",
+		"parcel": "^1.11.0",
+		"sass": "^1.23.0"
 	},
 	"dependencies": {
-    "bulma": "^0.7.5",
-		"@babel/polyfill": "^7.2.5"
+		"@babel/polyfill": "^7.2.5",
+		"bulma": "^0.7.5"
 	}
 }

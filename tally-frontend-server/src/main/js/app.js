@@ -1,21 +1,6 @@
-if (!Date.prototype.toInputString) {
-  (function() {
+import {registerPrototype} from './utc';
 
-    function pad(number) {
-      if (number < 10) {
-        return '0' + number;
-      }
-      return number;
-    }
-
-    Date.prototype.toInputString = function() {
-      return this.getUTCFullYear() +
-        '-' + pad(this.getUTCMonth() + 1) +
-        '-' + pad(this.getUTCDate());
-    };
-
-  }());
-}
+registerPrototype();
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.is-date-utc').forEach(dateField => {
@@ -23,6 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
         dateField.textContent = dateUtc.toLocaleDateString();
     });
 
+    const nowString = new Date().toInputString();
+    document.querySelectorAll('input[type=date]').forEach(dateInput => {
+        dateInput.value = nowString;
+    });
+    
     Chart.defaults.global.legend.display=false;
     Chart.defaults.global.tooltips.enabled=false;
     Chart.defaults.global.scales = {
@@ -68,8 +58,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    const nowString = new Date().toInputString();
-    document.querySelectorAll('input[type=date]').forEach(dateInput => {
-        dateInput.value = nowString;
-    });
 });
