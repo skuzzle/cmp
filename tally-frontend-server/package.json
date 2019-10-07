@@ -1,23 +1,24 @@
 {
-  "name": "tally-css",
-  "version": "1.0.0",
-  "description": "",
-  "main": "sass/main.css",
-  "scripts": {
-    "build": "node-sass --output-style compressed src/main/sass -o target/classes/static/css",
-    "watch": "nodemon -e scss -x \"npm run build\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Simon Taddiken",
-  "license": "MIT",
-  "devDependencies": {
-    "node-sass": "^4.9.3",
-    "nodemon": "^1.18.4"
-  },
-  "dependencies": {
-    "bulma": "^0.7.4",
-    "bulma-badge": "^3.0.0",
-    "bulma-divider": "^2.0.1",
-    "bulma-timeline": "^3.0.0"
-  }
+	"name": "tally-css",
+	"version": "1.0.0",
+	"description": "",
+	"scripts": {
+		"build": "parcel build --public-url ./ -d target/classes/static src/main/js/** src/main/css/**",
+        "start": "parcel       --public-url ./ -d target/classes/static src/main/js/** src/main/css/**",
+        "watch": "parcel watch --public-url ./ -d target/classes/static src/main/js/** src/main/css/**",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Simon Taddiken",
+	"license": "MIT",
+	"devDependencies": {
+		"node-sass": "^4.9.3",
+		"@babel/core": "^7.0.0-0",
+		"@babel/plugin-proposal-async-generator-functions": "^7.2.0",
+		"babel-preset-env": "^1.7.0",
+		"parcel": "^1.11.0"
+	},
+	"dependencies": {
+		"bulma": "^0.7.4",
+		"@babel/polyfill": "^7.2.5"
+	}
 }
