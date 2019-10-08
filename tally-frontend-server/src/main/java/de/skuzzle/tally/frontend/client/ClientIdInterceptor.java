@@ -22,6 +22,11 @@ class ClientIdInterceptor implements ClientHttpRequestInterceptor {
         request.getHeaders().add("X-Request-ID", clientId.getRequestId());
         request.getHeaders().add("X-Real-IP", clientId.getRealIp());
         request.getHeaders().add("X-Forwarded-For", clientId.getForwardedFor());
+
+        clientId.getOidToken().ifPresent(token -> {
+            request.getHeaders().add("Authorization", "Bearer " + token);
+        });
+
         return execution.execute(request, body);
     }
 

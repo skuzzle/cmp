@@ -12,6 +12,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="@{/favicon.ico}"/>
 </head>
 <body>
+
 <section class="hero is-info is-bold">
     <div class="hero-body">
         <div class="container">
@@ -22,6 +23,8 @@
                 <a th:href="@{/{publicKey}(publicKey=${tally.publicKey})}" th:text="'Share: ' + ${tally.publicKey}" href="#">Share:
                     http://tally.io/123547</a>
             </h2>
+            
+
         </div>
     </div>
 </section>

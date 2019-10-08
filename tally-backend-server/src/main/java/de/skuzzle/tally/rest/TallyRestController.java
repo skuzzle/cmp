@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.skuzzle.tally.auth.TallyUser;
 import de.skuzzle.tally.rest.ratelimit.ApiRateLimiter;
 import de.skuzzle.tally.rest.ratelimit.RateLimitExceededException;
 import de.skuzzle.tally.service.IncrementNotAvailableException;
@@ -48,6 +49,7 @@ public class TallyRestController {
             @RequestParam(required = false, defaultValue = "-1") int start,
             @RequestParam(required = false, defaultValue = "-1") int max,
             HttpServletRequest request) {
+
         rateLimiter.blockIfRateLimitIsExceeded(request);
         final TallySheet tallySheet = tallyService.getTallySheet(key);
 
@@ -67,8 +69,11 @@ public class TallyRestController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<RestTallyResponse> createTally(@PathVariable @NotEmpty String name,
             HttpServletRequest request) {
+
+        final TallyUser tallyUser = TallyUser.fromCurrentRequestContext();
+
         rateLimiter.blockIfRateLimitIsExceeded(request);
-        final TallySheet tallySheet = tallyService.createNewTallySheet("unknown", name);
+        final TallySheet tallySheet = tallyService.createNewTallySheet(tallyUser.getUserId(), name);
 
         final RestIncrements increments = RestIncrements.empty(0);
         final RestTallySheet restTallySheet = RestTallySheet.fromDomainObject(tallySheet);

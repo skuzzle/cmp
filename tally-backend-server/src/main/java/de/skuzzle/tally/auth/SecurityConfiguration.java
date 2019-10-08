@@ -1,4 +1,4 @@
-package de.skuzzle.tally.security;
+package de.skuzzle.tally.auth;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,9 +9,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http
+                .authorizeRequests()
                 .anyRequest().permitAll().and()
                 .cors().disable()
-                .csrf().disable();
+                .csrf().disable()
+                // .oauth2ResourceServer().jwt().jwkSetUri("https://www.googleapis.com/oauth2/v3/certs").and()
+                .anonymous();
     }
 }

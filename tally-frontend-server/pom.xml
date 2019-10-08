@@ -24,6 +24,18 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-jose</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 		<dependency>
@@ -126,8 +138,8 @@
 									<goal>build</goal>
 								</goals>
 								<configuration>
-							<tag>${project.version}</tag>
-						</configuration>
+									<tag>${project.version}</tag>
+								</configuration>
 							</execution>
 							<execution>
 								<id>latest-version</id>

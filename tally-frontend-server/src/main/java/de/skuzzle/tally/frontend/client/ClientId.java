@@ -5,6 +5,11 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,6 +23,17 @@ class ClientId {
 
     public ClientId(HttpServletRequest request) {
         this.request = request;
+    }
+
+    public Optional<String> getOidToken() {
+        return Optional.of(SecurityContextHolder.getContext())
+                .map(SecurityContext::getAuthentication)
+                .map(Authentication::getPrincipal)
+                .filter(OidcUser.class::isInstance)
+                .map(OidcUser.class::cast)
+                .map(OidcUser::getIdToken)
+                .map(OidcIdToken::getTokenValue)
+                .map(Object::toString);
     }
 
     public String getForwardedFor() {
