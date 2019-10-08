@@ -18,7 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.collect.ImmutableMap;
 
-import de.skuzzle.tally.frontend.client.ClientId;
+import de.skuzzle.tally.frontend.auth.TallyUser;
 import de.skuzzle.tally.frontend.client.RestIncrements;
 import de.skuzzle.tally.frontend.client.RestTallyIncrement;
 import de.skuzzle.tally.frontend.client.RestTallySheet;
@@ -30,16 +30,14 @@ import de.skuzzle.tally.frontend.graphs.Graph;
 public class TallyController {
 
     private final TallyClient client;
-    private final ClientId clientId;
 
-    public TallyController(TallyClient client, ClientId clientId) {
+    public TallyController(TallyClient client) {
         this.client = client;
-        this.clientId = clientId;
     }
 
-    @ModelAttribute("isLoggedIn")
-    public boolean isLoggedIn() {
-        return clientId.getOidToken().isPresent();
+    @ModelAttribute("user")
+    public TallyUser getUser() {
+        return TallyUser.fromCurrentRequestContext();
     }
 
     @GetMapping("/")
