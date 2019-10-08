@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.collect.ImmutableMap;
 
+import de.skuzzle.tally.frontend.client.ClientId;
 import de.skuzzle.tally.frontend.client.RestIncrements;
 import de.skuzzle.tally.frontend.client.RestTallyIncrement;
 import de.skuzzle.tally.frontend.client.RestTallySheet;
@@ -28,9 +30,21 @@ import de.skuzzle.tally.frontend.graphs.Graph;
 public class TallyController {
 
     private final TallyClient client;
+    private final ClientId clientId;
 
-    public TallyController(TallyClient client) {
+    public TallyController(TallyClient client, ClientId clientId) {
         this.client = client;
+        this.clientId = clientId;
+    }
+
+    @ModelAttribute("isLoggedIn")
+    public boolean isLoggedIn() {
+        return clientId.getOidToken().isPresent();
+    }
+
+    @GetMapping("/")
+    public String getIndex() {
+        return "index.html";
     }
 
     @PostMapping("/_create")

@@ -12,17 +12,11 @@
     <link rel="shortcut icon" type="image/x-icon" href="@{/favicon.ico}"/>
 </head>
 <body>
+
 <section class="hero is-info is-bold">
     <div class="hero-body">
         <div class="container">
-            <div class="is-pulled-right">
-                <a class="button" th:href="@{/oauth2/authorization/google}">
-                    <span class="icon">
-                        <i class="fab fa-google"></i>
-                    </span>
-                    <span>Login with Google</span>
-                </a>
-            </div>
+            <div class="is-pulled-right" th:insert="fragments/login :: login"></div>
             
             <h1 class="title">
                 Your Tally Sheet

@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Component;
 
 @Component
-class ClientId {
+public class ClientId {
 
     static final String REQUEST_ID = "X-Request-ID";
     static final String REAL_IP = "X-Real-IP";
