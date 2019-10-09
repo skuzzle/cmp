@@ -101,7 +101,7 @@ public class TallyClient {
 
     private RestErrorMessage error(String errorResponseBody) {
         try {
-            return objectMapper.readValue(errorResponseBody, RestTallyResponse.class).getError();
+            return objectMapper.readValue(errorResponseBody, RestErrorMessage.class);
         } catch (final IOException e) {
             logger.error("Error while deserializing exception response: {}", errorResponseBody, e);
             return new RestErrorMessage(e.getMessage(), e.getClass().getName());

@@ -128,14 +128,14 @@ public class TallyRestController {
     }
 
     @ExceptionHandler(RateLimitExceededException.class)
-    public ResponseEntity<RestTallyResponse> onRateLimitExceeded(RateLimitExceededException e) {
-        final RestTallyResponse body = RestTallyResponse.failure(e.getMessage(), e.getClass().getName());
+    public ResponseEntity<RestErrorMessage> onRateLimitExceeded(RateLimitExceededException e) {
+        final RestErrorMessage body = RestErrorMessage.of(e.getMessage(), e.getClass().getName());
         return new ResponseEntity<>(body, HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
     }
 
     @ExceptionHandler(value = { TallySheetNotAvailableException.class, IncrementNotAvailableException.class })
-    public ResponseEntity<RestTallyResponse> onTallySheetNotAvailable(Exception e) {
-        final RestTallyResponse body = RestTallyResponse.failure(e.getMessage(), e.getClass().getName());
+    public ResponseEntity<RestErrorMessage> onTallySheetNotAvailable(Exception e) {
+        final RestErrorMessage body = RestErrorMessage.of(e.getMessage(), e.getClass().getName());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
