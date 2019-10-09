@@ -35,7 +35,18 @@ public class TallyClient {
         }
     }
 
-    public TallyResult createNewTallySheet(String name) {
+    public TallyResult<RestTallySheetsReponse> listTallySheets() {
+        try {
+            final ResponseEntity<RestTallySheetsReponse> response = restTemplate.getForEntity("/",
+                    RestTallySheetsReponse.class);
+            return TallyResult.success(response.getStatusCode(), response.getBody());
+        } catch (HttpStatusCodeException e) {
+            logger.debug("HTTP error while calling backend 'GET /", e);
+            return resultFromException(e);
+        }
+    }
+
+    public TallyResult<RestTallyResponse> createNewTallySheet(String name) {
         Preconditions.checkArgument(name != null, "name must not be null");
         try {
             final ResponseEntity<RestTallyResponse> response = restTemplate.postForEntity("/{name}", null,
@@ -43,12 +54,11 @@ public class TallyClient {
             return TallyResult.success(response.getStatusCode(), response.getBody());
         } catch (final HttpStatusCodeException e) {
             logger.debug("HTTP error while calling backend 'POST /{}", name, e);
-            final RestErrorMessage error = error(e.getResponseBodyAsString());
-            return TallyResult.fail(e.getStatusCode(), error);
+            return resultFromException(e);
         }
     }
 
-    public TallyResult getTallySheet(String publicKey) {
+    public TallyResult<RestTallyResponse> getTallySheet(String publicKey) {
         Preconditions.checkArgument(publicKey != null, "publicKey must not be null");
 
         try {
@@ -57,12 +67,11 @@ public class TallyClient {
             return TallyResult.success(response.getStatusCode(), response.getBody());
         } catch (final HttpStatusCodeException e) {
             logger.debug("HTTP error while calling backend 'GET /{}", publicKey, e);
-            final RestErrorMessage error = error(e.getResponseBodyAsString());
-            return TallyResult.fail(e.getStatusCode(), error);
+            return resultFromException(e);
         }
     }
 
-    public TallyResult increment(String adminKey, RestTallyIncrement increment) {
+    public TallyResult<RestTallyResponse> increment(String adminKey, RestTallyIncrement increment) {
         Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
         Preconditions.checkArgument(increment != null, "increment must not be null");
         try {
@@ -71,8 +80,7 @@ public class TallyClient {
             return TallyResult.success(response.getStatusCode(), response.getBody());
         } catch (final HttpStatusCodeException e) {
             logger.debug("HTTP error while calling backend 'POST /{}/increment", adminKey, e);
-            final RestErrorMessage error = error(e.getResponseBodyAsString());
-            return TallyResult.fail(e.getStatusCode(), error);
+            return resultFromException(e);
         }
     }
 
@@ -97,6 +105,11 @@ public class TallyClient {
             logger.error("Error deleting increment {} from sheet with key '{}'", incrementId, adminKey, e);
             return false;
         }
+    }
+
+    private <T> TallyResult<T> resultFromException(HttpStatusCodeException e) {
+        final RestErrorMessage error = error(e.getResponseBodyAsString());
+        return TallyResult.fail(e.getStatusCode(), error);
     }
 
     private RestErrorMessage error(String errorResponseBody) {

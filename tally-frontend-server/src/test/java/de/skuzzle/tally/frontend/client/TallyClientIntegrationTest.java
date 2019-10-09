@@ -27,7 +27,7 @@ public class TallyClientIntegrationTest {
         assertThat(apiResponse.isSuccess()).isTrue();
         assertThat(apiResponse.getStatus()).isEqualTo(HttpStatus.CREATED);
 
-        final RestTallySheet tallySheet = apiResponse.tallySheet().orElseThrow();
+        final RestTallySheet tallySheet = apiResponse.payload().orElseThrow().getTallySheet();
         assertThat(tallySheet.getCreateDateUTC()).isEqualTo(LocalDateTime.of(1987, 9, 12, 11, 11, 0, 123000000));
         assertThat(tallySheet.getLastModifiedDateUTC()).isEqualTo(LocalDateTime.of(1987, 9, 12, 11, 11, 0, 123000000));
     }
@@ -40,8 +40,8 @@ public class TallyClientIntegrationTest {
         final var apiResponse = tallyClient.increment("adminKey", increment);
         assertThat(apiResponse.getStatus()).isEqualTo(HttpStatus.OK);
 
-        final RestTallySheet tallySheet = apiResponse.tallySheet().orElseThrow();
-        final RestIncrements increments = apiResponse.increments().orElseThrow();
+        final RestTallySheet tallySheet = apiResponse.payload().orElseThrow().getTallySheet();
+        final RestIncrements increments = apiResponse.payload().orElseThrow().getIncrements();
         assertThat(tallySheet.getCreateDateUTC()).isEqualTo(LocalDateTime.of(1987, 9, 12, 11, 11, 0, 123000000));
         assertThat(tallySheet.getLastModifiedDateUTC()).isEqualTo(LocalDateTime.of(1987, 9, 12, 11, 11, 0, 123000000));
         assertThat(increments.getEntries()).first().extracting(RestTallyIncrement::getIncrementDateUTC)

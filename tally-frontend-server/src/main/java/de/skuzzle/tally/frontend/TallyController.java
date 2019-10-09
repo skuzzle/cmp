@@ -21,9 +21,9 @@ import com.google.common.collect.ImmutableMap;
 import de.skuzzle.tally.frontend.auth.TallyUser;
 import de.skuzzle.tally.frontend.client.RestIncrements;
 import de.skuzzle.tally.frontend.client.RestTallyIncrement;
+import de.skuzzle.tally.frontend.client.RestTallyResponse;
 import de.skuzzle.tally.frontend.client.RestTallySheet;
 import de.skuzzle.tally.frontend.client.TallyClient;
-import de.skuzzle.tally.frontend.client.TallyResult;
 import de.skuzzle.tally.frontend.graphs.Graph;
 
 @Controller
@@ -47,8 +47,10 @@ public class TallyController {
 
     @PostMapping("/_create")
     public String createTallySheet(@RequestParam("name") String name) {
-        final TallyResult response = client.createNewTallySheet(name);
-        final RestTallySheet tallySheet = response.tallySheet().orElseThrow();
+        final RestTallySheet tallySheet = client.createNewTallySheet(name)
+                .payload()
+                .map(RestTallyResponse::getTallySheet)
+                .orElseThrow();
 
         return "redirect:/" + tallySheet.getAdminKey();
     }
@@ -66,17 +68,19 @@ public class TallyController {
         final RestTallyIncrement increment = RestTallyIncrement.createNew(description,
                 LocalDateTime.of(incrementDate, LocalTime.now()), tagSet);
 
-        final TallyResult response = client.increment(adminKey, increment);
-        final RestTallySheet tallySheet = response.tallySheet().orElseThrow();
+        final RestTallySheet tallySheet = client.increment(adminKey, increment)
+                .payload()
+                .map(RestTallyResponse::getTallySheet)
+                .orElseThrow();
         return "redirect:/" + tallySheet.getAdminKey();
     }
 
     @GetMapping("/{key}")
     public ModelAndView showTallySheet(@PathVariable("key") String key) {
-        final TallyResult response = client.getTallySheet(key);
+        final RestTallyResponse response = client.getTallySheet(key).payload().orElseThrow();
 
-        final RestTallySheet tallySheet = response.tallySheet().orElseThrow();
-        final RestIncrements increments = response.increments().orElseThrow();
+        final RestTallySheet tallySheet = response.getTallySheet();
+        final RestIncrements increments = response.getIncrements();
 
         final Graph graph = Graph.fromHistory(increments.getEntries());
         return new ModelAndView("tally", ImmutableMap.of(

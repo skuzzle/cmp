@@ -4,27 +4,24 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 
-public class TallyResult {
+public class TallyResult<T> {
 
     private final HttpStatus status;
-    private final RestTallySheet tallySheet;
-    private final RestIncrements increments;
+    private final T payload;
     private final RestErrorMessage errorResponse;
 
-    TallyResult(HttpStatus status, RestTallySheet tallySheet, RestIncrements increments,
-            RestErrorMessage errorResponse) {
+    private TallyResult(HttpStatus status, T payload, RestErrorMessage errorResponse) {
         this.status = status;
-        this.tallySheet = tallySheet;
-        this.increments = increments;
+        this.payload = payload;
         this.errorResponse = errorResponse;
     }
 
-    public static TallyResult success(HttpStatus status, RestTallyResponse response) {
-        return new TallyResult(status, response.getTallySheet(), response.getIncrements(), null);
+    public static <T> TallyResult<T> success(HttpStatus status, T payload) {
+        return new TallyResult<T>(status, payload, null);
     }
 
-    public static TallyResult fail(HttpStatus status, RestErrorMessage errorResponse) {
-        return new TallyResult(status, null, null, errorResponse);
+    public static <T> TallyResult<T> fail(HttpStatus status, RestErrorMessage errorResponse) {
+        return new TallyResult<>(status, null, errorResponse);
     }
 
     public HttpStatus getStatus() {
@@ -32,19 +29,15 @@ public class TallyResult {
     }
 
     public boolean isSuccess() {
-        return tallySheet != null;
+        return payload != null;
     }
 
     public boolean isError() {
         return errorResponse != null;
     }
 
-    public Optional<RestTallySheet> tallySheet() {
-        return Optional.ofNullable(tallySheet);
-    }
-
-    public Optional<RestIncrements> increments() {
-        return Optional.ofNullable(increments);
+    public Optional<T> payload() {
+        return Optional.ofNullable(payload);
     }
 
     public Optional<RestErrorMessage> error() {
