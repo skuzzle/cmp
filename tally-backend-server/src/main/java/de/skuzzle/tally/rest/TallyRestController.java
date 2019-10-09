@@ -79,7 +79,6 @@ public class TallyRestController {
     }
 
     @PostMapping("/{name}")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<RestTallyResponse> createTally(@PathVariable @NotEmpty String name,
             HttpServletRequest request) {
 
@@ -98,7 +97,6 @@ public class TallyRestController {
     }
 
     @PostMapping("/{key}/increment")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<RestTallyResponse> increment(@PathVariable String key,
             @RequestBody @Valid RestTallyIncrement increment,
             HttpServletRequest request) {
