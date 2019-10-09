@@ -14,7 +14,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll().and()
                 .cors().disable()
                 .csrf().disable()
-                // .oauth2ResourceServer().jwt().jwkSetUri("https://www.googleapis.com/oauth2/v3/certs").and()
+                .oauth2ResourceServer().jwt().jwkSetUri("https://www.googleapis.com/oauth2/v3/certs").and()
+                .and()
                 .anonymous();
     }
 }
