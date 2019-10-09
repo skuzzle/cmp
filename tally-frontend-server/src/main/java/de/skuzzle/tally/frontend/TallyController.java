@@ -40,11 +40,6 @@ public class TallyController {
         return TallyUser.fromCurrentRequestContext();
     }
 
-    @GetMapping("/")
-    public String getIndex() {
-        return "index.html";
-    }
-
     @PostMapping("/_create")
     public String createTallySheet(@RequestParam("name") String name) {
         final RestTallySheet tallySheet = client.createNewTallySheet(name)

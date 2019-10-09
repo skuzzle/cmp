@@ -1,0 +1,24 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<div th:fragment="recentlyCreatedList(recentlyCreatedList, loggedIn)">
+    <table class="table is-fullwidth" th:if="${loggedIn}">
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Name</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entry : ${recentlyCreatedList}">
+            <td><time is="date-label" th:text="${entry.creationDateUTC}">2019-09-09</time></td>
+            <td th:text="${entry.name}">Name</td>
+            <td>
+                <a class="button is-info" th:href="@{/{adminKey}(adminKey=${entry.publicKey})}">Share</a>
+                <a class="button is-danger" th:href="@{/{adminKey}(adminKey=${entry.adminKey})}">Edit</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+ </div>
+ </html>
