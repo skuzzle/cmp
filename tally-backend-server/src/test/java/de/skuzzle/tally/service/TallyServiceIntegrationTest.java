@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -146,5 +147,18 @@ public class TallyServiceIntegrationTest {
 
         final TallySheet updated = tallyService.getTallySheet(tallySheet.getPublicKey());
         assertThat(updated.getIncrements()).hasSize(2);
+    }
+    
+    @Test
+    void testFindTallySheetsForUserId() throws Exception {
+        tallyService.createNewTallySheet("user1", "sheet1");
+        tallyService.createNewTallySheet("user1", "sheet2");
+        tallyService.createNewTallySheet("user2", "sheet1");
+        
+        List<ShallowTallySheet> sheetsForUser = tallyService.getTallySheetsForUser("user1");
+        assertThat(sheetsForUser).hasSize(2);
+        assertThat(sheetsForUser).first().extracting(ShallowTallySheet::getUserId).isEqualTo("user1");
+        assertThat(sheetsForUser).first().extracting(ShallowTallySheet::getName).isEqualTo("sheet1");
+        assertThat(sheetsForUser).first().extracting(ShallowTallySheet::getAdminKey).isNotEqualTo(Optional.empty());
     }
 }

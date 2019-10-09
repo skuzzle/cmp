@@ -43,12 +43,16 @@ public class TallyUser {
         } else if (authentication instanceof AnonymousAuthenticationToken) {
             final String id = "unknown:" + UUID.randomUUID().toString();
             return id;
+        } else {
+            return authentication.getName();
         }
-        throw new IllegalStateException(
-                "Could determine user id from Authentication. Check your Spring-Security confdiguration");
     }
 
     public String getUserId() {
         return userId;
+    }
+    
+    public boolean isAnonymous() {
+        return !userId.startsWith("google:");
     }
 }

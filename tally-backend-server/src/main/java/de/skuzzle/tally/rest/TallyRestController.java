@@ -3,6 +3,7 @@ package de.skuzzle.tally.rest;
 import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -27,6 +28,7 @@ import de.skuzzle.tally.rest.ratelimit.RateLimitExceededException;
 import de.skuzzle.tally.service.IncrementNotAvailableException;
 import de.skuzzle.tally.service.IncrementQuery;
 import de.skuzzle.tally.service.IncrementQueryResult;
+import de.skuzzle.tally.service.ShallowTallySheet;
 import de.skuzzle.tally.service.TallyService;
 import de.skuzzle.tally.service.TallySheet;
 import de.skuzzle.tally.service.TallySheetNotAvailableException;
@@ -40,6 +42,17 @@ public class TallyRestController {
     TallyRestController(TallyService tallyService, ApiRateLimiter<HttpServletRequest> rateLimiter) {
         this.tallyService = tallyService;
         this.rateLimiter = rateLimiter;
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<RestTallySheetsReponse> getAllTallies(HttpServletRequest request) {
+        rateLimiter.blockIfRateLimitIsExceeded(request);
+        final TallyUser user = TallyUser.fromCurrentRequestContext();
+
+        final List<ShallowTallySheet> tallySheets = tallyService.getTallySheetsForUser(user.getUserId());
+        final List<RestTallySheet> restTallySheets = RestTallySheet.fromDomainObjects(tallySheets);
+        final RestTallySheetsReponse response = RestTallySheetsReponse.of(restTallySheets);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{key}")

@@ -17,7 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.google.common.base.Preconditions;
 
 @Document
-public class TallySheet {
+public class TallySheet implements ShallowTallySheet {
 
     @Id
     private String id;
@@ -40,12 +40,8 @@ public class TallySheet {
     @LastModifiedDate
     private LocalDateTime lastModifiedDateUTC;
 
-    TallySheet(String userId, String name, String adminKey, String publicKey, List<TallyIncrement> increments) {
-        Preconditions.checkArgument(userId != null, "userId must not be null");
-        Preconditions.checkArgument(name != null, "name must not be null");
-        Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
-        Preconditions.checkArgument(publicKey != null, "publicKey must not be null");
-        Preconditions.checkArgument(increments != null, "increments must not be null");
+    // private c'tor without validation only for spring-data
+    private TallySheet(String userId, String name, String adminKey, String publicKey, List<TallyIncrement> increments) {
         this.userId = userId;
         this.name = name;
         this.adminKey = adminKey;
@@ -54,9 +50,14 @@ public class TallySheet {
     }
 
     public static TallySheet newTallySheet(String userId, String name, String adminKey, String publicKey) {
+        Preconditions.checkArgument(userId != null, "userId must not be null");
+        Preconditions.checkArgument(name != null, "name must not be null");
+        Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
+        Preconditions.checkArgument(publicKey != null, "publicKey must not be null");
         return new TallySheet(userId, name, adminKey, publicKey, new ArrayList<>());
     }
 
+    @Override
     public String getId() {
         return this.id;
     }
@@ -65,14 +66,17 @@ public class TallySheet {
         return this.version;
     }
 
+    @Override
     public String getUserId() {
         return this.userId;
     }
 
+    @Override
     public String getName() {
         return this.name;
     }
 
+    @Override
     public Optional<String> getAdminKey() {
         return Optional.ofNullable(this.adminKey);
     }
@@ -82,6 +86,7 @@ public class TallySheet {
         return this;
     }
 
+    @Override
     public String getPublicKey() {
         return this.publicKey;
     }
@@ -95,10 +100,12 @@ public class TallySheet {
         return query.select(getIncrements());
     }
 
+    @Override
     public LocalDateTime getLastModifiedDateUTC() {
         return this.lastModifiedDateUTC;
     }
 
+    @Override
     public LocalDateTime getCreateDateUTC() {
         return this.createDateUTC;
     }

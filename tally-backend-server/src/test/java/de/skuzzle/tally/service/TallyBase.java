@@ -11,11 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.web.context.WebApplicationContext;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
 @SpringBootTest(properties = "tally.api.requestsPerSecond=1000")
+@WithMockUser(username = "user1")
 public class TallyBase {
 
     @Autowired
@@ -49,5 +51,4 @@ public class TallyBase {
 
         RestAssuredMockMvc.webAppContextSetup(webAppCtx);
     }
-
 }
