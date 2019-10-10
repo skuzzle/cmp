@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.skuzzle.tally.auth.TallyUser;
+import de.skuzzle.tally.rest.auth.TallyUser;
 import de.skuzzle.tally.rest.ratelimit.ApiRateLimiter;
 import de.skuzzle.tally.rest.ratelimit.RateLimitExceededException;
 import de.skuzzle.tally.service.IncrementNotAvailableException;

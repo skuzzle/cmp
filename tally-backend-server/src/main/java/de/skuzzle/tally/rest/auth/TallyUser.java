@@ -1,4 +1,4 @@
-package de.skuzzle.tally.auth;
+package de.skuzzle.tally.rest.auth;
 
 import java.util.UUID;
 
