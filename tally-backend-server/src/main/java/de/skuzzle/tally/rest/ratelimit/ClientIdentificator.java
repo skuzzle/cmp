@@ -1,6 +1,8 @@
 package de.skuzzle.tally.rest.ratelimit;
 
+import java.util.Optional;
+
 public interface ClientIdentificator<T> {
 
-    ApiClient identifyClientFrom(T hint);
+    Optional<ApiClient> tryIdentifyClientFrom(T hint);
 }

@@ -39,20 +39,24 @@ public class ApiRateLimiter<T> {
 
     public boolean exceedsLimit(T hint) {
         Preconditions.checkArgument(hint != null, "rate limiter client hint must not be null");
-        final ApiClient client = clientIdentificator.identifyClientFrom(hint);
-        final RateLimiter rateLimiter = limiterCache.getUnchecked(client);
-        return client.exceedsLimitOf(rateLimiter);
+        return clientIdentificator.tryIdentifyClientFrom(hint)
+                .filter(client -> {
+                    final RateLimiter rateLimiter = limiterCache.getUnchecked(client);
+                    return client.exceedsLimitOf(rateLimiter);
+                })
+                .isPresent();
     }
 
     public void blockIfRateLimitIsExceeded(T hint) {
         Preconditions.checkArgument(hint != null, "rate limiter client hint must not be null");
-        final ApiClient client = clientIdentificator.identifyClientFrom(hint);
-        final RateLimiter rateLimiter = limiterCache.getUnchecked(client);
-        if (client.exceedsLimitOf(rateLimiter)) {
-            logger.warn("Request from {} has been blocked after exceeding rate limit", client);
-            Metrics.counter("rate_limit_exceeded", "user_id", client.toString()).increment();
-            throw new RateLimitExceededException(client);
-        }
+        clientIdentificator.tryIdentifyClientFrom(hint).ifPresent(client -> {
+            final RateLimiter rateLimiter = limiterCache.getUnchecked(client);
+            if (client.exceedsLimitOf(rateLimiter)) {
+                logger.warn("Request from {} has been blocked after exceeding rate limit", client);
+                Metrics.counter("rate_limit_exceeded", "user_id", client.toString()).increment();
+                throw new RateLimitExceededException(client);
+            }
+        });
     }
 
 }

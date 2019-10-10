@@ -2,11 +2,14 @@ package de.skuzzle.tally.rest.ratelimit;
 
 import java.util.Objects;
 
+import com.google.common.base.Preconditions;
+
 public class BaseApiClient {
 
     protected final Object key;
 
     protected BaseApiClient(Object key) {
+        Preconditions.checkArgument(key != null, "key for identifying a client must not be null");
         this.key = key;
     }
 

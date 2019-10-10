@@ -1,13 +1,15 @@
 package de.skuzzle.tally.rest.ratelimit;
 
+import java.util.Optional;
+
 import javax.servlet.http.HttpServletRequest;
 
 public class RemoteIpClientIdentificator implements ClientIdentificator<HttpServletRequest> {
 
     @Override
-    public ApiClient identifyClientFrom(HttpServletRequest request) {
+    public Optional<ApiClient> tryIdentifyClientFrom(HttpServletRequest request) {
         final String remoteIp = getClientIP(request);
-        return new SimpleApiClient(remoteIp);
+        return Optional.of(new SimpleApiClient(remoteIp));
     }
 
     private String getClientIP(HttpServletRequest request) {

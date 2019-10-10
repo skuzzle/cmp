@@ -55,4 +55,9 @@ public class TallyUser {
     public boolean isAnonymous() {
         return !userId.startsWith("google:");
     }
+    
+    @Override
+    public String toString() {
+        return userId;
+    }
 }

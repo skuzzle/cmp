@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import de.skuzzle.tally.rest.ratelimit.ApiRateLimiter;
-import de.skuzzle.tally.rest.ratelimit.RemoteIpClientIdentificator;
 import de.skuzzle.tally.service.TallyServiceConfiguration;
 
 @Configuration
@@ -27,7 +26,7 @@ public class TallyRestConfiguration {
         logger.info("Configuring API rate limiter with a client dependent rate limit of {}",
                 apiProperties.getRequestsPerSecond());
         return new ApiRateLimiter<>(
-                new RemoteIpClientIdentificator(),
+                new AuthenticationClientIdentificator(),
                 apiProperties.getRequestsPerSecond());
     }
 }
