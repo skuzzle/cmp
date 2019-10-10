@@ -11,6 +11,8 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.RateLimiter;
 
+import io.micrometer.core.instrument.Metrics;
+
 public class ApiRateLimiter<T> {
 
     private static final Logger logger = LoggerFactory.getLogger(ApiRateLimiter.class);
@@ -48,6 +50,7 @@ public class ApiRateLimiter<T> {
         final RateLimiter rateLimiter = limiterCache.getUnchecked(client);
         if (client.exceedsLimitOf(rateLimiter)) {
             logger.warn("Request from {} has been blocked after exceeding rate limit", client);
+            Metrics.counter("rate_limit_exceeded", "user_id", client.toString()).increment();
             throw new RateLimitExceededException(client);
         }
     }
