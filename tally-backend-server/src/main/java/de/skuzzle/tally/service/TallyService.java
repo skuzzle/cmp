@@ -7,8 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Preconditions;
 
-import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Metrics;
 
 @Service
 public class TallyService {
@@ -17,19 +16,14 @@ public class TallyService {
 
     private final TallyRepository repository;
     private final RandomKeyGenerator randomKeyGenerator;
-    private final MeterRegistry meterRegistry;
 
-    TallyService(TallyRepository repository, RandomKeyGenerator randomKeyGenerator, MeterRegistry meterRegistry) {
+    TallyService(TallyRepository repository, RandomKeyGenerator randomKeyGenerator) {
         this.repository = repository;
         this.randomKeyGenerator = randomKeyGenerator;
-        this.meterRegistry = meterRegistry;
     }
 
     public TallySheet createNewTallySheet(String userId, String name) {
-        Counter.builder("created_tally")
-                .tag("user_id", userId)
-                .register(meterRegistry)
-                .increment();
+        Metrics.counter("created_tally", "user_id", userId).increment();
         return repository.save(TallySheet.newTallySheet(
                 userId,
                 name,
@@ -56,10 +50,7 @@ public class TallyService {
         final TallySheet tallySheet = repository.findByAdminKey(adminKey)
                 .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
 
-        Counter.builder("incremented_tally")
-                .tag("user_id", tallySheet.getUserId())
-                .register(meterRegistry)
-                .increment();
+        Metrics.counter("incremented_tally", "user_id", tallySheet.getUserId()).increment();
         tallySheet.incrementWith(increment);
         return repository.save(tallySheet);
     }
