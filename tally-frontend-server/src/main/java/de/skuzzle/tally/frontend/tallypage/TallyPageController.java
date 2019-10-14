@@ -1,4 +1,4 @@
-package de.skuzzle.tally.frontend;
+package de.skuzzle.tally.frontend.tallypage;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,11 +27,11 @@ import de.skuzzle.tally.frontend.client.TallyClient;
 import de.skuzzle.tally.frontend.graphs.Graph;
 
 @Controller
-public class TallyController {
+public class TallyPageController {
 
     private final TallyClient client;
 
-    public TallyController(TallyClient client) {
+    public TallyPageController(TallyClient client) {
         this.client = client;
     }
 
@@ -75,7 +75,7 @@ public class TallyController {
         final RestIncrements increments = response.getIncrements();
 
         final Graph graph = Graph.fromHistory(increments.getEntries());
-        return new ModelAndView("tally", ImmutableMap.of(
+        return new ModelAndView("tallypage/tally", ImmutableMap.of(
                 "tally", tallySheet,
                 "increments", increments,
                 "graph", graph));
