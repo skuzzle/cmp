@@ -106,6 +106,17 @@ public class TallyClient {
         }
     }
 
+    public boolean assignToCurrentUser(String adminKey) {
+        Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
+        try {
+            restTemplate.postForEntity("/{key}/assignToCurrentUser", null, Object.class, adminKey);
+            return true;
+        } catch (final Exception e) {
+            logger.error("Error while assigning sheet with key '{}' to current user", e);
+            return false;
+        }
+    }
+
     private <T> TallyResult<T> resultFromException(HttpStatusCodeException e) {
         final RestErrorMessage error = error(e.getResponseBodyAsString());
         return TallyResult.fail(e.getStatusCode(), error);

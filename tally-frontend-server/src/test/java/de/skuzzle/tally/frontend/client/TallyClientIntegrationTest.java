@@ -82,4 +82,10 @@ public class TallyClientIntegrationTest {
         final var success = tallyClient.deleteIncrement("adminKey1", "unknownIncrementId");
         assertThat(success).isFalse();
     }
+
+    @Test
+    void testAssignToCurrentUser() throws Exception {
+        final var success = tallyClient.assignToCurrentUser("adminKey3");
+        assertThat(success).isTrue();
+    }
 }

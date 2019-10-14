@@ -81,6 +81,12 @@ public class TallyController {
                 "graph", graph));
     }
 
+    @GetMapping(path = "/{key}", params = "action=assignToCurrentUser")
+    public String assignToCurrentUser(@PathVariable String key) {
+        client.assignToCurrentUser(key);
+        return "redirect:/" + key;
+    }
+
     @GetMapping(path = "/{key}/increment/{incrementId}", params = "action=delete")
     public String deleteIncrement(@PathVariable String key, @PathVariable String incrementId) {
         client.deleteIncrement(key, incrementId);
