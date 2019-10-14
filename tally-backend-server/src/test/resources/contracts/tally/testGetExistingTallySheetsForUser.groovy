@@ -25,9 +25,9 @@ org.springframework.cloud.contract.spec.Contract.make {
         body([
             tallySheets: [
                 [
-                    name: 'existing',
-                    publicKey: 'publicKey',
-                    adminKey: 'adminKey',
+                    name: 'existing1',
+                    publicKey: 'publicKey1',
+                    adminKey: 'adminKey1',
                     createDateUTC: $(
                         consumer('1987-09-12T11:11:00.123'),
                         producer(regex(Helpers.isoDateTimeWithNanos()))

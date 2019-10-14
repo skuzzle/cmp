@@ -1,6 +1,7 @@
 package de.skuzzle.tally.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,6 +11,32 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 public class TallySheetTest {
+
+    @Test
+    void testIsNotAssignableToAnonymous() throws Exception {
+        final UserId anonymous = UserId.unknown("foo");
+        final UserId anonymous2 = UserId.unknown("foo2");
+        final TallySheet sheet = TallySheet.newTallySheet(anonymous, "name", "adminKey", "publicKey");
+        assertThat(sheet.isAssignableTo(anonymous)).isFalse();
+        assertThatExceptionOfType(UserAssignmentException.class).isThrownBy(() -> sheet.assignToUser(anonymous2));
+    }
+
+    @Test
+    void testIsAlreadyAssigned() throws Exception {
+        final UserId authenticated = UserId.wellKnown("google", "foo@gmail.com");
+        final UserId authenticated2 = UserId.wellKnown("google", "bar@gmail.com");
+        final TallySheet sheet = TallySheet.newTallySheet(authenticated, "name", "adminKey", "publicKey");
+        assertThat(sheet.isAssignableTo(authenticated2)).isFalse();
+        assertThatExceptionOfType(UserAssignmentException.class).isThrownBy(() -> sheet.assignToUser(authenticated2));
+    }
+
+    @Test
+    void testIsNotAssignableToAuthenticated() throws Exception {
+        final UserId anonymous = UserId.unknown("foo");
+        final UserId authenticated = UserId.wellKnown("google", "foo@gmail.com");
+        final TallySheet sheet = TallySheet.newTallySheet(anonymous, "name", "adminKey", "publicKey");
+        assertThat(sheet.isAssignableTo(authenticated)).isTrue();
+    }
 
     @Test
     void testQueryAll() throws Exception {
@@ -61,7 +88,8 @@ public class TallySheetTest {
     }
 
     private TallySheet createWithIncrements(int count, LocalDateTime from, LocalDateTime until) {
-        final TallySheet sheet = TallySheet.newTallySheet("userId", "name", "adminKey", "publicKey");
+        final TallySheet sheet = TallySheet.newTallySheet(UserId.wellKnown("google", "foo@gmail.com"), "name",
+                "adminKey", "publicKey");
         final long days = ChronoUnit.DAYS.between(from, until);
         final long avgBetween = days / count;
         for (int i = 0; i < count; i++) {

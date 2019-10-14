@@ -37,15 +37,8 @@ public class TallyClientIntegrationTest {
         final var increment = RestTallyIncrement.createNew("Description",
                 LocalDateTime.of(2019, 04, 12, 11, 21, 32, 123000000), Set.of("tag1", "tag2"));
 
-        final var apiResponse = tallyClient.increment("adminKey", increment);
-        assertThat(apiResponse.getStatus()).isEqualTo(HttpStatus.OK);
-
-        final RestTallySheet tallySheet = apiResponse.payload().orElseThrow().getTallySheet();
-        final RestIncrements increments = apiResponse.payload().orElseThrow().getIncrements();
-        assertThat(tallySheet.getCreateDateUTC()).isEqualTo(LocalDateTime.of(1987, 9, 12, 11, 11, 0, 123000000));
-        assertThat(tallySheet.getLastModifiedDateUTC()).isEqualTo(LocalDateTime.of(1987, 9, 12, 11, 11, 0, 123000000));
-        assertThat(increments.getEntries()).first().extracting(RestTallyIncrement::getIncrementDateUTC)
-                .isEqualTo(LocalDateTime.of(2019, 04, 12, 11, 21, 32, 123000000));
+        final boolean result = tallyClient.increment("adminKey1", increment);
+        assertThat(result).isTrue();
     }
 
     @Test
@@ -61,7 +54,7 @@ public class TallyClientIntegrationTest {
 
     @Test
     void testGetExistingTallySheet() {
-        final var apiResponse = tallyClient.getTallySheet("publicKey");
+        final var apiResponse = tallyClient.getTallySheet("publicKey1");
         assertThat(apiResponse.getStatus()).isEqualTo(HttpStatus.OK);
         assertThat(apiResponse.isSuccess());
     }
@@ -74,7 +67,7 @@ public class TallyClientIntegrationTest {
 
     @Test
     void testDeleteTallySheet() {
-        final var success = tallyClient.deleteTallySheet("adminKey");
+        final var success = tallyClient.deleteTallySheet("adminKey1");
         assertThat(success).isTrue();
     }
 
@@ -86,7 +79,7 @@ public class TallyClientIntegrationTest {
 
     @Test
     void testDeleteUnknownIncrement() throws Exception {
-        final var success = tallyClient.deleteIncrement("adminKey", "unknownIncrementId");
+        final var success = tallyClient.deleteIncrement("adminKey1", "unknownIncrementId");
         assertThat(success).isFalse();
     }
 }

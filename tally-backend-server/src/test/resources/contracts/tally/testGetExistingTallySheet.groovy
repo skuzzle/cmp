@@ -17,15 +17,15 @@ org.springframework.cloud.contract.spec.Contract.make {
     name("getExistingTallySheet")
     request {
         method GET()
-        url '/publicKey'
+        url '/publicKey1'
         headers {}
     }
     response {
         status OK()
         body([
             tallySheet: [
-                name: 'existing',
-                publicKey: 'publicKey',
+                name: 'existing1',
+                publicKey: 'publicKey1',
                 adminKey: null,
                 createDateUTC: $(
                     consumer('1987-09-12T11:11:00.123'),

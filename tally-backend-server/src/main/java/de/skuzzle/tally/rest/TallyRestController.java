@@ -32,6 +32,8 @@ import de.skuzzle.tally.service.ShallowTallySheet;
 import de.skuzzle.tally.service.TallyService;
 import de.skuzzle.tally.service.TallySheet;
 import de.skuzzle.tally.service.TallySheetNotAvailableException;
+import de.skuzzle.tally.service.UserAssignmentException;
+import de.skuzzle.tally.service.UserId;
 
 @RestController
 public class TallyRestController {
@@ -44,13 +46,18 @@ public class TallyRestController {
         this.rateLimiter = rateLimiter;
     }
 
+    private UserId currentUser() {
+        final TallyUser requestUser = TallyUser.fromCurrentAuthentication();
+        return UserId.of(requestUser.getSource(), requestUser.getId(), requestUser.isAnonymous());
+    }
+
     @GetMapping("/")
     public ResponseEntity<RestTallySheetsReponse> getAllTallies(HttpServletRequest request) {
         rateLimiter.blockIfRateLimitIsExceeded(request);
-        final TallyUser user = TallyUser.fromCurrentRequestContext();
+        final UserId currentUser = currentUser();
 
-        final List<ShallowTallySheet> tallySheets = tallyService.getTallySheetsForUser(user.getUserId());
-        final List<RestTallySheet> restTallySheets = RestTallySheet.fromDomainObjects(tallySheets);
+        final List<ShallowTallySheet> tallySheets = tallyService.getTallySheetsFor(currentUser);
+        final List<RestTallySheet> restTallySheets = RestTallySheet.fromDomainObjects(currentUser, tallySheets);
         final RestTallySheetsReponse response = RestTallySheetsReponse.of(restTallySheets);
         return ResponseEntity.ok(response);
     }
@@ -72,8 +79,9 @@ public class TallyRestController {
                 .start(start < 0 ? 0 : start)
                 .maxResults(max < 0 ? Integer.MAX_VALUE : max));
 
+        final UserId currentUser = currentUser();
         final RestIncrements increments = RestIncrements.of(incrementQueryResult);
-        final RestTallySheet restTallySheet = RestTallySheet.fromDomainObject(tallySheet);
+        final RestTallySheet restTallySheet = RestTallySheet.fromDomainObject(currentUser, tallySheet);
         final RestTallyResponse response = RestTallyResponse.of(restTallySheet, increments);
         return ResponseEntity.ok(response);
     }
@@ -82,13 +90,12 @@ public class TallyRestController {
     public ResponseEntity<RestTallyResponse> createTally(@PathVariable @NotEmpty String name,
             HttpServletRequest request) {
 
-        final TallyUser tallyUser = TallyUser.fromCurrentRequestContext();
-
         rateLimiter.blockIfRateLimitIsExceeded(request);
-        final TallySheet tallySheet = tallyService.createNewTallySheet(tallyUser.getUserId(), name);
+        final UserId currentUser = currentUser();
+        final TallySheet tallySheet = tallyService.createNewTallySheet(currentUser, name);
 
         final RestIncrements increments = RestIncrements.empty(0);
-        final RestTallySheet restTallySheet = RestTallySheet.fromDomainObject(tallySheet);
+        final RestTallySheet restTallySheet = RestTallySheet.fromDomainObject(currentUser, tallySheet);
         final RestTallyResponse response = RestTallyResponse.of(restTallySheet, increments);
 
         return ResponseEntity
@@ -96,19 +103,23 @@ public class TallyRestController {
                 .body(response);
     }
 
+    @PostMapping("/{key}/assignToCurrentUser")
+    @ResponseStatus(HttpStatus.OK)
+    public void assignToCurrentUser(@PathVariable @NotEmpty String key,
+            HttpServletRequest request) {
+        rateLimiter.blockIfRateLimitIsExceeded(request);
+        final UserId currentUser = currentUser();
+        tallyService.assignToUser(key, currentUser);
+
+    }
+
     @PostMapping("/{key}/increment")
-    public ResponseEntity<RestTallyResponse> increment(@PathVariable String key,
+    @ResponseStatus(HttpStatus.OK)
+    public void increment(@PathVariable String key,
             @RequestBody @Valid RestTallyIncrement increment,
             HttpServletRequest request) {
         rateLimiter.blockIfRateLimitIsExceeded(request);
-        final TallySheet tallySheet = tallyService.increment(key, increment.toDomainObjectWithoutId());
-
-        final RestIncrements increments = RestIncrements.all(tallySheet.getIncrements());
-        final RestTallySheet restTallySheet = RestTallySheet.fromDomainObject(tallySheet);
-
-        final RestTallyResponse response = RestTallyResponse.of(restTallySheet, increments);
-        return ResponseEntity.ok()
-                .body(response);
+        tallyService.increment(key, increment.toDomainObjectWithoutId());
     }
 
     @DeleteMapping("/{key}")
@@ -123,6 +134,12 @@ public class TallyRestController {
     public void deleteIncrement(@PathVariable String key, @PathVariable String id, HttpServletRequest request) {
         rateLimiter.blockIfRateLimitIsExceeded(request);
         tallyService.deleteIncrement(key, id);
+    }
+
+    @ExceptionHandler(UserAssignmentException.class)
+    public ResponseEntity<RestErrorMessage> onUserAssignmentFailed(UserAssignmentException e) {
+        final RestErrorMessage body = RestErrorMessage.of(e.getMessage(), e.getClass().getName());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(RateLimitExceededException.class)

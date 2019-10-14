@@ -17,7 +17,7 @@ org.springframework.cloud.contract.spec.Contract.make {
     name("incrementExistingTallySheet")
     request {
         method POST()
-        url '/adminKey/increment'
+        url '/adminKey1/increment'
         body([
                 id: null,
                 incrementDateUTC: $(
@@ -32,35 +32,5 @@ org.springframework.cloud.contract.spec.Contract.make {
     }
     response {
         status OK()
-        body([
-            tallySheet: [
-                name: 'existing',
-                publicKey: 'publicKey',
-                adminKey: 'adminKey',
-                createDateUTC: $(
-                    consumer('1987-09-12T11:11:00.123'),
-                    producer(regex(Helpers.isoDateTimeWithNanos()))
-                ),
-                lastModifiedDateUTC: $(
-                    consumer('1987-09-12T11:11:00.123'),
-                    producer(regex(Helpers.isoDateTimeWithNanos()))
-                )
-            ],
-            increments: [
-                total: 1,
-                start: 0,
-                entries: [[
-                    description: regex('\\w+'),
-                    tags: [ 'tag1', 'tag2' ],
-                    incrementDateUTC: $(
-                            consumer('2019-04-12T11:21:32.123'),
-                            producer(regex(Helpers.isoDateTimeWithNanos()))
-                    )
-                ]]
-            ]
-        ])
-        headers {
-            contentType(applicationJson())
-        }
     }
 }

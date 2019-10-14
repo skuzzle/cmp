@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -25,7 +26,10 @@ public class TallySheet implements ShallowTallySheet {
     private int version;
 
     @Indexed
-    private final String userId;
+    private String userId;
+
+    @Transient
+    private UserId assignedUser;
 
     private final String name;
     @Indexed
@@ -47,14 +51,16 @@ public class TallySheet implements ShallowTallySheet {
         this.adminKey = adminKey;
         this.publicKey = publicKey;
         this.increments = increments;
+        this.assignedUser = UserId.fromLegacyStringId(userId);
     }
 
-    public static TallySheet newTallySheet(String userId, String name, String adminKey, String publicKey) {
+    public static TallySheet newTallySheet(UserId userId, String name, String adminKey, String publicKey) {
         Preconditions.checkArgument(userId != null, "userId must not be null");
         Preconditions.checkArgument(name != null, "name must not be null");
         Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
         Preconditions.checkArgument(publicKey != null, "publicKey must not be null");
-        return new TallySheet(userId, name, adminKey, publicKey, new ArrayList<>());
+
+        return new TallySheet(userId.toString(), name, adminKey, publicKey, new ArrayList<>());
     }
 
     @Override
@@ -66,9 +72,18 @@ public class TallySheet implements ShallowTallySheet {
         return this.version;
     }
 
+    /**
+     * @deprecated User {@link #getAssignedUser()}
+     */
     @Override
+    @Deprecated
     public String getUserId() {
         return this.userId;
+    }
+
+    @Override
+    public UserId getAssignedUser() {
+        return this.assignedUser;
     }
 
     @Override
@@ -108,6 +123,22 @@ public class TallySheet implements ShallowTallySheet {
     @Override
     public LocalDateTime getCreateDateUTC() {
         return this.createDateUTC;
+    }
+
+    @Override
+    public boolean isAssignableTo(UserId userId) {
+        return this.assignedUser.isAnonymous() && !userId.isAnonymous();
+    }
+
+    public void assignToUser(UserId userId) {
+        Preconditions.checkArgument(userId != null, "userId must not be null");
+        if (!isAssignableTo(userId)) {
+            throw new UserAssignmentException(String.format("Sheet with name '%s' is already assigned to: %s",
+                    name, assignedUser));
+        }
+
+        this.assignedUser = userId;
+        this.userId = userId.toString();
     }
 
     public boolean deleteIncrementWithId(String incrementId) {

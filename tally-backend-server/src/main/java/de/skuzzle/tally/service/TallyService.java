@@ -22,21 +22,32 @@ public class TallyService {
         this.randomKeyGenerator = randomKeyGenerator;
     }
 
-    public TallySheet createNewTallySheet(String userId, String name) {
-        Metrics.counter("created_tally", "user_id", userId).increment();
+    public TallySheet createNewTallySheet(UserId user, String name) {
+        Metrics.counter("created_tally", "user_id", user.toString()).increment();
         return repository.save(TallySheet.newTallySheet(
-                userId,
+                user,
                 name,
                 randomKeyGenerator.generateAdminKey(),
                 randomKeyGenerator.generatePublicKey(PUBLIC_KEY_LENGTH)));
     }
-    
-    public List<ShallowTallySheet> getTallySheetsForUser(String userId) {
+
+    public TallySheet assignToUser(String adminKey, UserId userId) {
+        Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
         Preconditions.checkArgument(userId != null, "userId must not be null");
-        return repository.findByUserId(userId);
+        final TallySheet byAdminKey = repository.findByAdminKey(adminKey)
+                .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
+
+        byAdminKey.assignToUser(userId);
+        return repository.save(byAdminKey);
+    }
+
+    public List<ShallowTallySheet> getTallySheetsFor(UserId userId) {
+        Preconditions.checkArgument(userId != null, "userId must not be null");
+        return repository.findByUserId(userId.toString());
     }
 
     public TallySheet getTallySheet(String publicKey) {
+        Preconditions.checkArgument(publicKey != null, "publicKey must not be null");
         final Optional<TallySheet> byPublicKey = repository.findByPublicKey(publicKey);
         if (byPublicKey.isPresent()) {
             final TallySheet publicTallySheet = byPublicKey.get();
@@ -47,21 +58,24 @@ public class TallyService {
     }
 
     public TallySheet increment(String adminKey, TallyIncrement increment) {
+        Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
         final TallySheet tallySheet = repository.findByAdminKey(adminKey)
                 .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
 
-        Metrics.counter("incremented_tally", "user_id", tallySheet.getUserId()).increment();
+        Metrics.counter("incremented_tally", "user_id", tallySheet.getAssignedUser().toString()).increment();
         tallySheet.incrementWith(increment);
         return repository.save(tallySheet);
     }
 
     public void deleteTallySheet(String adminKey) {
+        Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
         final TallySheet tallySheet = repository.findByAdminKey(adminKey)
                 .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
         repository.delete(tallySheet);
     }
 
     public void deleteIncrement(String adminKey, String incrementId) {
+        Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
         final TallySheet tallySheet = repository.findByAdminKey(adminKey)
                 .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
         if (tallySheet.deleteIncrementWithId(incrementId)) {

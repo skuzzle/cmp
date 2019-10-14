@@ -63,11 +63,8 @@ public class TallyController {
         final RestTallyIncrement increment = RestTallyIncrement.createNew(description,
                 LocalDateTime.of(incrementDate, LocalTime.now()), tagSet);
 
-        final RestTallySheet tallySheet = client.increment(adminKey, increment)
-                .payload()
-                .map(RestTallyResponse::getTallySheet)
-                .orElseThrow();
-        return "redirect:/" + tallySheet.getAdminKey();
+        client.increment(adminKey, increment);
+        return "redirect:/" + adminKey;
     }
 
     @GetMapping("/{key}")

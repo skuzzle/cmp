@@ -15,7 +15,7 @@ class AuthenticationClientIdentificator implements ClientIdentificator<HttpServl
 
     @Override
     public Optional<ApiClient> tryIdentifyClientFrom(HttpServletRequest hint) {
-        final TallyUser user = TallyUser.fromCurrentRequestContext();
+        final TallyUser user = TallyUser.fromCurrentAuthentication();
         if (user.isAnonymous()) {
             return identifyByIp.tryIdentifyClientFrom(hint);
         }

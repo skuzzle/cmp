@@ -12,52 +12,53 @@ import com.google.common.base.Preconditions;
 
 public class TallyUser {
 
-    private final String userId;
+    private final String source;
+    private final String id;
+    private final boolean anonymous;
 
-    private TallyUser(String userId) {
-        Preconditions.checkArgument(userId != null, "userId must not be null");
-        Preconditions.checkArgument(!userId.isEmpty(), "userId must not be empty");
-        this.userId = userId;
+    private TallyUser(String source, String id, boolean anonymous) {
+        Preconditions.checkArgument(source != null, "source must not be null");
+        Preconditions.checkArgument(id != null, "id must not be null");
+        this.source = source;
+        this.id = id;
+        this.anonymous = anonymous;
     }
 
-    public static TallyUser withId(String userId) {
-        return new TallyUser(userId);
-    }
-
-    public static TallyUser fromCurrentRequestContext() {
+    public static TallyUser fromCurrentAuthentication() {
         final SecurityContext context = SecurityContextHolder.getContext();
         final Authentication authentication = context.getAuthentication();
-        final String userId = getIdFrom(authentication);
-        return withId(userId);
+        return getIdFrom(authentication);
     }
 
-    private static String getIdFrom(Authentication authentication) {
+    private static TallyUser getIdFrom(Authentication authentication) {
         Preconditions.checkArgument(authentication != null,
                 "no Authentication object available. Check your Spring-Security configuration");
 
         final Object principal = authentication.getPrincipal();
         if (principal instanceof Jwt) {
             final Jwt jwt = (Jwt) principal;
-            final String id = "google:" + jwt.getClaimAsString("email");
-            return id;
+            return new TallyUser("google", jwt.getClaimAsString("email"), false);
         } else if (authentication instanceof AnonymousAuthenticationToken) {
-            final String id = "unknown:" + UUID.randomUUID().toString();
-            return id;
+            return new TallyUser("unknown", UUID.randomUUID().toString(), true);
         } else {
-            return authentication.getName();
+            return new TallyUser("test", authentication.getName(), false);
         }
     }
 
-    public String getUserId() {
-        return userId;
+    public String getSource() {
+        return this.source;
     }
-    
+
+    public String getId() {
+        return this.id;
+    }
+
     public boolean isAnonymous() {
-        return !userId.startsWith("google:");
+        return anonymous;
     }
-    
+
     @Override
     public String toString() {
-        return userId;
+        return String.format("%s:%s", source, id);
     }
 }

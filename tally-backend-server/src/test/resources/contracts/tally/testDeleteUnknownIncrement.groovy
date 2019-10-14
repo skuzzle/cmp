@@ -4,7 +4,7 @@ org.springframework.cloud.contract.spec.Contract.make {
     name("deleteUnknownIncrement")
     request {
         method DELETE()
-        url '/adminKey/increment/unknownIncrementId'
+        url '/adminKey1/increment/unknownIncrementId'
         headers {}
     }
     response {

@@ -11,14 +11,16 @@ public class RestTallySheet {
     // dates in UTC+0
     private final LocalDateTime createDateUTC;
     private final LocalDateTime lastModifiedDateUTC;
+    private final boolean assignableToCurrentUser;
 
     RestTallySheet(String name, String adminKey, String publicKey,
-            LocalDateTime createDateUTC, LocalDateTime lastModifiedDateUTC) {
+            LocalDateTime createDateUTC, LocalDateTime lastModifiedDateUTC, boolean assignableToCurrentUser) {
         this.name = name;
         this.adminKey = adminKey;
         this.publicKey = publicKey;
         this.createDateUTC = createDateUTC;
         this.lastModifiedDateUTC = lastModifiedDateUTC;
+        this.assignableToCurrentUser = assignableToCurrentUser;
     }
 
     public String getName() {
@@ -45,4 +47,7 @@ public class RestTallySheet {
         return this.lastModifiedDateUTC;
     }
 
+    public boolean isAssignableToCurrentUser() {
+        return this.assignableToCurrentUser;
+    }
 }
