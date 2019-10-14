@@ -14,8 +14,8 @@
             <td><time is="date-label" th:text="${entry.creationDateUTC}">2019-09-09</time></td>
             <td th:text="${entry.name}">Name</td>
             <td>
-                <a class="button is-info" th:href="@{/{adminKey}(adminKey=${entry.publicKey})}">Share</a>
-                <a class="button is-warning" th:href="@{/{adminKey}(adminKey=${entry.adminKey})}">Edit</a>
+                <a class="button is-light" th:href="@{/{adminKey}(adminKey=${entry.publicKey})}">Share</a>
+                <a class="button is-primary" th:href="@{/{adminKey}(adminKey=${entry.adminKey})}">Edit</a>
                 <a class="button is-danger" th:href="@{/{adminKey}?action=delete(adminKey=${entry.adminKey})}">Delete</a>
             </td>
         </tr>
