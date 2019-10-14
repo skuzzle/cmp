@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 
 import de.skuzzle.tally.frontend.auth.TallyUser;
@@ -47,6 +48,12 @@ public class FrontpageController {
             }
         }
         return model;
+    }
+
+    @GetMapping(path = "/{key}", params = "action=delete")
+    public String deleteTallySheet(@PathVariable String key) {
+        client.deleteTallySheet(key);
+        return "redirect:/";
     }
 
 }

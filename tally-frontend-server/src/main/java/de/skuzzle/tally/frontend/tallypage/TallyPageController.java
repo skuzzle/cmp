@@ -92,4 +92,5 @@ public class TallyPageController {
         client.deleteIncrement(key, incrementId);
         return "redirect:/" + key;
     }
+
 }
