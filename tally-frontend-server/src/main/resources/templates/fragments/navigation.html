@@ -1,0 +1,25 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<nav th:fragment="navigation" class="navbar" role="navigation" aria-label="main navigation">
+	<div class="navbar-brand">
+		<a class="navbar-item" href="https://bulma.io">
+		    <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28"></img>
+		</a>
+	</div>
+	
+	<div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+            <a class="navbar-item" th:href="@{/}">Home</a>
+        </div>
+    </div>
+
+	<div class="navbar-end">
+		<div class="navbar-item">
+			<div class="buttons" th:insert="fragments/login :: login">
+				<a class="button is-light"> Log in with google</a>
+			</div>
+		</div>
+	</div>
+</nav>

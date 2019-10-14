@@ -1,14 +1,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <div th:fragment="login">
-    <a class="button" th:href="@{/oauth2/authorization/google}" th:if="!${user.isLoggedIn()}">
+    <a class="button is-primary" th:href="@{/oauth2/authorization/google}" th:if="!${user.isLoggedIn()}">
         <span class="icon">
             <i class="fab fa-google"></i>
         </span>
         <span>Login with Google</span>
     </a>
     <form class="is-inline" method="post" th:action="@{/logout}" th:if="${user.isLoggedIn()}">
-        <input type="submit" class="button" th:value="'Logout ' + ${user.name}"></input>
+        <input type="submit" class="button is-light" th:value="'Logout ' + ${user.name}"></input>
     </form>
  </div>
  </html>
