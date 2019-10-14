@@ -38,10 +38,19 @@ public final class UserId {
         return new UserId(UNKNOWN_PREFIX, id, true);
     }
 
-    public static UserId fromLegacyStringId(String id) {
-        final String[] parts = id.split("\\:", 2);
-        final boolean anonymous = UNKNOWN_PREFIX.equals(parts[0]);
-        return new UserId(parts[0], parts[1], anonymous);
+    public static UserId fromLegacyStringId(String legacyId) {
+        final String[] parts = legacyId.split("\\:", 2);
+        final String source;
+        final String id;
+        if (parts.length == 1) {
+            source = UNKNOWN_PREFIX;
+            id = parts[0];
+        } else {
+            source = parts[0];
+            id = parts[1];
+        }
+        final boolean anonymous = UNKNOWN_PREFIX.equals(source);
+        return new UserId(source, id, anonymous);
     }
 
     public String getSource() {
