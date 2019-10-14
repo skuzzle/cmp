@@ -11,6 +11,16 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 public class TallySheetTest {
+    
+    @Test
+    void testIncrementCollectionIsImmutable() throws Exception {
+        final TallySheet sheet = createWithIncrements(25,
+                LocalDate.of(2019, 01, 01).atStartOfDay(),
+                LocalDate.of(2019, 02, 01).atStartOfDay());
+        
+        assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(
+                () -> sheet.getIncrements().add(TallyIncrement.newIncrement("foo", LocalDateTime.now(), Set.of())));
+    }
 
     @Test
     void testIsNotAssignableToAnonymous() throws Exception {
