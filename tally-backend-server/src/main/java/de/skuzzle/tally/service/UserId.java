@@ -61,6 +61,12 @@ public final class UserId {
         return this.id;
     }
 
+    String getMetricsId() {
+        return isAnonymous()
+                ? UNKNOWN_PREFIX
+                : toString();
+    }
+
     public boolean isAnonymous() {
         return this.anonymous;
     }

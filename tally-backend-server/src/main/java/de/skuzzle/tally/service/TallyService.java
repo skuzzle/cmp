@@ -23,7 +23,7 @@ public class TallyService {
     }
 
     public TallySheet createNewTallySheet(UserId user, String name) {
-        Metrics.counter("created_tally", "user_id", user.toString()).increment();
+        Metrics.counter("created_tally", "user_id", user.getMetricsId()).increment();
         return repository.save(TallySheet.newTallySheet(
                 user,
                 name,
@@ -62,7 +62,7 @@ public class TallyService {
         final TallySheet tallySheet = repository.findByAdminKey(adminKey)
                 .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
 
-        Metrics.counter("incremented_tally", "user_id", tallySheet.getAssignedUser().toString()).increment();
+        Metrics.counter("incremented_tally", "user_id", tallySheet.getAssignedUser().getMetricsId()).increment();
         tallySheet.incrementWith(increment);
         return repository.save(tallySheet);
     }
