@@ -4,19 +4,19 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "tally.api")
+@ConfigurationProperties(prefix = "cmp.api")
 class ApiProperties {
-    private RateLimit rateLimit = new RateLimit();
+    private Ratelimit ratelimit = new Ratelimit();
 
-    public RateLimit getRateLimit() {
-        return this.rateLimit;
+    public Ratelimit getRatelimit() {
+        return this.ratelimit;
     }
 
-    public void setRateLimit(RateLimit rateLimit) {
-        this.rateLimit = rateLimit;
+    public void setRatelimit(Ratelimit ratelimit) {
+        this.ratelimit = ratelimit;
     }
 
-    public static class RateLimit {
+    public static class Ratelimit {
         private double rps = 10.0;
         private boolean enabled = true;
 

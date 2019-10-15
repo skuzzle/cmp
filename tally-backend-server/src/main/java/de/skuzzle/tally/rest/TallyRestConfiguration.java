@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import de.skuzzle.tally.rest.ApiProperties.RateLimit;
+import de.skuzzle.tally.rest.ApiProperties.Ratelimit;
 import de.skuzzle.tally.rest.ratelimit.ApiRateLimiter;
 import de.skuzzle.tally.rest.ratelimit.DisabledRateLimiter;
 import de.skuzzle.tally.rest.ratelimit.MemoryCacheRateLimiter;
@@ -26,7 +26,7 @@ public class TallyRestConfiguration {
 
     @Bean
     public ApiRateLimiter<HttpServletRequest> rateLimiter() {
-        final RateLimit rateLimit = apiProperties.getRateLimit();
+        final Ratelimit rateLimit = apiProperties.getRatelimit();
         if (rateLimit.isEnabled()) {
             logger.info("Configuring API rate limiter with a client dependent rate limit of {}", rateLimit.getRps());
             return new MemoryCacheRateLimiter<>(
