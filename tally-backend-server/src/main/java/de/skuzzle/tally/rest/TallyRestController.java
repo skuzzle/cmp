@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.skuzzle.tally.rest.auth.TallyUser;
-import de.skuzzle.tally.rest.ratelimit.ApiRateLimiter;
+import de.skuzzle.tally.rest.ratelimit.MemoryCacheRateLimiter;
 import de.skuzzle.tally.rest.ratelimit.RateLimitExceededException;
 import de.skuzzle.tally.service.IncrementNotAvailableException;
 import de.skuzzle.tally.service.IncrementQuery;
@@ -39,9 +39,9 @@ import de.skuzzle.tally.service.UserId;
 public class TallyRestController {
 
     private final TallyService tallyService;
-    private final ApiRateLimiter<HttpServletRequest> rateLimiter;
+    private final MemoryCacheRateLimiter<HttpServletRequest> rateLimiter;
 
-    TallyRestController(TallyService tallyService, ApiRateLimiter<HttpServletRequest> rateLimiter) {
+    TallyRestController(TallyService tallyService, MemoryCacheRateLimiter<HttpServletRequest> rateLimiter) {
         this.tallyService = tallyService;
         this.rateLimiter = rateLimiter;
     }

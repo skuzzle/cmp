@@ -16,7 +16,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
-@SpringBootTest(properties = "tally.api.requestsPerSecond=1000")
+@SpringBootTest
 @WithMockUser(username = "user1")
 public class TallyBase {
 

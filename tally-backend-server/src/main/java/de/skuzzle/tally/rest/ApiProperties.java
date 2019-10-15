@@ -6,13 +6,35 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "tally.api")
 class ApiProperties {
-    private double requestsPerSecond;
+    private RateLimit rateLimit;
 
-    public double getRequestsPerSecond() {
-        return requestsPerSecond;
+    public RateLimit getRateLimit() {
+        return this.rateLimit;
     }
 
-    public void setRequestsPerSecond(double requestsPerSecond) {
-        this.requestsPerSecond = requestsPerSecond;
+    public void setRateLimit(RateLimit rateLimit) {
+        this.rateLimit = rateLimit;
+    }
+
+    public static class RateLimit {
+        private double rps;
+        private boolean enabled = true;
+
+        public double getRps() {
+            return this.rps;
+        }
+
+        public void setRps(double rps) {
+            this.rps = rps;
+        }
+
+        public boolean isEnabled() {
+            return this.enabled;
+        }
+
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
+
     }
 }
