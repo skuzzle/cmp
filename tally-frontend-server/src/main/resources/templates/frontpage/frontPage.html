@@ -20,17 +20,19 @@
 <section class="section">
     <div class="container">
         <div class="columns is-centered">
-            <div class="column is-one-third has-text-centered">
+            <div class="column is-half has-text-centered">
                 <h1 class="title">
                     Count pizzas
                 </h1>
                 <p class="subtitle has-text-grey-light">
-                    ... and more
+                    ... and more. View an <a th:href="@{/2SkVp8RP}">example</a> or <a href="#create-anchor">create</a> your own
                 </p>
             </div>
         </div>
     </div>
-    
+</section>
+
+<section class="section">
     <div class="container">
         <div class="columns is-centered">
             <div class="column has-text-centered is-4">
@@ -89,7 +91,7 @@
                 <form method="post" th:action="@{/_create}" >
                     <div class="field has-addons">
                         <div class="control is-expanded">
-                            <input class="input" name="name" type="text" placeholder="Name your counter" required="true" autofocus="true">
+                            <input id="create-anchor" class="input" name="name" type="text" placeholder="Name your counter" required="true" autofocus="true">
                         </div>
                         <div class="control">
                             <input type="submit" class="button is-info" value="Create Counter">
