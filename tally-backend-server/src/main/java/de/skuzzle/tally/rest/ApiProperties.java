@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "tally.api")
 class ApiProperties {
-    private RateLimit rateLimit;
+    private RateLimit rateLimit = new RateLimit();
 
     public RateLimit getRateLimit() {
         return this.rateLimit;
@@ -17,7 +17,7 @@ class ApiProperties {
     }
 
     public static class RateLimit {
-        private double rps;
+        private double rps = 10.0;
         private boolean enabled = true;
 
         public double getRps() {
