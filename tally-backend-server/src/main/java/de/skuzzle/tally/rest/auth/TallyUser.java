@@ -1,5 +1,6 @@
 package de.skuzzle.tally.rest.auth;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -10,7 +11,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 
 import com.google.common.base.Preconditions;
 
-public class TallyUser {
+public final class TallyUser {
 
     private final String source;
     private final String id;
@@ -55,6 +56,18 @@ public class TallyUser {
 
     public boolean isAnonymous() {
         return anonymous;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(source, id);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj == this || obj instanceof TallyUser
+                && Objects.equals(source, ((TallyUser) obj).source)
+                && Objects.equals(id, ((TallyUser) obj).id);
     }
 
     @Override
