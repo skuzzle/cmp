@@ -1,25 +1,72 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <div th:fragment="recentlyCreatedList(recentlyCreatedList, loggedIn)">
-    <table class="table is-fullwidth" th:if="${loggedIn}">
-        <thead>
-        <tr>
-            <th>Date</th>
-            <th>Name</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="entry : ${recentlyCreatedList}">
-            <td><time is="date-label" th:text="${entry.creationDateUTC}">2019-09-09</time></td>
-            <td th:text="${entry.name}">Name</td>
-            <td>
-                <a class="button is-light" th:href="@{/{adminKey}(adminKey=${entry.publicKey})}">Share</a>
-                <a class="button is-primary" th:href="@{/{adminKey}(adminKey=${entry.adminKey})}">Edit</a>
-                <a class="button is-danger" th:href="@{/{adminKey}?action=delete(adminKey=${entry.adminKey})}">Delete</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
- </div>
- </html>
+	<table class="table is-fullwidth" th:if="${loggedIn}">
+		<thead>
+			<tr>
+				<th>Date</th>
+				<th>Name</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="entry : ${recentlyCreatedList}">
+				<td><time is="date-label" th:text="${entry.creationDateUTC}">2019-09-09</time></td>
+				<td th:text="${entry.name}">Name</td>
+				<td><a class="button is-light"
+					th:href="@{/{adminKey}(adminKey=${entry.publicKey})}">Share</a> <a
+					class="button is-primary"
+					th:href="@{/{adminKey}(adminKey=${entry.adminKey})}">Edit</a> <a
+					class="button is-danger"
+					th:href="@{/{adminKey}?action=delete(adminKey=${entry.adminKey})}">Delete</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<div th:fragment="tallyRows(recentlyCreatedList, user)" th:each="entry : ${recentlyCreatedList}" class="column is-full">
+    <div th:replace="this :: tallyEntry(${entry}, ${user})"></div>
+</div>
+
+<div class="box is-radiusless" th:fragment="tallyEntry(tally, user)">
+<nav  class="level is-mobile">
+		<div class="level-item has-text-centered">
+            <div>
+                <p class="heading">Name</p>
+                <p class="title" th:text="${tally.name}">Pizza Counter</p>
+            </div>
+	   </div>
+        <div class="level-item has-text-centered">
+            <div>
+                <p class="heading">Created</p>
+                <p class="title"><time is="date-label" th:text="${entry.creationDateUTC}">2019-09-09</time></p>
+            </div>
+        </div>
+    <div class="level-right">
+	    <p class="level-item"><a class="button is-light" th:href="@{/{adminKey}(adminKey=${entry.publicKey})}">Share</a></p>
+	    <p class="level-item"><a class="button is-primary" th:href="@{/{adminKey}(adminKey=${entry.adminKey})}">Edit</a></p>
+	    <p class="level-item"><a class="button is-danger" th:href="@{/{adminKey}?action=delete(adminKey=${entry.adminKey})}">Delete</a></p>
+    </div>
+</nav>
+</div>
+
+<div th:fragment="tallyEntry2(tally, user)" class="card">
+	<header class="card-header">
+		<p class="card-header-title" th:text="${tally.name}">Pizza Counter
+			2018</p>
+	</header>
+	<div class="card-content">
+		<div class="content">
+			Test <br>
+			<time is="date-label" th:text="${entry.creationDateUTC}">2019-09-09</time>
+		</div>
+	</div>
+	<footer class="card-footer">
+		<a class="card-footer-item"
+			th:href="@{/{adminKey}(adminKey=${entry.publicKey})}">Share</a>  
+	</footer>
+</div>
+</html>
