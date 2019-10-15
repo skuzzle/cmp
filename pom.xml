@@ -99,9 +99,27 @@
 					<version>${spring-cloud.version}</version>
 				</plugin>
 				<plugin>
-					<groupId>com.spotify</groupId>
-					<artifactId>dockerfile-maven-plugin</artifactId>
-					<version>1.4.8</version>
+					<groupId>com.google.cloud.tools</groupId>
+					<artifactId>jib-maven-plugin</artifactId>
+					<version>1.6.1</version>
+					<configuration>
+						<from>
+							<image>openjdk:12</image>
+						</from>
+						<to>
+							<image>skuzzle/${project.artifactId}</image>
+							<tags>
+								<tag>${project.version}</tag>
+								<tag>latest</tag>
+							</tags>
+						</to>
+						<container>
+							<jvmFlags>
+								<jvmFlag>-XX:+UnlockExperimentalVMOptions</jvmFlag>
+								<jvmFlag>XX:+UseJVMCICompiler</jvmFlag>
+							</jvmFlags>
+						</container>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>

@@ -9,7 +9,12 @@ pipeline {
     stage('Build') {
       steps {
         sh 'mvn -B versions:set -DnewVersion=${BUILD_NUMBER}'
-        sh 'mvn -B clean install -Pcreate-image'
+        sh 'mvn -B clean install
+      }
+    }
+    stage('Containerize') {
+      steps {
+        sh 'mvn -B jib:dockerBuild'
       }
     }
   }
