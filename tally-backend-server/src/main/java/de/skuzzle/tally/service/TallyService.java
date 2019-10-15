@@ -37,6 +37,7 @@ public class TallyService {
         final TallySheet byAdminKey = repository.findByAdminKey(adminKey)
                 .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
 
+        Metrics.counter("assigned_tally", "user_id", userId.getMetricsId()).increment();
         byAdminKey.assignToUser(userId);
         return repository.save(byAdminKey);
     }
