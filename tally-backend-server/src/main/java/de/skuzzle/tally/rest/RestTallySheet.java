@@ -15,19 +15,22 @@ public class RestTallySheet {
     private final String adminKey;
     private final String publicKey;
     private final boolean assignableToCurrentUser;
+    private final int totalCount;
 
     // dates in UTC+0
     private final LocalDateTime createDateUTC;
     private final LocalDateTime lastModifiedDateUTC;
 
     private RestTallySheet(String name, String adminKey, String publicKey,
-            LocalDateTime createDateUTC, LocalDateTime lastModifiedDateUTC, boolean assignableToCurrentUser) {
+            LocalDateTime createDateUTC, LocalDateTime lastModifiedDateUTC, boolean assignableToCurrentUser,
+            int totalCount) {
         this.name = name;
         this.adminKey = adminKey;
         this.publicKey = publicKey;
         this.createDateUTC = createDateUTC;
         this.lastModifiedDateUTC = lastModifiedDateUTC;
         this.assignableToCurrentUser = assignableToCurrentUser;
+        this.totalCount = totalCount;
     }
 
     public static List<RestTallySheet> fromDomainObjects(UserId currentUser,
@@ -46,7 +49,8 @@ public class RestTallySheet {
                 tallySheet.getPublicKey(),
                 tallySheet.getCreateDateUTC(),
                 tallySheet.getLastModifiedDateUTC(),
-                tallySheet.isAssignableTo(currentUser));
+                tallySheet.isAssignableTo(currentUser),
+                tallySheet.getTotalCount());
     }
 
     public String getName() {
@@ -73,4 +77,7 @@ public class RestTallySheet {
         return this.assignableToCurrentUser;
     }
 
+    public int getTotalCount() {
+        return this.totalCount;
+    }
 }

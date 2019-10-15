@@ -22,32 +22,55 @@
         <div class="columns is-centered">
             <div class="column is-one-third has-text-centered">
                 <h1 class="title">
-                    Count everything
+                    Count pizzas
                 </h1>
                 <p class="subtitle has-text-grey-light">
-                    ... and share the results!
+                    ... and more
                 </p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column has-text-centered is-4">
+                <div><canvas class="is-tally-graph"></canvas></div>
             </div>
         </div>
     </div>
 </section>
 
-<section class="section">
+<section class="section is-hidden-mobile">
     <div class="container">
         <div class="columns is-centered">
             <div class="column is-one-fifth">
                 <div class="box is-radiusless">
-                    <div class="content has-text-centered">Easily create personal counters</div>
+                    <div class="content has-text-centered">
+                    <span class="icon is-large">
+                        <i class="fas fa-3x fa-chart-line"></i>
+                    </span><br/>
+                    Easily create counters and visualize their growth
+                    </div>
                 </div>
             </div>
             <div class="column is-one-fifth">
                 <div class="box is-radiusless">
-                    <div class="content has-text-centered">Share counters with your friends</div>
+                    <div class="content has-text-centered">
+                    <span class="icon is-large">
+                        <i class="fas fa-3x fa-share"></i>
+                    </span><br/>
+                    Share counters with your friends and colleagues
+                    </div>
                 </div>
             </div>
             <div class="column is-one-fifth">
                 <div class="box is-radiusless">
-                    <div class="content has-text-centered">Keep track of important metrics in your life</div>
+                    <div class="content has-text-centered">
+                    <span class="icon is-large">
+                        <i class="far fa-3x fa-sticky-note"></i>
+                    </span><br/>
+                    Keep track of important metrics in your life
+                    </div>
                 </div>
             </div>
         </div>
@@ -86,5 +109,8 @@
 </section>
 
     <footer th:replace="fragments/footer :: footer"></footer>
+<script>
+var GRAPH_DATA = {"datasets":[{"data":[{"x":0.0,"y":9.0},{"x":0.0,"y":9.0},{"x":0.0,"y":9.0},{"x":0.0,"y":9.0},{"x":0.0,"y":9.0},{"x":0.0,"y":9.0},{"x":0.0,"y":9.0},{"x":0.0,"y":9.0},{"x":0.0,"y":9.0},{"x":1.0,"y":9.0},{"x":1.0,"y":9.0},{"x":1.0,"y":9.0},{"x":1.0,"y":9.0},{"x":1.0,"y":9.0},{"x":1.0,"y":9.0},{"x":1.0,"y":9.0},{"x":1.0,"y":9.0},{"x":1.0,"y":9.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":3.0,"y":8.0},{"x":3.0,"y":8.0},{"x":3.0,"y":8.0},{"x":3.0,"y":8.0},{"x":3.0,"y":8.0},{"x":3.0,"y":8.0},{"x":3.0,"y":8.0},{"x":3.0,"y":8.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":5.0,"y":8.0},{"x":5.0,"y":8.0},{"x":5.0,"y":8.0},{"x":5.0,"y":8.0},{"x":5.0,"y":8.0},{"x":5.0,"y":8.0},{"x":5.0,"y":8.0},{"x":5.0,"y":8.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":7.0,"y":8.0},{"x":7.0,"y":8.0},{"x":7.0,"y":8.0},{"x":7.0,"y":8.0},{"x":7.0,"y":8.0},{"x":7.0,"y":8.0},{"x":7.0,"y":8.0},{"x":7.0,"y":8.0},{"x":8.0,"y":8.0},{"x":8.0,"y":8.0},{"x":8.0,"y":8.0},{"x":8.0,"y":8.0},{"x":8.0,"y":8.0},{"x":8.0,"y":8.0},{"x":8.0,"y":8.0},{"x":8.0,"y":8.0},{"x":9.0,"y":4.0},{"x":9.0,"y":4.0},{"x":9.0,"y":4.0},{"x":9.0,"y":4.0}],"pointRadius":0}],"labels":["Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza"]};
+</script>
 </body>
 </html>

@@ -13,6 +13,8 @@ public interface ShallowTallySheet {
 
     boolean isAssignableTo(UserId userId);
 
+    int getTotalCount();
+
     UserId getAssignedUser();
 
     Optional<String> getAdminKey();

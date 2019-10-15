@@ -1,13 +1,28 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <footer class="footer has-text-centered" th:fragment="footer">
-    <div class="content">
-        <p>
-            <strong>Count My Pizza</strong> by <a href="https://cv.skuzzle.de">Simon Taddiken</a>
-            <br/>
-            Icons made by <a href="https://www.flaticon.com/authors/adib-sulthon" title="Adib Sulthon">Adib Sulthon</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
-        </p>
-    </div>
+    <nav class="level">
+        <div class="level-item">
+            <div class="content">
+                <p>
+                    <strong>Count My Pizza</strong> by <a href="https://cv.skuzzle.de">Simon Taddiken</a>
+                    <br/>
+                    (Some) Icons made by <a href="https://www.flaticon.com/authors/adib-sulthon" title="Adib Sulthon">Adib Sulthon</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+                </p>
+            </div>
+        </div>
+        
+        <div class="level-item" th:if="false">
+            <div class="content">
+                <p>
+                    Imprint
+                    <br/>
+                    Privacy
+                </p>
+            </div>
+        </div>
+    </nav>
+
 </footer>
 
 </html>

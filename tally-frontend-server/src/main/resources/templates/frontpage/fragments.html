@@ -2,28 +2,37 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-<div th:fragment="tallyRows(recentlyCreatedList, user)" th:each="entry : ${recentlyCreatedList}" class="column is-full">
+<div th:fragment="tallyRows(recentlyCreatedList, user)" th:each="entry : ${recentlyCreatedList}" class="column is-half">
     <div th:replace="this :: tallyEntry(${entry}, ${user})"></div>
 </div>
 
 <div class="box is-radiusless" th:fragment="tallyEntry(tally, user)">
-	<nav class="level is-mobile">
-		<div class="level-item has-text-centered">
-            <div>
-                <p class="heading">Name</p>
-                <p class="title" th:text="${tally.name}">Pizza Counter</p>
+	<nav class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <span th:text="${tally.name}">Pizza Counter</span>
             </div>
-	   </div>
+        </div>
         <div class="level-item has-text-centered">
             <div>
                 <p class="heading">Created</p>
-                <p class="title"><time is="date-label" th:text="${entry.creationDateUTC}">2019-09-09</time></p>
+                <p class="subtitle"><time is="date-label" th:text="${entry.creationDateUTC}">2019-09-09</time></p>
+            </div>
+        </div>
+        <div class="level-item has-text-centered">
+            <div>
+                <p class="heading">Count</p>
+                <p class="subtitle" th:text="${tally.totalCount}">90</p>
             </div>
         </div>
 	    <div class="level-right">
-		    <p class="level-item"><a class="button is-light" th:href="@{/{adminKey}(adminKey=${entry.publicKey})}">Share</a></p>
-		    <p class="level-item"><a class="button is-primary" th:href="@{/{adminKey}(adminKey=${entry.adminKey})}">Edit</a></p>
-		    <p class="level-item"><a class="button is-danger" th:href="@{/{adminKey}?action=delete(adminKey=${entry.adminKey})}">Delete</a></p>
+            <div class="level-item">
+                <div class="field is-grouped">
+                    <p class="control"><a class="button is-light" th:href="@{/{adminKey}(adminKey=${entry.publicKey})}">View</a></p>    
+                    <p class="control"><a class="button is-primary" th:href="@{/{adminKey}(adminKey=${entry.adminKey})}">Edit</a></p>
+                    <p class="control"><a class="button is-danger" th:href="@{/{adminKey}?action=delete(adminKey=${entry.adminKey})}">Delete</a></p>
+                </div>
+            </div>
 	    </div>
 	</nav>
 </div>

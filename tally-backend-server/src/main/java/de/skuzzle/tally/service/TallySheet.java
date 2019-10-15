@@ -106,6 +106,11 @@ public class TallySheet implements ShallowTallySheet {
         return this.publicKey;
     }
 
+    @Override
+    public int getTotalCount() {
+        return increments.size();
+    }
+
     public List<TallyIncrement> getIncrements() {
         return Collections.unmodifiableList(this.increments);
     }
