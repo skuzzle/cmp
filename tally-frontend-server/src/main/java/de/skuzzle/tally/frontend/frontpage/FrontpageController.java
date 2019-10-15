@@ -8,9 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import de.skuzzle.tally.frontend.auth.TallyUser;
+import de.skuzzle.tally.frontend.client.RestTallyResponse;
 import de.skuzzle.tally.frontend.client.RestTallySheet;
 import de.skuzzle.tally.frontend.client.RestTallySheetsReponse;
 import de.skuzzle.tally.frontend.client.TallyClient;
@@ -28,6 +31,16 @@ public class FrontpageController {
     @ModelAttribute("user")
     public TallyUser getUser() {
         return TallyUser.fromCurrentRequestContext();
+    }
+
+    @PostMapping("/_create")
+    public String createTallySheet(@RequestParam("name") String name) {
+        final RestTallySheet tallySheet = client.createNewTallySheet(name)
+                .payload()
+                .map(RestTallyResponse::getTallySheet)
+                .orElseThrow();
+
+        return "redirect:/" + tallySheet.getAdminKey();
     }
 
     @GetMapping("/")

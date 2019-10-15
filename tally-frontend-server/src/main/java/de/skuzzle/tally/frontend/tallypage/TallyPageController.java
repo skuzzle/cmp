@@ -40,16 +40,6 @@ public class TallyPageController {
         return TallyUser.fromCurrentRequestContext();
     }
 
-    @PostMapping("/_create")
-    public String createTallySheet(@RequestParam("name") String name) {
-        final RestTallySheet tallySheet = client.createNewTallySheet(name)
-                .payload()
-                .map(RestTallyResponse::getTallySheet)
-                .orElseThrow();
-
-        return "redirect:/" + tallySheet.getAdminKey();
-    }
-
     @PostMapping("/{adminKey}")
     public String incrementTallySheet(@PathVariable("adminKey") String adminKey,
             @RequestParam("description") String description,
