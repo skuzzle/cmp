@@ -16,7 +16,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
-@SpringBootTest(properties = "cmp.api.ratelimit.enable=false")
+@SpringBootTest(properties = "cmp.api.ratelimit.enabled=false")
 @WithMockUser(username = "user1")
 public class TallyBase {
 
