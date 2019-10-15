@@ -17,6 +17,16 @@
     <nav th:replace="fragments/navigation :: navigation"></nav>
 </div>
 
+<div class="notification is-danger is-radiusless is-marginless" th:if="${tally.admin}">
+    You are viewing your tally sheet using its admin link. If you want to share this sheet, use the read-only link. Everyone who knows the admin link
+    will be able to update/delete this tally sheet!
+</div>
+
+<div class="notification is-warning is-radiusless is-marginless" th:if="${tally.assignableToCurrentUser}">
+    The sheet you are viewing has not been assigned to a user. Do you want to assign it to <span th:text="${user.name}">user name</span>?
+    <a class="button" th:href="@{/{adminKey}?action=assignToCurrentUser(adminKey=${tally.adminKey})}" th:text="'Assign to ' + ${user.name}">User Name</a>
+</div>
+
 <section class="hero is-info is-bold">
     <div class="hero-body">
         <div class="container">
@@ -27,21 +37,10 @@
                 <a th:href="@{/{publicKey}(publicKey=${tally.publicKey})}" th:text="'Share: ' + ${tally.publicKey}" href="#">Share:
                     http://tally.io/123547</a>
             </h2>
-            
-
         </div>
     </div>
 </section>
 
-<div class="notification is-danger is-radiusless" th:if="${tally.admin}">
-    You are viewing your tally sheet using its admin link. If you want to share this sheet, use the read-only link. Everyone who knows the admin link
-    will be able to update/delete this tally sheet!
-</div>
-
-<div class="notification is-warning is-radiusless" th:if="${tally.assignableToCurrentUser}">
-    The sheet you are viewing has not been assigned to a user. Do you want to assign it to <span th:text="${user.name}">user name</span>?
-    <a class="button" th:href="@{/{adminKey}?action=assignToCurrentUser(adminKey=${tally.adminKey})}" th:text="'Assign to ' + ${user.name}">User Name</a>
-</div>
 
 <section class="section">
     <div class="container">

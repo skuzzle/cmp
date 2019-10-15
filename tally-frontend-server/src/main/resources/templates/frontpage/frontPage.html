@@ -17,17 +17,39 @@
     <nav th:replace="fragments/navigation :: navigation"></nav>
 </div>
 
-<section class="hero is-info is-bold">
-    <div class="hero-body">
-        <div class="container">
-            <h1 class="title">
-                Count My Pizza
-            </h1>
-            <h2 class="subtitle">
-                Create and share public counters
-            </h2>
-            
+<section class="section">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-one-third has-text-centered">
+                <h1 class="title">
+                    Count everything
+                </h1>
+                <p class="subtitle has-text-grey-light">
+                    ... and share the results!
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
 
+<section class="section">
+    <div class="container">
+        <div class="columns is-centered">
+            <div class="column is-one-fifth">
+                <div class="box is-radiusless">
+                    <div class="content has-text-centered">Easily create personal counters</div>
+                </div>
+            </div>
+            <div class="column is-one-fifth">
+                <div class="box is-radiusless">
+                    <div class="content has-text-centered">Share counters with your friends</div>
+                </div>
+            </div>
+            <div class="column is-one-fifth">
+                <div class="box is-radiusless">
+                    <div class="content has-text-centered">Keep track of important metrics in your life</div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -36,21 +58,18 @@
     <div class="container">
         <div class="columns is-centered">
 
-            <div class="column is-one-third">
-                <h1 class="title">
-                    Create your new tally sheet!
-                </h1>
+            <div class="column is-one-third has-text-centered">
                 <p class="subtitle">
-                    Give your tally sheet a short descriptive name (like Pizza Counter 2018).
+                    Give your counter a short descriptive name (like Pizza Counter 2018).
                 </p>
 
                 <form method="post" th:action="@{/_create}" >
                     <div class="field has-addons">
                         <div class="control is-expanded">
-                            <input class="input" name="name" type="text" placeholder="Name your tally sheet" required="true" autofocus="true">
+                            <input class="input" name="name" type="text" placeholder="Name your counter" required="true" autofocus="true">
                         </div>
                         <div class="control">
-                            <input type="submit" class="button is-info" value="New Tally"/>
+                            <input type="submit" class="button is-info" value="Create Counter">
                         </div>
                     </div>
                 </form>
