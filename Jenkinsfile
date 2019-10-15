@@ -9,7 +9,7 @@ pipeline {
     stage('Build') {
       steps {
         sh 'mvn -B versions:set -DnewVersion=${BUILD_NUMBER}'
-        sh 'mvn -B clean install
+        sh 'mvn -B clean install'
       }
     }
     stage('Containerize') {
