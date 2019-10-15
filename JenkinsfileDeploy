@@ -1,0 +1,15 @@
+pipeline {
+  agent any
+  stages {
+    stage('Undeploy') {
+      steps {
+        sh 'cd /apps/cmp && docker-compose down'
+      }
+    }
+    stage('Deploy') {
+      steps {
+        sh 'cd /apps/cmp && docker-compose up'
+      }
+    }
+  }
+}
