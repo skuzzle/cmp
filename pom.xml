@@ -23,7 +23,6 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>11</java.version>
 		<spring-cloud.version>2.1.1.RELEASE</spring-cloud.version>
-		<google.api-version>1.30.4</google.api-version>
 		<node.version>v10.15.1</node.version>
 		<yarn.version>v1.13.0</yarn.version>
 	</properties>
@@ -35,16 +34,6 @@
 
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>com.google.api-client</groupId>
-				<artifactId>google-api-client</artifactId>
-				<version>1.30.4</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.http-client</groupId>
-				<artifactId>google-http-client-apache-v2</artifactId>
-				<version>1.32.1</version>
-			</dependency>
 
 			<dependency>
 				<groupId>org.immutables</groupId>
