@@ -181,4 +181,13 @@ public class TallyServiceIntegrationTest {
         final List<ShallowTallySheet> sheetsForUser = tallyService.getTallySheetsFor(authenticated);
         assertThat(sheetsForUser).hasSize(1);
     }
+    
+    @Test
+    void testAssignToUserWIthPublicKey() throws Exception {
+        final TallySheet sheet = tallyService.createNewTallySheet(UserId.unknown("unknown"), "sheet");
+        final UserId authenticated = UserId.wellKnown("google", "foo@gmail.com");
+
+        assertThatExceptionOfType(TallySheetNotAvailableException.class).isThrownBy(
+                () -> tallyService.assignToUser(sheet.getPublicKey(), authenticated));
+    }
 }
