@@ -47,11 +47,11 @@
     <div class="container">
         <div class="columns is-centered">
             <div class="column is-4">
-                <div class="card">
-                    <header class="card-header">
+                <div class="card ">
+                    <header class="card-header has-background-white-ter">
                         <p class="card-header-title has-text-centered">Total count</p>
                     </header>
-                    <div class="card-content has-text-centered">
+                    <div class="card-content has-text-centered  ">
                         <canvas class="is-tally-graph" th:data-public-key="${tally.publicKey}"></canvas>
                         <p class="title is-size-2 " title="Total count" th:text="${increments.total}">1234</p>
                     </div>
