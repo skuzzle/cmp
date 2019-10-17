@@ -4,3 +4,10 @@
 .is-size-0 {
     font-size: 10rem;
 }
+
+.truncate-text {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
