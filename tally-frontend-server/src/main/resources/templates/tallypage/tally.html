@@ -27,7 +27,8 @@
     <a class="button" th:href="@{/{adminKey}?action=assignToCurrentUser(adminKey=${tally.adminKey})}" th:text="'Assign to ' + ${user.name}">User Name</a>
 </div>
 
-<section class="hero is-info is-bold">
+
+<section class="hero">
     <div class="hero-body">
         <div class="container">
             <h1 class="title is-capitalized	" th:text="${tally.name}">
@@ -42,21 +43,24 @@
 </section>
 
 
-<section class="section">
+<section class="section has-background-white-bis">
     <div class="container">
         <div class="columns is-centered">
-            <div class="column has-text-centered is-4">
-                <div style="position:relative">
-                    <p class="title is-size-0" th:text="${increments.total}">1234</p>
-
-                    <div style="position:absolute;bottom:0px;left:0;right:0">
+            <div class="column is-4">
+                <div class="card">
+                    <header class="card-header">
+                        <p class="card-header-title has-text-centered">Total count</p>
+                    </header>
+                    <div class="card-content has-text-centered">
                         <canvas class="is-tally-graph" th:data-public-key="${tally.publicKey}"></canvas>
+                        <p class="title is-size-2 " title="Total count" th:text="${increments.total}">1234</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
 
 <section class="section" th:if="${tally.admin}">
     <div class="container">
