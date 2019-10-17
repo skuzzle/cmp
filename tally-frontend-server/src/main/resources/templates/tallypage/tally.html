@@ -35,7 +35,7 @@
                 Pizza Count 2018
             </h1>
             <h2 class="subtitle">
-                <a th:href="@{/{publicKey}(publicKey=${tally.publicKey})}" th:text="'Share: ' + ${tally.publicKey}" href="#">Share:
+                Share: <a th:href="@{/{publicKey}(publicKey=${tally.publicKey})}" title="Read-Only Link to share with your friends" th:text="${tally.publicKey}" href="#">Share:
                     http://tally.io/123547</a>
             </h2>
         </div>
