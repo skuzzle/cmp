@@ -83,15 +83,17 @@
     <div class="container">
         <div class="columns is-centered">
 
-            <div class="column is-one-third has-text-centered">
+            <div class="column is-one-third">
+                <div class="content">
                 <p class="subtitle">
                     Give your counter a short descriptive name (like Pizza Counter 2018).
                 </p>
-
+                <p th:if="!${user.loggedIn}" class="is-size-6">Hint: You can login later and assign the counter to your account.</p>
+                </div>
                 <form method="post" th:action="@{/_create}" >
                     <div class="field has-addons">
                         <div class="control is-expanded">
-                            <input id="create-anchor" class="input" name="name" type="text" placeholder="Name your counter" required="true" autofocus="true">
+                            <input id="create-anchor" class="input" name="name" type="text" placeholder="Name your counter" required="true">
                         </div>
                         <div class="control">
                             <input type="submit" class="button is-info" value="Create Counter">
