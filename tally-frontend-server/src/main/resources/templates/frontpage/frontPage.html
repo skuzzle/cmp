@@ -13,106 +13,106 @@
 </head>
 <body>
 
-<div class="container">
-    <nav th:replace="fragments/navigation :: navigation"></nav>
-</div>
-
-<section class="section">
     <div class="container">
-        <div class="columns is-centered">
-            <div class="column is-half has-text-centered ">
-                <h1 class="title is-spaced">
-                    Count pizzas
-                </h1>
-                <p class="subtitle has-text-grey-light">
-                    ... and more. View an <a th:href="@{/2SkVp8RP}">example</a> or <a href="#create-anchor">create</a> your own
-                </p>
-            </div>
-        </div>
+        <nav th:replace="fragments/navigation :: navigation"></nav>
     </div>
-</section>
 
-<section class="section">
-    <div class="container ">
-        <div class="columns is-centered">
-            <div class="column has-text-centered is-4">
-                <div>
-                    <canvas th:replace="fragments/graph :: graph(${exampleGraph})"></canvas>
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-half has-text-centered ">
+                    <h1 class="title is-spaced">
+                        Count pizzas
+                    </h1>
+                    <p class="subtitle has-text-grey-light">
+                        ... and more. View an <a th:href="@{/2SkVp8RP}">example</a> or <a href="#create-anchor">create</a> your own
+                    </p>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section class="section is-hidden-mobile has-background-white-bis">
-    <div class="container">
-        <div class="columns is-centered">
-            <div class="column is-one-fifth">
-                <div class="box is-radiusless">
-                    <div class="content has-text-centered">
-                    <span class="icon is-large">
-                        <i class="fas fa-3x fa-chart-line"></i>
-                    </span><br/>
-                    Easily create counters and visualize their growth
-                    </div>
-                </div>
-            </div>
-            <div class="column is-one-fifth">
-                <div class="box is-radiusless">
-                    <div class="content has-text-centered">
-                    <span class="icon is-large">
-                        <i class="fas fa-3x fa-share"></i>
-                    </span><br/>
-                    Share counters with your friends and colleagues
-                    </div>
-                </div>
-            </div>
-            <div class="column is-one-fifth">
-                <div class="box is-radiusless">
-                    <div class="content has-text-centered">
-                    <span class="icon is-large">
-                        <i class="far fa-3x fa-sticky-note"></i>
-                    </span><br/>
-                    Keep track of important metrics in your life
+    <section class="section">
+        <div class="container ">
+            <div class="columns is-centered">
+                <div class="column has-text-centered is-4">
+                    <div>
+                        <canvas th:replace="fragments/graph :: graph(data=${exampleGraph}, showYAxis=false)"></canvas>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section class="section">
-    <div class="container">
-        <div class="columns is-centered">
-
-            <div class="column is-one-third">
-                <div class="content">
-                <p class="subtitle">
-                    Give your counter a short descriptive name (like Pizza Counter 2018).
-                </p>
-                <p th:if="!${user.loggedIn}" class="is-size-6">Hint: You can login later and assign the counter to your account.</p>
-                </div>
-                <form method="post" th:action="@{/_create}" >
-                    <div class="field has-addons">
-                        <div class="control is-expanded">
-                            <input id="create-anchor" class="input" name="name" type="text" placeholder="Name your counter" required="true">
-                        </div>
-                        <div class="control">
-                            <input type="submit" class="button is-info" value="Create Counter">
+    <section class="section is-hidden-mobile has-background-white-bis">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-one-fifth">
+                    <div class="box is-radiusless">
+                        <div class="content has-text-centered">
+                        <span class="icon is-large">
+                            <i class="fas fa-3x fa-chart-line"></i>
+                        </span><br/>
+                        Easily create counters and visualize their growth
                         </div>
                     </div>
-                </form>
+                </div>
+                <div class="column is-one-fifth">
+                    <div class="box is-radiusless">
+                        <div class="content has-text-centered">
+                        <span class="icon is-large">
+                            <i class="fas fa-3x fa-share"></i>
+                        </span><br/>
+                        Share counters with your friends and colleagues
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-one-fifth">
+                    <div class="box is-radiusless">
+                        <div class="content has-text-centered">
+                        <span class="icon is-large">
+                            <i class="far fa-3x fa-sticky-note"></i>
+                        </span><br/>
+                        Keep track of important metrics in your life
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section class="section">
-    <div class="container">
-        <div class="columns is-multiline" th:insert="frontpage/fragments :: tallyRows(${recentlyCreated}, ${user})">
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+    
+                <div class="column is-one-third">
+                    <div class="content">
+                    <p class="subtitle">
+                        Give your counter a short descriptive name (like Pizza Counter 2018).
+                    </p>
+                    <p th:if="!${user.loggedIn}" class="is-size-6">Hint: You can login later and assign the counter to your account.</p>
+                    </div>
+                    <form method="post" th:action="@{/_create}" >
+                        <div class="field has-addons">
+                            <div class="control is-expanded">
+                                <input id="create-anchor" class="input" name="name" type="text" placeholder="Name your counter" required="true">
+                            </div>
+                            <div class="control">
+                                <input type="submit" class="button is-info" value="Create Counter">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-multiline" th:insert="frontpage/fragments :: tallyRows(${recentlyCreated}, ${user})">
+            </div>
+        </div>
+    </section>
 
     <footer th:replace="fragments/footer :: footer"></footer>
 </body>

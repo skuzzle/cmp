@@ -1,13 +1,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
     xmlns:th="http://www.thymeleaf.org">
     
-<th:block th:fragment="graph(dataObject)" th:with="graphId=${#strings.randomAlphanumeric(10)}">
+<th:block th:fragment="graph(data)" th:with="graphId=${#strings.randomAlphanumeric(10)}, showYAxis=${showYAxis?:true}">
     <canvas class="is-tally-graph-new" th:id="${graphId}"></canvas>
     <script th:inline="javascript">
     document.addEventListener('DOMContentLoaded', () => {
         new Chart(document.getElementById([[${graphId}]]), {
             type: 'line',
-            data: [[${dataObject}]],
+            data: [[${data}]],
             options: {
         	    legend: {
         		    display: false
@@ -32,7 +32,7 @@
                     yAxes: [{
                         type: "linear",
                         stacked: true,
-                        display: true,
+                        display: [[${showYAxis}]],
                         scaleLabel: {
                             display: false
                         },
