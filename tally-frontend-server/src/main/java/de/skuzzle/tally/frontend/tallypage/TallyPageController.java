@@ -40,23 +40,6 @@ public class TallyPageController {
         return TallyUser.fromCurrentRequestContext();
     }
 
-    @PostMapping("/{adminKey}")
-    public String incrementTallySheet(@PathVariable("adminKey") String adminKey,
-            @RequestParam("description") String description,
-            @RequestParam("tags") String tags,
-            @RequestParam("incrementDateUTC") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate incrementDate) {
-
-        final Set<String> tagSet = Arrays.stream(tags.split(","))
-                .map(String::trim)
-                .filter(tag -> !tag.isEmpty())
-                .collect(Collectors.toSet());
-        final RestTallyIncrement increment = RestTallyIncrement.createNew(description,
-                LocalDateTime.of(incrementDate, LocalTime.now()), tagSet);
-
-        client.increment(adminKey, increment);
-        return "redirect:/" + adminKey;
-    }
-
     @GetMapping("/{key}")
     public ModelAndView showTallySheet(@PathVariable("key") String key) {
         final RestTallyResponse response = client.getTallySheet(key).payload().orElseThrow();
@@ -72,6 +55,24 @@ public class TallyPageController {
                 "timeline", timeline,
                 "increments", increments,
                 "graph", graph));
+    }
+
+    @PostMapping("/{adminKey}")
+    public String incrementTallySheet(
+            @PathVariable("adminKey") String adminKey,
+            @RequestParam("description") String description,
+            @RequestParam("tags") String tags,
+            @RequestParam("incrementDateUTC") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate incrementDate) {
+
+        final Set<String> tagSet = Arrays.stream(tags.split(","))
+                .map(String::trim)
+                .filter(tag -> !tag.isEmpty())
+                .collect(Collectors.toSet());
+        final RestTallyIncrement increment = RestTallyIncrement.createNew(description,
+                LocalDateTime.of(incrementDate, LocalTime.now()), tagSet);
+
+        client.increment(adminKey, increment);
+        return "redirect:/" + adminKey;
     }
 
     @GetMapping(path = "/{key}", params = "action=assignToCurrentUser")

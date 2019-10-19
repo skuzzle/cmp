@@ -52,7 +52,7 @@
                         <p class="card-header-title has-text-centered">Total count</p>
                     </header>
                     <div class="card-content has-text-centered  ">
-                        <canvas class="is-tally-graph" th:data-public-key="${tally.publicKey}"></canvas>
+                        <canvas th:replace="fragments/graph :: graph(${graph})"></canvas>
                         <p class="title is-size-2 " title="Total count" th:text="${increments.total}">1234</p>
                     </div>
                 </div>
@@ -94,14 +94,8 @@
 
 
 <section class="section">
-    <div class="container" th:insert="tallypage/fragments :: timeline(${timeline})">
-    </div>
+    <div class="container" th:insert="tallypage/timeline:: timeline(${timeline})"></div>
 </section>
-<script th:inline="javascript">
-/*<![CDATA[*/
-    var GRAPH_DATA = [[${graph}]];
-/*]]>*/
-</script>
     <footer th:replace="fragments/footer :: footer"></footer>
 </body>
 </html>

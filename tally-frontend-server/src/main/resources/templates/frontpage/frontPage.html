@@ -36,7 +36,9 @@
     <div class="container ">
         <div class="columns is-centered">
             <div class="column has-text-centered is-4">
-                <div><canvas class="is-tally-graph"></canvas></div>
+                <div>
+                    <canvas th:replace="fragments/graph :: graph(${exampleGraph})"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -113,8 +115,5 @@
 </section>
 
     <footer th:replace="fragments/footer :: footer"></footer>
-<script>
-var GRAPH_DATA = {"datasets":[{"data":[{"x":0.0,"y":9.0},{"x":0.0,"y":9.0},{"x":0.0,"y":9.0},{"x":0.0,"y":9.0},{"x":0.0,"y":9.0},{"x":0.0,"y":9.0},{"x":0.0,"y":9.0},{"x":0.0,"y":9.0},{"x":0.0,"y":9.0},{"x":1.0,"y":9.0},{"x":1.0,"y":9.0},{"x":1.0,"y":9.0},{"x":1.0,"y":9.0},{"x":1.0,"y":9.0},{"x":1.0,"y":9.0},{"x":1.0,"y":9.0},{"x":1.0,"y":9.0},{"x":1.0,"y":9.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":2.0,"y":11.0},{"x":3.0,"y":8.0},{"x":3.0,"y":8.0},{"x":3.0,"y":8.0},{"x":3.0,"y":8.0},{"x":3.0,"y":8.0},{"x":3.0,"y":8.0},{"x":3.0,"y":8.0},{"x":3.0,"y":8.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":4.0,"y":13.0},{"x":5.0,"y":8.0},{"x":5.0,"y":8.0},{"x":5.0,"y":8.0},{"x":5.0,"y":8.0},{"x":5.0,"y":8.0},{"x":5.0,"y":8.0},{"x":5.0,"y":8.0},{"x":5.0,"y":8.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":6.0,"y":12.0},{"x":7.0,"y":8.0},{"x":7.0,"y":8.0},{"x":7.0,"y":8.0},{"x":7.0,"y":8.0},{"x":7.0,"y":8.0},{"x":7.0,"y":8.0},{"x":7.0,"y":8.0},{"x":7.0,"y":8.0},{"x":8.0,"y":8.0},{"x":8.0,"y":8.0},{"x":8.0,"y":8.0},{"x":8.0,"y":8.0},{"x":8.0,"y":8.0},{"x":8.0,"y":8.0},{"x":8.0,"y":8.0},{"x":8.0,"y":8.0},{"x":9.0,"y":4.0},{"x":9.0,"y":4.0},{"x":9.0,"y":4.0},{"x":9.0,"y":4.0}],"pointRadius":0}],"labels":["Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza","Pizza"]};
-</script>
 </body>
 </html>

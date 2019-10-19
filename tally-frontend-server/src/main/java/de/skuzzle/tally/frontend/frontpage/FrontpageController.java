@@ -18,6 +18,7 @@ import de.skuzzle.tally.frontend.client.RestTallySheet;
 import de.skuzzle.tally.frontend.client.RestTallySheetsReponse;
 import de.skuzzle.tally.frontend.client.TallyClient;
 import de.skuzzle.tally.frontend.client.TallyResult;
+import de.skuzzle.tally.frontend.graphs.Graph;
 
 @Controller
 public class FrontpageController {
@@ -31,6 +32,11 @@ public class FrontpageController {
     @ModelAttribute("user")
     public TallyUser getUser() {
         return TallyUser.fromCurrentRequestContext();
+    }
+    
+    @ModelAttribute("exampleGraph")
+    public Graph exampleGraph() {
+        return ExampleGraph.randomGraph();
     }
 
     @PostMapping("/_create")

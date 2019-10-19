@@ -1,0 +1,55 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+    
+<th:block th:fragment="graph(dataObject)" th:with="graphId=${#strings.randomAlphanumeric(10)}">
+    <canvas class="is-tally-graph-new" th:id="${graphId}"></canvas>
+    <script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', () => {
+        new Chart(document.getElementById([[${graphId}]]), {
+            type: 'line',
+            data: [[${dataObject}]],
+            options: {
+        	    legend: {
+        		    display: false
+        	    },
+        	    tooltips: {
+        		    enabled: false
+        	    },
+                scales: {
+                    xAxes: [{
+                        type: "linear",
+                        scaleLabel: {
+                            display: false
+                        },
+                        gridLines: {
+                            display: false,
+                            drawTicks: false
+                        },
+                        ticks: {
+                            display: false
+                        }
+                    }],
+                    yAxes: [{
+                        type: "linear",
+                        stacked: true,
+                        display: true,
+                        scaleLabel: {
+                            display: false
+                        },
+                        gridLines: {
+                            display: false
+                        },
+                        ticks: {
+                            display: true,
+                            precision: 0,
+                            stepSize: 1
+                        }
+                    }]
+                }
+            }
+        });
+    });
+    </script>
+</th:block>
+
+</html>
