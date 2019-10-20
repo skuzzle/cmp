@@ -31,7 +31,7 @@ public class TallySheet implements ShallowTallySheet {
     @Transient
     private UserId assignedUser;
 
-    private final String name;
+    private String name;
     @Indexed
     private String adminKey;
     @Indexed
@@ -178,5 +178,11 @@ public class TallySheet implements ShallowTallySheet {
             }
         }
         return -1;
+    }
+
+    public void changeNameTo(String newName) {
+        Preconditions.checkArgument(newName != null, "newName must not be null");
+        Preconditions.checkArgument(!newName.isEmpty(), "newName must not be empty");
+        this.name = newName;
     }
 }

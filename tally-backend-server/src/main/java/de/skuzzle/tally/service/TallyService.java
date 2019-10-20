@@ -68,6 +68,23 @@ public class TallyService {
         return repository.save(tallySheet);
     }
 
+    public TallySheet updateIncrement(String adminKey, TallyIncrement increment) {
+        Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
+        final TallySheet tallySheet = repository.findByAdminKey(adminKey)
+                .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
+
+        tallySheet.updateIncrement(increment);
+        return repository.save(tallySheet);
+    }
+
+    public TallySheet changeName(String adminKey, String newName) {
+        Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
+        final TallySheet tallySheet = repository.findByAdminKey(adminKey)
+                .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
+        tallySheet.changeNameTo(newName);
+        return repository.save(tallySheet);
+    }
+
     public void deleteTallySheet(String adminKey) {
         Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
         final TallySheet tallySheet = repository.findByAdminKey(adminKey)

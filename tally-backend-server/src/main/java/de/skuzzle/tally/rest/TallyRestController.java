@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -103,6 +104,13 @@ public class TallyRestController {
                 .body(response);
     }
 
+    @DeleteMapping("/{key}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteTallySheet(@PathVariable String key, HttpServletRequest request) {
+        rateLimiter.blockIfRateLimitIsExceeded(request);
+        tallyService.deleteTallySheet(key);
+    }
+
     @PostMapping("/{key}/assignToCurrentUser")
     @ResponseStatus(HttpStatus.OK)
     public void assignToCurrentUser(@PathVariable @NotEmpty String key,
@@ -111,6 +119,14 @@ public class TallyRestController {
         final UserId currentUser = currentUser();
         tallyService.assignToUser(key, currentUser);
 
+    }
+
+    @PutMapping("/{key}/changeName/{newName}")
+    @ResponseStatus(HttpStatus.OK)
+    public void changeName(@PathVariable @NotEmpty String key, @PathVariable String newName,
+            HttpServletRequest request) {
+        rateLimiter.blockIfRateLimitIsExceeded(request);
+        tallyService.changeName(key, newName);
     }
 
     @PostMapping("/{key}/increment")
@@ -122,11 +138,12 @@ public class TallyRestController {
         tallyService.increment(key, increment.toDomainObjectWithoutId());
     }
 
-    @DeleteMapping("/{key}")
+    @PutMapping("/{key}/increment/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteTallySheet(@PathVariable String key, HttpServletRequest request) {
+    public void updateIncrement(@PathVariable String key, @RequestBody RestTallyIncrement increment,
+            HttpServletRequest request) {
         rateLimiter.blockIfRateLimitIsExceeded(request);
-        tallyService.deleteTallySheet(key);
+        tallyService.updateIncrement(key, increment.toDomainObjectWithId());
     }
 
     @DeleteMapping("/{key}/increment/{id}")

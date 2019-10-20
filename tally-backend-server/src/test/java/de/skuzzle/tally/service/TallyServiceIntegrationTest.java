@@ -181,13 +181,29 @@ public class TallyServiceIntegrationTest {
         final List<ShallowTallySheet> sheetsForUser = tallyService.getTallySheetsFor(authenticated);
         assertThat(sheetsForUser).hasSize(1);
     }
-    
+
     @Test
-    void testAssignToUserWIthPublicKey() throws Exception {
+    void testAssignToUserWithPublicKey() throws Exception {
         final TallySheet sheet = tallyService.createNewTallySheet(UserId.unknown("unknown"), "sheet");
         final UserId authenticated = UserId.wellKnown("google", "foo@gmail.com");
 
         assertThatExceptionOfType(TallySheetNotAvailableException.class).isThrownBy(
                 () -> tallyService.assignToUser(sheet.getPublicKey(), authenticated));
+    }
+
+    @Test
+    void testChangeNameWithPublicKey() throws Exception {
+        final TallySheet sheet = tallyService.createNewTallySheet(UserId.unknown("unknown"), "sheet");
+        assertThatExceptionOfType(TallySheetNotAvailableException.class)
+                .isThrownBy(() -> tallyService.changeName(sheet.getPublicKey(), "newName"));
+    }
+
+    @Test
+    void testChangeName() throws Exception {
+        final TallySheet sheet = tallyService.createNewTallySheet(UserId.unknown("unknown"), "newName");
+        tallyService.changeName(sheet.getAdminKey().orElseThrow(), "newName");
+
+        // look up again from database
+        assertThat(tallyService.getTallySheet(sheet.getPublicKey()).getName()).isEqualTo("newName");
     }
 }
