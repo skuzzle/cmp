@@ -1950,6 +1950,11 @@ builtin-status-codes@^3.0.0:
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
   integrity sha1-hZgoeOIbmOHGZCXgPQF0eI9Wnug=
 
+bulma-tagsinput@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/bulma-tagsinput/-/bulma-tagsinput-2.0.0.tgz#ef6653464212f23a50b3b046fc9735bd75fc1768"
+  integrity sha512-BFvd0oaxgeWHOEh3d4cgETy5vpSSjRRBA9w+8TWEuhjFQg38Rb+3vjDCavL+udpdjf+dRV0SK5T4kYCXTOrz5A==
+
 bulma-timeline@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/bulma-timeline/-/bulma-timeline-3.0.4.tgz#494f458098a06dcf8dcc7fe8f2f158b63d1d1ef2"
