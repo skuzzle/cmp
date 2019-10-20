@@ -2,18 +2,14 @@
     xmlns:th="http://www.thymeleaf.org"
     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-    <div th:fragment="timeline(timeline)">
-        <div class="timeline is-centered">
+    <div th:fragment="timeline(timeline)" class="timeline is-centered">
+        <header class="timeline-header">
+            <span class="tag is-medium is-outlined">Today</span>
+        </header>
         
-            <header class="timeline-header">
-                <span class="tag is-medium is-outlined">Today</span>
-            </header>
-            
-            <th:block th:each="month : ${timeline.months}" >
-                <div th:replace="this :: timelineMonth(${month})"></div>
-            </th:block>
-            
-        </div>
+        <th:block th:each="month : ${timeline.months}" >
+            <div th:replace="this :: timelineMonth(${month})"></div>
+        </th:block>
     </div>
 
     <th:block th:fragment="timelineMonth(month)">
@@ -22,8 +18,8 @@
                 <i class="fa fa-flag"></i>
             </div>
             <div class="timeline-content">
-                <p class="heading"><strong th:text="${month.name}">February 2019</strong></p>
-                <p>Total: <span th:text="${month.totalCount}">10</span></p>
+                <h4 class="title is-4"  th:text="${month.name}">February 2019</h4>
+                <h6 class="subtitle is-6">Total: <span th:text="${month.totalCount}">10</span></h6>
             </div>
         </div>
         <th:block th:each="increment : ${month.increments}">
@@ -34,12 +30,12 @@
     <div th:fragment="timelineIncrement(increment)" class="timeline-item">
         <div class="timeline-marker"></div>
         <div class="timeline-content">
+            <p th:text="${increment.getDescription()}">
+                Pizza
+            </p>
             <p class="heading">
                 <a th:if="${tally.admin}" th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}" class="delete" title="Delete this increment">Delete</a>
                 <time is="date-label" th:text="${increment.incrementDateUTC}">2019-09-09</time>
-            </p>
-            <p th:text="${increment.getDescription()}">
-                Pizza
             </p>
             <div class="tags" th:if="${increment.hasTags()}">
                 <span class="tag" th:each="tag : ${increment.tags}" th:text="${tag}"></span>

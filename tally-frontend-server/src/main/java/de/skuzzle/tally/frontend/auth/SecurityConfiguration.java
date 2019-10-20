@@ -14,6 +14,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2Login()
                 .and()
+                .csrf().disable()
                 .logout().logoutSuccessUrl("/");
     }
 }

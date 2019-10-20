@@ -52,7 +52,7 @@
                         <p class="card-header-title has-text-centered">Total count</p>
                     </header>
                     <div class="card-content has-text-centered  ">
-                        <canvas class="is-tally-graph" th:data-public-key="${tally.publicKey}"></canvas>
+                        <canvas th:replace="fragments/graph :: graph(${graph})"></canvas>
                         <p class="title is-size-2 " title="Total count" th:text="${increments.total}">1234</p>
                     </div>
                 </div>
@@ -93,88 +93,9 @@
 </section>
 
 
-<section>
-    <div th:replace="tallypage/fragments :: timeline(${timeline})"></div>
-
-<div class="timeline is-centered" th:if="false">
-
-    <header class="timeline-header">
-        <span class="tag is-medium is-outlined">Today</span>
-    </header>
-  
-    <div class="timeline-item">
-        <div class="timeline-marker is-danger is-icon">
-            <i class="fa fa-flag"></i>
-        </div>
-        <div class="timeline-content">
-            <p class="heading">February 2019</p>
-            <p>Total: 10</p>
-        </div>
-    </div>
-  
-    <!-- title and tags -->
-    <div class="timeline-item">
-        <div class="timeline-marker"></div>
-        <div class="timeline-content">
-            <p class="heading">28.02.2019</p>
-            <p>Pizza</p>
-            <div class="tags">
-                <span class="tag">tag1</span><span class="tag">tag2</span><span class="tag">tag3</span>
-            </div>
-        </div>
-    </div>
-    
-    <!-- no tags but title -->
-    <div class="timeline-item">
-        <div class="timeline-marker"></div>
-        <div class="timeline-content">
-            <p class="heading">25.02.2019</p>
-            <p>Pizza</p>
-        </div>
-    </div>
-    
-    <!-- no title but tags -->
-    <div class="timeline-item">
-        <div class="timeline-marker"></div>
-        <div class="timeline-content">
-            <p class="heading">20.02.2019</p>
-            <div class="tags">
-                <span class="tag">tag1</span><span class="tag">tag2</span><span class="tag">tag3</span>
-            </div>
-        </div>
-    </div>
-    
-    <!-- no title not tags -->
-    <div class="timeline-item">
-        <div class="timeline-marker"></div>
-        <div class="timeline-content">
-            <p class="heading">20.02.2019</p>
-        </div>
-    </div>
-  
-  <header class="timeline-header">
-    <span class="tag is-primary">2017</span>
-  </header>
-  <div class="timeline-item is-danger">
-    <div class="timeline-marker is-danger is-icon">
-      <i class="fa fa-flag"></i>
-    </div>
-    <div class="timeline-content">
-      <p class="heading">March 2017</p>
-      <p>Timeline content - Can include any HTML element</p>
-    </div>
-  </div>
-  <header class="timeline-header">
-    <span class="tag is-medium is-primary">End</span>
-  </header>
-</div>
-
+<section class="section">
+    <div class="container" th:insert="tallypage/timeline:: timeline(${timeline})"></div>
 </section>
-<script th:inline="javascript">
-/*<![CDATA[*/
-    var GRAPH_DATA = [[${graph}]];
-/*]]>*/
-</script>
     <footer th:replace="fragments/footer :: footer"></footer>
 </body>
 </html>
