@@ -1,10 +1,10 @@
 package contracts.tally
 
 org.springframework.cloud.contract.spec.Contract.make {
-    name("deleteIncrement")
+    name("changeName")
     request {
-        method DELETE()
-        url '/adminKey2/increment/incrementId'
+        method PUT()
+        url '/adminKey2/changeName/newName'
     }
     response {
         status OK()

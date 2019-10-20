@@ -138,7 +138,7 @@ public class TallyRestController {
         tallyService.increment(key, increment.toDomainObjectWithoutId());
     }
 
-    @PutMapping("/{key}/increment/{id}")
+    @PutMapping("/{key}/increment")
     @ResponseStatus(HttpStatus.OK)
     public void updateIncrement(@PathVariable String key, @RequestBody RestTallyIncrement increment,
             HttpServletRequest request) {
