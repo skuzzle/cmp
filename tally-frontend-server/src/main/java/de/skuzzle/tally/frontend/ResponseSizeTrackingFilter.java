@@ -31,9 +31,8 @@ class ResponseSizeTrackingFilter extends OncePerRequestFilter {
             if (response instanceof ResponseFacade) {
                 final ResponseFacade rspo = (ResponseFacade) response;
                 final long contentWritten = rspo.getContentWritten();
-                Metrics.gauge("http_server_response_bytes",
-                        List.of(Tag.of("uri", request.getRequestURI())),
-                        contentWritten);
+                Metrics.counter("http_server_response_bytes",
+                        List.of(Tag.of("uri", request.getRequestURI()))).increment(contentWritten);
             }
         }
     }
