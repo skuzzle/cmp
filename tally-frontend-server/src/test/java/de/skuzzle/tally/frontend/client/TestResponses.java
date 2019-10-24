@@ -26,7 +26,7 @@ public class TestResponses {
         }
 
         public TallyResult<RestTallySheetsReponse> toResponse() {
-            final RestTallySheetsReponse tallySheetsReponse = new RestTallySheetsReponse(tallySheets);
+            final RestTallySheetsReponse tallySheetsReponse = new RestTallySheetsReponse(tallySheets, null);
             return TallyResult.success(HttpStatus.OK, tallySheetsReponse);
         }
     }
