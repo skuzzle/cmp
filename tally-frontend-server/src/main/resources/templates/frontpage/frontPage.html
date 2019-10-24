@@ -90,7 +90,7 @@
                     <p class="subtitle">
                         Give your counter a short descriptive name (like Pizza Counter 2018).
                     </p>
-                    <p th:if="!${user.loggedIn}" class="is-size-6">Hint: You can login later and assign the counter to your account.</p>
+                    <p th:if="!${user.loggedIn}" class="is-size-6"><strong>Hint:</strong> You can login later and assign the counter to your account if you want.</p>
                     </div>
                     <form method="post" th:action="@{/_create}" >
                         <div class="field has-addons">
