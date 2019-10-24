@@ -88,4 +88,10 @@ public class TallyClientIntegrationTest {
         final var success = tallyClient.assignToCurrentUser("adminKey3");
         assertThat(success).isTrue();
     }
+
+    @Test
+    void testListTallySheets() throws Exception {
+        final var apiResponse = tallyClient.listTallySheets();
+        assertThat(apiResponse.payload().orElseThrow().getTallySheets()).hasSize(2);
+    }
 }

@@ -6,7 +6,7 @@ public class RestTallySheetsReponse {
 
     private final List<RestTallySheet> tallySheets;
 
-    RestTallySheetsReponse(List<RestTallySheet> tallySheets) {
+    RestTallySheetsReponse(List<RestTallySheet> tallySheets, RestErrorMessage errorMessage) {
         this.tallySheets = tallySheets;
     }
 

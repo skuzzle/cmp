@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Period;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,7 +63,7 @@ public class TallyPageControllerTest {
     }
 
     @Test
-    void testViewEmptyCounterReadOnly() throws Exception {
+    void testViewEmptyCounter() throws Exception {
         // should give same result when logged in
         withAnonymousUser();
 
@@ -76,6 +77,15 @@ public class TallyPageControllerTest {
         // should give same result when anonymous
         withUserNamed("Heini");
 
+        // create some increments spread across multiple monthz
+        tallySheetAdmin.addIncrement("1", "first", LocalDateTime.now(), "tag1", "tag2")
+                .addIncrement("2", "second", LocalDateTime.now().minus(Period.ofMonths(1)))
+                .addIncrement("3", "third", LocalDateTime.now().minus(Period.ofMonths(1)))
+                .addIncrement("4", "fourth", LocalDateTime.now().minus(Period.ofMonths(2)), "tag");
+
+        mockMvc.perform(get("/{adminKey}", tallySheetAdmin.getAdminKey()))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("tally", "timeline", "increments", "graph", "user"));
     }
 
     @Test
@@ -110,7 +120,7 @@ public class TallyPageControllerTest {
 
         final String adminKey = tallySheetAdmin.getAdminKey();
         final String description = "description";
-        final String tags = "comma,separated, leading space,trailing space ";
+        final String tags = "comma,separated, leading space,trailing space ,, ";
         final String incrementDateUTC = "1987-12-09";
 
         mockMvc.perform(post("/{adminKey}?description={description}&tags={tags}&incrementDateUTC={incrementDateUTC}",
