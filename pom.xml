@@ -75,7 +75,12 @@
 				<version>${spring-cloud.version}</version>
 				<scope>test</scope>
 			</dependency>
-
+			<dependency>
+				<groupId>io.florianlopes</groupId>
+				<artifactId>spring-mvc-test-utils</artifactId>
+				<version>1.0.0</version>
+				<scope>test</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
