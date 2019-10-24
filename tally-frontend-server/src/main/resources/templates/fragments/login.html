@@ -1,12 +1,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <div th:fragment="login(user)">
-    <a class="button is-primary" th:href="@{/oauth2/authorization/google}" th:if="!${user.isLoggedIn()}">
-        <span class="icon">
-            <i class="fab fa-google"></i>
-        </span>
-        <span>Login with Google</span>
-    </a>
+    <div class="field has-addons" th:if="!${user.isLoggedIn()}">
+        <p class="control">
+            <a class="button is-primary" title="countmy.pizza works perfectly fine without logging in!" 
+                    th:href="@{/oauth2/authorization/google}">
+                <span class="icon">
+                    <i class="fab fa-google"></i>
+                </span>
+                <span>Login with Google</span>
+            </a>
+        </p>
+        <p class="control">
+            <span class="button is-static" title="countmy.pizza works perfectly fine without logging in!" >if you want to</span>
+        </p>
+    </div>
+    
     <form class="is-inline" method="post" th:action="@{/logout}" th:if="${user.isLoggedIn()}">
         <input type="submit" class="button is-light" th:value="'Logout ' + ${user.name}"></input>
     </form>
