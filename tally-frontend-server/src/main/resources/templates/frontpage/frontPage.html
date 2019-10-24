@@ -14,7 +14,7 @@
 <body>
 
     <div class="container">
-        <nav th:replace="fragments/navigation :: navigation"></nav>
+        <nav th:replace="fragments/navigation :: navigation(${user})"></nav>
     </div>
 
     <section class="section">

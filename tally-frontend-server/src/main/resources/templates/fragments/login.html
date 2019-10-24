@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-<div th:fragment="login">
+<div th:fragment="login(user)">
     <a class="button is-primary" th:href="@{/oauth2/authorization/google}" th:if="!${user.isLoggedIn()}">
         <span class="icon">
             <i class="fab fa-google"></i>

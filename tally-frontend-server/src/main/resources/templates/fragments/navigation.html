@@ -2,7 +2,7 @@
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
-<nav th:fragment="navigation" class="navbar" role="navigation" aria-label="main navigation">
+<nav th:fragment="navigation(user)" class="navbar" role="navigation" aria-label="main navigation">
 	<div class="navbar-brand">
 		<a class="navbar-item" th:href="@{/}">
 		    <img th:src="@{/static/favicon/android-chrome-512x512.png}" ></img>
@@ -14,7 +14,7 @@
     
 	<div class="navbar-end">
 		<div class="navbar-item">
-			<div class="buttons" th:insert="fragments/login :: login">
+			<div class="buttons" th:insert="fragments/login :: login(${user})">
 				<a class="button is-light"> Log in with google</a>
 			</div>
 		</div>
