@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
 import de.skuzzle.tally.frontend.auth.TallyUser;
@@ -30,14 +31,16 @@ import de.skuzzle.tally.frontend.graphs.Graph;
 public class TallyPageController {
 
     private final TallyClient client;
+    private final TallyUser currentUser;
 
-    public TallyPageController(TallyClient client) {
+    public TallyPageController(TallyClient client, TallyUser currentUser) {
         this.client = client;
+        this.currentUser = currentUser;
     }
 
     @ModelAttribute("user")
     public TallyUser getUser() {
-        return TallyUser.fromCurrentRequestContext();
+        return currentUser;
     }
 
     @GetMapping("/{key}")
@@ -77,6 +80,7 @@ public class TallyPageController {
 
     @GetMapping(path = "/{key}", params = "action=assignToCurrentUser")
     public String assignToCurrentUser(@PathVariable String key) {
+        Preconditions.checkState(this.currentUser.isLoggedIn(), "Can't assign to current user: user not logged in");
         client.assignToCurrentUser(key);
         return "redirect:/" + key;
     }

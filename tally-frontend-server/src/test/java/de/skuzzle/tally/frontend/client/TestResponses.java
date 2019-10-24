@@ -42,6 +42,34 @@ public class TestResponses {
         private int totalCount = 0;
         private final List<RestTallyIncrement> increments = new ArrayList<>();
 
+        public String getName() {
+            return this.name;
+        }
+
+        public String getAdminKey() {
+            return this.adminKey;
+        }
+
+        public String getPublicKey() {
+            return this.publicKey;
+        }
+
+        public LocalDateTime getCreateDateUTC() {
+            return this.createDateUTC;
+        }
+
+        public LocalDateTime getLastModifiedDateUTC() {
+            return this.lastModifiedDateUTC;
+        }
+
+        public boolean isAssignableToCurrentUser() {
+            return this.assignableToCurrentUser;
+        }
+
+        public int getTotalCount() {
+            return this.totalCount;
+        }
+
         public TallySheetResponseBuilder withName(String name) {
             this.name = name;
             return this;
