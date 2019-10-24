@@ -1,8 +1,10 @@
 package de.skuzzle.tally.frontend.auth;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.web.context.annotation.RequestScope;
 
 @Configuration
 class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -16,5 +18,11 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .logout().logoutSuccessUrl("/");
+    }
+
+    @Bean
+    @RequestScope
+    public TallyUser currentUser() {
+        return TallyUser.fromCurrentRequestContext();
     }
 }

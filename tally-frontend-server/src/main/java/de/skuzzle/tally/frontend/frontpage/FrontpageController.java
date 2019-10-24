@@ -24,29 +24,21 @@ import de.skuzzle.tally.frontend.graphs.Graph;
 public class FrontpageController {
 
     private final TallyClient client;
+    private final TallyUser currentUser;
 
-    public FrontpageController(TallyClient client) {
+    public FrontpageController(TallyClient client, TallyUser currentUser) {
         this.client = client;
+        this.currentUser = currentUser;
     }
 
     @ModelAttribute("user")
     public TallyUser getUser() {
-        return TallyUser.fromCurrentRequestContext();
+        return currentUser;
     }
-    
+
     @ModelAttribute("exampleGraph")
     public Graph exampleGraph() {
         return ExampleGraph.randomGraph();
-    }
-
-    @PostMapping("/_create")
-    public String createTallySheet(@RequestParam("name") String name) {
-        final RestTallySheet tallySheet = client.createNewTallySheet(name)
-                .payload()
-                .map(RestTallyResponse::getTallySheet)
-                .orElseThrow();
-
-        return "redirect:/" + tallySheet.getAdminKey();
     }
 
     @GetMapping("/")
@@ -67,6 +59,16 @@ public class FrontpageController {
             }
         }
         return model;
+    }
+
+    @PostMapping("/_create")
+    public String createTallySheet(@RequestParam("name") String name) {
+        final RestTallySheet tallySheet = client.createNewTallySheet(name)
+                .payload()
+                .map(RestTallyResponse::getTallySheet)
+                .orElseThrow();
+
+        return "redirect:/" + tallySheet.getAdminKey();
     }
 
     @GetMapping(path = "/{key}", params = "action=delete")
