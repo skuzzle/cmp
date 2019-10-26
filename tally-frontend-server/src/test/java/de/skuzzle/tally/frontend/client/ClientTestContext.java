@@ -39,6 +39,11 @@ class ClientTestContext {
         return this.tallyClientMock;
     }
 
+    public ClientTestContext configureMetaInfoResponse(RestTallyMetaInfoResponse response) {
+        when(tallyClientMock.getMetaInfo()).thenReturn(response);
+        return this;
+    }
+
     public ClientTestContext configurePublic(Consumer<TallySheetResponseBuilder> tallySheet) {
         this.publicTallySheet = TestResponses.tallySheet().withAdminKey(null);
         tallySheet.accept(publicTallySheet);

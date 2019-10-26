@@ -19,7 +19,8 @@ public class TestTallyClientConfigurer implements TestExecutionListener {
     public void beforeTestMethod(TestContext testContext) throws Exception {
         ClientTestContext.initContext(testContext)
                 .configureAdminReply(defaultConfig())
-                .configurePublic(defaultConfig());
+                .configurePublic(defaultConfig())
+                .configureMetaInfoResponse(RestTallyMetaInfoResponse.of(5));
     }
 
     @Override
