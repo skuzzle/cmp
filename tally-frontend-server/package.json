@@ -27,6 +27,7 @@
 		"bulma": "^0.7.5",
 		"bulma-tagsinput": "^2.0.0",
 		"bulma-timeline": "^3.0.4",
+		"bulma-tooltip": "^3.0.2",
 		"chart.js": "^2.8.0"
 	}
 }

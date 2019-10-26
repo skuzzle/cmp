@@ -3,22 +3,21 @@
 <div th:fragment="login(user)" class="buttons">
     <div class="field has-addons" th:if="!${user.isLoggedIn()}">
         <p class="control">
-            <a class="button is-primary" title="countmy.pizza works perfectly fine without logging in!" 
+            <a class="button is-primary" 
                     th:href="@{/oauth2/authorization/google}">
                 <span class="icon">
                     <i class="fab fa-google"></i>
                 </span>
                 <span>Login with Google</span>
+                <span class="icon has-tooltip-bottom has-tooltip-multiline"
+                    data-tooltip="countmy.pizza works perfectly fine without logging in! Logging in provides you a nice dashboard of the counters you created.">
+                    <i class="fas fa-info-circle"></i>
+                </span>
             </a>
-        </p>
-        <p class="control">
-            <span class="button is-static" title="countmy.pizza works perfectly fine without logging in!" >if you want to</span>
         </p>
     </div>
     
     <div th:if="${user.isLoggedIn()}" class="content">
-
-
         Welcome <strong th:text="${user.name}"></strong>
     </div>
 </div>
