@@ -17,7 +17,7 @@ public class TallyFrontendApplication {
         SpringApplication.run(TallyFrontendApplication.class, args);
     }
 
-    @Autowired
+    @Autowired(required = false)
     private void reportVersionNumber(Version version) {
         LOGGER.info("Running version '{}'", version.getVersion());
         Metrics.counter("version_name", "version", version.getVersion()).increment();

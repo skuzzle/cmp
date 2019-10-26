@@ -2,7 +2,6 @@ package de.skuzzle.tally.frontend.tallypage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -15,59 +14,34 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Period;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import de.skuzzle.tally.frontend.auth.TallyUser;
+import de.skuzzle.tally.frontend.auth.TestUserConfigurer;
 import de.skuzzle.tally.frontend.client.RestTallyIncrement;
-import de.skuzzle.tally.frontend.client.TallyClient;
-import de.skuzzle.tally.frontend.client.TestResponses;
-import de.skuzzle.tally.frontend.client.TestResponses.TallySheetResponseBuilder;
+import de.skuzzle.tally.frontend.client.TestTallyClientConfigurer;
+import de.skuzzle.tally.frontend.slice.mvc.FrontendTestSlice;
 
-@SpringBootTest(webEnvironment = WebEnvironment.MOCK)
-@AutoConfigureMockMvc
+@FrontendTestSlice
+@WebMvcTest(controllers = TallyPageController.class)
 public class TallyPageControllerTest {
 
-    @MockBean
-    private TallyUser currentUser;
-    @MockBean
-    private TallyClient tallyClient;
-
+    @Autowired
+    private TestUserConfigurer testUser;
+    @Autowired
+    private TestTallyClientConfigurer clientConfigurer;
     @Autowired
     private MockMvc mockMvc;
-
-    private final TallySheetResponseBuilder tallySheetPublic = TestResponses.tallySheet().withAdminKey(null);
-    private final TallySheetResponseBuilder tallySheetAdmin = TestResponses.tallySheet();
-
-    private void withAnonymousUser() {
-        when(currentUser.isLoggedIn()).thenReturn(false);
-        when(currentUser.getName()).thenReturn("unknown");
-    }
-
-    private void withUserNamed(String name) {
-        when(currentUser.isLoggedIn()).thenReturn(true);
-        when(currentUser.getName()).thenReturn(name);
-    }
-
-    @BeforeEach
-    void setupCurrentTallySheet() {
-        when(tallyClient.getTallySheet(tallySheetPublic.getPublicKey())).thenReturn(this.tallySheetPublic.toResponse());
-        when(tallyClient.getTallySheet(tallySheetAdmin.getAdminKey())).thenReturn(this.tallySheetAdmin.toResponse());
-    }
 
     @Test
     void testViewEmptyCounter() throws Exception {
         // should give same result when logged in
-        withAnonymousUser();
+        testUser.anonymous();
 
-        mockMvc.perform(get("/{publicKey}", tallySheetPublic.getPublicKey()))
+        mockMvc.perform(get("/{publicKey}", clientConfigurer.getPublicKey()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("tally", "timeline", "increments", "graph", "user"));
     }
@@ -75,50 +49,52 @@ public class TallyPageControllerTest {
     @Test
     void testViewCounterWithEntries() throws Exception {
         // should give same result when anonymous
-        withUserNamed("Heini");
+        testUser.authenticatedWithName("Heini");
 
         // create some increments spread across multiple monthz
-        tallySheetAdmin.addIncrement("1", "first", LocalDateTime.now(), "tag1", "tag2")
-                .addIncrement("2", "second", LocalDateTime.now().minus(Period.ofMonths(1)))
-                .addIncrement("3", "third", LocalDateTime.now().minus(Period.ofMonths(1)))
-                .addIncrement("4", "fourth", LocalDateTime.now().minus(Period.ofMonths(2)), "tag");
+        clientConfigurer.configureAdminReply(
+                tallySheet -> tallySheet
+                        .addIncrement("1", "first", LocalDateTime.now(), "tag1", "tag2")
+                        .addIncrement("2", "second", LocalDateTime.now().minus(Period.ofMonths(1)))
+                        .addIncrement("3", "third", LocalDateTime.now().minus(Period.ofMonths(1)))
+                        .addIncrement("4", "fourth", LocalDateTime.now().minus(Period.ofMonths(2)), "tag"));
 
-        mockMvc.perform(get("/{adminKey}", tallySheetAdmin.getAdminKey()))
+        mockMvc.perform(get("/{adminKey}", clientConfigurer.getAdminKey()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("tally", "timeline", "increments", "graph", "user"));
     }
 
     @Test
     void testAssignToCurrentUser() throws Exception {
-        withUserNamed("Heini");
+        testUser.authenticatedWithName("Heini");
 
-        final String adminKey = tallySheetAdmin.getAdminKey();
-        when(tallyClient.assignToCurrentUser(adminKey)).thenReturn(true);
+        final String adminKey = clientConfigurer.getAdminKey();
+        when(clientConfigurer.getClient().assignToCurrentUser(adminKey)).thenReturn(true);
 
         mockMvc.perform(get("/{adminKey}?action=assignToCurrentUser", adminKey))
                 .andExpect(redirectedUrlTemplate("/{adminKey}", adminKey));
-        verify(tallyClient).assignToCurrentUser(adminKey);
+        clientConfigurer.verify().assignToCurrentUser(adminKey);
     }
 
     @Test
     void testDeleteIncrement() throws Exception {
-        withAnonymousUser();
+        testUser.anonymous();
 
         final String incrementId = "incrementId";
-        final String adminKey = tallySheetAdmin.getAdminKey();
-        when(tallyClient.deleteIncrement(adminKey, incrementId)).thenReturn(true);
+        final String adminKey = clientConfigurer.getAdminKey();
+        when(clientConfigurer.getClient().deleteIncrement(adminKey, incrementId)).thenReturn(true);
 
         mockMvc.perform(get("/{adminKey}/increment/{incrementId}?action=delete", adminKey, incrementId))
                 .andExpect(redirectedUrlTemplate("/{adminKey}", adminKey));
 
-        verify(tallyClient).deleteIncrement(adminKey, incrementId);
+        clientConfigurer.verify().deleteIncrement(adminKey, incrementId);
     }
 
     @Test
     void testIncrement() throws Exception {
-        withAnonymousUser();
+        testUser.anonymous();
 
-        final String adminKey = tallySheetAdmin.getAdminKey();
+        final String adminKey = clientConfigurer.getAdminKey();
         final String description = "description";
         final String tags = "comma,separated, leading space,trailing space ,, ";
         final String incrementDateUTC = "1987-12-09";
@@ -128,7 +104,7 @@ public class TallyPageControllerTest {
                 .andExpect(redirectedUrlTemplate("/{adminKey}", adminKey));
 
         final ArgumentCaptor<RestTallyIncrement> incrementCaptor = ArgumentCaptor.forClass(RestTallyIncrement.class);
-        verify(tallyClient).increment(eq(adminKey), incrementCaptor.capture());
+        clientConfigurer.verify().increment(eq(adminKey), incrementCaptor.capture());
 
         final RestTallyIncrement increment = incrementCaptor.getValue();
         assertThat(increment.getDescription()).isEqualTo(description);

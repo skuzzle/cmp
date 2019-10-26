@@ -11,41 +11,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import de.skuzzle.tally.frontend.auth.TallyUser;
+import de.skuzzle.tally.frontend.auth.TestUserConfigurer;
 import de.skuzzle.tally.frontend.client.TallyClient;
 import de.skuzzle.tally.frontend.client.TestResponses;
+import de.skuzzle.tally.frontend.slice.mvc.FrontendTestSlice;
 
-@SpringBootTest(webEnvironment = WebEnvironment.MOCK)
-@AutoConfigureMockMvc
+@FrontendTestSlice
+@WebMvcTest(controllers = FrontpageController.class)
 public class FrontpageControllerTest {
 
-    @MockBean
+    @Autowired
     private TallyClient tallyClient;
-    @MockBean
-    private TallyUser currentUser;
-
     @Autowired
     private MockMvc mockMvc;
-
-    private void withAnonymousUser() {
-        when(currentUser.isLoggedIn()).thenReturn(false);
-        when(currentUser.getName()).thenReturn("unknown");
-    }
-
-    private void withUserNamed(String name) {
-        when(currentUser.isLoggedIn()).thenReturn(true);
-        when(currentUser.getName()).thenReturn(name);
-    }
+    @Autowired
+    private TestUserConfigurer testUser;
 
     @Test
     void testRenderFrontPageInitial() throws Exception {
-        withAnonymousUser();
+        testUser.anonymous();
 
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
@@ -54,7 +41,7 @@ public class FrontpageControllerTest {
 
     @Test
     void testRenderFrontendLoggedInNoCounters() throws Exception {
-        withUserNamed("Heini");
+        testUser.authenticatedWithName("Heini");
 
         when(tallyClient.listTallySheets()).thenReturn(TestResponses.emptyTallySheets().toResponse());
         mockMvc.perform(get("/"))
@@ -63,7 +50,7 @@ public class FrontpageControllerTest {
 
     @Test
     void testRenderFrontendLoggedInWithCounters() throws Exception {
-        withUserNamed("Heini");
+        testUser.authenticatedWithName("Heini");
 
         when(tallyClient.listTallySheets()).thenReturn(TestResponses.emptyTallySheets()
                 .addTallySheet(TestResponses.tallySheet())
@@ -75,7 +62,7 @@ public class FrontpageControllerTest {
 
     @Test
     void testCreateCounter() throws Exception {
-        withAnonymousUser();
+        testUser.anonymous();
 
         final String newCounterName = "MyCounter";
         final String expectedAdminKey = "adminKey";
@@ -90,7 +77,7 @@ public class FrontpageControllerTest {
 
     @Test
     void testDeleteCounter() throws Exception {
-        withAnonymousUser();
+        testUser.anonymous();
 
         final String adminKeyToDelete = "adminKey";
         when(tallyClient.deleteTallySheet(adminKeyToDelete)).thenReturn(true);
