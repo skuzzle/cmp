@@ -2,11 +2,15 @@ package de.skuzzle.tally.frontend.client;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class RestTallySheetsReponse {
 
     private final List<RestTallySheet> tallySheets;
 
-    RestTallySheetsReponse(List<RestTallySheet> tallySheets, RestErrorMessage errorMessage) {
+    @JsonCreator
+    RestTallySheetsReponse(@JsonProperty("tallySheets") List<RestTallySheet> tallySheets) {
         this.tallySheets = tallySheets;
     }
 

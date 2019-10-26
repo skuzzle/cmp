@@ -28,6 +28,10 @@ public class TallyClient {
         }
     }
 
+    public RestTallyMetaInfoResponse getMetaInfo() {
+        return restTemplate.getForObject("/_meta", RestTallyMetaInfoResponse.class);
+    }
+
     public RestTallySheetsReponse listTallySheets() {
         return restTemplate.getForObject("/", RestTallySheetsReponse.class);
     }

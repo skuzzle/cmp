@@ -1,10 +1,14 @@
 package de.skuzzle.tally.frontend.client;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class RestTallyMetaInfoResponse {
 
     private final int totalTallySheetCount;
 
-    private RestTallyMetaInfoResponse(int totalTallySheetCount) {
+    @JsonCreator
+    RestTallyMetaInfoResponse(@JsonProperty("totalTallySheetCount") int totalTallySheetCount) {
         this.totalTallySheetCount = totalTallySheetCount;
     }
 

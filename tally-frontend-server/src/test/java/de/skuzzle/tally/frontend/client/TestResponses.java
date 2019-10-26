@@ -24,7 +24,7 @@ public class TestResponses {
         }
 
         public RestTallySheetsReponse toResponse() {
-            return new RestTallySheetsReponse(tallySheets, null);
+            return new RestTallySheetsReponse(tallySheets);
         }
     }
 

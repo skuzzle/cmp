@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import de.skuzzle.tally.frontend.auth.TallyUser;
+import de.skuzzle.tally.frontend.client.RestTallyMetaInfoResponse;
 import de.skuzzle.tally.frontend.client.RestTallyResponse;
 import de.skuzzle.tally.frontend.client.RestTallySheet;
 import de.skuzzle.tally.frontend.client.RestTallySheetsReponse;
@@ -43,7 +44,10 @@ public class FrontpageController {
     @GetMapping("/")
     public ModelAndView getIndex() {
         final TallyUser user = getUser();
+        final RestTallyMetaInfoResponse metaInfo = client.getMetaInfo();
+
         final ModelAndView model = new ModelAndView("frontpage/frontPage.html")
+                .addObject("totalTallySheetCount", metaInfo.getTotalTallySheetCount())
                 .addObject("recentlyCreated", List.of());
 
         if (user.isLoggedIn()) {
