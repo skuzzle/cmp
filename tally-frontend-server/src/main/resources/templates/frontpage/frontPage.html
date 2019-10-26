@@ -47,36 +47,9 @@
     <section class="section is-hidden-mobile has-background-white-bis">
         <div class="container">
             <div class="columns is-centered">
-                <div class="column is-one-fifth">
-                    <div class="box is-radiusless">
-                        <div class="content has-text-centered">
-                        <span class="icon is-large">
-                            <i class="fas fa-3x fa-chart-line"></i>
-                        </span><br/>
-                        Easily create counters and visualize their growth
-                        </div>
-                    </div>
-                </div>
-                <div class="column is-one-fifth">
-                    <div class="box is-radiusless">
-                        <div class="content has-text-centered">
-                        <span class="icon is-large">
-                            <i class="fas fa-3x fa-share"></i>
-                        </span><br/>
-                        Share counters with your friends and colleagues
-                        </div>
-                    </div>
-                </div>
-                <div class="column is-one-fifth">
-                    <div class="box is-radiusless">
-                        <div class="content has-text-centered">
-                        <span class="icon is-large">
-                            <i class="fas fa-3x fa-sticky-note"></i>
-                        </span><br/>
-                        Keep track of important metrics in your life
-                        </div>
-                    </div>
-                </div>
+                <div class="column is-one-fifth" th:insert="frontpage/teaserTiles :: tile('fa-chart-line', 'Easily create counters and visualize their growth')"></div>
+                <div class="column is-one-fifth" th:insert="frontpage/teaserTiles :: tile('fa-share', 'Share counters with your friends and colleagues')"></div>
+                <div class="column is-one-fifth" th:insert="frontpage/teaserTiles :: tile('fa-sticky-note', 'Keep track of important metrics in your life')"></div>
             </div>
         </div>
     </section>

@@ -1,0 +1,12 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="tile(icon, text)" class="box is-radiusless">
+    <div class="content has-text-centered">
+        <span class="icon is-large">
+            <i class="fas fa-3x" th:classappend="${icon}"></i>
+        </span><br/>
+        <span th:text="${text}">Easily create counters and visualize their growth</span>
+    </div>
+</div>
+
+</html>
