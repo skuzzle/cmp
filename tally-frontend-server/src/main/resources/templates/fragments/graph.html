@@ -1,5 +1,4 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-    xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     
 <th:block th:fragment="graph(data)" th:with="graphId=${#strings.randomAlphanumeric(10)}, showYAxis=${showYAxis?:true}">
     <canvas class="is-tally-graph-new" th:id="${graphId}"></canvas>
