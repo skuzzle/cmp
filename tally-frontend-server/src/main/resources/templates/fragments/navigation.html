@@ -13,10 +13,7 @@
     <a class="navbar-item" th:href="@{/}">countmy.pizza</a>
     
 	<div class="navbar-end">
-		<div class="navbar-item">
-			<div class="buttons" th:insert="fragments/login :: login(${user})">
-				<a class="button is-light"> Log in with google</a>
-			</div>
-		</div>
+		<div class="navbar-item" th:insert="fragments/login :: login(${user})"></div>
+        <div class="navbar-item" th:insert="fragments/login :: logout"></div>
 	</div>
 </nav>
