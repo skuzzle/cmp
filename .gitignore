@@ -26,3 +26,5 @@
 
 ### Spring local config ###
 application-local.properties
+
+*.log
