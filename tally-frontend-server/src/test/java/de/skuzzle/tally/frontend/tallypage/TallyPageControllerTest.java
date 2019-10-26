@@ -2,7 +2,6 @@ package de.skuzzle.tally.frontend.tallypage;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -69,7 +68,6 @@ public class TallyPageControllerTest {
         testUser.authenticatedWithName("Heini");
 
         final String adminKey = clientConfigurer.getAdminKey();
-        when(clientConfigurer.getClient().assignToCurrentUser(adminKey)).thenReturn(true);
 
         mockMvc.perform(get("/{adminKey}?action=assignToCurrentUser", adminKey))
                 .andExpect(redirectedUrlTemplate("/{adminKey}", adminKey));
@@ -82,7 +80,6 @@ public class TallyPageControllerTest {
 
         final String incrementId = "incrementId";
         final String adminKey = clientConfigurer.getAdminKey();
-        when(clientConfigurer.getClient().deleteIncrement(adminKey, incrementId)).thenReturn(true);
 
         mockMvc.perform(get("/{adminKey}/increment/{incrementId}?action=delete", adminKey, incrementId))
                 .andExpect(redirectedUrlTemplate("/{adminKey}", adminKey));

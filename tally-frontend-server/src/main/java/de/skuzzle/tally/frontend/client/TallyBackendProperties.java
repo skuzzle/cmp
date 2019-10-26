@@ -5,12 +5,12 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
 @ConfigurationProperties(prefix = "cmp.backend")
-class TallyProperties {
+class TallyBackendProperties {
 
     private final String url;
     private final String healthUrl;
 
-    public TallyProperties(String url, String healthUrl) {
+    public TallyBackendProperties(String url, String healthUrl) {
         this.url = url;
         this.healthUrl = healthUrl;
     }

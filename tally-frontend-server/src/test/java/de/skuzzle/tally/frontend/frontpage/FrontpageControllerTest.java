@@ -80,7 +80,6 @@ public class FrontpageControllerTest {
         testUser.anonymous();
 
         final String adminKeyToDelete = "adminKey";
-        when(tallyClient.deleteTallySheet(adminKeyToDelete)).thenReturn(true);
         mockMvc.perform(get("/{adminKey}?action=delete", adminKeyToDelete))
                 .andExpect(redirectedUrl("/"));
         verify(tallyClient).deleteTallySheet("adminKey");

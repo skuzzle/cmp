@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +21,13 @@ public class TallyServiceIntegrationTest {
 
     @Autowired
     private TallyService tallyService;
+    @Autowired
+    private TallyRepository tallyRepository;
+
+    @BeforeEach
+    void clearDatabase() {
+        tallyRepository.deleteAll();
+    }
 
     @Test
     void testCreateTallySheet() throws Exception {
@@ -205,5 +213,14 @@ public class TallyServiceIntegrationTest {
 
         // look up again from database
         assertThat(tallyService.getTallySheet(sheet.getPublicKey()).getName()).isEqualTo("newName");
+    }
+
+    @Test
+    void testCountAllTallySheets() throws Exception {
+        tallyService.createNewTallySheet(UserId.unknown("unknown"), "newName");
+        tallyService.createNewTallySheet(UserId.unknown("unknown"), "newName");
+        tallyService.createNewTallySheet(UserId.unknown("unknown"), "newName");
+
+        assertThat(tallyService.countAllTallySheets()).isEqualTo(3);
     }
 }

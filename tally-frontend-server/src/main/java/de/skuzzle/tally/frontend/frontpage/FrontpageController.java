@@ -17,7 +17,6 @@ import de.skuzzle.tally.frontend.client.RestTallyResponse;
 import de.skuzzle.tally.frontend.client.RestTallySheet;
 import de.skuzzle.tally.frontend.client.RestTallySheetsReponse;
 import de.skuzzle.tally.frontend.client.TallyClient;
-import de.skuzzle.tally.frontend.client.TallyResult;
 import de.skuzzle.tally.frontend.graphs.Graph;
 
 @Controller
@@ -46,29 +45,23 @@ public class FrontpageController {
         final TallyUser user = getUser();
         final ModelAndView model = new ModelAndView("frontpage/frontPage.html")
                 .addObject("recentlyCreated", List.of());
+
         if (user.isLoggedIn()) {
-            final TallyResult<RestTallySheetsReponse> result = client.listTallySheets();
-            if (result.isSuccess()) {
-                final List<RestTallySheet> sheets = result.payload().map(RestTallySheetsReponse::getTallySheets)
-                        .orElseThrow();
-                final List<RecentlyCreatedTally> recentlyCreated = sheets.stream()
-                        .sorted(Comparator.comparing(RestTallySheet::getCreateDateUTC).reversed())
-                        .map(RecentlyCreatedTally::fromRestResponse)
-                        .collect(Collectors.toList());
-                model.addObject("recentlyCreated", recentlyCreated);
-            }
+            final RestTallySheetsReponse result = client.listTallySheets();
+            final List<RestTallySheet> sheets = result.getTallySheets();
+            final List<RecentlyCreatedTally> recentlyCreated = sheets.stream()
+                    .sorted(Comparator.comparing(RestTallySheet::getCreateDateUTC).reversed())
+                    .map(RecentlyCreatedTally::fromRestResponse)
+                    .collect(Collectors.toList());
+            model.addObject("recentlyCreated", recentlyCreated);
         }
         return model;
     }
 
     @PostMapping("/_create")
     public String createTallySheet(@RequestParam("name") String name) {
-        final RestTallySheet tallySheet = client.createNewTallySheet(name)
-                .payload()
-                .map(RestTallyResponse::getTallySheet)
-                .orElseThrow();
-
-        return "redirect:/" + tallySheet.getAdminKey();
+        final RestTallyResponse response = client.createNewTallySheet(name);
+        return "redirect:/" + response.getTallySheet().getAdminKey();
     }
 
     @GetMapping(path = "/{key}", params = "action=delete")

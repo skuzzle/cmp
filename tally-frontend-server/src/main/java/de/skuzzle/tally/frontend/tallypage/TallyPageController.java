@@ -45,7 +45,7 @@ public class TallyPageController {
 
     @GetMapping("/{key}")
     public ModelAndView showTallySheet(@PathVariable("key") String key) {
-        final RestTallyResponse response = client.getTallySheet(key).payload().orElseThrow();
+        final RestTallyResponse response = client.getTallySheet(key);
 
         final RestTallySheet tallySheet = response.getTallySheet();
         final RestIncrements increments = response.getIncrements();

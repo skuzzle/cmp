@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Preconditions;
+import com.google.common.primitives.Ints;
 
 import io.micrometer.core.instrument.Metrics;
 
@@ -20,6 +21,10 @@ public class TallyService {
     TallyService(TallyRepository repository, RandomKeyGenerator randomKeyGenerator) {
         this.repository = repository;
         this.randomKeyGenerator = randomKeyGenerator;
+    }
+
+    public int countAllTallySheets() {
+        return Ints.saturatedCast(repository.count());
     }
 
     public TallySheet createNewTallySheet(UserId user, String name) {

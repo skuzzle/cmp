@@ -1,6 +1,7 @@
 package de.skuzzle.tally.frontend.client;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
 import org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpStatusCodeException;
 
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK, properties = "cmp.backend.url=http://localhost:6565")
 @AutoConfigureStubRunner(ids = "de.skuzzle.tally:tally-backend:+:stubs:6565",
@@ -24,10 +26,8 @@ public class TallyClientIntegrationTest {
     @Test
     void testCreateTallySheet() {
         final var apiResponse = tallyClient.createNewTallySheet("name");
-        assertThat(apiResponse.isSuccess()).isTrue();
-        assertThat(apiResponse.getStatus()).isEqualTo(HttpStatus.CREATED);
 
-        final RestTallySheet tallySheet = apiResponse.payload().orElseThrow().getTallySheet();
+        final RestTallySheet tallySheet = apiResponse.getTallySheet();
         assertThat(tallySheet.getCreateDateUTC()).isEqualTo(LocalDateTime.of(1987, 9, 12, 11, 11, 0, 123000000));
         assertThat(tallySheet.getLastModifiedDateUTC()).isEqualTo(LocalDateTime.of(1987, 9, 12, 11, 11, 0, 123000000));
     }
@@ -37,61 +37,54 @@ public class TallyClientIntegrationTest {
         final var increment = RestTallyIncrement.createNew("Description",
                 LocalDateTime.of(2019, 04, 12, 11, 21, 32, 123000000), Set.of("tag1", "tag2"));
 
-        final boolean result = tallyClient.increment("adminKey1", increment);
-        assertThat(result).isTrue();
+        tallyClient.increment("adminKey1", increment);
     }
 
     @Test
     void testGetUnknownTallySheet() {
-        final var apiResponse = tallyClient.getTallySheet("unknownPublicKey");
-        assertThat(apiResponse.isError()).isTrue();
-
-        final RestErrorMessage errorResponse = apiResponse.error().orElseThrow();
-        assertThat(apiResponse.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(errorResponse.getMessage()).isEqualTo("unknownPublicKey");
-        assertThat(errorResponse.getOrigin()).isEqualTo("de.skuzzle.tally.service.TallySheetNotAvailableException");
+        assertThatExceptionOfType(HttpStatusCodeException.class)
+                .isThrownBy(() -> tallyClient.getTallySheet("unknownPublicKey"))
+                .matches(e -> e.getStatusCode() == HttpStatus.NOT_FOUND);
     }
 
     @Test
     void testGetExistingTallySheet() {
         final var apiResponse = tallyClient.getTallySheet("publicKey1");
-        assertThat(apiResponse.getStatus()).isEqualTo(HttpStatus.OK);
-        assertThat(apiResponse.isSuccess());
+        assertThat(apiResponse.getTallySheet().getPublicKey()).isEqualTo("publicKey1");
     }
 
     @Test
     void testDeleteUnknownTallySheet() {
-        final var success = tallyClient.deleteTallySheet("unknownAdminKey");
-        assertThat(success).isFalse();
+        assertThatExceptionOfType(HttpStatusCodeException.class)
+                .isThrownBy(() -> tallyClient.deleteTallySheet("unknownAdminKey"))
+                .matches(e -> e.getStatusCode() == HttpStatus.NOT_FOUND);
     }
 
     @Test
     void testDeleteTallySheet() {
-        final var success = tallyClient.deleteTallySheet("adminKey1");
-        assertThat(success).isTrue();
+        tallyClient.deleteTallySheet("adminKey1");
     }
 
     @Test
     void testDeleteIncrement() throws Exception {
-        final var success = tallyClient.deleteIncrement("adminKey2", "incrementId");
-        assertThat(success).isTrue();
+        tallyClient.deleteIncrement("adminKey2", "incrementId");
     }
 
     @Test
     void testDeleteUnknownIncrement() throws Exception {
-        final var success = tallyClient.deleteIncrement("adminKey1", "unknownIncrementId");
-        assertThat(success).isFalse();
+        assertThatExceptionOfType(HttpStatusCodeException.class)
+                .isThrownBy(() -> tallyClient.deleteIncrement("adminKey1", "unknownIncrementId"))
+                .matches(e -> e.getStatusCode() == HttpStatus.NOT_FOUND);
     }
 
     @Test
     void testAssignToCurrentUser() throws Exception {
-        final var success = tallyClient.assignToCurrentUser("adminKey3");
-        assertThat(success).isTrue();
+        tallyClient.assignToCurrentUser("adminKey3");
     }
 
     @Test
     void testListTallySheets() throws Exception {
         final var apiResponse = tallyClient.listTallySheets();
-        assertThat(apiResponse.payload().orElseThrow().getTallySheets()).hasSize(2);
+        assertThat(apiResponse.getTallySheets()).hasSize(2);
     }
 }

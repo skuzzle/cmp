@@ -13,11 +13,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Configuration
 public class TallyClientConfiguration {
 
-    private final TallyProperties tallyProperties;
+    private final TallyBackendProperties tallyProperties;
     private final ObjectMapper objectMapper;
     private final ClientId clientId;
 
-    public TallyClientConfiguration(TallyProperties tallyProperties, ObjectMapper objectMapper, ClientId clientId) {
+    public TallyClientConfiguration(TallyBackendProperties tallyProperties, ObjectMapper objectMapper,
+            ClientId clientId) {
         this.tallyProperties = tallyProperties;
         this.objectMapper = objectMapper;
         this.clientId = clientId;
@@ -40,7 +41,6 @@ public class TallyClientConfiguration {
     public TallyClient tallyClient() {
         return new TallyClient(
                 restTemplate(tallyProperties.getUrl()),
-                restTemplate(tallyProperties.getHealthUrl()),
-                objectMapper);
+                restTemplate(tallyProperties.getHealthUrl()));
     }
 }

@@ -52,6 +52,15 @@ public class TallyRestController {
         return UserId.of(requestUser.getSource(), requestUser.getId(), requestUser.isAnonymous());
     }
 
+    @GetMapping("/_meta")
+    public ResponseEntity<RestTallyMetaInfoResponse> getMetaInfo(HttpServletRequest request) {
+        rateLimiter.blockIfRateLimitIsExceeded(request);
+
+        final int countAllTallySheets = tallyService.countAllTallySheets();
+        final RestTallyMetaInfoResponse body = RestTallyMetaInfoResponse.of(countAllTallySheets);
+        return ResponseEntity.ok(body);
+    }
+
     @GetMapping("/")
     public ResponseEntity<RestTallySheetsReponse> getAllTallies(HttpServletRequest request) {
         rateLimiter.blockIfRateLimitIsExceeded(request);

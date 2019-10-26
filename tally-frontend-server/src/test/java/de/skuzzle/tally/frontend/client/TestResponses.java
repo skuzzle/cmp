@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.http.HttpStatus;
-
 public class TestResponses {
 
     public static TallySheetResponseBuilder tallySheet() {
@@ -25,9 +23,8 @@ public class TestResponses {
             return this;
         }
 
-        public TallyResult<RestTallySheetsReponse> toResponse() {
-            final RestTallySheetsReponse tallySheetsReponse = new RestTallySheetsReponse(tallySheets, null);
-            return TallyResult.success(HttpStatus.OK, tallySheetsReponse);
+        public RestTallySheetsReponse toResponse() {
+            return new RestTallySheetsReponse(tallySheets, null);
         }
     }
 
@@ -121,11 +118,11 @@ public class TestResponses {
                     totalCount);
         }
 
-        public TallyResult<RestTallyResponse> toResponse() {
+        public RestTallyResponse toResponse() {
             final RestTallySheet tallySheet = toTallySheet();
             final RestIncrements increments = new RestIncrements(this.increments, 0, 0);
             final RestTallyResponse restTallyResponse = new RestTallyResponse(tallySheet, increments);
-            return TallyResult.success(HttpStatus.OK, restTallyResponse);
+            return restTallyResponse;
         }
     }
 }
