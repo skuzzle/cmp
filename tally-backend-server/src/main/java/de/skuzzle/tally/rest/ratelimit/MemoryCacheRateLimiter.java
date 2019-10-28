@@ -1,5 +1,6 @@
 package de.skuzzle.tally.rest.ratelimit;
 
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -40,12 +41,15 @@ public class MemoryCacheRateLimiter<T> implements ApiRateLimiter<T> {
     @Override
     public boolean exceedsLimit(T hint) {
         Preconditions.checkArgument(hint != null, "rate limiter client hint must not be null");
-        return clientIdentificator.tryIdentifyClientFrom(hint)
-                .filter(client -> {
-                    final RateLimiter rateLimiter = limiterCache.getUnchecked(client);
-                    return client.exceedsLimitOf(rateLimiter);
-                })
-                .isPresent();
+        final Optional<ApiClient> identifiedClient = clientIdentificator.tryIdentifyClientFrom(hint);
+        if (identifiedClient.isPresent()) {
+            final ApiClient client = identifiedClient.orElseThrow();
+            final RateLimiter rateLimiter = limiterCache.getUnchecked(client);
+            return client.exceedsLimitOf(rateLimiter);
+        }
+        // can not exceed the limit if client has not been identified
+        logger.debug("No client could be identified from '{}'. This request was not rate limited!", hint);
+        return false;
     }
 
     @Override
