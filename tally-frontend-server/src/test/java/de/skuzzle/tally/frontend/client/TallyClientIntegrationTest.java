@@ -15,17 +15,15 @@ import org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpStatusCodeException;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-@SpringBootTest(webEnvironment = WebEnvironment.MOCK, properties = "cmp.backend.url=http://localhost:6565")
+@SpringBootTest(webEnvironment = WebEnvironment.MOCK, properties = {
+        "cmp.backend.url=http://localhost:6565",
+        "cmp.backend.healthUrl=http://not.used.in.this.test" })
 @AutoConfigureStubRunner(ids = "de.skuzzle.tally:tally-backend:+:stubs:6565",
         stubsMode = StubRunnerProperties.StubsMode.LOCAL)
 public class TallyClientIntegrationTest {
 
     @Autowired
     private TallyClient tallyClient;
-    @Autowired
-    private ObjectMapper obj;
 
     @Test
     void testCreateTallySheet() {
