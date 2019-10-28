@@ -8,3 +8,4 @@ export class DateLabel extends HTMLTimeElement  {
 		this.textContent = formatted;
 	}
 }
+customElements.define("date-label", DateLabel, { extends: 'time' });

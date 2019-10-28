@@ -6,3 +6,4 @@ export class InputNow extends HTMLInputElement {
 		this.value = utcString(new Date());
 	}
 }
+customElements.define("input-now", InputNow, { extends: 'input' });
