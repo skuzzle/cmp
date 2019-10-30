@@ -1,6 +1,8 @@
 {
     "name": "Count My Pizza",
-    "short_name": "Count My Pizza",
+    "short_name": "countmy.pizza",
+    "homepage_url": "https://countmy.pizza",
+    "description": "Count pizzas - and more.",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
