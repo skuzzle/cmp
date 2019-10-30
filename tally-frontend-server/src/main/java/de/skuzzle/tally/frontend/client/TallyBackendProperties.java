@@ -9,10 +9,12 @@ class TallyBackendProperties {
 
     private final String url;
     private final String healthUrl;
+    private final boolean useResilienceFeatures;
 
-    public TallyBackendProperties(String url, String healthUrl) {
+    public TallyBackendProperties(String url, String healthUrl, boolean useResilienceFeatures) {
         this.url = url;
         this.healthUrl = healthUrl;
+        this.useResilienceFeatures = useResilienceFeatures;
     }
 
     public String getUrl() {
@@ -23,4 +25,7 @@ class TallyBackendProperties {
         return this.healthUrl;
     }
 
+    public boolean useResilienceFeatures() {
+        return this.useResilienceFeatures;
+    }
 }

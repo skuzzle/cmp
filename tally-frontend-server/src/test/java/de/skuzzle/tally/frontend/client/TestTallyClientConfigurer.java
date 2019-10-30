@@ -38,7 +38,7 @@ public class TestTallyClientConfigurer implements TestExecutionListener {
         return this;
     }
 
-    public DefaultBackendClient getClient() {
+    public BackendClient getClient() {
         return ClientTestContext.getContext().getTallyClientMock();
     }
 

@@ -39,9 +39,11 @@ public class TallyClientConfiguration {
 
     @Bean
     public BackendClient tallyClient() {
-        return new ResilientBackendClient(
-                new DefaultBackendClient(
-                        restTemplate(tallyProperties.getUrl()),
-                        restTemplate(tallyProperties.getHealthUrl())));
+        final BackendClient client = new DefaultBackendClient(
+                restTemplate(tallyProperties.getUrl()),
+                restTemplate(tallyProperties.getHealthUrl()));
+        return tallyProperties.useResilienceFeatures()
+                ? new ResilientBackendClient(client)
+                : client;
     }
 }
