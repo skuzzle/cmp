@@ -22,10 +22,11 @@
 </div>
  
 <th:block th:fragment="logout(user)">
-    <div class="content"  th:if="${user.isLoggedIn()}">
-        Welcome <strong th:text="${user.name}"></strong>
+    <div class="buttons"  th:if="${user.isLoggedIn()}">
+        <span class="button is-static" th:text="'Welcome ' + ${user.name}">
+        </span>
     
-        <form class="is-inline is-pulled-right" method="post" th:action="@{/logout}">
+        <form class="is-inline" method="post" th:action="@{/logout}">
             <input type="submit" class="button is-danger is-outlined" value="Logout"></input>
         </form>
     </div>
