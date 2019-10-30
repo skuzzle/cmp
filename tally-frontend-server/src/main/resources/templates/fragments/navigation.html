@@ -12,7 +12,7 @@
     
 	<div class="navbar-end">
 		<div class="navbar-item" th:insert="fragments/login :: login(${user})"></div>
-        <div class="navbar-item" th:insert="fragments/login :: logout"></div>
+        <div class="navbar-item" th:insert="fragments/login :: logout(${user})"></div>
 	</div>
 </nav>
 
