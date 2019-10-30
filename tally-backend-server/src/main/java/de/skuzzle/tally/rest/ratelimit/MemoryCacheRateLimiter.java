@@ -18,12 +18,18 @@ public class MemoryCacheRateLimiter<T> implements ApiRateLimiter<T> {
 
     private static final Logger logger = LoggerFactory.getLogger(MemoryCacheRateLimiter.class);
 
+    /*
+     * If a recognized client does not send another request within this time its rate
+     * limiter will be reset to zero
+     */
     private static final long REMEMBER_CLIENTS_FOR = 5; // minutes
 
     private final LoadingCache<ApiClient, RateLimiter> limiterCache;
     private final ClientIdentificator<T> clientIdentificator;
 
     public MemoryCacheRateLimiter(ClientIdentificator<T> clientIdentificator, double requestsPerSecond) {
+        Preconditions.checkArgument(clientIdentificator != null, "clientIDentificator must not be null");
+
         this.clientIdentificator = clientIdentificator;
         this.limiterCache = CacheBuilder.newBuilder()
                 .expireAfterAccess(REMEMBER_CLIENTS_FOR, TimeUnit.MINUTES)
