@@ -26,9 +26,14 @@
         <span class="button is-static" th:text="'Welcome ' + ${user.name}">
         </span>
     
-        <form class="is-inline" method="post" th:action="@{/logout}">
-            <input type="submit" class="button is-danger is-outlined" value="Logout"></input>
-        </form>
+        <form th:replace="this :: logoutForm"></form>
     </div>
 </th:block>
+
+<form th:fragment="logoutForm" class="is-inline"  th:action="@{/logout}">
+    <input th:replace="this :: submitLogout"></input>
+</form>
+
+<input th:fragment="submitLogout" type="submit" class="button is-danger is-outlined" value="Logout"></input>
+
  </html>
