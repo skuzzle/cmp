@@ -12,15 +12,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="@{/favicon.ico}"/>
 </head>
 <body>
-<script type="module">
-WebComponents.waitFor(() => {
-    return import('./includes/date-label');
-});
-WebComponents.waitFor(() => {
-alert("===)");
-    return import('./includes/input-now');
-});
-</script>
+
 <div class="container">
     <nav th:replace="fragments/navigation :: navigation(${user})"></nav>
 </div>
