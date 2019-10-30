@@ -19,15 +19,15 @@
             <span class="button is-static">to enjoy all features</span>
         </p> 
     </div>
-    
-    <div th:if="${user.isLoggedIn()}" class="content">
-        Welcome <strong th:text="${user.name}"></strong>
-    </div>
 </div>
  
-<th:block th:fragment="logout">
-    <form class="is-inline is-pulled-right" method="post" th:action="@{/logout}" th:if="${user.isLoggedIn()}">
-        <input type="submit" class="button is-danger is-outlined" value="Logout"></input>
-    </form>
+<th:block th:fragment="logout(user)">
+    <div class="content"  th:if="${user.isLoggedIn()}">
+        Welcome <strong th:text="${user.name}"></strong>
+    
+        <form class="is-inline is-pulled-right" method="post" th:action="@{/logout}">
+            <input type="submit" class="button is-danger is-outlined" value="Logout"></input>
+        </form>
+    </div>
 </th:block>
  </html>
