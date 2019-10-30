@@ -20,20 +20,20 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
 import de.skuzzle.tally.frontend.auth.TallyUser;
+import de.skuzzle.tally.frontend.client.BackendClient;
 import de.skuzzle.tally.frontend.client.RestIncrements;
 import de.skuzzle.tally.frontend.client.RestTallyIncrement;
 import de.skuzzle.tally.frontend.client.RestTallyResponse;
 import de.skuzzle.tally.frontend.client.RestTallySheet;
-import de.skuzzle.tally.frontend.client.TallyClient;
 import de.skuzzle.tally.frontend.graphs.Graph;
 
 @Controller
 public class TallyPageController {
 
-    private final TallyClient client;
+    private final BackendClient client;
     private final TallyUser currentUser;
 
-    public TallyPageController(TallyClient client, TallyUser currentUser) {
+    public TallyPageController(BackendClient client, TallyUser currentUser) {
         this.client = client;
         this.currentUser = currentUser;
     }

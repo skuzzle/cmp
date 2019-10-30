@@ -23,7 +23,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 public class TallyClientIntegrationTest {
 
     @Autowired
-    private TallyClient tallyClient;
+    private BackendClient tallyClient;
 
     @Test
     void testCreateTallySheet() {

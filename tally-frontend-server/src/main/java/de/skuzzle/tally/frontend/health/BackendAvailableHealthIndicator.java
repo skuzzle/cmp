@@ -4,14 +4,14 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.stereotype.Component;
 
-import de.skuzzle.tally.frontend.client.TallyClient;
+import de.skuzzle.tally.frontend.client.BackendClient;
 
 @Component
 class BackendAvailableHealthIndicator implements HealthIndicator {
 
-    private final TallyClient client;
+    private final BackendClient client;
 
-    public BackendAvailableHealthIndicator(TallyClient client) {
+    public BackendAvailableHealthIndicator(BackendClient client) {
         this.client = client;
     }
 

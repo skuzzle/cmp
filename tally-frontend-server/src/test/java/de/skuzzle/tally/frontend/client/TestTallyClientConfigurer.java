@@ -38,7 +38,7 @@ public class TestTallyClientConfigurer implements TestExecutionListener {
         return this;
     }
 
-    public TallyClient getClient() {
+    public DefaultBackendClient getClient() {
         return ClientTestContext.getContext().getTallyClientMock();
     }
 
@@ -50,7 +50,7 @@ public class TestTallyClientConfigurer implements TestExecutionListener {
         return ClientTestContext.getContext().getAdminTallySheet().getAdminKey();
     }
 
-    public TallyClient verify() {
+    public BackendClient verify() {
         return Mockito.verify(getClient());
     }
 }

@@ -13,20 +13,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import de.skuzzle.tally.frontend.auth.TallyUser;
+import de.skuzzle.tally.frontend.client.BackendClient;
 import de.skuzzle.tally.frontend.client.RestTallyMetaInfoResponse;
 import de.skuzzle.tally.frontend.client.RestTallyResponse;
 import de.skuzzle.tally.frontend.client.RestTallySheet;
 import de.skuzzle.tally.frontend.client.RestTallySheetsReponse;
-import de.skuzzle.tally.frontend.client.TallyClient;
 import de.skuzzle.tally.frontend.graphs.Graph;
 
 @Controller
 public class FrontpageController {
 
-    private final TallyClient client;
+    private final BackendClient client;
     private final TallyUser currentUser;
 
-    public FrontpageController(TallyClient client, TallyUser currentUser) {
+    public FrontpageController(BackendClient client, TallyUser currentUser) {
         this.client = client;
         this.currentUser = currentUser;
     }

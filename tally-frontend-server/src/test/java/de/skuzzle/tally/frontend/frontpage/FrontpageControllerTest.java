@@ -15,7 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import de.skuzzle.tally.frontend.auth.TestUserConfigurer;
-import de.skuzzle.tally.frontend.client.TallyClient;
+import de.skuzzle.tally.frontend.client.BackendClient;
 import de.skuzzle.tally.frontend.client.TestResponses;
 import de.skuzzle.tally.frontend.slice.mvc.FrontendTestSlice;
 
@@ -24,7 +24,7 @@ import de.skuzzle.tally.frontend.slice.mvc.FrontendTestSlice;
 public class FrontpageControllerTest {
 
     @Autowired
-    private TallyClient tallyClient;
+    private BackendClient tallyClient;
     @Autowired
     private MockMvc mockMvc;
     @Autowired

@@ -13,7 +13,7 @@ class ClientTestContext {
     private final static ThreadLocal<ClientTestContext> contexts = new ThreadLocal<>();
 
     public static ClientTestContext initContext(TestContext testContext) {
-        final TallyClient tallyClientMock = testContext.getApplicationContext().getBean(TallyClient.class);
+        final DefaultBackendClient tallyClientMock = testContext.getApplicationContext().getBean(DefaultBackendClient.class);
         final ClientTestContext context = new ClientTestContext(tallyClientMock);
         contexts.set(context);
         return context;
@@ -27,15 +27,15 @@ class ClientTestContext {
         contexts.set(null);
     }
 
-    private final TallyClient tallyClientMock;
+    private final DefaultBackendClient tallyClientMock;
     private TallySheetResponseBuilder publicTallySheet;
     private TallySheetResponseBuilder adminTallySheet;
 
-    ClientTestContext(TallyClient tallyClientMock) {
+    ClientTestContext(DefaultBackendClient tallyClientMock) {
         this.tallyClientMock = tallyClientMock;
     }
 
-    public TallyClient getTallyClientMock() {
+    public DefaultBackendClient getTallyClientMock() {
         return this.tallyClientMock;
     }
 
