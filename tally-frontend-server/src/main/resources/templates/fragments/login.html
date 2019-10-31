@@ -23,7 +23,7 @@
  
 <th:block th:fragment="logout(user)">
     <div class="buttons"  th:if="${user.isLoggedIn()}">
-        <span class="button is-static" th:text="'Welcome ' + ${user.name}">
+        <span class="button is-static" th:text="'Hi ' + ${user.name}">
         </span>
     
         <form th:replace="this :: logoutForm"></form>
