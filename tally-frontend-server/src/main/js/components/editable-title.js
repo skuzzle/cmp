@@ -3,7 +3,7 @@ Slim.tag(
 `<h1 s:if="!editing" class="title is-capitalized" bind>
 	{{currentTitle}} 
 	<button s:if="allowEdit" class="button" click="startEditing">
-		Change title
+		Change name
 	</button>
 </h1>
 <div s:if="editing" class="field is-grouped">
