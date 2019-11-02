@@ -32,7 +32,7 @@ class EditableTitle extends Slim {
 	
 	submitTitle() {
 		const newTitle = this.titleInput.value;
-		if (newTitle === currentTitle) {
+		if (newTitle === this.currentTitle) {
 			this.finishEditing();
 			return;
 		}
