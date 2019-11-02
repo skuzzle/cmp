@@ -8,7 +8,7 @@ Slim.tag(
 </h1>
 <div s:if="editing" class="field is-grouped">
 	<div class="control">
-		<input s:id="titleInput" class="input is-medium" type="text" autofocus=true required="true" title="Enter the new title"></input>
+		<input s:id="titleInput" class="input" type="text" autofocus=true required="true" title="Enter the new title"></input>
 	</div>
 	<div class="control">
 		<button class="button is-light" click="submitTitle" title="Change title"bind>
