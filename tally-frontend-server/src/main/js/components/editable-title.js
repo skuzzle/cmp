@@ -11,12 +11,12 @@ Slim.tag(
 		<input s:id="titleInput" class="input is-medium" type="text" autofocus=true required="true" title="Enter the new title"></input>
 	</div>
 	<div class="control">
-		<button class="button is-light is-medium" click="submitTitle" title="Change title"bind>
+		<button class="button is-light" click="submitTitle" title="Change title"bind>
 			Save
 		</button>
 	</div>
 	<div class="control">
-		<button class="button is-outlined is-medium is-danger" click="finishEditing" title="Keep current title">
+		<button class="button is-outlined is-danger" click="finishEditing" title="Keep current title">
 			Cancel
 		</button>
 	</div>
