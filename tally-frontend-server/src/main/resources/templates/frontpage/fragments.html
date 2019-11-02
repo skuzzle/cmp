@@ -14,7 +14,7 @@
         <div class="level-item has-text-centered">
             <div>
                 <p class="heading">Created</p>
-                <p class="subtitle"><time is="date-label" th:text="${entry.creationDateUTC}">2019-09-09</time></p>
+                <p class="subtitle"><date-label th:text="${entry.creationDateUTC}">2019-09-09</date-label></p>
             </div>
         </div>
         <div class="level-item has-text-centered">
@@ -33,21 +33,5 @@
             </div>
 	    </div>
 	</nav>
-</div>
-
-<div th:fragment="tallyEntry2(tally, user)" class="card">
-	<header class="card-header">
-		<p class="card-header-title" th:text="${tally.name}">Pizza Counter 2018</p>
-	</header>
-	<div class="card-content">
-		<div class="content">
-			Test <br>
-			<time is="date-label" th:text="${entry.creationDateUTC}">2019-09-09</time>
-		</div>
-	</div>
-	<footer class="card-footer">
-		<a class="card-footer-item"
-			th:href="@{/{adminKey}(adminKey=${entry.publicKey})}">Share</a>  
-	</footer>
 </div>
 </html>

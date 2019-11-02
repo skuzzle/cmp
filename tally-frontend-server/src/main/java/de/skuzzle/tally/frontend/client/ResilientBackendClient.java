@@ -74,4 +74,10 @@ class ResilientBackendClient implements BackendClient {
         delegate.assignToCurrentUser(adminKey);
     }
 
+    @Override
+    @CircuitBreaker(name = "backendClient")
+    @Retry(name = "backendClient")
+    public void changeName(String adminKey, String newTitle) {
+        delegate.changeName(adminKey, newTitle);
+    }
 }

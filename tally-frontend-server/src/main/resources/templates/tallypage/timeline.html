@@ -33,7 +33,7 @@
             </p>
             <p class="heading">
                 <a th:if="${tally.admin}" th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}" class="delete" title="Delete this increment">Delete</a>
-                <time is="date-label" th:text="${increment.incrementDateUTC}">2019-09-09</time>
+                <date-label th:text="${increment.incrementDateUTC}">2019-09-09</date-label>
             </p>
             <div class="tags" th:if="${increment.hasTags()}">
                 <span class="tag" th:each="tag : ${increment.tags}" th:text="${tag}"></span>

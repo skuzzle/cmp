@@ -1,34 +1,30 @@
 {
-	"name": "tally-css",
-	"version": "1.0.0",
-	"description": "",
-	"scripts": {
-		"build": "parcel build --public-url ./ -d target/classes/static src/main/js/*.js src/main/css/*.scss",
-		"start": "parcel       --public-url ./ -d target/classes/static src/main/js/*.js src/main/css/*.scss",
-		"watch": "parcel watch --public-url ./ -d target/classes/static src/main/js/*.js src/main/css/*.scss",
-		"test": "jest"
-	},
-	"author": "Simon Taddiken",
-	"license": "MIT",
-	"devDependencies": {
-		"@babel/core": "^7.6.2",
-		"@babel/plugin-proposal-async-generator-functions": "^7.2.0",
-		"@babel/preset-env": "^7.6.2",
-		"babel-jest": "^24.9.0",
-		"babel-preset-env": "^1.7.0",
-		"jest": "^24.9.0",
-		"node-sass": "^4.9.3",
-		"parcel": "^1.11.0",
-		"sass": "^1.23.0"
-	},
-	"dependencies": {
-		"@babel/polyfill": "^7.2.5",
-		"@fortawesome/fontawesome-free": "^5.11.2",
-		"@webcomponents/webcomponentsjs": "^2.3.0",
-		"bulma": "^0.7.5",
-		"bulma-tagsinput": "^2.0.0",
-		"bulma-timeline": "^3.0.4",
-		"bulma-tooltip": "^3.0.2",
-		"chart.js": "^2.8.0"
-	}
+    "name": "countmy.pizza",
+    "version": "1.0.0",
+    "description": "Count my pizza JS components",
+    "private": true,
+    "scripts": {
+        "build": "parcel build --public-url ./ -d target/classes/static src/main/js/*.js src/main/css/*.scss",
+        "start": "parcel       --public-url ./ -d target/classes/static src/main/js/*.js src/main/css/*.scss",
+        "watch": "parcel watch --public-url ./ -d target/classes/static src/main/js/*.js src/main/css/*.scss",
+        "test": "jest"
+    },
+    "author": "Simon Taddiken",
+    "license": "MIT",
+    "devDependencies": {
+        "@fortawesome/fontawesome-free": "^5.11.2",
+        "@webcomponents/webcomponentsjs": "^2.3.0",
+        "babel-jest": "^24.9.0",
+        "babel-preset-env": "^1.7.0",
+        "bulma": "^0.7.5",
+        "bulma-tagsinput": "^2.0.0",
+        "bulma-timeline": "^3.0.4",
+        "bulma-tooltip": "^3.0.2",
+        "chart.js": "^2.8.0",
+        "jest": "^24.9.0",
+        "node-sass": "^4.9.3",
+        "parcel": "^1.11.0",
+        "sass": "^1.23.0",
+        "slim-js": "^4.0.7"
+    }
 }

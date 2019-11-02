@@ -91,4 +91,9 @@ public class TallyPageController {
         return "redirect:/" + key;
     }
 
+    @GetMapping(path = "{key}", params = { "action=changeName", "newName" })
+    public String changeTitle(@PathVariable String key, @RequestParam String newName) {
+        client.changeName(key, newName);
+        return "redirect:/" + key;
+    }
 }

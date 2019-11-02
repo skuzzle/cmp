@@ -32,9 +32,9 @@
 <section class="hero">
     <div class="hero-body">
         <div class="container">
-            <h1 class="title is-capitalized	" th:text="${tally.name}">
+            <editable-title th:text="${tally.name}" th:attr="changeNameAction=@{/{adminKey}?action=changeName&newName=(adminKey=${tally.adminKey})}, allowEdit=${tally.admin}">
                 Pizza Count 2018
-            </h1>
+            </editable-title>
             <h2 class="subtitle">
                 Share: <a th:href="@{/{publicKey}(publicKey=${tally.publicKey})}" title="Read-Only Link to share with your friends" th:text="${tally.publicKey}" href="#">Share:
                     http://tally.io/123547</a>
@@ -70,7 +70,7 @@
                 <form method="post" th:action="@{/{adminKey}(adminKey=${tally.adminKey})}">
                     <div class="field">
                         <div class="control is-expanded">
-                            <input is="input-now" class="input" name="incrementDateUTC" type="date" title="The increment date" required="true" autofocus="true"  >
+                            <input-now name="incrementDateUTC" required="true" autofocus="true" title="The increment date"></input-now>
                         </div>
                     </div>
                     <div class="field">

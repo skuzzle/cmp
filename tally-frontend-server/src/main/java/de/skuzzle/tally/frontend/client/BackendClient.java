@@ -20,4 +20,6 @@ public interface BackendClient {
 
     void assignToCurrentUser(String adminKey);
 
+    void changeName(String adminKey, String newTitle);
+
 }

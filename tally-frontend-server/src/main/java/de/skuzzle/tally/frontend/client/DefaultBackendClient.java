@@ -77,4 +77,11 @@ class DefaultBackendClient implements BackendClient {
         restTemplate.postForEntity("/{key}/assignToCurrentUser", null, Object.class, adminKey);
     }
 
+    @Override
+    public void changeName(String adminKey, String newName) {
+        Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
+        Preconditions.checkArgument(newName != null, "newName must not be null");
+        restTemplate.put("/{key}/changeName/{newName}", null, adminKey, newName);
+    }
+
 }
