@@ -5,7 +5,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 
-import de.skuzzle.tally.frontend.auth.TallyUser;
+import de.skuzzle.cmp.frontend.auth.TallyUser;
 import de.skuzzle.tally.frontend.auth.TestUserConfigurer;
 
 @Profile("slice.mvc")

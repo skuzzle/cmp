@@ -12,7 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.TestExecutionListeners.MergeMode;
 
-import de.skuzzle.tally.frontend.Version;
+import de.skuzzle.cmp.frontend.Version;
 import de.skuzzle.tally.frontend.client.TestTallyClientConfigurer;
 
 @Target(ElementType.TYPE)
