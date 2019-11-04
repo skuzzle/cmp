@@ -112,7 +112,7 @@
 				<artifactId>spring-cloud-contract-maven-plugin</artifactId>
 				<extensions>true</extensions>
 				<configuration>
-					<packageWithBaseClasses>de.skuzzle.tally.service</packageWithBaseClasses>
+					<packageWithBaseClasses>de.skuzzle.cmp.service</packageWithBaseClasses>
 					<convertToYaml>true</convertToYaml>
 					<testFramework>JUNIT5</testFramework>
 				</configuration>
