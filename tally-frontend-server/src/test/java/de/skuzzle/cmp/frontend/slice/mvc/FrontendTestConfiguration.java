@@ -1,4 +1,4 @@
-package de.skuzzle.tally.frontend.slice.mvc;
+package de.skuzzle.cmp.frontend.slice.mvc;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;

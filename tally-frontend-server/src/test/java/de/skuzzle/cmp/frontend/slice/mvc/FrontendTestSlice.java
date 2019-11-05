@@ -1,4 +1,4 @@
-package de.skuzzle.tally.frontend.slice.mvc;
+package de.skuzzle.cmp.frontend.slice.mvc;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -13,7 +13,7 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.TestExecutionListeners.MergeMode;
 
 import de.skuzzle.cmp.frontend.Version;
-import de.skuzzle.tally.frontend.client.TestTallyClientConfigurer;
+import de.skuzzle.cmp.frontend.client.TestTallyClientConfigurer;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

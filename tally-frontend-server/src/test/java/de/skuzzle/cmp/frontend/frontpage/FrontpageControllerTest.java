@@ -14,11 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import de.skuzzle.cmp.frontend.auth.TestUserConfigurer;
 import de.skuzzle.cmp.frontend.client.BackendClient;
-import de.skuzzle.cmp.frontend.frontpage.FrontpageController;
-import de.skuzzle.tally.frontend.auth.TestUserConfigurer;
-import de.skuzzle.tally.frontend.client.TestResponses;
-import de.skuzzle.tally.frontend.slice.mvc.FrontendTestSlice;
+import de.skuzzle.cmp.frontend.client.TestResponses;
+import de.skuzzle.cmp.frontend.slice.mvc.FrontendTestSlice;
 
 @FrontendTestSlice
 @WebMvcTest(controllers = FrontpageController.class)

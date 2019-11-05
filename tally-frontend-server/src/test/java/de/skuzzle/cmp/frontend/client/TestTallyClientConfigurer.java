@@ -6,9 +6,7 @@ import org.mockito.Mockito;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.TestExecutionListener;
 
-import de.skuzzle.cmp.frontend.client.BackendClient;
-import de.skuzzle.cmp.frontend.client.RestTallyMetaInfoResponse;
-import de.skuzzle.tally.frontend.client.TestResponses.TallySheetResponseBuilder;
+import de.skuzzle.cmp.frontend.client.TestResponses.TallySheetResponseBuilder;
 
 public class TestTallyClientConfigurer implements TestExecutionListener {
 
