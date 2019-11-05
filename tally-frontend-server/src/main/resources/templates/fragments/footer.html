@@ -1,23 +1,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-<footer class="footer has-text-centered" th:fragment="footer">
+<footer class="footer" th:fragment="footer">
     <nav class="level">
         <div class="level-item">
             <div class="content">
-                <p>
-                    <strong>Count My Pizza</strong> by <a href="https://cv.skuzzle.de">Simon Taddiken</a>
-                    <br/>
-                    (Some) Icons made by <a href="https://www.flaticon.com/authors/adib-sulthon" title="Adib Sulthon">Adib Sulthon</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
-                    <br/>
-                    Source code available on <a href="https://github.com/skuzzle/cmp">GitHub</a>
-                </p>
-                <p class="is-size-7"><a href="https://status.countmy.pizza">Status</a> - Build: <span th:text="${version.version}">12</span></p>
+                <p class="is-size-7">
+                <a th:href="@{/imprint}">Imprint</a>
+                <br>
+                <a href="https://status.countmy.pizza">Status</a> - Build: <span th:text="${version.version}">12</span></p>
             </div>
         </div>
         
-        <div class="level-item" th:if="false">
+        <div class="level-item">
             <div class="content">
-                
+                <p class="is-size-7">
+                    <strong>Count My Pizza</strong> by <a href="https://cv.skuzzle.de">Simon Taddiken</a>
+                    <br>
+                    (Some) Icons made by <a href="https://www.flaticon.com/authors/adib-sulthon" title="Adib Sulthon">Adib Sulthon</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+                    <br>
+                    <span class="">Source code available on <a href="https://github.com/skuzzle/cmp">GitHub</a></span>
+                </p>
             </div>
         </div>
     </nav>
