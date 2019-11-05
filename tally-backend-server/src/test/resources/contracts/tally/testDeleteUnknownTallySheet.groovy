@@ -12,7 +12,7 @@ org.springframework.cloud.contract.spec.Contract.make {
         headers {}
         body([
             message: "unknownAdminKey",
-            origin: "de.skuzzle.cmp.service.TallySheetNotAvailableException"
+            origin: "de.skuzzle.cmp.counter.TallySheetNotAvailableException"
         ])
     }
 }
