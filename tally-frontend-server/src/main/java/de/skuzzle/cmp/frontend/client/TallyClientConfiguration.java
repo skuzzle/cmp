@@ -2,6 +2,7 @@ package de.skuzzle.cmp.frontend.client;
 
 import java.util.Arrays;
 
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -11,6 +12,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
+@EnableConfigurationProperties(TallyBackendProperties.class)
 public class TallyClientConfiguration {
 
     private final TallyBackendProperties tallyProperties;
