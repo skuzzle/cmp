@@ -17,7 +17,9 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .oauth2Login()
                 .and()
                 .csrf().disable()
-                .logout().logoutSuccessUrl("/");
+                .logout()
+                .logoutSuccessUrl("/")
+                .deleteCookies("JSESSIONID");
     }
 
     @Bean
