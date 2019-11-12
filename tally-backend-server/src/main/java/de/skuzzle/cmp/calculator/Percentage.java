@@ -47,7 +47,7 @@ public final class Percentage implements Comparable<Percentage> {
 
     @Override
     public int hashCode() {
-        return percentage.hashCode();
+        return rounded().hashCode();
     }
 
     @Override
@@ -56,13 +56,13 @@ public final class Percentage implements Comparable<Percentage> {
                 && compareTo(((Percentage) obj)) == 0;
     }
 
-    private BigDecimal scaled() {
+    private BigDecimal rounded() {
         return percentage.setScale(2, RoundingMode.HALF_UP);
     }
 
     @Override
     public int compareTo(Percentage o) {
-        return scaled().compareTo(o.scaled());
+        return rounded().compareTo(o.rounded());
     }
 
     @Override

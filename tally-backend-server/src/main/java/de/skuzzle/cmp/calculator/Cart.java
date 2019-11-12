@@ -40,6 +40,14 @@ public class Cart {
         return this.calculatedPrices;
     }
 
+    public Cart suggestTip(TipSuggestion tipSuggestion) {
+        Preconditions.checkArgument(tipSuggestion != null, "tipSuggestion must not be null");
+        CartTransaction.assertActiveTransaction();
+
+        orderingPersons.values().forEach(orderingPerson -> orderingPerson.suggestTip(tipSuggestion));
+        return this;
+    }
+
     private CalculatedPrices updateCalculation() {
         final Money totalOriginalPrice = calculateOriginalPrice();
         final Money absoluteGlobalDiscount = globalDiscount.getAbsoluteValue(totalOriginalPrice);
@@ -91,10 +99,20 @@ public class Cart {
         return this;
     }
 
+    public Cart withDiscountedPrice(Money discountedPrice) {
+        Preconditions.checkArgument(discountedPrice != null, "discountedPrice must not be null");
+        CartTransaction.assertActiveTransaction();
+
+        final Money discount = this.calculatedPrices.getOriginalPrice().minus(discountedPrice);
+        this.globalDiscount = Discount.absolute(discount);
+        return this;
+    }
+
     public String format() {
         final StringBuilder stringBuilder = new StringBuilder()
-                .append(this.calculatedPrices.format("Totals\t\t\t\t"))
-                .append("\n");
+                .append("\t\t\t\t\tPreis\tRbt.\tRbt.%\tRbt.Pr.\tTip\tTip%\tzu Zahlen").append("\n")
+                .append(this.calculatedPrices.format("Totals\t\t\t\t\t"))
+                .append("\n\n");
         for (final OrderingPerson orderingPerson : orderingPersons.values()) {
             stringBuilder.append(orderingPerson.format("\t")).append("\n");
         }

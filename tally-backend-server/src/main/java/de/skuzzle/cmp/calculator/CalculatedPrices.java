@@ -10,8 +10,14 @@ final class CalculatedPrices {
     private final Money absoluteTip;
     private final Percentage relativeTip;
 
-    public CalculatedPrices(Money originalPrice, Money discountedPrice, Money absoluteDiscount,
-            Percentage relativeDiscount, Money tippedDiscountedPrice, Money absoluteTip, Percentage relativeTip) {
+    public CalculatedPrices(Money originalPrice,
+            Money discountedPrice,
+            Money absoluteDiscount,
+            Percentage relativeDiscount,
+            Money tippedDiscountedPrice,
+            Money absoluteTip,
+            Percentage relativeTip) {
+
         this.originalPrice = originalPrice;
         this.discountedPrice = discountedPrice;
         this.absoluteDiscount = absoluteDiscount;
@@ -60,11 +66,23 @@ final class CalculatedPrices {
                 .append("\t")
                 .append(discountedPrice)
                 .append("\t")
-                .append(absoluteTip)
+                .append(dashForZero(absoluteTip))
                 .append("\t")
-                .append(relativeTip)
+                .append(dashForZero(relativeTip))
                 .append("\t")
                 .append(tippedDiscountedPrice)
                 .toString();
+    }
+
+    private String dashForZero(Money money) {
+        return Money.ZERO.equals(money)
+                ? "  "
+                : money.toString();
+    }
+
+    private String dashForZero(Percentage percentage) {
+        return Percentage.ZERO.equals(percentage)
+                ? "  "
+                : percentage.toString();
     }
 }

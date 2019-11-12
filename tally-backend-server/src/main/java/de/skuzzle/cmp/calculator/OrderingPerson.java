@@ -89,11 +89,21 @@ public class OrderingPerson {
         return this;
     }
 
+    OrderingPerson suggestTip(TipSuggestion tipSuggestion) {
+        CartTransaction.assertActiveTransaction();
+
+        final Money discountedPrice = this.calculatedPrices.getDiscountedPrice();
+        final Money suggestedTip = tipSuggestion.suggestTipFor(discountedPrice);
+
+        this.tip = Tip.absolute(suggestedTip);
+        return this;
+    }
+
     public String format(String prefix) {
         final StringBuilder stringBuilder = new StringBuilder()
                 .append(prefix)
                 .append(this.name)
-                .append(this.calculatedPrices.format("\t\t\t"))
+                .append(this.calculatedPrices.format("\t\t\t\t"))
                 .append("\n");
 
         for (final LineItem lineItem : this.lineItems) {

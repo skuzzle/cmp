@@ -1,5 +1,6 @@
 package de.skuzzle.cmp.calculator;
 
+import static de.skuzzle.cmp.calculator.Amount.times;
 import static de.skuzzle.cmp.calculator.Money.money;
 import static de.skuzzle.cmp.calculator.Percentage.percent;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,7 +17,7 @@ public class CartTest {
         return new Cart().transaction(transaction -> {
             final OrderingPerson simon = transaction.orderingPerson("Simon");
             simon.addLineItem(pizzaSalami);
-            simon.addLineItem(bread);
+            simon.addLineItem(bread.withAmount(Amount.times(2)));
             final OrderingPerson timo = transaction.orderingPerson("Timo");
             timo.addLineItem(pizzaTuna);
         });
@@ -28,7 +29,7 @@ public class CartTest {
 
         final CalculatedPrices totals = cart.getCalculatedPrices();
         assertPlausibleTotals(totals);
-        assertThat(totals.getOriginalPrice()).isEqualTo(money(30.0));
+        assertThat(totals.getOriginalPrice()).isEqualTo(money(35.0));
     }
 
     @Test
@@ -38,7 +39,7 @@ public class CartTest {
 
         final CalculatedPrices totals = cart.getCalculatedPrices();
         assertPlausibleTotals(totals);
-        assertThat(totals.getOriginalPrice()).isEqualTo(money(30));
+        assertThat(totals.getOriginalPrice()).isEqualTo(money(35));
     }
 
     @Test
@@ -48,7 +49,7 @@ public class CartTest {
 
         final CalculatedPrices totals = cart.getCalculatedPrices();
         assertPlausibleTotals(totals);
-        assertThat(totals.getOriginalPrice()).isEqualTo(money(30));
+        assertThat(totals.getOriginalPrice()).isEqualTo(money(35));
     }
 
     @Test
@@ -156,6 +157,45 @@ public class CartTest {
                     transaction.orderingPerson("Simon").payTip(Tip.relative(percent(0.1)));
                     transaction.orderingPerson("Timo").payTip(Tip.absolute(money(2.0)));
                 });
+        System.out.println(cart.format());
+    }
+
+    @Test
+    void testEcht() throws Exception {
+        final Cart cart = Cart.newEmptyCart()
+                .transaction(transaction -> {
+                    transaction.orderingPerson("Chris")
+                            .addLineItem(LineItem.withNameAndPrice("Pizza Brötchen", money(4.49)).withAmount(times(3)))
+                            .addLineItem(LineItem.withNameAndPrice("Knoblauch Dip", money(0.99)).withAmount(times(2)));
+                    transaction.orderingPerson("Simon")
+                            .payTip(Tip.absolute(money(1)))
+                            .addLineItem(LineItem.withNameAndPrice("Pizza Tuna 25cm", money(8.49)));
+                    transaction.orderingPerson("Timo")
+                            .addLineItem(LineItem.withNameAndPrice("Conchita 25cm", money(9.99)));
+                    transaction.orderingPerson("Robert")
+                            .addLineItem(LineItem.withNameAndPrice("Pizza Bombay 28cm", money(9.99)));
+                })
+                .transaction(transaction -> transaction.withDiscountedPrice(Money.money(35.44)));
+        System.out.println(cart.format());
+    }
+
+    @Test
+    void testEchtSuggestTip() throws Exception {
+        final Cart cart = Cart.newEmptyCart()
+                .transaction(transaction -> {
+                    transaction.orderingPerson("Chris")
+                            .addLineItem(LineItem.withNameAndPrice("Pizza Brötchen", money(4.49)).withAmount(times(3)))
+                            .addLineItem(LineItem.withNameAndPrice("Knoblauch Dip", money(0.99)).withAmount(times(2)));
+                    transaction.orderingPerson("Simon")
+                            .payTip(Tip.absolute(money(1)))
+                            .addLineItem(LineItem.withNameAndPrice("Pizza Tuna 25cm", money(8.49)));
+                    transaction.orderingPerson("Timo")
+                            .addLineItem(LineItem.withNameAndPrice("Conchita 25cm", money(9.99)));
+                    transaction.orderingPerson("Robert")
+                            .addLineItem(LineItem.withNameAndPrice("Pizza Bombay 28cm", money(9.99)));
+                })
+                .transaction(transaction -> transaction.withDiscountedPrice(Money.money(35.44)))
+                .transaction(transaction -> transaction.suggestTip(new TipSuggestion(percent(0.1), money(1))));
         System.out.println(cart.format());
     }
 }

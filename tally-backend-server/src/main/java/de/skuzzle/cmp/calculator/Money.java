@@ -26,6 +26,18 @@ public final class Money implements Comparable<Money> {
         return Percentage.percent(monetaryAmount.divide(other.monetaryAmount, CTX));
     }
 
+    public Money max(Money other) {
+        return this.compareTo(other) > 0
+                ? this
+                : other;
+    }
+
+    public Money min(Money other) {
+        return this.compareTo(other) < 0
+                ? this
+                : other;
+    }
+
     public Money plus(Percentage percentage) {
         return percentage.addHoundred().from(this);
     }
@@ -44,12 +56,12 @@ public final class Money implements Comparable<Money> {
 
     @Override
     public String toString() {
-        return scaled().toPlainString();
+        return rounded().toPlainString();
     }
 
     @Override
     public int hashCode() {
-        return monetaryAmount.hashCode();
+        return rounded().hashCode();
     }
 
     @Override
@@ -58,13 +70,13 @@ public final class Money implements Comparable<Money> {
                 && compareTo(((Money) obj)) == 0;
     }
 
-    private BigDecimal scaled() {
+    private BigDecimal rounded() {
         return monetaryAmount.setScale(2, RoundingMode.HALF_UP);
     }
 
     @Override
     public int compareTo(Money o) {
-        return scaled().compareTo(o.scaled());
+        return rounded().compareTo(o.rounded());
     }
 
 }
