@@ -103,7 +103,7 @@
 					<version>1.6.1</version>
 					<configuration>
 						<from>
-							<image>openjdk:12</image>
+							<image>openjdk:13</image>
 						</from>
 						<to>
 							<image>skuzzle/${project.artifactId}</image>
