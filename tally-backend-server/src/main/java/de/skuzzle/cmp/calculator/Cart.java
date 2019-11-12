@@ -55,13 +55,10 @@ public class Cart {
         final Money discountedPrice = totalOriginalPrice.minus(absoluteGlobalDiscount);
         final Percentage relativeDiscount = discountedPrice.inRelationTo(totalOriginalPrice).complementary();
 
-        Money absoluteTip = Money.ZERO;
-        for (final var orderingPerson : orderingPersons.values()) {
-            final var calculatedPrices = orderingPerson.updateCalculation(absoluteGlobalDiscount,
-                    totalOriginalPrice);
-
-            absoluteTip = absoluteTip.plus(calculatedPrices.getAbsoluteTip());
-        }
+        final Money absoluteTip = orderingPersons.values().stream()
+                .map(op -> op.updateCalculation(absoluteGlobalDiscount, totalOriginalPrice))
+                .map(CalculatedPrices::getAbsoluteTip)
+                .reduce(Money.ZERO, Money::plus);
 
         final Percentage relativeTip = absoluteTip.inRelationTo(discountedPrice);
         final Money tippedDiscountedPrice = discountedPrice.plus(absoluteTip);

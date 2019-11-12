@@ -50,14 +50,10 @@ public class OrderingPerson {
     CalculatedPrices updateCalculation(Money absoluteGlobalDiscount, Money totalOriginalPrice) {
         final Money originalPrice = calculateOriginalPrice();
 
-        Money discountedPrice = Money.ZERO;
-        for (final var lineItem : lineItems) {
-            final var calculatedPrices = lineItem.updateCalculation(
-                    absoluteGlobalDiscount,
-                    totalOriginalPrice);
-
-            discountedPrice = discountedPrice.plus(calculatedPrices.getDiscountedPrice());
-        }
+        final Money discountedPrice = lineItems.stream()
+                .map(li -> li.updateCalculation(absoluteGlobalDiscount, totalOriginalPrice))
+                .map(CalculatedPrices::getDiscountedPrice)
+                .reduce(Money.ZERO, Money::plus);
 
         final Money absoluteTip = tip.getAbsoluteValue(discountedPrice);
         final Percentage relativeDiscount = discountedPrice.inRelationTo(originalPrice).complementary();
