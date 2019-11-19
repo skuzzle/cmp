@@ -26,13 +26,14 @@
     </th:block>
 
     <div th:fragment="timelineIncrement(increment)" class="timeline-item">
-        <div class="timeline-marker"></div>
+        <div class="timeline-marker is-icon">
+            <a th:if="${tally.admin}" th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}" class="delete" title="Delete this increment"></a>
+        </div>
         <div class="timeline-content">
             <p th:text="${increment.getDescription()}">
                 Pizza
             </p>
             <p class="heading">
-                <a th:if="${tally.admin}" th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}" class="delete" title="Delete this increment">Delete</a>
                 <date-label th:text="${increment.incrementDateUTC}">2019-09-09</date-label>
             </p>
             <div class="tags" th:if="${increment.hasTags()}">
