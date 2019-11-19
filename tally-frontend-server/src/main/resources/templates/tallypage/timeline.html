@@ -26,7 +26,7 @@
     </th:block>
 
     <div th:fragment="timelineIncrement(increment)" class="timeline-item">
-        <div class="timeline-marker is-icon">
+        <div class="timeline-marker" th:classappend="${tally.admin} ? 'is-icon' : ''">
             <a th:if="${tally.admin}" th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}" class="delete" title="Delete this increment"></a>
         </div>
         <div class="timeline-content">
