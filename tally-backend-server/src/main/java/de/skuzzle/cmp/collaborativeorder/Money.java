@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.calculator;
+package de.skuzzle.cmp.collaborativeorder;
 
 import java.math.BigDecimal;
 import java.math.MathContext;

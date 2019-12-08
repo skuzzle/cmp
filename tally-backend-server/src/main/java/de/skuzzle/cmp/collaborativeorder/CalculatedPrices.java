@@ -1,6 +1,18 @@
-package de.skuzzle.cmp.calculator;
+package de.skuzzle.cmp.collaborativeorder;
+
+import com.google.common.base.Preconditions;
 
 final class CalculatedPrices {
+
+    private static final boolean ASSERT_CONSISTENCY = true;
+    public static final CalculatedPrices ZERO = new CalculatedPrices(
+            Money.ZERO,
+            Money.ZERO,
+            Money.ZERO,
+            Percentage.ZERO,
+            Money.ZERO,
+            Money.ZERO,
+            Percentage.ZERO);
 
     private final Money originalPrice;
     private final Money discountedPrice;
@@ -25,6 +37,29 @@ final class CalculatedPrices {
         this.tippedDiscountedPrice = tippedDiscountedPrice;
         this.relativeTip = relativeTip;
         this.absoluteTip = absoluteTip;
+
+        if (ASSERT_CONSISTENCY) {
+            checkConsistency();
+        }
+
+    }
+
+    void checkConsistency() {
+        Preconditions.checkArgument(
+                getAbsoluteDiscount().plus(getDiscountedPrice()).equals(getOriginalPrice()),
+                "Discount + DiscountedPrice should add up to OriginalPrice");
+
+        Preconditions.checkArgument(
+                getRelativeDiscount().complementary().from(getOriginalPrice()).equals(getDiscountedPrice()),
+                "Relative discount from OriginalPrice should give calculated DiscountedPrice");
+
+        Preconditions.checkArgument(
+                getAbsoluteTip().plus(getDiscountedPrice()).equals(getTippedDiscountedPrice()),
+                "AbsoluteTip + DiscountedPrice should give TippedDiscountedPrice");
+
+        Preconditions.checkArgument(
+                getDiscountedPrice().plus(getRelativeDiscount()).equals(getTippedDiscountedPrice()),
+                "RelativeTip + DiscountedPrice should give TippedDiscountedPrice");
     }
 
     public Money getOriginalPrice() {

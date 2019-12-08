@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.calculator;
+package de.skuzzle.cmp.collaborativeorder;
 
 public final class TipSuggestion {
 

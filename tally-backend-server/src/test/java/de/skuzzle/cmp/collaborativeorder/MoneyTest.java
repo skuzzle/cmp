@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.calculator;
+package de.skuzzle.cmp.collaborativeorder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -10,7 +10,7 @@ import nl.jqno.equalsverifier.Warning;
 public class MoneyTest {
 
     @Test
-    void testEquals() throws Exception {
+    void testEqualsContract() throws Exception {
         EqualsVerifier.forClass(Money.class)
                 .suppress(Warning.NULL_FIELDS)
                 .verify();

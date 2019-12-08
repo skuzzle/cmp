@@ -1,9 +1,10 @@
-package de.skuzzle.cmp.calculator;
+package de.skuzzle.cmp.collaborativeorder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
+import de.skuzzle.cmp.collaborativeorder.Percentage;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
