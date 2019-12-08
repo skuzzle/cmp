@@ -24,7 +24,7 @@ public class TimelineIncrement {
         return new TimelineIncrement(increment.getId(),
                 increment.getIncrementDateUTC(),
                 increment.getDescription(),
-                increment.getTags());
+                increment.getTags().all());
     }
 
     public String getId() {

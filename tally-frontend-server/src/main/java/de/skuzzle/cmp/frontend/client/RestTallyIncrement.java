@@ -34,8 +34,8 @@ public class RestTallyIncrement {
         return this.description;
     }
 
-    public Set<String> getTags() {
-        return this.tags;
+    public Tags getTags() {
+        return Tags.fromCollection(this.tags);
     }
 
     public LocalDateTime getIncrementDateUTC() {
