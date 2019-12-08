@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="formContent">
+    <div class="field">
+        <div class="control is-expanded">
+            <input-now name="incrementDateUTC" required="true" autofocus="true" title="The increment date"></input-now>
+        </div>
+    </div>
+    <div class="field">
+        <div class="control is-expanded">
+            <input class="input" name="description" type="text" placeholder="Description" title="Increment description (optional)" autofocus="true"  >
+        </div>
+    
+    </div>
+    <div class="field has-addons">
+        <div class="control is-expanded">
+            <input class="input" name="tags" type="tags" placeholder="Add some tags" title="Comma separated tags, leading and trailing spaces will be trimmed (optional)" autofocus="true"  >
+        </div>
+        <div class="control">
+            <input type="submit" class="button is-info" value="Create"/>
+        </div>
+    </div>
+</th:block>
+</html>
