@@ -47,7 +47,15 @@
     <div class="container">
         <div class="columns is-centered">
             <div class="column is-4">
-                <canvas th:replace="fragments/graph :: graph(data=${graph}, showYAxis=false)"></canvas>
+                <div class="card ">                 <canvas th:replace="fragments/graph :: graph(data=${graph}, showYAxis=false)"></canvas>
+                    <header class="card-header has-background-white-ter">   
+                        <p class="card-header-title has-text-centered">Total count</p>  
+                    </header>   
+                    <div class="card-content has-text-centered  ">  
+                        <canvas th:replace="fragments/graph :: graph(${graph})"></canvas>   
+                        <p class="title is-size-2 " title="Total count" th:text="${increments.total}">1234</p>  
+                    </div>  
+                </div>  
             </div>
         </div>
     </div>
