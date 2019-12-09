@@ -37,8 +37,8 @@ public final class Percentage implements Comparable<Percentage> {
         return money.multiply(percentage);
     }
 
-    public Percentage addHoundred() {
-        return new Percentage(HOUNDRED.percentage.add(percentage, CTX));
+    public Money addTo(Money money) {
+        return money.multiply(HOUNDRED.percentage.add(percentage, CTX));
     }
 
     public Percentage complementary() {

@@ -39,7 +39,7 @@ public final class Money implements Comparable<Money> {
     }
 
     public Money plus(Percentage percentage) {
-        return percentage.addHoundred().from(this);
+        return percentage.addTo(this);
     }
 
     public Money plus(Money other) {
