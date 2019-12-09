@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 
 final class CalculatedPrices {
 
-    private static final boolean ASSERT_CONSISTENCY = true;
+    private static final boolean ASSERT_CONSISTENCY_ON_CONSTRUCTION = true;
     public static final CalculatedPrices ZERO = new CalculatedPrices(
             Money.ZERO,
             Money.ZERO,
@@ -38,7 +38,7 @@ final class CalculatedPrices {
         this.relativeTip = relativeTip;
         this.absoluteTip = absoluteTip;
 
-        if (ASSERT_CONSISTENCY) {
+        if (ASSERT_CONSISTENCY_ON_CONSTRUCTION) {
             checkConsistency();
         }
 
