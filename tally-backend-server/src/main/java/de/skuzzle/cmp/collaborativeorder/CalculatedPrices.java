@@ -47,19 +47,23 @@ final class CalculatedPrices {
     void checkConsistency() {
         Preconditions.checkArgument(
                 getAbsoluteDiscount().plus(getDiscountedPrice()).equals(getOriginalPrice()),
-                "Discount + DiscountedPrice should add up to OriginalPrice");
+                "Discount (%s) + DiscountedPrice (%s) should add up to OriginalPrice (%s)",
+                getAbsoluteDiscount(), getDiscountedPrice(), getOriginalPrice());
 
         Preconditions.checkArgument(
                 getRelativeDiscount().complementary().from(getOriginalPrice()).equals(getDiscountedPrice()),
-                "Relative discount from OriginalPrice should give calculated DiscountedPrice");
+                "RelativeDiscount (%s) from OriginalPrice (%s) should give CalculatedDiscountedPrice (%s)",
+                getRelativeDiscount(), getOriginalPrice(), getDiscountedPrice());
 
         Preconditions.checkArgument(
                 getAbsoluteTip().plus(getDiscountedPrice()).equals(getTippedDiscountedPrice()),
-                "AbsoluteTip + DiscountedPrice should give TippedDiscountedPrice");
+                "AbsoluteTip (%s) + DiscountedPrice (%s) should give TippedDiscountedPrice (%s)",
+                getAbsoluteTip(), getDiscountedPrice(), getTippedDiscountedPrice());
 
         Preconditions.checkArgument(
-                getDiscountedPrice().plus(getRelativeDiscount()).equals(getTippedDiscountedPrice()),
-                "RelativeTip + DiscountedPrice should give TippedDiscountedPrice");
+                getDiscountedPrice().plus(getRelativeTip()).equals(getTippedDiscountedPrice()),
+                "RelativeTip (%s) + DiscountedPrice (%s) should give TippedDiscountedPrice (%s)",
+                getDiscountedPrice(), getRelativeDiscount(), getTippedDiscountedPrice());
     }
 
     public Money getOriginalPrice() {
