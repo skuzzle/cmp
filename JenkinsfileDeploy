@@ -3,12 +3,12 @@ pipeline {
   stages {
     stage('Undeploy') {
       steps {
-        sh 'cd /docker/tally-web && docker-compose down || true'
+        sh 'cd /docker/cmp && docker-compose down || true'
       }
     }
     stage('Deploy') {
       steps {
-        sh 'cd /docker/tally-web && docker-compose up -d'
+        sh 'cd /docker/cmp && docker-compose up -d'
       }
     }
   }

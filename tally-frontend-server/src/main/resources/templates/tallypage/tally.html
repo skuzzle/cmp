@@ -43,61 +43,40 @@
     </div>
 </section>
 
-
 <section class="section has-background-white-bis">
     <div class="container">
         <div class="columns is-centered">
             <div class="column is-4">
                 <div class="card ">
-                    <header class="card-header has-background-white-ter">
-                        <p class="card-header-title has-text-centered">Total count</p>
-                    </header>
-                    <div class="card-content has-text-centered  ">
-                        <canvas th:replace="fragments/graph :: graph(${graph})"></canvas>
-                        <p class="title is-size-2 " title="Total count" th:text="${increments.total}">1234</p>
-                    </div>
-                </div>
+                    <header class="card-header has-background-white-ter">   
+                        <p class="card-header-title has-text-centered">Total count</p>  
+                    </header>   
+                    <div class="card-content has-text-centered  ">  
+                        <canvas th:replace="fragments/graph :: graph(${graph})"></canvas>   
+                        <p class="title is-size-2 " title="Total count" th:text="${increments.total}">1234</p>  
+                    </div>  
+                </div>  
             </div>
         </div>
     </div>
 </section>
-
 
 <section class="section" th:if="${tally.admin}">
     <div class="container">
         <div class="columns is-centered">
             <div class="column is-4">
-                <form method="post" th:action="@{/{adminKey}(adminKey=${tally.adminKey})}">
-                    <div class="field">
-                        <div class="control is-expanded">
-                            <input-now name="incrementDateUTC" required="true" autofocus="true" title="The increment date"></input-now>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="control is-expanded">
-                            <input class="input" name="description" type="text" placeholder="Description" title="Increment description (optional)" autofocus="true"  >
-                        </div>
-
-                    </div>
-                    <div class="field has-addons">
-                        <div class="control is-expanded">
-                            <input class="input" name="tags" type="tags" placeholder="Add some tags" title="Comma separated tags, leading and trailing spaces will be trimmed (optional)" autofocus="true"  >
-                        </div>
-                        <div class="control">
-                            <input type="submit" class="button is-info" value="Increment"/>
-                        </div>
-                    </div>
-                </form>
+                <form method="post" th:action="@{/{adminKey}(adminKey=${tally.adminKey})}" th:insert="tallypage/createItem :: formContent"></form>
             </div>
         </div>
     </div>
 </section>
 
-
 <section class="section">
     <div class="container" th:insert="tallypage/timeline:: timeline(${timeline})"></div>
 </section>
-    <footer th:replace="fragments/footer :: footer"></footer>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+
 </body>
 
 </html>

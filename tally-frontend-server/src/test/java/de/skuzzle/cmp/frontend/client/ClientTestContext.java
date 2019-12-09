@@ -6,9 +6,7 @@ import java.util.function.Consumer;
 
 import org.springframework.test.context.TestContext;
 
-import de.skuzzle.cmp.frontend.client.BackendClient;
-import de.skuzzle.cmp.frontend.client.RestTallyMetaInfoResponse;
-import de.skuzzle.tally.frontend.client.TestResponses.TallySheetResponseBuilder;
+import de.skuzzle.cmp.frontend.client.TestResponses.TallySheetResponseBuilder;
 
 class ClientTestContext {
 

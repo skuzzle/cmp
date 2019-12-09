@@ -4,6 +4,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.common.base.Preconditions;
+
 public class RestIncrements {
 
     private final List<RestTallyIncrement> entries;
@@ -32,5 +34,13 @@ public class RestIncrements {
 
     public boolean isEmpty() {
         return entries.isEmpty();
+    }
+
+    public RestTallyIncrement getIncrement(String incrementId) {
+        Preconditions.checkArgument(incrementId != null, "incrementId must not be null");
+        return entries.stream()
+                .filter(increment -> increment.getId().equals(incrementId))
+                .findFirst()
+                .orElseThrow();
     }
 }

@@ -12,7 +12,7 @@ org.springframework.cloud.contract.spec.Contract.make {
         headers {}
         body([
             message: "unknownPublicKey",
-            origin: "de.skuzzle.tally.service.TallySheetNotAvailableException"
+            origin: "de.skuzzle.cmp.counter.TallySheetNotAvailableException"
         ])
     }
 }
