@@ -3,6 +3,8 @@ package de.skuzzle.cmp.collaborativeorder;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.Collection;
+import java.util.function.Function;
 
 import com.google.common.base.Preconditions;
 
@@ -16,6 +18,12 @@ public final class Money implements Comparable<Money> {
     private Money(BigDecimal monetaryAmount) {
         Preconditions.checkArgument(monetaryAmount != null, "amount must not be null");
         this.monetaryAmount = monetaryAmount;
+    }
+
+    public static <T> Money sumBy(Collection<T> collection, Function<? super T, Money> getter) {
+        return collection.stream()
+                .map(getter)
+                .reduce(ZERO, Money::plus);
     }
 
     public static Money money(double value) {

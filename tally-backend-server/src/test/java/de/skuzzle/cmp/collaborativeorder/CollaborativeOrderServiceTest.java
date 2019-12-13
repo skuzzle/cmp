@@ -23,17 +23,19 @@ public class CollaborativeOrderServiceTest {
 
     @Autowired
     private CollaborativeOrderService orders;
+    @Autowired
+    private ParticipationService participants;
 
     private CollaborativeOrder organizeSampleOrder() {
-        CollaborativeOrder order = orders.organizeCollaborativeOrder("Domino's", SIMON);
-        orders.join(order.getId(), SIMON);
-        orders.join(order.getId(), ROBERT);
+        final CollaborativeOrder order = orders.organizeCollaborativeOrder("Domino's", SIMON);
+        participants.join(order.getId(), SIMON);
+        participants.join(order.getId(), ROBERT);
 
-        order = orders.addLineItem(order.getId(), SIMON, pizzaTuna);
-        order = orders.addLineItem(order.getId(), SIMON, bread);
-        order = orders.addLineItem(order.getId(), ROBERT, pizzaSalami);
+        participants.addLineItem(order.getId(), SIMON, pizzaTuna);
+        participants.addLineItem(order.getId(), SIMON, bread);
+        participants.addLineItem(order.getId(), ROBERT, pizzaSalami);
 
-        return order;
+        return orders.getOrderForOrganizator(order.getId(), SIMON);
     }
 
     @Test
@@ -67,9 +69,9 @@ public class CollaborativeOrderServiceTest {
 
     @Test
     void testOrderWithTip() throws Exception {
-        CollaborativeOrder order = organizeSampleOrder();
-        order = orders.setTip(order.getId(), SIMON, Tip.absolute(money(1.0)));
-        order = orders.setTip(order.getId(), SIMON, Tip.relative(percent(0.1)));
+        final CollaborativeOrder order = organizeSampleOrder();
+        participants.setTip(order.getId(), SIMON, Tip.absolute(money(1.0)));
+        participants.setTip(order.getId(), SIMON, Tip.relative(percent(0.1)));
 
         final CalculatedPrices totals = order.getCalculatedPrices();
         totals.checkConsistency();
@@ -78,10 +80,10 @@ public class CollaborativeOrderServiceTest {
 
     @Test
     void testOrderWithTipAndDiscount() throws Exception {
-        CollaborativeOrder order = organizeSampleOrder();
-        order = orders.setDiscount(order.getId(), SIMON, Discount.absolute(money(5)));
-        order = orders.setTip(order.getId(), SIMON, Tip.absolute(money(1.0)));
-        order = orders.setTip(order.getId(), SIMON, Tip.relative(percent(0.1)));
+        final CollaborativeOrder order = organizeSampleOrder();
+        orders.setDiscount(order.getId(), SIMON, Discount.absolute(money(5)));
+        participants.setTip(order.getId(), SIMON, Tip.absolute(money(1.0)));
+        participants.setTip(order.getId(), SIMON, Tip.relative(percent(0.1)));
 
         final CalculatedPrices totals = order.getCalculatedPrices();
         totals.checkConsistency();
@@ -99,14 +101,14 @@ public class CollaborativeOrderServiceTest {
     void testJoinOrderClosedForJoining() throws Exception {
         final CollaborativeOrder order = organizeSampleOrder();
         orders.closeOrderForJoining(order.getId(), SIMON);
-        assertThatExceptionOfType(IllegalStateException.class).isThrownBy(() -> orders.join(order.getId(), TIMO));
+        assertThatExceptionOfType(IllegalStateException.class).isThrownBy(() -> participants.join(order.getId(), TIMO));
     }
 
     @Test
     void testJoinOrderClosedForModification() throws Exception {
         final CollaborativeOrder order = organizeSampleOrder();
         orders.closeOrderForModification(order.getId(), SIMON);
-        assertThatExceptionOfType(IllegalStateException.class).isThrownBy(() -> orders.join(order.getId(), TIMO));
+        assertThatExceptionOfType(IllegalStateException.class).isThrownBy(() -> participants.join(order.getId(), TIMO));
     }
 
     @Test
@@ -114,7 +116,7 @@ public class CollaborativeOrderServiceTest {
         final CollaborativeOrder order = organizeSampleOrder();
         orders.closeOrderForModification(order.getId(), SIMON);
         assertThatExceptionOfType(IllegalStateException.class)
-                .isThrownBy(() -> orders.setTip(order.getId(), SIMON, Tip.absolute(Money.ZERO)));
+                .isThrownBy(() -> participants.setTip(order.getId(), SIMON, Tip.absolute(Money.ZERO)));
     }
 
     @Test
@@ -122,7 +124,7 @@ public class CollaborativeOrderServiceTest {
         final CollaborativeOrder order = organizeSampleOrder();
         orders.closeOrderForModification(order.getId(), SIMON);
         assertThatExceptionOfType(IllegalStateException.class)
-                .isThrownBy(() -> orders.addLineItem(order.getId(), SIMON, bread));
+                .isThrownBy(() -> participants.addLineItem(order.getId(), SIMON, bread));
     }
 
     private Money priced(double value) {

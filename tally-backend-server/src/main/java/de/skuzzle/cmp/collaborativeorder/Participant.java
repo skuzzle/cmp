@@ -11,31 +11,30 @@ import com.google.common.base.Preconditions;
 public class Participant {
 
     private final String id;
-    private final String collaborativeOrderId;
     private final UserId userId;
     private final List<LineItem> lineItems;
+    private final List<Payment> payments;
     private Tip tip;
     private boolean readyToOrder;
 
     @Transient
     private CalculatedPrices calculatedPrices;
 
-    private Participant(String id, String collaborativeOrderId, UserId userId, List<LineItem> lineItems, Tip tip) {
+    private Participant(String id, UserId userId, List<LineItem> lineItems, List<Payment> payments, Tip tip) {
         this.id = id;
-        this.collaborativeOrderId = collaborativeOrderId;
         this.userId = userId;
         this.lineItems = lineItems;
+        this.payments = payments;
         this.tip = tip;
 
         this.calculatedPrices = CalculatedPrices.ZERO;
     }
 
-    public static Participant newParticipation(String collaborativeOrderId, UserId userId) {
-        Preconditions.checkArgument(collaborativeOrderId != null, "collaborativeOrderId must not be null");
+    static Participant newParticipation(UserId userId) {
         Preconditions.checkArgument(userId != null, "userId must not be null");
 
         final String id = UUID.randomUUID().toString();
-        return new Participant(id, collaborativeOrderId, userId, new ArrayList<>(), Tip.NONE);
+        return new Participant(id, userId, new ArrayList<>(), new ArrayList<>(), Tip.NONE);
     }
 
     public String getId() {
@@ -44,6 +43,10 @@ public class Participant {
 
     public UserId getUserId() {
         return this.userId;
+    }
+
+    public boolean hasUserId(UserId other) {
+        return this.getUserId().equals(other);
     }
 
     CollaborativeOrder leave(CollaborativeOrder order) {
@@ -61,14 +64,27 @@ public class Participant {
         return this.readyToOrder;
     }
 
-    void setReadyToOrder(boolean readyToOrder) {
+    Participant setReadyToOrder(boolean readyToOrder) {
         this.readyToOrder = readyToOrder;
+        return this;
+    }
+
+    Participant registerPayment(Payment payment) {
+        Preconditions.checkArgument(payment != null, "payment must not be null");
+        this.payments.add(payment);
+        return this;
+    }
+
+    public Money getPaidAmount() {
+        return Money.sumBy(payments, Payment::getAmountPaid);
+    }
+
+    public Money getAmountToPay() {
+        return calculatedPrices.getTippedDiscountedPrice();
     }
 
     Money sumOfItemPrices() {
-        return this.lineItems.stream()
-                .map(LineItem::getOriginalPrice)
-                .reduce(Money.ZERO, Money::plus);
+        return Money.sumBy(lineItems, LineItem::getOriginalPrice);
     }
 
     CalculatedPrices updateCalculation(Money absoluteGlobalDiscount, Money totalSumOfItemPrices) {
@@ -102,10 +118,5 @@ public class Participant {
         Preconditions.checkArgument(lineItem != null, "lineItem must not be null");
         this.lineItems.add(lineItem);
         return this;
-    }
-
-    void setCalculatedPrices(CalculatedPrices calculatedPrices) {
-        Preconditions.checkArgument(calculatedPrices != null);
-        this.calculatedPrices = calculatedPrices;
     }
 }
