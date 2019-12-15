@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.rest;
+package de.skuzzle.cmp.rest.counter;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -32,9 +32,9 @@ import de.skuzzle.cmp.counter.TallySheet;
 import de.skuzzle.cmp.counter.TallySheetNotAvailableException;
 import de.skuzzle.cmp.counter.UserAssignmentException;
 import de.skuzzle.cmp.counter.UserId;
+import de.skuzzle.cmp.ratelimit.ApiRateLimiter;
+import de.skuzzle.cmp.ratelimit.RateLimitExceededException;
 import de.skuzzle.cmp.rest.auth.TallyUser;
-import de.skuzzle.cmp.rest.ratelimit.ApiRateLimiter;
-import de.skuzzle.cmp.rest.ratelimit.RateLimitExceededException;
 
 @RestController
 public class TallyRestController {

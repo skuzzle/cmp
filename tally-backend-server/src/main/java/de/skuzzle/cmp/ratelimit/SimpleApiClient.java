@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.rest.ratelimit;
+package de.skuzzle.cmp.ratelimit;
 
 import com.google.common.util.concurrent.RateLimiter;
 

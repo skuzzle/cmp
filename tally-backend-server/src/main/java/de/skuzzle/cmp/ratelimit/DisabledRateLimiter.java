@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.rest.ratelimit;
+package de.skuzzle.cmp.ratelimit;
 
 public class DisabledRateLimiter<T> implements ApiRateLimiter<T> {
 

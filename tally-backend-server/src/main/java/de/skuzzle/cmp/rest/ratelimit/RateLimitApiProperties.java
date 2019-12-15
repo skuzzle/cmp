@@ -1,11 +1,11 @@
-package de.skuzzle.cmp.rest;
+package de.skuzzle.cmp.rest.ratelimit;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationProperties(prefix = "cmp.api")
-class ApiProperties {
+class RateLimitApiProperties {
     private Ratelimit ratelimit = new Ratelimit();
 
     public Ratelimit getRatelimit() {

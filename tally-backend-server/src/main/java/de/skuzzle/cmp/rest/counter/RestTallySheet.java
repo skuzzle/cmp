@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.rest;
+package de.skuzzle.cmp.rest.counter;
 
 import java.time.LocalDateTime;
 import java.util.List;
