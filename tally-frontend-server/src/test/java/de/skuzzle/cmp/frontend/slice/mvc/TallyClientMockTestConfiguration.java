@@ -5,8 +5,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 
-import de.skuzzle.cmp.frontend.client.BackendClient;
-import de.skuzzle.cmp.frontend.client.TestTallyClientConfigurer;
+import de.skuzzle.cmp.counter.client.BackendClient;
+import de.skuzzle.cmp.counter.client.TestTallyClientConfigurer;
 
 @Profile("slice.mvc")
 @TestConfiguration

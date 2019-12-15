@@ -12,8 +12,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.TestExecutionListeners.MergeMode;
 
-import de.skuzzle.cmp.frontend.Version;
-import de.skuzzle.cmp.frontend.client.TestTallyClientConfigurer;
+import de.skuzzle.cmp.Version;
+import de.skuzzle.cmp.counter.client.TestTallyClientConfigurer;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
