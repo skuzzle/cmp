@@ -2,6 +2,8 @@ package de.skuzzle.cmp.counter;
 
 import java.security.SecureRandom;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Component;
 
@@ -12,14 +14,11 @@ class RandomKeyGenerator {
     private static final char[] chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 
     public String generatePublicKey(int length) {
-        final StringBuilder result = new StringBuilder(length);
-        for (int i = 0; i < length; ++i) {
-            final int idx = rnd.nextInt(chars.length);
-            final char c = chars[idx];
-            result.append(c);
-        }
-
-        return result.toString();
+        return IntStream.range(0, length)
+                .map(i -> rnd.nextInt(chars.length))
+                .map(idx -> chars[idx])
+                .mapToObj(Character::toString)
+                .collect(Collectors.joining());
     }
 
     public String generateAdminKey() {
