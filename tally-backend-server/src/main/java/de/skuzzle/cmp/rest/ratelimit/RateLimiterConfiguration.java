@@ -9,13 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import de.skuzzle.cmp.common.ratelimit.ApiClient;
+import de.skuzzle.cmp.common.ratelimit.ApiRateLimiter;
+import de.skuzzle.cmp.common.ratelimit.ClientIdentificator;
+import de.skuzzle.cmp.common.ratelimit.DisabledRateLimiter;
+import de.skuzzle.cmp.common.ratelimit.MemoryCacheRateLimiter;
+import de.skuzzle.cmp.common.ratelimit.RemoteIpClientIdentificator;
 import de.skuzzle.cmp.counter.domain.TallyServiceConfiguration;
-import de.skuzzle.cmp.ratelimit.ApiClient;
-import de.skuzzle.cmp.ratelimit.ApiRateLimiter;
-import de.skuzzle.cmp.ratelimit.ClientIdentificator;
-import de.skuzzle.cmp.ratelimit.DisabledRateLimiter;
-import de.skuzzle.cmp.ratelimit.MemoryCacheRateLimiter;
-import de.skuzzle.cmp.ratelimit.RemoteIpClientIdentificator;
 import de.skuzzle.cmp.rest.auth.TallyUser;
 import de.skuzzle.cmp.rest.ratelimit.RateLimitApiProperties.Ratelimit;
 

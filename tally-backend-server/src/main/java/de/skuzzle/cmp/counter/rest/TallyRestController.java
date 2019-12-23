@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.skuzzle.cmp.common.ratelimit.ApiRateLimiter;
+import de.skuzzle.cmp.common.ratelimit.RateLimitExceededException;
 import de.skuzzle.cmp.counter.domain.IncrementNotAvailableException;
 import de.skuzzle.cmp.counter.domain.IncrementQuery;
 import de.skuzzle.cmp.counter.domain.IncrementQueryResult;
@@ -32,8 +34,6 @@ import de.skuzzle.cmp.counter.domain.TallySheet;
 import de.skuzzle.cmp.counter.domain.TallySheetNotAvailableException;
 import de.skuzzle.cmp.counter.domain.UserAssignmentException;
 import de.skuzzle.cmp.counter.domain.UserId;
-import de.skuzzle.cmp.ratelimit.ApiRateLimiter;
-import de.skuzzle.cmp.ratelimit.RateLimitExceededException;
 import de.skuzzle.cmp.rest.auth.TallyUser;
 
 @RestController
