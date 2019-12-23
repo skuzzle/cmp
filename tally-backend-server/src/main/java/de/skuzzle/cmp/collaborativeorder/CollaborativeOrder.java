@@ -12,7 +12,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.google.common.base.Preconditions;
 
-import de.skuzzle.cmp.collections.Lists;
+import de.skuzzle.cmp.common.collections.Lists;
+import de.skuzzle.cmp.common.table.ConsoleTable;
+import de.skuzzle.cmp.common.table.RowData;
+
 import io.micrometer.core.instrument.Metrics;
 
 @Document
@@ -244,5 +247,24 @@ public class CollaborativeOrder {
             Metrics.timer("cart_transaction").record(duration, TimeUnit.NANOSECONDS);
         }
     }
-
+    
+    @Override
+    public String toString() {
+        return toTable().toString();
+    }
+    
+    ConsoleTable toTable() {
+        final ConsoleTable table = ConsoleTable.withHeaders("Name", "Amount", "Single", "Position", "Disc %", "Disc", "Disc Price", "Tip %", "Tip", "Tipped price");
+        table.addRow(RowData.of(
+                "Totals", "", "", 
+                calculatedPrices.getOriginalPrice(),
+                calculatedPrices.getRelativeDiscount(),
+                calculatedPrices.getAbsoluteDiscount(),
+                calculatedPrices.getDiscountedPrice(), 
+                calculatedPrices.getRelativeTip(),
+                calculatedPrices.getAbsoluteTip(),
+                calculatedPrices.getTippedDiscountedPrice()));
+        participants.forEach(participant -> participant.toTable(table));
+        return table;
+    }
 }

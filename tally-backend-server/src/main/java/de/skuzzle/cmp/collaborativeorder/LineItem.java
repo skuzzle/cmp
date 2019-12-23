@@ -4,6 +4,9 @@ import org.springframework.data.annotation.Transient;
 
 import com.google.common.base.Preconditions;
 
+import de.skuzzle.cmp.common.table.ConsoleTable;
+import de.skuzzle.cmp.common.table.RowData;
+
 public class LineItem {
 
     private final Money singlePrice;
@@ -81,5 +84,18 @@ public class LineItem {
     @Override
     public String toString() {
         return this.amount + " " + this.productName + ": " + this.singlePrice;
+    }
+
+    void toTable(ConsoleTable table) {
+         table.addRow(RowData.of("    " + productName, 
+                 amount, 
+                 singlePrice, 
+                 calculatedPrices.getOriginalPrice(),
+                 calculatedPrices.getRelativeDiscount(),
+                 calculatedPrices.getAbsoluteDiscount(),
+                 calculatedPrices.getDiscountedPrice(), 
+                 calculatedPrices.getRelativeTip(),
+                 calculatedPrices.getAbsoluteTip(),
+                 calculatedPrices.getTippedDiscountedPrice()));
     }
 }
