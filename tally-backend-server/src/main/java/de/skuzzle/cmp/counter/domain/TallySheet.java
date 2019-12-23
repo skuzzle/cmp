@@ -155,7 +155,7 @@ public class TallySheet implements ShallowTallySheet {
     public void incrementWith(TallyIncrement increment) {
         Preconditions.checkArgument(increment != null, "increment must not be null");
         Lists.firstIndexOf(increments, other -> other.getId().equals(increment.getId()))
-                .orElseThrow(() -> new IllegalArgumentException(
+                .ifPresent(index -> new IllegalArgumentException(
                         String.format("Increment with id %s already exists in tally sheet with id %s",
                                 increment.getId(), getId())));
 
