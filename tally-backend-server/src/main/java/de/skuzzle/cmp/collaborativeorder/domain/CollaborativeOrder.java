@@ -13,9 +13,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.google.common.base.Preconditions;
 
 import de.skuzzle.cmp.common.collections.Lists;
+import de.skuzzle.cmp.common.table.Column;
 import de.skuzzle.cmp.common.table.ConsoleTable;
 import de.skuzzle.cmp.common.table.RowData;
-
 import io.micrometer.core.instrument.Metrics;
 
 @Document
@@ -247,20 +247,31 @@ public class CollaborativeOrder {
             Metrics.timer("cart_transaction").record(duration, TimeUnit.NANOSECONDS);
         }
     }
-    
+
     @Override
     public String toString() {
         return toTable().toString();
     }
-    
+
     ConsoleTable toTable() {
-        final ConsoleTable table = ConsoleTable.withHeaders("Name", "Amount", "Single", "Position", "Disc %", "Disc", "Disc Price", "Tip %", "Tip", "Tipped price");
+        final ConsoleTable table = ConsoleTable.withColumns(
+                Column.leftAlignedWithName("Name"),
+                Column.rightAlignedWithName("Amount"),
+                Column.rightAlignedWithName("Single"),
+                Column.rightAlignedWithName("Position"),
+                Column.rightAlignedWithName("Disc %"),
+                Column.rightAlignedWithName("Disc"),
+                Column.rightAlignedWithName("Disc Price"),
+                Column.rightAlignedWithName("Tip %"),
+                Column.rightAlignedWithName("Tip"),
+                Column.rightAlignedWithName("Tipped price"));
+
         table.addRow(RowData.of(
-                "Totals", "", "", 
+                "Totals", "", "",
                 calculatedPrices.getOriginalPrice(),
                 calculatedPrices.getRelativeDiscount(),
                 calculatedPrices.getAbsoluteDiscount(),
-                calculatedPrices.getDiscountedPrice(), 
+                calculatedPrices.getDiscountedPrice(),
                 calculatedPrices.getRelativeTip(),
                 calculatedPrices.getAbsoluteTip(),
                 calculatedPrices.getTippedDiscountedPrice()));
