@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -155,25 +154,22 @@ public class TallySheet implements ShallowTallySheet {
 
     public void incrementWith(TallyIncrement increment) {
         Preconditions.checkArgument(increment != null, "increment must not be null");
-        final boolean idExists = firstIndexOf(increments, other -> other.getId().equals(increment.getId())) >= 0;
-        Preconditions.checkArgument(!idExists, "Increment with id %s already exists in tally sheet with id %s",
-                increment.getId(), getId());
+        Lists.firstIndexOf(increments, other -> other.getId().equals(increment.getId()))
+                .orElseThrow(() -> new IllegalArgumentException(
+                        String.format("Increment with id %s already exists in tally sheet with id %s",
+                                increment.getId(), getId())));
 
         this.increments.add(increment);
     }
 
     public void updateIncrement(TallyIncrement increment) {
         Preconditions.checkArgument(increment != null, "increment must not be null");
-        final int idx = firstIndexOf(increments, other -> other.getId().equals(increment.getId()));
-        final boolean idExists = idx >= 0;
-        Preconditions.checkArgument(idExists, "Increment with id %s does not exist in tally sheet with id %s",
-                increment.getId(), getId());
+        final int idx = Lists.firstIndexOf(increments, other -> other.getId().equals(increment.getId()))
+                .orElseThrow(() -> new IllegalArgumentException(
+                        String.format("Increment with id %s does not exist in tally sheet with id %s",
+                                increment.getId(), getId())));
 
         this.increments.set(idx, increment);
-    }
-
-    private <T> int firstIndexOf(List<T> list, Predicate<? super T> p) {
-        return Lists.firstIndexOf(list, p);
     }
 
     public void changeNameTo(String newName) {

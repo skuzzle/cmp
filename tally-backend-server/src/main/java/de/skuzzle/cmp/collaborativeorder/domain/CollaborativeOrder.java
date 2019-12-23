@@ -200,8 +200,8 @@ public class CollaborativeOrder {
     public Participant participantWithId(UserId userId) {
         Preconditions.checkArgument(userId != null, "userId must not be null");
 
-        final int i = Lists.firstIndexOf(participants, p -> p.hasUserId(userId));
-        Preconditions.checkArgument(i >= 0, "Collaborative order does not have a participant with user id %s", userId);
+        final int i = Lists.firstIndexOf(participants, p -> p.hasUserId(userId))
+                .orElseThrow(() -> new UnknownParticipantException(userId.toString()));
         return participants.get(i);
     }
 

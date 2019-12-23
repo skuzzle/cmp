@@ -100,10 +100,22 @@ public class CollaborativeOrderServiceTest {
     }
 
     @Test
+    void testAccessUnknownOrder() throws Exception {
+        assertThatExceptionOfType(UnknownOrderException.class)
+                .isThrownBy(() -> orders.getOrderForOrganizator("unknownid", SIMON));
+    }
+
+    @Test
     void testUpdateForeignOrder() throws Exception {
         final CollaborativeOrder order = orders.organizeCollaborativeOrder("Test", SIMON);
-        assertThatExceptionOfType(Exception.class)
+        assertThatExceptionOfType(UnknownOrderException.class)
                 .isThrownBy(() -> orders.setDiscount(order.getId(), ROBERT, Discount.NONE));
+    }
+
+    @Test
+    void testJoinUnknownOrder() throws Exception {
+        assertThatExceptionOfType(UnknownOrderException.class)
+                .isThrownBy(() -> participants.join("unknownid", ROBERT));
     }
 
     @Test

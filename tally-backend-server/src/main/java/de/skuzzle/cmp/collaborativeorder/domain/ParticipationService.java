@@ -15,47 +15,47 @@ public class ParticipationService {
 
     // participant view
 
-    public Participant join(String collaborativeOrderId, UserId userId) {
+    private CollaborativeOrder getOrder(String collaborativeOrderId) {
         Preconditions.checkArgument(collaborativeOrderId != null, "collaborativeOrderId must not be null");
-        final CollaborativeOrder collaborativeOrder = collaborativeOrderRepository.findById(collaborativeOrderId)
-                .orElseThrow();
+        return collaborativeOrderRepository.findById(collaborativeOrderId)
+                .orElseThrow(() -> new UnknownOrderException(collaborativeOrderId));
+    }
 
+    public Participant join(String collaborativeOrderId, UserId userId) {
+        final CollaborativeOrder collaborativeOrder = getOrder(collaborativeOrderId);
         final Participant participant = collaborativeOrder.incoporateUser(userId);
         collaborativeOrderRepository.save(collaborativeOrder);
         return participant;
     }
 
     public void leave(String collaborativeOrderId, UserId userId) {
-        final CollaborativeOrder collaborativeOrder = collaborativeOrderRepository.findById(collaborativeOrderId)
-                .orElseThrow();
+        final CollaborativeOrder collaborativeOrder = getOrder(collaborativeOrderId);
         collaborativeOrder.expel(userId);
         collaborativeOrderRepository.save(collaborativeOrder);
     }
 
     public Participant addLineItem(String collaborativeOrderId, UserId userId, LineItem lineItem) {
-        final CollaborativeOrder order = collaborativeOrderRepository.findById(collaborativeOrderId).orElseThrow();
-        final Participant participant = order.addLineItem(userId, lineItem);
-        collaborativeOrderRepository.save(order);
+        final CollaborativeOrder collaborativeOrder = getOrder(collaborativeOrderId);
+        final Participant participant = collaborativeOrder.addLineItem(userId, lineItem);
+        collaborativeOrderRepository.save(collaborativeOrder);
         return participant;
     }
 
     public Participant payTip(String collaborativeOrderId, UserId userId, Tip tip) {
-        final CollaborativeOrder order = collaborativeOrderRepository.findById(collaborativeOrderId).orElseThrow();
-        final Participant participant = order.withTipBy(userId, tip);
-        collaborativeOrderRepository.save(order);
+        final CollaborativeOrder collaborativeOrder = getOrder(collaborativeOrderId);
+        final Participant participant = collaborativeOrder.withTipBy(userId, tip);
+        collaborativeOrderRepository.save(collaborativeOrder);
         return participant;
     }
 
     public Participant setReadyToOrder(String collaborativeOrderId, UserId userId, boolean readyToOrder) {
-        final CollaborativeOrder order = collaborativeOrderRepository.findById(collaborativeOrderId).orElseThrow();
-        final Participant participant = order.participantReady(userId, readyToOrder);
-        collaborativeOrderRepository.save(order);
+        final CollaborativeOrder collaborativeOrder = getOrder(collaborativeOrderId);
+        final Participant participant = collaborativeOrder.participantReady(userId, readyToOrder);
+        collaborativeOrderRepository.save(collaborativeOrder);
         return participant;
     }
 
     public Participant getParticipation(String collaborativeOrderId, UserId userId) {
-        final CollaborativeOrder collaborativeOrder = collaborativeOrderRepository.findById(collaborativeOrderId)
-                .orElseThrow();
-        return collaborativeOrder.participantWithId(userId);
+        return getOrder(collaborativeOrderId).participantWithId(userId);
     }
 }

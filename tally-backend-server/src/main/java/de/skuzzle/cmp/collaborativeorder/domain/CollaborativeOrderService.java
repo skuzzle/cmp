@@ -1,11 +1,13 @@
 package de.skuzzle.cmp.collaborativeorder.domain;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import com.google.common.base.Preconditions;
 
 @Component
 public class CollaborativeOrderService {
+
+    private static final Logger log = LoggerFactory.getLogger(CollaborativeOrderService.class);
 
     private final CollaborativeOrderRepository collaborativeOrderRepository;
 
@@ -19,9 +21,14 @@ public class CollaborativeOrderService {
     }
 
     public CollaborativeOrder getOrderForOrganizator(String collaborativeOrderId, UserId organisatorId) {
-        final CollaborativeOrder order = collaborativeOrderRepository.findById(collaborativeOrderId).orElseThrow();
-        Preconditions.checkArgument(order.isOrganizedBy(organisatorId), "%s is not the organisator of order with id %s",
-                collaborativeOrderId);
+        final CollaborativeOrder order = collaborativeOrderRepository.findById(collaborativeOrderId)
+                .orElseThrow(() -> new UnknownOrderException(collaborativeOrderId));
+
+        if (!order.isOrganizedBy(organisatorId)) {
+            log.warn("User {} tried to access order {} but is not the organisator", organisatorId,
+                    collaborativeOrderId);
+            throw new UnknownOrderException(collaborativeOrderId);
+        }
         return order;
     }
 
