@@ -30,6 +30,14 @@ final class CalculatedPrices {
             Money absoluteTip,
             Percentage relativeTip) {
 
+        Preconditions.checkArgument(originalPrice != null, "originalPrice must not be null");
+        Preconditions.checkArgument(discountedPrice != null, "discountedPrice must not be null");
+        Preconditions.checkArgument(absoluteDiscount != null, "absoluteDiscount must not be null");
+        Preconditions.checkArgument(relativeDiscount != null, "relativeDiscount must not be null");
+        Preconditions.checkArgument(tippedDiscountedPrice != null, "tippedDiscountedPrice must not be null");
+        Preconditions.checkArgument(absoluteTip != null, "absoluteTip must not be null");
+        Preconditions.checkArgument(relativeTip != null, "relativeTip must not be null");
+        
         this.originalPrice = originalPrice;
         this.discountedPrice = discountedPrice;
         this.absoluteDiscount = absoluteDiscount;
@@ -92,36 +100,5 @@ final class CalculatedPrices {
 
     public Percentage getRelativeTip() {
         return this.relativeTip;
-    }
-
-    public String format(String prefix) {
-        return new StringBuilder()
-                .append(prefix)
-                .append(originalPrice)
-                .append("\t")
-                .append(absoluteDiscount)
-                .append("\t")
-                .append(relativeDiscount)
-                .append("\t")
-                .append(discountedPrice)
-                .append("\t")
-                .append(dashForZero(absoluteTip))
-                .append("\t")
-                .append(dashForZero(relativeTip))
-                .append("\t")
-                .append(tippedDiscountedPrice)
-                .toString();
-    }
-
-    private String dashForZero(Money money) {
-        return Money.ZERO.equals(money)
-                ? "  "
-                : money.toString();
-    }
-
-    private String dashForZero(Percentage percentage) {
-        return Percentage.ZERO.equals(percentage)
-                ? "  "
-                : percentage.toString();
     }
 }
