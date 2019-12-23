@@ -1,12 +1,12 @@
-package de.skuzzle.cmp.rest.counter;
+package de.skuzzle.cmp.counter.rest;
 
 import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Preconditions;
 
-import de.skuzzle.cmp.counter.IncrementQueryResult;
-import de.skuzzle.cmp.counter.TallyIncrement;
+import de.skuzzle.cmp.counter.domain.IncrementQueryResult;
+import de.skuzzle.cmp.counter.domain.TallyIncrement;
 
 public class RestIncrements {
 

@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import de.skuzzle.cmp.counter.TallyServiceConfiguration;
+import de.skuzzle.cmp.counter.domain.TallyServiceConfiguration;
 import de.skuzzle.cmp.ratelimit.ApiClient;
 import de.skuzzle.cmp.ratelimit.ApiRateLimiter;
 import de.skuzzle.cmp.ratelimit.ClientIdentificator;

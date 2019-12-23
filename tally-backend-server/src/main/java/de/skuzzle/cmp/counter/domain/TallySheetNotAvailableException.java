@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.counter;
+package de.skuzzle.cmp.counter.domain;
 
 public class TallySheetNotAvailableException extends RuntimeException {
 

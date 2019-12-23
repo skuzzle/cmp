@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.counter;
+package de.skuzzle.cmp.counter.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -14,14 +14,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import de.skuzzle.cmp.counter.IncrementNotAvailableException;
-import de.skuzzle.cmp.counter.ShallowTallySheet;
-import de.skuzzle.cmp.counter.TallyIncrement;
-import de.skuzzle.cmp.counter.TallyRepository;
-import de.skuzzle.cmp.counter.TallyService;
-import de.skuzzle.cmp.counter.TallySheet;
-import de.skuzzle.cmp.counter.TallySheetNotAvailableException;
-import de.skuzzle.cmp.counter.UserId;
+import de.skuzzle.cmp.counter.domain.IncrementNotAvailableException;
+import de.skuzzle.cmp.counter.domain.ShallowTallySheet;
+import de.skuzzle.cmp.counter.domain.TallyIncrement;
+import de.skuzzle.cmp.counter.domain.TallyRepository;
+import de.skuzzle.cmp.counter.domain.TallyService;
+import de.skuzzle.cmp.counter.domain.TallySheet;
+import de.skuzzle.cmp.counter.domain.TallySheetNotAvailableException;
+import de.skuzzle.cmp.counter.domain.UserId;
 
 @SpringBootTest
 public class TallyServiceIntegrationTest {

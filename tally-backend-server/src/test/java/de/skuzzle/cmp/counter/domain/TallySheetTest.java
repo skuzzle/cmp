@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.counter;
+package de.skuzzle.cmp.counter.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -10,12 +10,12 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import de.skuzzle.cmp.counter.IncrementQuery;
-import de.skuzzle.cmp.counter.IncrementQueryResult;
-import de.skuzzle.cmp.counter.TallyIncrement;
-import de.skuzzle.cmp.counter.TallySheet;
-import de.skuzzle.cmp.counter.UserAssignmentException;
-import de.skuzzle.cmp.counter.UserId;
+import de.skuzzle.cmp.counter.domain.IncrementQuery;
+import de.skuzzle.cmp.counter.domain.IncrementQueryResult;
+import de.skuzzle.cmp.counter.domain.TallyIncrement;
+import de.skuzzle.cmp.counter.domain.TallySheet;
+import de.skuzzle.cmp.counter.domain.UserAssignmentException;
+import de.skuzzle.cmp.counter.domain.UserId;
 
 public class TallySheetTest {
     

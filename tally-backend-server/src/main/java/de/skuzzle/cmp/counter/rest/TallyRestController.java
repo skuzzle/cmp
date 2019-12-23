@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.rest.counter;
+package de.skuzzle.cmp.counter.rest;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -23,15 +23,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.skuzzle.cmp.counter.IncrementNotAvailableException;
-import de.skuzzle.cmp.counter.IncrementQuery;
-import de.skuzzle.cmp.counter.IncrementQueryResult;
-import de.skuzzle.cmp.counter.ShallowTallySheet;
-import de.skuzzle.cmp.counter.TallyService;
-import de.skuzzle.cmp.counter.TallySheet;
-import de.skuzzle.cmp.counter.TallySheetNotAvailableException;
-import de.skuzzle.cmp.counter.UserAssignmentException;
-import de.skuzzle.cmp.counter.UserId;
+import de.skuzzle.cmp.counter.domain.IncrementNotAvailableException;
+import de.skuzzle.cmp.counter.domain.IncrementQuery;
+import de.skuzzle.cmp.counter.domain.IncrementQueryResult;
+import de.skuzzle.cmp.counter.domain.ShallowTallySheet;
+import de.skuzzle.cmp.counter.domain.TallyService;
+import de.skuzzle.cmp.counter.domain.TallySheet;
+import de.skuzzle.cmp.counter.domain.TallySheetNotAvailableException;
+import de.skuzzle.cmp.counter.domain.UserAssignmentException;
+import de.skuzzle.cmp.counter.domain.UserId;
 import de.skuzzle.cmp.ratelimit.ApiRateLimiter;
 import de.skuzzle.cmp.ratelimit.RateLimitExceededException;
 import de.skuzzle.cmp.rest.auth.TallyUser;
@@ -164,19 +164,19 @@ public class TallyRestController {
 
     @ExceptionHandler(UserAssignmentException.class)
     public ResponseEntity<RestErrorMessage> onUserAssignmentFailed(UserAssignmentException e) {
-        final RestErrorMessage body = RestErrorMessage.of(e.getMessage(), e.getClass().getName());
+        final RestErrorMessage body = RestErrorMessage.of(e.getMessage(), e.getClass().getSimpleName());
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(RateLimitExceededException.class)
     public ResponseEntity<RestErrorMessage> onRateLimitExceeded(RateLimitExceededException e) {
-        final RestErrorMessage body = RestErrorMessage.of(e.getMessage(), e.getClass().getName());
+        final RestErrorMessage body = RestErrorMessage.of(e.getMessage(), e.getClass().getSimpleName());
         return new ResponseEntity<>(body, HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
     }
 
     @ExceptionHandler(value = { TallySheetNotAvailableException.class, IncrementNotAvailableException.class })
     public ResponseEntity<RestErrorMessage> onTallySheetNotAvailable(Exception e) {
-        final RestErrorMessage body = RestErrorMessage.of(e.getMessage(), e.getClass().getName());
+        final RestErrorMessage body = RestErrorMessage.of(e.getMessage(), e.getClass().getSimpleName());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 

@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.rest.counter;
+package de.skuzzle.cmp.counter.rest;
 
 import com.google.common.base.Preconditions;
 

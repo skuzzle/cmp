@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.counter;
+package de.skuzzle.cmp.counter.domain;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

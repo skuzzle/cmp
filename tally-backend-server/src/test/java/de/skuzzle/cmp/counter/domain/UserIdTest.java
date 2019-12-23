@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.counter;
+package de.skuzzle.cmp.counter.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
-import de.skuzzle.cmp.counter.UserId;
+import de.skuzzle.cmp.counter.domain.UserId;
 
 public class UserIdTest {
 

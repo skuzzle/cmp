@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.rest.counter;
+package de.skuzzle.cmp.counter.rest;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
-import de.skuzzle.cmp.counter.TallyIncrement;
+import de.skuzzle.cmp.counter.domain.TallyIncrement;
 
 public class RestTallyIncrement {
 

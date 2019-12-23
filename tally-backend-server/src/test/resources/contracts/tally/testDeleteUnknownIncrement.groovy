@@ -12,7 +12,7 @@ org.springframework.cloud.contract.spec.Contract.make {
         headers {}
         body([
             message: "unknownIncrementId",
-            origin: "de.skuzzle.cmp.counter.IncrementNotAvailableException"
+            origin: "IncrementNotAvailableException"
         ])
     }
 }

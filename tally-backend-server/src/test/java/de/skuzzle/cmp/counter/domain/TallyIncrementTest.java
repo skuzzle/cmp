@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.counter;
+package de.skuzzle.cmp.counter.domain;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import de.skuzzle.cmp.counter.TallyIncrement;
+import de.skuzzle.cmp.counter.domain.TallyIncrement;
 
 public class TallyIncrementTest {
 

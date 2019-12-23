@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.rest.counter;
+package de.skuzzle.cmp.counter.rest;
 
 public class RestTallyMetaInfoResponse {
 

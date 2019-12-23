@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.rest.counter;
+package de.skuzzle.cmp.counter.rest;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
-import de.skuzzle.cmp.counter.ShallowTallySheet;
-import de.skuzzle.cmp.counter.UserId;
+import de.skuzzle.cmp.counter.domain.ShallowTallySheet;
+import de.skuzzle.cmp.counter.domain.UserId;
 
 public class RestTallySheet {
 

@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.counter;
+package de.skuzzle.cmp.counter.domain;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
@@ -14,11 +14,11 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.web.context.WebApplicationContext;
 
-import de.skuzzle.cmp.counter.RandomKeyGenerator;
-import de.skuzzle.cmp.counter.TallyIncrement;
-import de.skuzzle.cmp.counter.TallyService;
-import de.skuzzle.cmp.counter.TallySheet;
-import de.skuzzle.cmp.counter.UserId;
+import de.skuzzle.cmp.counter.domain.RandomKeyGenerator;
+import de.skuzzle.cmp.counter.domain.TallyIncrement;
+import de.skuzzle.cmp.counter.domain.TallyService;
+import de.skuzzle.cmp.counter.domain.TallySheet;
+import de.skuzzle.cmp.counter.domain.UserId;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 
 @SpringBootTest(properties = "cmp.api.ratelimit.enabled=false")

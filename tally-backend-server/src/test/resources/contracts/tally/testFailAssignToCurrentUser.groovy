@@ -13,7 +13,7 @@ org.springframework.cloud.contract.spec.Contract.make {
         status BAD_REQUEST()
         body([
             message: "Sheet with name 'existing2' is already assigned to: test:user1",
-            origin: "de.skuzzle.cmp.counter.UserAssignmentException"
+            origin: "UserAssignmentException"
         ])
     }
 }
