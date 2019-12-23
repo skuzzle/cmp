@@ -39,7 +39,7 @@ public class ParticipationService {
         return participant;
     }
 
-    public Participant setTip(String collaborativeOrderId, UserId userId, Tip tip) {
+    public Participant payTip(String collaborativeOrderId, UserId userId, Tip tip) {
         final CollaborativeOrder order = collaborativeOrderRepository.findById(collaborativeOrderId).orElseThrow();
         final Participant participant = order.withTipBy(userId, tip);
         collaborativeOrderRepository.save(order);

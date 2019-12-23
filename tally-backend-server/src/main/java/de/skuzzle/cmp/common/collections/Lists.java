@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.collections;
+package de.skuzzle.cmp.common.collections;
 
 import java.util.List;
 import java.util.function.Predicate;
