@@ -37,6 +37,14 @@ public class CollaborativeOrderServiceTest {
 
         return orders.getOrderForOrganizator(order.getId(), SIMON);
     }
+    
+    @Test
+    void testOrderToTable() throws Exception {
+        CollaborativeOrder organizeSampleOrder = organizeSampleOrder();
+        participants.payTip(organizeSampleOrder.getId(), SIMON, Tip.absolute(money(2)));
+        CollaborativeOrder orderForOrganizator = orders.getOrderForOrganizator(organizeSampleOrder.getId(), SIMON);
+        System.out.println(orderForOrganizator);
+    }
 
     @Test
     void testOrderNoTipNoDiscount() throws Exception {
@@ -70,8 +78,8 @@ public class CollaborativeOrderServiceTest {
     @Test
     void testOrderWithTip() throws Exception {
         final CollaborativeOrder order = organizeSampleOrder();
-        participants.setTip(order.getId(), SIMON, Tip.absolute(money(1.0)));
-        participants.setTip(order.getId(), SIMON, Tip.relative(percent(0.1)));
+        participants.payTip(order.getId(), SIMON, Tip.absolute(money(1.0)));
+        participants.payTip(order.getId(), SIMON, Tip.relative(percent(0.1)));
 
         final CalculatedPrices totals = order.getCalculatedPrices();
         totals.checkConsistency();
@@ -82,8 +90,8 @@ public class CollaborativeOrderServiceTest {
     void testOrderWithTipAndDiscount() throws Exception {
         final CollaborativeOrder order = organizeSampleOrder();
         orders.setDiscount(order.getId(), SIMON, Discount.absolute(money(5)));
-        participants.setTip(order.getId(), SIMON, Tip.absolute(money(1.0)));
-        participants.setTip(order.getId(), SIMON, Tip.relative(percent(0.1)));
+        participants.payTip(order.getId(), SIMON, Tip.absolute(money(1.0)));
+        participants.payTip(order.getId(), SIMON, Tip.relative(percent(0.1)));
 
         final CalculatedPrices totals = order.getCalculatedPrices();
         totals.checkConsistency();
@@ -116,7 +124,7 @@ public class CollaborativeOrderServiceTest {
         final CollaborativeOrder order = organizeSampleOrder();
         orders.closeOrderForModification(order.getId(), SIMON);
         assertThatExceptionOfType(IllegalStateException.class)
-                .isThrownBy(() -> participants.setTip(order.getId(), SIMON, Tip.absolute(Money.ZERO)));
+                .isThrownBy(() -> participants.payTip(order.getId(), SIMON, Tip.absolute(Money.ZERO)));
     }
 
     @Test
