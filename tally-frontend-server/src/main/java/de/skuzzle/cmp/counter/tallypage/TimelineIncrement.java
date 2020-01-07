@@ -2,6 +2,7 @@ package de.skuzzle.cmp.counter.tallypage;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.YearMonth;
 import java.util.Set;
 
 import de.skuzzle.cmp.counter.client.RestTallyIncrement;
@@ -33,6 +34,10 @@ public class TimelineIncrement {
 
     Month getMonth() {
         return incrementDateUTC.getMonth();
+    }
+
+    YearMonth getYearMonth() {
+        return YearMonth.from(incrementDateUTC);
     }
 
     public LocalDateTime getIncrementDateUTC() {

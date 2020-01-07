@@ -1,17 +1,17 @@
 package de.skuzzle.cmp.counter.tallypage;
 
-import java.time.Month;
+import java.time.YearMonth;
 import java.util.List;
 
 public class TimelineMonth {
 
     private final String name;
-    private final Month month;
+    private final YearMonth yearMonth;
     private final List<TimelineIncrement> increments;
 
-    public TimelineMonth(String name, Month month, List<TimelineIncrement> increments) {
+    public TimelineMonth(String name, YearMonth yearMonth, List<TimelineIncrement> increments) {
         this.name = name;
-        this.month = month;
+        this.yearMonth = yearMonth;
         this.increments = increments;
     }
 
@@ -19,8 +19,8 @@ public class TimelineMonth {
         return this.name;
     }
 
-    public Month getMonth() {
-        return this.month;
+    public YearMonth getYearMonth() {
+        return this.yearMonth;
     }
 
     public List<TimelineIncrement> getIncrements() {
