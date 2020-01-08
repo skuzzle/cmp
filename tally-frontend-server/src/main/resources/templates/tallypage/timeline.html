@@ -1,14 +1,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
     <div th:fragment="timeline(timeline)" class="timeline is-centered">
-        <header class="timeline-header">
-            <span class="tag is-medium is-outlined">Latest</span>
-        </header>
-        
-        <th:block th:each="month : ${timeline.months}" >
-            <div th:replace="this :: timelineMonth(${month})"></div>
+        <th:block th:each="year : ${timeline.years}" >
+            <div th:replace="this :: timelineYear(${year})"></div>
         </th:block>
     </div>
+
+    <th:block th:fragment="timelineYear(year)">
+        <header class="timeline-header timeline-year">
+            <h2 class="title" th:text="${year.name}">2019</h2>
+        </header>
+        
+        <th:block th:each="month : ${year.months}" >
+            <div th:replace="this :: timelineMonth(${month})"></div>
+        </th:block>
+    </th:block>
 
     <th:block th:fragment="timelineMonth(month)">
         <div class="timeline-item timeline-month">

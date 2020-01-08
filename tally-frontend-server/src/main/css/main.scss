@@ -24,6 +24,10 @@
     border-bottom: 1px solid $grey-lighter;
     border-image: linear-gradient(90deg, $grey-lighter, #fff) 1;
 }
+.timeline-header.timeline-year {
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}
 
 .timeline-item:nth-of-type(2n).timeline-month {
     border-bottom: 1px solid $grey-lighter;

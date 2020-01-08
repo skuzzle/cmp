@@ -1,7 +1,9 @@
 package de.skuzzle.cmp.counter.tallypage;
 
+import java.time.Year;
 import java.time.YearMonth;
 import java.util.List;
+import java.util.Objects;
 
 public class TimelineMonth {
 
@@ -9,7 +11,7 @@ public class TimelineMonth {
     private final YearMonth yearMonth;
     private final List<TimelineIncrement> increments;
 
-    public TimelineMonth(String name, YearMonth yearMonth, List<TimelineIncrement> increments) {
+    TimelineMonth(String name, YearMonth yearMonth, List<TimelineIncrement> increments) {
         this.name = name;
         this.yearMonth = yearMonth;
         this.increments = increments;
@@ -17,6 +19,10 @@ public class TimelineMonth {
 
     public String getName() {
         return this.name;
+    }
+
+    public Year getYear() {
+        return Year.from(yearMonth);
     }
 
     public YearMonth getYearMonth() {
@@ -29,5 +35,16 @@ public class TimelineMonth {
 
     public int getTotalCount() {
         return increments.size();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(yearMonth);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj == this || obj instanceof TimelineMonth
+                && Objects.equals(yearMonth, ((TimelineMonth) obj).yearMonth);
     }
 }
