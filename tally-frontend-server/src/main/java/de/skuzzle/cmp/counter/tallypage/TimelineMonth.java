@@ -3,18 +3,20 @@ package de.skuzzle.cmp.counter.tallypage;
 import java.time.Year;
 import java.time.YearMonth;
 import java.util.List;
-import java.util.Objects;
+import java.util.stream.Collectors;
+
+import com.google.common.primitives.Ints;
 
 public class TimelineMonth {
 
     private final String name;
     private final YearMonth yearMonth;
-    private final List<TimelineIncrement> increments;
+    private final List<TimelineDay> days;
 
-    TimelineMonth(String name, YearMonth yearMonth, List<TimelineIncrement> increments) {
+    TimelineMonth(String name, YearMonth yearMonth, List<TimelineDay> days) {
         this.name = name;
         this.yearMonth = yearMonth;
-        this.increments = increments;
+        this.days = days;
     }
 
     public String getName() {
@@ -29,22 +31,14 @@ public class TimelineMonth {
         return this.yearMonth;
     }
 
-    public List<TimelineIncrement> getIncrements() {
-        return this.increments;
+    public List<TimelineDay> getDays() {
+        return this.days;
     }
 
     public int getTotalCount() {
-        return increments.size();
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(yearMonth);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj == this || obj instanceof TimelineMonth
-                && Objects.equals(yearMonth, ((TimelineMonth) obj).yearMonth);
+        final long sum = days.stream()
+                .collect(Collectors.summarizingInt(TimelineDay::getTotalCount))
+                .getSum();
+        return Ints.saturatedCast(sum);
     }
 }

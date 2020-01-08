@@ -51,7 +51,7 @@ public class TallyPageController {
         final RestIncrements increments = response.getIncrements();
 
         final Graph graph = Graph.fromHistory(increments.getEntries());
-        final Timeline timeline = Timeline.fromBackendResponse(response);
+        final Timeline timeline = TimelineBuilder.fromBackendResponse(response);
 
         return new ModelAndView("tallypage/tally", ImmutableMap.of(
                 "tally", tallySheet,

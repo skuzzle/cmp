@@ -26,12 +26,22 @@
                 <h6 class="subtitle is-6">Total: <span th:text="${month.totalCount}">10</span></h6>
             </div>
         </div>
-        <th:block th:each="increment : ${month.increments}">
-            <div th:replace="this:: timelineIncrement(${increment})"></div>
+        <th:block th:each="day : ${month.days}">
+            <div th:replace="this:: timelineDay(${day})"></div>
+        </th:block>
+    </th:block>
+    
+    <th:block th:fragment="timelineDay(day)">
+            <th:block th:if="${day.increments.size() == 1}">
+            <div th:replace="this :: timelineSingleIncrement(${day.increments[0]})"></div>
+        </th:block>
+        
+        <th:block th:unless="${day.increments.size() == 1}">
+            <div  th:replace="this :: timelineMultiIncrement(${day})"></div>
         </th:block>
     </th:block>
 
-    <div th:fragment="timelineIncrement(increment)" class="timeline-item">
+    <div th:fragment="timelineSingleIncrement(increment)" class="timeline-item">
         <div class="timeline-marker" th:classappend="${tally.admin} ? 'is-icon' : ''">
             <a th:if="${tally.admin}" th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}" class="delete" title="Delete this increment"></a>
         </div>
@@ -48,4 +58,26 @@
         </div>
     </div>
     
+    <div th:fragment="timelineMultiIncrement(day)" class="timeline-item">
+        <div class="timeline-marker"></div>
+        
+        <div class="timeline-content">
+            <p class="heading">
+                <date-label th:text="${day.date}">2019-09-09</date-label>
+            </p>
+            <h6 class="subtitle is-6">Total: <span th:text="${day.totalCount}">10</span></h6>
+            
+            <div th:each="increment : ${day.increments}">
+                <p>
+                <a th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}" class="delete" title="Delete this increment"></a>
+                <span th:text="${increment.getDescription()}">
+                    Pizza
+                </span>
+                <div class="tags" th:if="${increment.hasTags()}">
+                    <span class="tag" th:each="tag : ${increment.tags}" th:text="${tag}"></span>
+                </div>
+                </p>
+            </div>
+        </div>
+    </div>
 </html>
