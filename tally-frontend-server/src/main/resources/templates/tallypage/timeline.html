@@ -69,7 +69,7 @@
             
             <div th:each="increment : ${day.increments}">
                 <p>
-                <a th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}" class="delete" title="Delete this increment"></a>
+                <a th:if="${tally.admin}" th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}" class="delete" title="Delete this increment"></a>
                 <span th:text="${increment.getDescription()}">
                     Pizza
                 </span>
