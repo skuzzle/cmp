@@ -56,6 +56,10 @@ public class TimelineIncrement {
         return this.tags;
     }
 
+    public boolean isEmpty() {
+        return tags.isEmpty() && description.isEmpty();
+    }
+
     public boolean hasTags() {
         return !tags.isEmpty();
     }
