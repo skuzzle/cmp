@@ -50,13 +50,19 @@
                         class="delete confirmable" 
                         title="Delete this increment..."></a>
                         
-                    <th:block th:replace="this :: descriptionAndTags(${increment})"></th:block>
+                    <edit-increment 
+                        th:attr="incrementDateUTC=${increment.incrementDateUTC}, description=${increment.description}, tags=${increment.tagsValue}, allowEdit=${tally.admin}, updateUrl=@{/{adminKey}/increment/{incrementId}?action=updateIncrement(adminKey=${tally.adminKey}, incrementId=${increment.id})}">
+                    
+                        <th:block th:replace="this :: descriptionAndTags(${increment})"></th:block>                    
+                    </edit-increment>
                 </div>
             </div>
         </div>
     </th:block>
     
     <th:block th:fragment="descriptionAndTags(increment)">
+
+    
         <em th:if="${increment.empty}" title="This increment has no tags and no description">No Description</em>
         <th:block th:unless="${increment.empty}">
             <span th:text="${increment.getDescription()}">

@@ -26,6 +26,15 @@ public class RestTallyIncrement {
         return new RestTallyIncrement(null, description, tags, incrementDateUTC);
     }
 
+    public static RestTallyIncrement createWithId(String id, String description, LocalDateTime incrementDateUTC,
+            Set<String> tags) {
+        Preconditions.checkArgument(id != null, "id must not be null");
+        Preconditions.checkArgument(description != null, "description must not be null");
+        Preconditions.checkArgument(incrementDateUTC != null, "incrementDateUTC must not be null");
+        Preconditions.checkArgument(tags != null, "tags must not be null");
+        return new RestTallyIncrement(id, description, tags, incrementDateUTC);
+    }
+
     public String getId() {
         return this.id;
     }

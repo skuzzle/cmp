@@ -72,6 +72,13 @@ class DefaultBackendClient implements BackendClient {
     }
 
     @Override
+    public void updateIncrement(String adminKey, RestTallyIncrement increment) {
+        Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
+        Preconditions.checkArgument(increment != null, "increment must not be null");
+        restTemplate.put("/{key}/increment", increment, adminKey);
+    }
+
+    @Override
     public void assignToCurrentUser(String adminKey) {
         Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
         restTemplate.postForEntity("/{key}/assignToCurrentUser", null, Object.class, adminKey);

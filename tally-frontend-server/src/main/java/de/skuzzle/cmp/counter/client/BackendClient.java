@@ -18,6 +18,8 @@ public interface BackendClient {
 
     void deleteIncrement(String adminKey, String incrementId);
 
+    void updateIncrement(String adminKey, RestTallyIncrement increment);
+
     void assignToCurrentUser(String adminKey);
 
     void changeName(String adminKey, String newTitle);

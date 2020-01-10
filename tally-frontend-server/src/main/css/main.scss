@@ -33,3 +33,9 @@
     border-bottom: 1px solid $grey-lighter;
     border-image: linear-gradient(270deg, $grey-lighter, #fff) 1;
 }
+
+.notification .edit-increment {
+    position: absolute;
+    right: 0.5rem;
+    top: 28px;
+}

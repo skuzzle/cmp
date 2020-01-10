@@ -8,6 +8,11 @@ export function utcToLocal(dateString) {
     });
 }
 
+export function utcToInputValue(dateString) {
+    const dateUtc = new Date(dateString + "Z");
+    return utcString(dateUtc);
+}
+
 export function utcString(date) {
 	return `${date.getUTCFullYear()}-${pad(date.getUTCMonth() + 1)}-${pad(date.getUTCDate())}`
 }

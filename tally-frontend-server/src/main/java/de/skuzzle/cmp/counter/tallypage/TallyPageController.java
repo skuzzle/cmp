@@ -3,9 +3,7 @@ package de.skuzzle.cmp.counter.tallypage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -25,6 +23,7 @@ import de.skuzzle.cmp.counter.client.RestIncrements;
 import de.skuzzle.cmp.counter.client.RestTallyIncrement;
 import de.skuzzle.cmp.counter.client.RestTallyResponse;
 import de.skuzzle.cmp.counter.client.RestTallySheet;
+import de.skuzzle.cmp.counter.client.Tags;
 import de.skuzzle.cmp.counter.graphs.Graph;
 import de.skuzzle.cmp.counter.tagcloud.TagCloud;
 import de.skuzzle.cmp.counter.timeline.Timeline;
@@ -72,14 +71,26 @@ public class TallyPageController {
             @RequestParam("tags") String tags,
             @RequestParam("incrementDateUTC") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate incrementDate) {
 
-        final Set<String> tagSet = Arrays.stream(tags.split(","))
-                .map(String::trim)
-                .filter(tag -> !tag.isEmpty())
-                .collect(Collectors.toSet());
+        final Set<String> tagSet = Tags.fromString(tags).all();
         final RestTallyIncrement increment = RestTallyIncrement.createNew(description,
                 LocalDateTime.of(incrementDate, LocalTime.now()), tagSet);
 
         client.increment(adminKey, increment);
+        return "redirect:/" + adminKey;
+    }
+
+    @GetMapping(path = "{adminKey}/increment/{incrementId}", params = "action=updateIncrement")
+    public String updateIncrement(
+            @PathVariable("adminKey") String adminKey,
+            @PathVariable("incrementId") String incrementId,
+            @RequestParam("description") String description,
+            @RequestParam("tags") String tags,
+            @RequestParam("incrementDateUTC") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate incrementDate) {
+
+        final Set<String> tagSet = Tags.fromString(tags).all();
+        final RestTallyIncrement increment = RestTallyIncrement.createWithId(incrementId, description,
+                LocalDateTime.of(incrementDate, LocalTime.now()), tagSet);
+        client.updateIncrement(adminKey, increment);
         return "redirect:/" + adminKey;
     }
 
@@ -96,9 +107,9 @@ public class TallyPageController {
         return "redirect:/" + key;
     }
 
-    @GetMapping(path = "{key}", params = { "action=changeName", "newName" })
-    public String changeTitle(@PathVariable String key, @RequestParam String newName) {
-        client.changeName(key, newName);
-        return "redirect:/" + key;
+    @GetMapping(path = "{adminKey}", params = { "action=changeName", "newName" })
+    public String changeTitle(@PathVariable String adminKey, @RequestParam String newName) {
+        client.changeName(adminKey, newName);
+        return "redirect:/" + adminKey;
     }
 }

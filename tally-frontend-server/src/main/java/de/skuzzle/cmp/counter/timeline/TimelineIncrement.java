@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.YearMonth;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import de.skuzzle.cmp.counter.client.RestTallyIncrement;
 
@@ -54,6 +55,10 @@ public class TimelineIncrement {
 
     public Set<String> getTags() {
         return this.tags;
+    }
+
+    public String getTagsValue() {
+        return tags.stream().collect(Collectors.joining(","));
     }
 
     public boolean isEmpty() {

@@ -70,6 +70,13 @@ class ResilientBackendClient implements BackendClient {
     @Override
     @CircuitBreaker(name = "backendClient")
     @Retry(name = "backendClient")
+    public void updateIncrement(String adminKey, RestTallyIncrement increment) {
+        delegate.updateIncrement(adminKey, increment);
+    }
+
+    @Override
+    @CircuitBreaker(name = "backendClient")
+    @Retry(name = "backendClient")
     public void assignToCurrentUser(String adminKey) {
         delegate.assignToCurrentUser(adminKey);
     }
