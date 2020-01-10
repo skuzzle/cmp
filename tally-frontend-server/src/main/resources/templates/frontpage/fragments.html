@@ -28,7 +28,7 @@
                 <div class="field is-grouped">
                     <p class="control"><a class="button is-light" th:href="@{/{adminKey}(adminKey=${entry.publicKey})}">View</a></p>    
                     <p class="control"><a class="button is-primary" th:href="@{/{adminKey}(adminKey=${entry.adminKey})}">Edit</a></p>
-                    <p class="control"><a class="button is-danger" th:href="@{/{adminKey}?action=delete(adminKey=${entry.adminKey})}">Delete</a></p>
+                    <p class="control"><a class="button is-danger confirmable" th:href="@{/{adminKey}?action=delete(adminKey=${entry.adminKey})}">Delete</a></p>
                 </div>
             </div>
 	    </div>

@@ -46,7 +46,10 @@
 
     <div th:fragment="timelineSingleIncrement(increment)" class="timeline-item">
         <div class="timeline-marker" th:classappend="${tally.admin} ? 'is-icon' : ''">
-            <a th:if="${tally.admin}" th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}" class="delete" title="Delete this increment"></a>
+            <a th:if="${tally.admin}" 
+                th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}"
+                class="delete confirmable" 
+                title="Delete this increment"></a>
         </div>
         <div class="timeline-content">
             <p th:text="${increment.getDescription()}">
@@ -71,15 +74,18 @@
             <h6 class="subtitle is-6">Total: <span th:text="${day.totalCount}">10</span></h6>
             
             <div th:each="increment : ${day.increments}">
-                <p>
-                <a th:if="${tally.admin}" th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}" class="delete" title="Delete this increment"></a>
-                <span th:text="${increment.getDescription()}">
-                    Pizza
-                </span>
-                <div class="tags" th:if="${increment.hasTags()}">
-                    <span class="tag" th:each="tag : ${increment.tags}" th:text="${tag}"></span>
+                <div>
+                    <a th:if="${tally.admin}" 
+                        th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${tally.adminKey}, incrementId=${increment.id})}" 
+                        class="delete confirmable" 
+                        title="Delete this increment"></a>
+                    <span th:text="${increment.getDescription()}">
+                        Pizza
+                    </span>
+                    <div class="tags" th:if="${increment.hasTags()}">
+                        <span class="tag" th:each="tag : ${increment.tags}" th:text="${tag}"></span>
+                    </div>
                 </div>
-                </p>
             </div>
         </div>
     </div>
