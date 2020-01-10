@@ -4,13 +4,13 @@ public class WeightedTag {
 
     private final String name;
     private final int count;
-    private final int differentTags;
+    private final int differentCounts;
     private final double weight;
 
-    WeightedTag(String name, int count, int maxCount, int differentTags) {
+    WeightedTag(String name, int count, int maxCount, int differentCounts) {
         this.name = name;
         this.count = count;
-        this.differentTags = differentTags;
+        this.differentCounts = differentCounts;
         this.weight = (double) count / maxCount;
     }
 
@@ -24,19 +24,13 @@ public class WeightedTag {
 
     public String getCssSize() {
         // smallest
-        final int maxBulmaSize = maxBulmaSize();
-        final int buckets = Math.min(differentTags, 5);
+        final int maxBulmaSize = 7;
+        final int buckets = Math.min(differentCounts, 5);
+        // [0, buckets - 1]
         final int relativeSize = relativeSize(buckets);
 
         final int bulmaSize = maxBulmaSize - relativeSize;
         return "is-size-" + bulmaSize;
-    }
-
-    private int maxBulmaSize() {
-        if (differentTags == 1) {
-            return 6;
-        }
-        return 7;
     }
 
     private int relativeSize(int buckets) {

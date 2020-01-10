@@ -32,10 +32,10 @@ public class TagCloud {
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
         final int maxCount = Ints.saturatedCast(tagToCount.values().stream().max(Long::compare).orElse(0L));
-        final int differentTags = tagToCount.keySet().size();
+        final int differenCounts = Ints.saturatedCast(tagToCount.values().stream().distinct().count());
 
         final List<WeightedTag> tags = tagToCount.entrySet().stream()
-                .map(mapEntry -> toWeightedTag(maxCount, differentTags, mapEntry))
+                .map(mapEntry -> toWeightedTag(maxCount, differenCounts, mapEntry))
                 .collect(Collectors.toList());
 
         return new TagCloud(tags);
