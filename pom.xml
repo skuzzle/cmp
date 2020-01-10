@@ -27,6 +27,17 @@
 		<yarn.version>v1.13.0</yarn.version>
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/libs-milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
 	<modules>
 		<module>tally-backend-server</module>
 		<module>tally-frontend-server</module>
@@ -34,7 +45,6 @@
 
 	<dependencyManagement>
 		<dependencies>
-
 			<dependency>
 				<groupId>org.immutables</groupId>
 				<artifactId>value</artifactId>
@@ -67,6 +77,11 @@
 				<groupId>org.springframework.metrics</groupId>
 				<artifactId>spring-metrics</artifactId>
 				<version>0.5.1.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.mobile</groupId>
+				<artifactId>spring-mobile-device</artifactId>
+				<version>2.0.0.M3</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>

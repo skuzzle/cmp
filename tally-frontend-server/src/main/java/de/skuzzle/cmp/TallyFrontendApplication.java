@@ -6,11 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Import;
+import org.springframework.mobile.device.annotation.DeviceResolverConfiguration;
 
 import io.micrometer.core.instrument.Metrics;
 
 @SpringBootApplication
 @EnableConfigurationProperties(Version.class)
+@Import(DeviceResolverConfiguration.class)
 public class TallyFrontendApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TallyFrontendApplication.class);

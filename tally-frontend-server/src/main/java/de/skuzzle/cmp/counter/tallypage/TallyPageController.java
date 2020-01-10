@@ -3,9 +3,11 @@ package de.skuzzle.cmp.counter.tallypage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 
 import de.skuzzle.cmp.auth.TallyUser;
 import de.skuzzle.cmp.counter.client.BackendClient;
@@ -46,7 +47,7 @@ public class TallyPageController {
     }
 
     @GetMapping("/{key}")
-    public ModelAndView showTallySheet(@PathVariable("key") String key) {
+    public ModelAndView showTallySheet(@PathVariable("key") String key, Device device) {
         final RestTallyResponse response = client.getTallySheet(key);
 
         final RestTallySheet tallySheet = response.getTallySheet();
@@ -56,12 +57,14 @@ public class TallyPageController {
         final Timeline timeline = TimelineBuilder.fromBackendResponse(response);
         final TagCloud tagCloud = TagCloud.fromBackendResponse(response);
 
-        return new ModelAndView("tallypage/tally", ImmutableMap.of(
+        final boolean mobile = !device.isNormal();
+        return new ModelAndView("tallypage/tally", Map.of(
                 "tagCloud", tagCloud,
                 "tally", tallySheet,
                 "timeline", timeline,
                 "increments", increments,
-                "graph", graph));
+                "graph", graph,
+                "mobile", mobile));
     }
 
     @PostMapping("/{adminKey}")
