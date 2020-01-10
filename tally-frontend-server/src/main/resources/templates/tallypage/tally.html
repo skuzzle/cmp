@@ -51,9 +51,19 @@
                     <header class="card-header has-background-white-ter">   
                         <p class="card-header-title has-text-centered">Total count</p>  
                     </header>   
-                    <div class="card-content has-text-centered  ">  
+                    <div class="card-content has-text-centered">  
                         <canvas th:replace="fragments/graph :: graph(${graph})"></canvas>   
                         <p class="title is-size-2 " title="Total count" th:text="${increments.total}">1234</p>  
+                    </div>  
+                </div>  
+            </div>
+            <div th:unless="${tagCloud.empty}" class="column is-4">
+                <div class="card ">
+                    <header class="card-header has-background-white-ter">   
+                        <p class="card-header-title has-text-centered">Tags</p>  
+                    </header>   
+                    <div class="card-content has-text-centered">  
+                        <div th:replace="tallypage/tagcloud :: tagCloud(${tagCloud})"></div>
                     </div>  
                 </div>  
             </div>
@@ -69,6 +79,10 @@
             </div>
         </div>
     </div>
+</section>
+
+<section class="section">
+    <div class="container" ></div>
 </section>
 
 <section class="section">

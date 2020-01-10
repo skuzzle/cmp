@@ -1,0 +1,12 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+    <div th:fragment="tagCloud(cloud)" class="tags">
+        <span class="tag" 
+            th:each="weightedTag : ${cloud.tags}"
+            th:classappend="${weightedTag.cssSize}" 
+            th:text="${weightedTag.name}"
+            th:title="'Occurrences: ' + ${weightedTag.count}">
+        </span>
+    </div>
+
+</html>

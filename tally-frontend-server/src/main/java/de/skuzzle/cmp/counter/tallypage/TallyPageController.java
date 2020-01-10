@@ -26,6 +26,7 @@ import de.skuzzle.cmp.counter.client.RestTallyIncrement;
 import de.skuzzle.cmp.counter.client.RestTallyResponse;
 import de.skuzzle.cmp.counter.client.RestTallySheet;
 import de.skuzzle.cmp.counter.graphs.Graph;
+import de.skuzzle.cmp.counter.tagcloud.TagCloud;
 import de.skuzzle.cmp.counter.timeline.Timeline;
 import de.skuzzle.cmp.counter.timeline.TimelineBuilder;
 
@@ -54,8 +55,10 @@ public class TallyPageController {
 
         final Graph graph = Graph.fromHistory(increments.getEntries());
         final Timeline timeline = TimelineBuilder.fromBackendResponse(response);
+        final TagCloud tagCloud = TagCloud.fromBackendResponse(response);
 
         return new ModelAndView("tallypage/tally", ImmutableMap.of(
+                "tagCloud", tagCloud,
                 "tally", tallySheet,
                 "timeline", timeline,
                 "increments", increments,
