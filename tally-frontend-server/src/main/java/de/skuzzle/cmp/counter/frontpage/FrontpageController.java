@@ -54,7 +54,7 @@ public class FrontpageController {
             final RestTallySheetsReponse result = client.listTallySheets();
             final List<RestTallySheet> sheets = result.getTallySheets();
             final List<RecentlyCreatedTally> recentlyCreated = sheets.stream()
-                    .sorted(Comparator.comparing(RestTallySheet::getCreateDateUTC).reversed())
+                    .sorted(Comparator.comparing(RestTallySheet::getLastModifiedDateUTC).reversed())
                     .map(RecentlyCreatedTally::fromRestResponse)
                     .collect(Collectors.toList());
             model.addObject("recentlyCreated", recentlyCreated);
