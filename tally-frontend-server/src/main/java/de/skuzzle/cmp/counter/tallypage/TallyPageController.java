@@ -26,6 +26,8 @@ import de.skuzzle.cmp.counter.client.RestTallyIncrement;
 import de.skuzzle.cmp.counter.client.RestTallyResponse;
 import de.skuzzle.cmp.counter.client.RestTallySheet;
 import de.skuzzle.cmp.counter.graphs.Graph;
+import de.skuzzle.cmp.counter.timeline.Timeline;
+import de.skuzzle.cmp.counter.timeline.TimelineBuilder;
 
 @Controller
 public class TallyPageController {

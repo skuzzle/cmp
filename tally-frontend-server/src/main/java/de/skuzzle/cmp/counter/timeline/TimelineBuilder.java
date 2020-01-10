@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.counter.tallypage;
+package de.skuzzle.cmp.counter.timeline;
 
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
@@ -18,7 +18,7 @@ import java.util.Map;
 import de.skuzzle.cmp.counter.client.RestTallyIncrement;
 import de.skuzzle.cmp.counter.client.RestTallyResponse;
 
-class TimelineBuilder {
+public class TimelineBuilder {
 
     public static Timeline fromBackendResponse(RestTallyResponse response) {
         final TimelineBuilder builder = new TimelineBuilder();

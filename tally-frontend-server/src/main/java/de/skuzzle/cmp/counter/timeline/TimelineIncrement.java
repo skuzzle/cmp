@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.counter.tallypage;
+package de.skuzzle.cmp.counter.timeline;
 
 import java.time.LocalDateTime;
 import java.time.Month;
