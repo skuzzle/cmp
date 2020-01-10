@@ -46,6 +46,19 @@
 <section class="section has-background-white-bis">
     <div class="container">
         <div class="columns is-centered">
+        
+            <div class="column is-4" th:if="${tally.admin}">
+                <div class="card ">
+                    <header class="card-header has-background-white-ter">   
+                        <p class="card-header-title has-text-centered">New Entry</p>  
+                    </header>   
+                    <div class="card-content has-text-centered">  
+                        <form method="post" th:action="@{/{adminKey}(adminKey=${tally.adminKey})}" th:insert="tallypage/createItem :: formContent(${tagCloud.names})"></form>
+                    </div>  
+                </div>  
+            </div>
+        
+        
             <div class="column is-4">
                 <div class="card ">
                     <header class="card-header has-background-white-ter">   
@@ -57,6 +70,7 @@
                     </div>  
                 </div>  
             </div>
+            
             <div th:unless="${tagCloud.empty}" class="column is-4">
                 <div class="card ">
                     <header class="card-header has-background-white-ter">   
@@ -66,16 +80,6 @@
                         <div th:replace="tallypage/tagcloud :: tagCloud(${tagCloud})"></div>
                     </div>  
                 </div>  
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="section" th:if="${tally.admin}">
-    <div class="container">
-        <div class="columns is-centered">
-            <div class="column is-4">
-                <form method="post" th:action="@{/{adminKey}(adminKey=${tally.adminKey})}" th:insert="tallypage/createItem :: formContent"></form>
             </div>
         </div>
     </div>

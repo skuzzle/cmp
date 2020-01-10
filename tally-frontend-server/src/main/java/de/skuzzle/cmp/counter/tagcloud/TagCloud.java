@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -16,9 +17,11 @@ import de.skuzzle.cmp.counter.client.Tags;
 
 public class TagCloud {
 
+    private final Set<String> names;
     private final List<WeightedTag> tags;
 
-    private TagCloud(List<WeightedTag> tags) {
+    private TagCloud(Set<String> names, List<WeightedTag> tags) {
+        this.names = names;
         this.tags = tags;
     }
 
@@ -38,7 +41,7 @@ public class TagCloud {
                 .map(mapEntry -> toWeightedTag(maxCount, differenCounts, mapEntry))
                 .collect(Collectors.toList());
 
-        return new TagCloud(tags);
+        return new TagCloud(tagToCount.keySet(), tags);
     }
 
     private static WeightedTag toWeightedTag(int maxCount, int differentTags, Entry<String, Long> mapEntry) {
@@ -46,6 +49,10 @@ public class TagCloud {
         final String tag = mapEntry.getKey();
         final int tagCount = Ints.saturatedCast(mapEntry.getValue());
         return new WeightedTag(tag, tagCount, maxCount, differentTags);
+    }
+
+    public Set<String> getNames() {
+        return this.names;
     }
 
     public List<WeightedTag> getTags() {
