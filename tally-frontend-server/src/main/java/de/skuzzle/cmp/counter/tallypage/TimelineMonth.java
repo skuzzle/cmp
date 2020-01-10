@@ -12,11 +12,17 @@ public class TimelineMonth {
     private final String name;
     private final YearMonth yearMonth;
     private final List<TimelineDay> days;
+    private final int totalCount;
 
     TimelineMonth(String name, YearMonth yearMonth, List<TimelineDay> days) {
         this.name = name;
         this.yearMonth = yearMonth;
         this.days = days;
+
+        final long sum = days.stream()
+                .collect(Collectors.summarizingInt(TimelineDay::getTotalCount))
+                .getSum();
+        this.totalCount = Ints.saturatedCast(sum);
     }
 
     public String getName() {
@@ -36,9 +42,6 @@ public class TimelineMonth {
     }
 
     public int getTotalCount() {
-        final long sum = days.stream()
-                .collect(Collectors.summarizingInt(TimelineDay::getTotalCount))
-                .getSum();
-        return Ints.saturatedCast(sum);
+        return this.totalCount;
     }
 }

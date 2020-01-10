@@ -8,7 +8,10 @@
 
     <th:block th:fragment="timelineYear(year)">
         <header class="timeline-header timeline-year">
-            <h2 class="title" th:text="${year.name}">2019</h2>
+            <div>
+                <h4 class="title is-4" th:text="${year.name}">2019</h4>
+                <h6 class="subtitle is-6">Total: <span th:text="${year.totalCount}">10</span></h6>
+            </div>
         </header>
         
         <th:block th:each="month : ${year.months}" >
@@ -22,7 +25,7 @@
                 <i class="fa fa-flag"></i>
             </div>
             <div class="timeline-content">
-                <h4 class="title is-4"  th:text="${month.name}">February 2019</h4>
+                <h4 class="title is-4" th:text="${month.name}">February 2019</h4>
                 <h6 class="subtitle is-6">Total: <span th:text="${month.totalCount}">10</span></h6>
             </div>
         </div>
