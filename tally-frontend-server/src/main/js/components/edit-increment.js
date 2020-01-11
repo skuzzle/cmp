@@ -1,5 +1,6 @@
 import { utcToInputValue } from './utc.js'
-import bulmaTagsinput from '../../../../node_modules/bulma-tagsinput/src/js/index.js';
+import bulmaTagsinput from 'bulma-tagsinput';
+import { Slim } from 'slim-js';
 
 Slim.tag(
 'edit-increment',
