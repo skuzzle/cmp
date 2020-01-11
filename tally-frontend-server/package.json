@@ -10,10 +10,6 @@
     },
     "author": "Simon Taddiken",
     "license": "MIT",
-    "sideEffects": [
-        "src/main/js/components/**.js",
-        "*.scss"
-    ],
     "devDependencies": {
         "babel-jest": "^24.9.0",
         "css-loader": "^3.4.2",
