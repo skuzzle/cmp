@@ -68,9 +68,9 @@ class EditIncrement extends Slim {
 	}
 	
 	submitIncrement() {
-		const newIncrementDateUTC = this.dateInput.value;
-		const newDescription = this.descriptionInput.value;
-		const newTags = this.tagsInput.value;
+		const newIncrementDateUTC = encodeURIComponent(this.dateInput.value);
+		const newDescription = encodeURIComponent(this.descriptionInput.value);
+		const newTags = encodeURIComponent(this.tagsInput.value);
 		
 		const actionUrl = this.updateUrl + `&incrementDateUTC=${newIncrementDateUTC}&description=${newDescription}&tags=${newTags}`;
 		fetch(actionUrl)

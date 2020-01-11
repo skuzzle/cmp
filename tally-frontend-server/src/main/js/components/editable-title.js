@@ -36,7 +36,7 @@ class EditableTitle extends Slim {
 			this.finishEditing();
 			return;
 		}
-		const actionUrl = this.action + newTitle;
+		const actionUrl = this.action + encodeURIComponent(newTitle);
 		fetch(actionUrl)
 			.then(response => {
 				this.currentTitle = newTitle;
