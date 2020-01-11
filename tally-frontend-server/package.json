@@ -4,27 +4,43 @@
     "description": "Count my pizza JS components",
     "private": true,
     "scripts": {
-        "build": "parcel build --public-url ./ -d target/classes/static src/main/js/*.js src/main/css/*.scss",
-        "start": "parcel       --public-url ./ -d target/classes/static src/main/js/*.js src/main/css/*.scss",
-        "watch": "parcel watch --public-url ./ -d target/classes/static src/main/js/*.js src/main/css/*.scss",
+        "build": "webpack --config webpack.prod.js",
+        "watch": "webpack --config webpack.dev.js --watch",
         "test": "jest"
     },
     "author": "Simon Taddiken",
     "license": "MIT",
+    "sideEffects": [
+        "src/main/js/components/**.js",
+        "*.scss"
+    ],
     "devDependencies": {
-        "@fortawesome/fontawesome-free": "^5.12.0",
-        "@webcomponents/webcomponentsjs": "^2.4.1",
         "babel-jest": "^24.9.0",
-        "babel-preset-env": "^1.7.0",
+        "css-loader": "^3.4.2",
+        "jest": "^24.9.0",
+        "mini-css-extract-plugin": "^0.9.0",
+        "node-sass": "^4.13.0",
+        "optimize-css-assets-webpack-plugin": "^5.0.3",
+        "parcel": "^1.11.0",
+        "sass": "^1.24.4",
+        "sass-loader": "^8.0.1",
+        "style-loader": "^1.1.2",
+        "terser-webpack-plugin": "^2.3.2",
+        "webpack": "^4.41.5",
+        "webpack-cli": "^3.3.10",
+        "webpack-merge": "^4.2.2"
+    },
+    "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^1.2.26",
+        "@fortawesome/free-brands-svg-icons": "^5.12.0",
+        "@fortawesome/free-regular-svg-icons": "^5.12.0",
+        "@fortawesome/free-solid-svg-icons": "^5.12.0",
+        "@webcomponents/webcomponentsjs": "^2.4.1",
         "bulma": "^0.8.0",
         "bulma-tagsinput": "^2.0.0",
         "bulma-timeline": "^3.0.4",
         "bulma-tooltip": "^3.0.2",
         "chart.js": "^2.9.3",
-        "jest": "^24.9.0",
-        "node-sass": "^4.13.0",
-        "parcel": "^1.11.0",
-        "sass": "^1.24.4",
         "slim-js": "^4.0.7"
     }
 }

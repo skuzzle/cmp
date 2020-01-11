@@ -1,4 +1,5 @@
 import { utcToLocal } from './utc.js'
+import { Slim } from 'slim-js';
 
 Slim.tag(
 'date-label',

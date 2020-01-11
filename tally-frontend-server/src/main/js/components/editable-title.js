@@ -1,3 +1,5 @@
+import { Slim } from 'slim-js';
+
 Slim.tag(
 'editable-title',
 `<h1 s:if="!editing" class="title is-capitalized" bind>

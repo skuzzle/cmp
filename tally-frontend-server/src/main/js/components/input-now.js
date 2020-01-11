@@ -1,4 +1,5 @@
 import { utcString } from './utc.js'
+import { Slim } from 'slim-js';
 
 Slim.tag(
 'input-now',
