@@ -4,10 +4,20 @@ const devMode = process.env.NODE_ENV !== 'production';
 const path = require('path');
 
 module.exports = {
-    entry: './src/main/js/index.js',
+    entry: {
+    	css: './src/main/js/css.js',
+    	icons: './src/main/js/icons.js',
+    	graphs: './src/main/js/graphs.js',
+    	components: './src/main/js/components.js'
+    },
     output: {
-        filename: 'main.js',
+        filename: '[name].js',
         path: path.resolve(__dirname, 'target/classes/static'),
+    },
+    optimization: {
+    	splitChunks: {
+    		chunks: 'all',
+    	}
     },
 
     plugins: [new MiniCssExtractPlugin({

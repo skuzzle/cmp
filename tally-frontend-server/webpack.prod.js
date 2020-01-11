@@ -9,8 +9,7 @@ module.exports = merge(common, {
     devtool: 'source-map',
 
     optimization: {
-        minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})],
-    	usedExports: true
+        minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})]
     }
 
 });

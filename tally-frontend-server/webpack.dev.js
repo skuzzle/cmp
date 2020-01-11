@@ -3,8 +3,5 @@ const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
     mode: 'development',
-    devtool: 'inline-source-map',
-    optimization: {
-    	usedExports: true
-    }
+    devtool: 'inline-source-map'
 });
