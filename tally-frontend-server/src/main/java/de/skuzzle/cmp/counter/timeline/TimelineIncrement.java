@@ -1,8 +1,6 @@
 package de.skuzzle.cmp.counter.timeline;
 
 import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.YearMonth;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,24 +31,12 @@ public class TimelineIncrement {
         return this.id;
     }
 
-    Month getMonth() {
-        return incrementDateUTC.getMonth();
-    }
-
-    YearMonth getYearMonth() {
-        return YearMonth.from(incrementDateUTC);
-    }
-
     public LocalDateTime getIncrementDateUTC() {
         return this.incrementDateUTC;
     }
 
     public String getDescription() {
         return description;
-    }
-
-    public boolean hasDescription() {
-        return !description.isEmpty();
     }
 
     public Set<String> getTags() {
