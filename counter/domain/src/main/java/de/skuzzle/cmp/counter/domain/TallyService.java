@@ -78,6 +78,7 @@ public class TallyService {
         final TallySheet tallySheet = repository.findByAdminKey(adminKey)
                 .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
 
+        Metrics.counter("updated_increment", "user_id", tallySheet.getAssignedUser().getMetricsId()).increment();
         tallySheet.updateIncrement(increment);
         return repository.save(tallySheet);
     }
@@ -86,6 +87,8 @@ public class TallyService {
         Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
         final TallySheet tallySheet = repository.findByAdminKey(adminKey)
                 .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
+
+        Metrics.counter("changed_name", "user_id", tallySheet.getAssignedUser().getMetricsId()).increment();
         tallySheet.changeNameTo(newName);
         return repository.save(tallySheet);
     }
@@ -94,6 +97,8 @@ public class TallyService {
         Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
         final TallySheet tallySheet = repository.findByAdminKey(adminKey)
                 .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
+
+        Metrics.counter("deleted_tally", "user_id", tallySheet.getAssignedUser().getMetricsId()).increment();
         repository.delete(tallySheet);
     }
 
@@ -101,7 +106,9 @@ public class TallyService {
         Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
         final TallySheet tallySheet = repository.findByAdminKey(adminKey)
                 .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
+
         if (tallySheet.deleteIncrementWithId(incrementId)) {
+            Metrics.counter("delete_increment", "user_id", tallySheet.getAssignedUser().getMetricsId()).increment();
             repository.save(tallySheet);
         } else {
             throw new IncrementNotAvailableException(incrementId);

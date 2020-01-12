@@ -19,10 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import de.skuzzle.cmp.counter.FrontendTestSlice;
+import de.skuzzle.cmp.counter.TestUserConfigurer;
 import de.skuzzle.cmp.counter.client.RestTallyIncrement;
 import de.skuzzle.cmp.counter.client.TestTallyClientConfigurer;
-import de.skuzzle.cmp.counter.frontend.slice.mvc.FrontendTestSlice;
-import de.skuzzle.cmp.counter.frontend.slice.mvc.TestUserConfigurer;
 
 @FrontendTestSlice
 @WebMvcTest(controllers = TallyPageController.class)

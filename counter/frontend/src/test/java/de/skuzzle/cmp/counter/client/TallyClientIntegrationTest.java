@@ -18,7 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpStatusCodeException;
 
 import de.skuzzle.cmp.auth.TallyUser;
-import de.skuzzle.cmp.counter.frontend.slice.mvc.TestUserConfigurer;
+import de.skuzzle.cmp.counter.TestUserConfigurer;
 
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK, properties = {
         "cmp.backend.url=http://localhost:6565",

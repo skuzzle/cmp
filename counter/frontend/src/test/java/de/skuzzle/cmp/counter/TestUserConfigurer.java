@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.counter.frontend.slice.mvc;
+package de.skuzzle.cmp.counter;
 
 import static org.mockito.Mockito.when;
 

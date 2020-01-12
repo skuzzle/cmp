@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.counter.frontend.slice.mvc;
+package de.skuzzle.cmp.counter;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;

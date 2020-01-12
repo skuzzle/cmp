@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.common.collections;
+package de.skuzzle.cmp.counter.collections;
 
 import java.util.List;
 import java.util.OptionalInt;
