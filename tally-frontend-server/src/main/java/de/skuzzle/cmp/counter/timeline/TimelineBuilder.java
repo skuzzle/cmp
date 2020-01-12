@@ -17,13 +17,19 @@ import java.util.Map;
 
 import de.skuzzle.cmp.counter.client.RestTallyIncrement;
 import de.skuzzle.cmp.counter.client.RestTallyResponse;
+import de.skuzzle.cmp.counter.client.RestTallySheet;
 
 public class TimelineBuilder {
 
     public static Timeline fromBackendResponse(RestTallyResponse response) {
         final TimelineBuilder builder = new TimelineBuilder();
         response.getIncrements().getEntries().forEach(builder::addIncrement);
-        return builder.toTimeline();
+        final RestTallySheet tallySheet = response.getTallySheet();
+
+        final List<TimelineYear> years = builder.toYears();
+        return tallySheet.isAdmin()
+                ? Timeline.forAdmin(years, tallySheet.getAdminKey())
+                : Timeline.forReadOnly(years);
     }
 
     private final Map<Year, TimelineYearBuilder> years = new HashMap<>();
@@ -35,12 +41,11 @@ public class TimelineBuilder {
         return this;
     }
 
-    private Timeline toTimeline() {
-        final List<TimelineYear> timelineYears = years.values().stream()
+    private List<TimelineYear> toYears() {
+        return years.values().stream()
                 .sorted(comparing(TimelineYearBuilder::getYear).reversed())
                 .map(TimelineYearBuilder::toTimelineYear)
                 .collect(toList());
-        return new Timeline(timelineYears);
 
     }
 
