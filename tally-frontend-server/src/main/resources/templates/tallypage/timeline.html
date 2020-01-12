@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-    <div th:fragment="timeline(timeline)" class="timeline" th:classappend="${!mobile} ? 'is-centered' : ''">
+    <div th:fragment="timeline(timeline, isMobile)" class="timeline" th:classappend="${!isMobile} ? 'is-centered' : ''">
         <th:block th:each="year : ${timeline.years}" >
             <div th:replace="this :: timelineYear(${timeline}, ${year})"></div>
         </th:block>
