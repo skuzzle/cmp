@@ -14,15 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import de.skuzzle.cmp.counter.domain.IncrementNotAvailableException;
-import de.skuzzle.cmp.counter.domain.ShallowTallySheet;
-import de.skuzzle.cmp.counter.domain.TallyIncrement;
-import de.skuzzle.cmp.counter.domain.TallyRepository;
-import de.skuzzle.cmp.counter.domain.TallyService;
-import de.skuzzle.cmp.counter.domain.TallySheet;
-import de.skuzzle.cmp.counter.domain.TallySheetNotAvailableException;
-import de.skuzzle.cmp.counter.domain.UserId;
-
 @SpringBootTest
 public class TallyServiceIntegrationTest {
 
@@ -45,7 +36,6 @@ public class TallyServiceIntegrationTest {
             softly.assertThat(sheet.getIncrements()).isEmpty();
             softly.assertThat(sheet.getAdminKey()).isNotEmpty();
             softly.assertThat(sheet.getName()).isEqualTo("test");
-            softly.assertThat(sheet.getUserId()).isEqualTo(USER.toString());
             softly.assertThat(sheet.getAssignedUser()).isEqualTo(USER);
             softly.assertThat(sheet.getPublicKey()).isNotEmpty();
             softly.assertThat(sheet.getLastModifiedDateUTC()).isNotNull();
@@ -180,7 +170,6 @@ public class TallyServiceIntegrationTest {
 
         final List<ShallowTallySheet> sheetsForUser = tallyService.getTallySheetsFor(user1);
         assertThat(sheetsForUser).hasSize(2);
-        assertThat(sheetsForUser).first().extracting(ShallowTallySheet::getUserId).isEqualTo(user1.toString());
         assertThat(sheetsForUser).first().extracting(ShallowTallySheet::getAssignedUser).isEqualTo(user1);
         assertThat(sheetsForUser).first().extracting(ShallowTallySheet::getName).isEqualTo("sheet1");
         assertThat(sheetsForUser).first().extracting(ShallowTallySheet::getAdminKey).isNotEqualTo(Optional.empty());

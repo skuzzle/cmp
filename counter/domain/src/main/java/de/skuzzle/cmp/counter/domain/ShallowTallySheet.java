@@ -9,8 +9,6 @@ public interface ShallowTallySheet {
 
     String getName();
 
-    String getUserId();
-
     boolean isAssignableTo(UserId userId);
 
     int getTotalCount();

@@ -73,15 +73,6 @@ public class TallySheet implements ShallowTallySheet {
         return this.version;
     }
 
-    /**
-     * @deprecated User {@link #getAssignedUser()}
-     */
-    @Override
-    @Deprecated
-    public String getUserId() {
-        return this.userId;
-    }
-
     @Override
     public UserId getAssignedUser() {
         return this.assignedUser;
