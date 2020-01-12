@@ -42,7 +42,7 @@ public class TallyPageControllerTest {
 
         mockMvc.perform(get("/{publicKey}", clientConfigurer.getPublicKey()))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("tally", "timeline", "increments", "graph", "user"));
+                .andExpect(model().attributeExists("tally", "timeline", "increments", "graph", "user", "tagCloud"));
     }
 
     @Test

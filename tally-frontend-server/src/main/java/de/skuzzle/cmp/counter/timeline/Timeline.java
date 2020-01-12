@@ -30,7 +30,6 @@ public class Timeline {
     }
 
     public String getAdminKey() {
-        Preconditions.checkState(this.isAdmin(), "No admin key available");
         return this.adminKey;
     }
 

@@ -21,7 +21,6 @@ public class TimelineAssert extends AbstractAssert<TimelineAssert, Timeline> {
 
     public TimelineAssert isReadOnly() {
         Assertions.assertThat(actual.isAdmin()).isFalse();
-        Assertions.assertThatExceptionOfType(IllegalStateException.class).isThrownBy(actual::getAdminKey);
         return this;
     }
 
