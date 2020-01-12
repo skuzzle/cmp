@@ -15,10 +15,6 @@ import org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpStatusCodeException;
 
-import de.skuzzle.cmp.counter.client.BackendClient;
-import de.skuzzle.cmp.counter.client.RestTallyIncrement;
-import de.skuzzle.cmp.counter.client.RestTallySheet;
-
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK, properties = {
         "cmp.backend.url=http://localhost:6565",
         "cmp.backend.healthUrl=http://not.used.in.this.test" })
@@ -98,5 +94,16 @@ public class TallyClientIntegrationTest {
     void testGetMetaInformation() throws Exception {
         final var apiResponse = tallyClient.getMetaInfo();
         assertThat(apiResponse.getTotalTallySheetCount()).isEqualTo(3);
+    }
+
+    @Test
+    void testChangeName() throws Exception {
+        tallyClient.changeName("adminKey2", "newName");
+    }
+
+    @Test
+    void testUpdateIncrement() throws Exception {
+        tallyClient.updateIncrement("adminKey2", RestTallyIncrement.createWithId("incrementId",
+                "Description", LocalDateTime.now(), Set.of("tag1", "tag2")));
     }
 }
