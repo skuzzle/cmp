@@ -133,19 +133,20 @@
 					<installDirectory>target</installDirectory>
 					<workingDirectory>${basedir}</workingDirectory>
 					<nodeVersion>${node.version}</nodeVersion>
+					<npmVersion>${npm.version}</npmVersion>
 					<yarnVersion>${yarn.version}</yarnVersion>
 				</configuration>
 				<executions>
 					<execution>
 						<id>install node and yarn</id>
 						<goals>
-							<goal>install-node-and-yarn</goal>
+							<goal>install-node-and-npm</goal>
 						</goals>
 					</execution>
 					<execution>
 						<id>yarn install</id>
 						<goals>
-							<goal>yarn</goal>
+							<goal>npm</goal>
 						</goals>
 						<configuration>
 							<!-- this calls yarn install -->
@@ -156,7 +157,7 @@
 					<execution>
 						<id>yarn build</id>
 						<goals>
-							<goal>yarn</goal>
+							<goal>npm</goal>
 						</goals>
 						<configuration>
 							<!-- this calls yarn build -->

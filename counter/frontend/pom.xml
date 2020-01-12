@@ -8,18 +8,22 @@
 		<artifactId>tally-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>tally-backend</artifactId>
-	<name>tally-backend</name>
+    
+    <groupId>de.skuzzle.tally.counter</groupId>
+	<artifactId>counter-frontend</artifactId>
+	<name>counter-frontend</name>
+	<packaging>jar</packaging>
 
 	<dependencies>
-		<dependency>
-			<groupId>de.skuzzle.tally.counter</groupId>
-			<artifactId>counter-rest</artifactId>
-		</dependency>
         <dependency>
-            <groupId>de.skuzzle.tally</groupId>
-            <artifactId>rest-auth</artifactId>
+            <groupId>de.skuzzle.tally.counter</groupId>
+            <artifactId>counter-domain</artifactId>
         </dependency>
+		<dependency>
+			<groupId>org.immutables</groupId>
+			<artifactId>value</artifactId>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -103,18 +107,5 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>com.google.cloud.tools</groupId>
-				<artifactId>jib-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
 
 </project>

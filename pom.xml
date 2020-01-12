@@ -25,6 +25,7 @@
 		<spring-cloud.version>2.1.1.RELEASE</spring-cloud.version>
 		<node.version>v10.15.1</node.version>
 		<yarn.version>v1.13.0</yarn.version>
+		<npm.version>6.3.0</npm.version>
 	</properties>
 
 	<repositories>
@@ -39,12 +40,50 @@
 	</repositories>
 
 	<modules>
+		<module>counter/domain</module>
+		<module>counter/rest</module>
+		<module>counter/frontend</module>
+		
+		<module>collaborativeorder/domain</module>
+		
+		
+		<module>rest-auth</module>
 		<module>tally-backend-server</module>
 		<module>tally-frontend-server</module>
 	</modules>
 
 	<dependencyManagement>
 		<dependencies>
+		  
+			<!-- common -->
+			<dependency>
+				<groupId>de.skuzzle.tally</groupId>
+				<artifactId>rest-auth</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<!-- counter -->
+			<dependency>
+				<groupId>de.skuzzle.tally.counter</groupId>
+				<artifactId>counter-domain</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.skuzzle.tally.counter</groupId>
+				<artifactId>counter-rest</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.skuzzle.tally.counter</groupId>
+				<artifactId>counter-frontend</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<!-- collaborativeorder -->
+            <dependency>
+                <groupId>de.skuzzle.tally.collaborativeorder</groupId>
+                <artifactId>collaborativeorder-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            
 			<dependency>
 				<groupId>org.immutables</groupId>
 				<artifactId>value</artifactId>

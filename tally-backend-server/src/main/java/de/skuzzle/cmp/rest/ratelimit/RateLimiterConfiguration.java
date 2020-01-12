@@ -15,14 +15,13 @@ import de.skuzzle.cmp.common.ratelimit.ClientIdentificator;
 import de.skuzzle.cmp.common.ratelimit.DisabledRateLimiter;
 import de.skuzzle.cmp.common.ratelimit.MemoryCacheRateLimiter;
 import de.skuzzle.cmp.common.ratelimit.RemoteIpClientIdentificator;
-import de.skuzzle.cmp.counter.domain.TallyServiceConfiguration;
 import de.skuzzle.cmp.rest.auth.TallyUser;
 import de.skuzzle.cmp.rest.ratelimit.RateLimitApiProperties.Ratelimit;
 
 @Configuration
 public class RateLimiterConfiguration {
 
-    private static final Logger logger = LoggerFactory.getLogger(TallyServiceConfiguration.class);
+    private static final Logger logger = LoggerFactory.getLogger(RateLimiterConfiguration.class);
 
     private final RateLimitApiProperties apiProperties;
 
