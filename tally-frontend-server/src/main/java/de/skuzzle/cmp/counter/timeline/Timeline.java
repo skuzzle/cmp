@@ -34,6 +34,13 @@ public class Timeline {
         return this.adminKey;
     }
 
+    public TimelineYear year(int year) {
+        return years.stream()
+                .filter(tlYear -> tlYear.getYear().getValue() == year)
+                .findFirst()
+                .orElseThrow();
+    }
+
     public List<TimelineYear> getYears() {
         return this.years;
     }

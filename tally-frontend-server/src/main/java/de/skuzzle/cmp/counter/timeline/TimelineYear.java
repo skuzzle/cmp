@@ -1,5 +1,6 @@
 package de.skuzzle.cmp.counter.timeline;
 
+import java.time.Month;
 import java.time.Year;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +30,13 @@ public class TimelineYear {
 
     public Year getYear() {
         return this.year;
+    }
+
+    public TimelineMonth getMonth(Month month) {
+        return months.stream()
+                .filter(tlMonth -> tlMonth.getYearMonth().getMonth().equals(month))
+                .findFirst()
+                .orElseThrow();
     }
 
     public List<TimelineMonth> getMonths() {

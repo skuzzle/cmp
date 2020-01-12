@@ -8,18 +8,18 @@ public class TimelineDay {
 
     private final String name;
     private final MonthDay monthDay;
-    private final LocalDateTime date;
+    private final LocalDateTime dateUTC;
     private final List<TimelineIncrement> increments;
 
-    TimelineDay(String name, LocalDateTime date, List<TimelineIncrement> increments) {
+    TimelineDay(String name, LocalDateTime dateUTC, List<TimelineIncrement> increments) {
         this.name = name;
-        this.date = date;
-        this.monthDay = MonthDay.from(date);
+        this.dateUTC = dateUTC;
+        this.monthDay = MonthDay.from(dateUTC);
         this.increments = increments;
     }
 
-    public LocalDateTime getDate() {
-        return this.date;
+    public LocalDateTime getDateUTC() {
+        return this.dateUTC;
     }
 
     public String getName() {

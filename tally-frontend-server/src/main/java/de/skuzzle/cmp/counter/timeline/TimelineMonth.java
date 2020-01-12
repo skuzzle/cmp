@@ -37,6 +37,13 @@ public class TimelineMonth {
         return this.yearMonth;
     }
 
+    public TimelineDay getDay(int dayOfMonth) {
+        return this.days.stream()
+                .filter(tlDay -> tlDay.getMonthDay().getDayOfMonth() == dayOfMonth)
+                .findFirst()
+                .orElseThrow();
+    }
+
     public List<TimelineDay> getDays() {
         return this.days;
     }
