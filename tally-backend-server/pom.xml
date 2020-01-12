@@ -8,8 +8,8 @@
 		<artifactId>tally-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>tally-backend</artifactId>
-	<name>tally-backend</name>
+	<artifactId>tally-backend-server</artifactId>
+	<name>tally-backend-server</name>
 
 	<dependencies>
 		<dependency>

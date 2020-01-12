@@ -48,6 +48,8 @@
 		
 		
 		<module>rest-auth</module>
+		<module>frontend-auth</module>
+		
 		<module>tally-backend-server</module>
 		<module>tally-frontend-server</module>
 	</modules>
@@ -61,6 +63,12 @@
 				<artifactId>rest-auth</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+            <dependency>
+                <groupId>de.skuzzle.tally</groupId>
+                <artifactId>frontend-auth</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            
 			<!-- counter -->
 			<dependency>
 				<groupId>de.skuzzle.tally.counter</groupId>

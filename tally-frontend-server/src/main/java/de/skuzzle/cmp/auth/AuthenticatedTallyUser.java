@@ -1,5 +1,8 @@
 package de.skuzzle.cmp.auth;
 
+import java.util.Optional;
+
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import com.google.common.base.Preconditions;
@@ -15,6 +18,14 @@ class AuthenticatedTallyUser implements TallyUser {
 
     static TallyUser fromOpenIdUser(OidcUser openIdUser) {
         return new AuthenticatedTallyUser(openIdUser);
+    }
+
+    @Override
+    public Optional<String> getOidToken() {
+        return Optional.of(openIdUser)
+                .map(OidcUser::getIdToken)
+                .map(OidcIdToken::getTokenValue)
+                .map(Object::toString);
     }
 
     @Override

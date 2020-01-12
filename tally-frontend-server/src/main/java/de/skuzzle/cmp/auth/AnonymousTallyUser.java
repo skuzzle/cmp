@@ -1,5 +1,7 @@
 package de.skuzzle.cmp.auth;
 
+import java.util.Optional;
+
 class AnonymousTallyUser implements TallyUser {
 
     private static final TallyUser ONLY_INSTANCE = new AnonymousTallyUser();
@@ -10,6 +12,11 @@ class AnonymousTallyUser implements TallyUser {
 
     static TallyUser getInstance() {
         return ONLY_INSTANCE;
+    }
+
+    @Override
+    public Optional<String> getOidToken() {
+        return Optional.empty();
     }
 
     @Override
