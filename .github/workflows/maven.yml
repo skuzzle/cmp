@@ -32,4 +32,4 @@ jobs:
           run: mvn -B install --file pom.xml
         
         - name: Release maven package
-          run: mvn -B deploy -Ddeploy.username=${{ secrets.deploy_username }} -Ddeploy.password=${{ secrets.deploy_password }}
+          run: mvn -B deploy -s deploy-settings.xml -Ddeploy.username=${{ secrets.deploy_username }} -Ddeploy.password=${{ secrets.deploy_password }}
