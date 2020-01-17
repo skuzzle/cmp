@@ -35,4 +35,4 @@ jobs:
           run: mvn -B deploy -s deploy-settings.xml -DskipTests -Ddeploy.username=${{ secrets.deploy_username }} -Ddeploy.password=${{ secrets.deploy_password }}
           
         - name: Containerize
-          run: mvn -B jib:build 
+          run: mvn -B jib:build -Ddeploy.username=${{ secrets.deploy_username }} -Ddeploy.password=${{ secrets.deploy_password }}
