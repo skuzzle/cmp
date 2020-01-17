@@ -1,5 +1,8 @@
-name: Maven-CI
-on: [push]
+name: Build Release
+on: 
+    push:
+        branches: 
+            - master
 jobs:
     build:
         runs-on: ubuntu-latest
