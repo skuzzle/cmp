@@ -1,0 +1,20 @@
+name: Build Branch
+on: 
+    push:
+        branches-ignore: 
+            - master
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v1
+        - name: Set Up JDK
+          uses: actions/setup-java@v1
+          with: 
+            java-version: 13
+
+        - name: Build with maven
+          run: mvn -B install
+        
+        #- name: Release maven package
+        #  run: mvn -B deploy -s deploy-settings.xml -DskipTests -Ddeploy.username=${{ secrets.deploy_username }} -Ddeploy.password=${{ secrets.deploy_password }}
