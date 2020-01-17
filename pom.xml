@@ -17,6 +17,10 @@
     <name>tally-parent</name>
 
     <properties>
+        <!-- passed by commandline on deploy -->
+        <username>${deploy.username}</username>
+        <password>${deploy.password}</password>
+        
         <application.version.number>${project.version}</application.version.number>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
