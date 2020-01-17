@@ -29,7 +29,7 @@ jobs:
           run: mvn -B versions:set -DnewVersion=$BUILDNUM_FOR_GLOBAL
         
         - name: Build with maven
-          run: mvn -B install --file pom.xml
+          run: mvn -B -T1C install
         
         #- name: Release maven package
         #  run: mvn -B deploy -s deploy-settings.xml -DskipTests -Ddeploy.username=${{ secrets.deploy_username }} -Ddeploy.password=${{ secrets.deploy_password }}
