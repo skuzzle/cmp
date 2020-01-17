@@ -12,7 +12,13 @@ jobs:
           uses: actions/setup-java@v1
           with: 
             java-version: 13
-
+            
+        - name: Cache m2
+          uses: actions/cache@v1
+          with:
+              path: ~/.m2
+              key: maven-cache
+              
         - name: Build with maven
           run: mvn -B install
         
