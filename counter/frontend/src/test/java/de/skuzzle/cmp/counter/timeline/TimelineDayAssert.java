@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
 
-import de.skuzzle.cmp.counter.timeline.TimelineDay;
-
 public class TimelineDayAssert extends AbstractAssert<TimelineDayAssert, TimelineDay> {
 
     private TimelineDayAssert(TimelineDay actual) {

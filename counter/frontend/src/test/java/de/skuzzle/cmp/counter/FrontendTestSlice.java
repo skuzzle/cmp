@@ -11,8 +11,10 @@ import org.springframework.mobile.device.annotation.DeviceResolverConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.TestExecutionListeners.MergeMode;
+import org.springframework.test.context.TestPropertySource;
 
 import de.skuzzle.cmp.counter.client.TestTallyClientConfigurer;
+import de.skuzzle.cmp.counter.version.VersionSpringConfiguration;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
@@ -20,8 +22,10 @@ import de.skuzzle.cmp.counter.client.TestTallyClientConfigurer;
 @ActiveProfiles("slice.mvc")
 @Import({ AuthenticationMockTestConfiguration.class,
         DeviceResolverConfiguration.class,
-        TallyClientMockTestConfiguration.class })
+        TallyClientMockTestConfiguration.class,
+        VersionSpringConfiguration.class })
 @TestExecutionListeners(mergeMode = MergeMode.MERGE_WITH_DEFAULTS, listeners = TestTallyClientConfigurer.class)
+@TestPropertySource(properties = "cmp.version=1")
 public @interface FrontendTestSlice {
 
 }

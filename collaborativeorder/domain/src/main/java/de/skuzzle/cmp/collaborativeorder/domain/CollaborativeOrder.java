@@ -12,10 +12,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.google.common.base.Preconditions;
 
-import de.skuzzle.cmp.collaborativeorder.collections.Lists;
 import de.skuzzle.cmp.collaborativeorder.table.Column;
 import de.skuzzle.cmp.collaborativeorder.table.ConsoleTable;
 import de.skuzzle.cmp.collaborativeorder.table.RowData;
+import de.skuzzle.cmp.common.collections.Lists;
 import io.micrometer.core.instrument.Metrics;
 
 @Document

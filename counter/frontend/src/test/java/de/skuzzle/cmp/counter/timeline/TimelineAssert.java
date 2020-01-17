@@ -3,8 +3,6 @@ package de.skuzzle.cmp.counter.timeline;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
 
-import de.skuzzle.cmp.counter.timeline.Timeline;
-
 public class TimelineAssert extends AbstractAssert<TimelineAssert, Timeline> {
 
     private TimelineAssert(Timeline actual) {

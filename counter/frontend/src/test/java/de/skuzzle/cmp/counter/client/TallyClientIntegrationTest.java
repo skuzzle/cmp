@@ -22,7 +22,8 @@ import de.skuzzle.cmp.counter.TestUserConfigurer;
 
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK, properties = {
         "cmp.backend.url=http://localhost:6565",
-        "cmp.backend.healthUrl=http://not.used.in.this.test" })
+        "cmp.backend.healthUrl=http://not.used.in.this.test",
+        "cmp.version=1" })
 @AutoConfigureStubRunner(ids = "de.skuzzle.tally.counter:counter-rest:+:stubs:6565",
         stubsMode = StubRunnerProperties.StubsMode.LOCAL)
 public class TallyClientIntegrationTest {

@@ -19,7 +19,7 @@ public final class UserId {
         Preconditions.checkArgument(id != null, "id must not be null");
         Preconditions.checkArgument(!id.isEmpty(), "id must not be empty");
 
-        Preconditions.checkArgument(UNKNOWN_PREFIX.equals(source) || !anonymous,
+        Preconditions.checkArgument(!anonymous || UNKNOWN_PREFIX.equals(source),
                 "source must be 'unknown' when anonymous flag is true, but was '%s'", source);
         this.source = source;
         this.id = id;

@@ -30,12 +30,12 @@ public class RateLimiterConfiguration {
     }
 
     @Bean
-    public ApiRateLimiter<HttpServletRequest> rateLimiter() {
+    public ApiRateLimiter<HttpServletRequest> rateLimiter(TallyUser tallyUser) {
         final Ratelimit rateLimit = apiProperties.getRatelimit();
         if (rateLimit.isEnabled()) {
             logger.info("Configuring API rate limiter with a client dependent rate limit of {}", rateLimit.getRps());
             return new MemoryCacheRateLimiter<>(
-                    new AuthenticationClientIdentificator(),
+                    new AuthenticationClientIdentificator(tallyUser),
                     rateLimit.getRps());
         } else {
             logger.warn("API rate limit is disabled");
@@ -47,9 +47,15 @@ public class RateLimiterConfiguration {
 
         private final ClientIdentificator<HttpServletRequest> identifyByIp = new RemoteIpClientIdentificator();
 
+        private final TallyUser tallyUser;
+
+        AuthenticationClientIdentificator(TallyUser tallyUser) {
+            this.tallyUser = tallyUser;
+        }
+
         @Override
         public Optional<ApiClient> tryIdentifyClientFrom(HttpServletRequest hint) {
-            final TallyUser user = TallyUser.fromCurrentAuthentication();
+            final TallyUser user = tallyUser;
             if (user.isAnonymous()) {
                 return identifyByIp.tryIdentifyClientFrom(hint);
             }

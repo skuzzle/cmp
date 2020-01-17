@@ -6,9 +6,8 @@ import java.util.function.Consumer;
 
 import org.springframework.test.context.TestContext;
 
-import de.skuzzle.cmp.counter.client.BackendClient;
-import de.skuzzle.cmp.counter.client.RestTallyMetaInfoResponse;
 import de.skuzzle.cmp.counter.client.TestResponses.TallySheetResponseBuilder;
+
 class ClientTestContext {
 
     private final static ThreadLocal<ClientTestContext> contexts = new ThreadLocal<>();

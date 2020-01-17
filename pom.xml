@@ -31,6 +31,7 @@
         <yarn.version>v1.13.0</yarn.version>
         <npm.version>6.3.0</npm.version>
         
+        <!-- per default, skip docker build. Will be enabled in sub modules -->
         <jib.skip>true</jib.skip>
     </properties>
     
@@ -62,16 +63,25 @@
     </repositories>
 
     <modules>
+        <!-- Domain -->
+        <!-- Counter -->
         <module>counter/domain</module>
         <module>counter/rest</module>
         <module>counter/frontend</module>
         
+        <!-- Collaborative Order -->
         <module>collaborativeorder/domain</module>
         
+        <!-- Common -->
+        <module>common/rest-auth</module>
+        <module>common/frontend-auth</module>
+        <module>common/http</module>
+        <module>common/collections</module>
         
-        <module>rest-auth</module>
-        <module>frontend-auth</module>
+        <!-- UI -->
+        <module>ui/fragments</module>
         
+        <!-- Application -->
         <module>application/backend-server</module>
         <module>application/frontend-server</module>
     </modules>
@@ -81,13 +91,23 @@
           
             <!-- common -->
             <dependency>
-                <groupId>de.skuzzle.cmp</groupId>
+                <groupId>de.skuzzle.cmp.common</groupId>
                 <artifactId>rest-auth</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.skuzzle.cmp</groupId>
+                <groupId>de.skuzzle.cmp.common</groupId>
                 <artifactId>frontend-auth</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.skuzzle.cmp.common</groupId>
+                <artifactId>http</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.skuzzle.cmp.common</groupId>
+                <artifactId>collections</artifactId>
                 <version>${project.version}</version>
             </dependency>
             
@@ -107,10 +127,18 @@
                 <artifactId>counter-frontend</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            
             <!-- collaborativeorder -->
             <dependency>
                 <groupId>de.skuzzle.cmp.collaborativeorder</groupId>
                 <artifactId>collaborativeorder-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            
+            <!-- UI -->
+            <dependency>
+                <groupId>de.skuzzle.cmp.ui</groupId>
+                <artifactId>fragments</artifactId>
                 <version>${project.version}</version>
             </dependency>
             

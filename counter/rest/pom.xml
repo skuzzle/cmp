@@ -22,7 +22,7 @@
             <artifactId>counter-domain</artifactId>
         </dependency>
         <dependency>
-            <groupId>de.skuzzle.cmp</groupId>
+            <groupId>de.skuzzle.cmp.common</groupId>
             <artifactId>rest-auth</artifactId>
         </dependency>
 		<dependency>

@@ -8,7 +8,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import de.skuzzle.cmp.counter.client.RestTallyResponse;
 import de.skuzzle.cmp.counter.client.TestResponses;
-import de.skuzzle.cmp.counter.tagcloud.TagCloud;
 
 @Controller
 class TagCloudTestController {

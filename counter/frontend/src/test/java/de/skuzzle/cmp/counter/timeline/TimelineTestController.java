@@ -11,8 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 import de.skuzzle.cmp.counter.client.RestTallyResponse;
 import de.skuzzle.cmp.counter.client.TestResponses;
 import de.skuzzle.cmp.counter.client.TestResponses.TallySheetResponseBuilder;
-import de.skuzzle.cmp.counter.timeline.Timeline;
-import de.skuzzle.cmp.counter.timeline.TimelineBuilder;
 
 @Controller
 public class TimelineTestController {

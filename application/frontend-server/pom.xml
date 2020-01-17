@@ -7,24 +7,32 @@
 		<groupId>de.skuzzle.cmp</groupId>
 		<artifactId>cmp-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+		<relativePath>../../pom.xml</relativePath>
 	</parent>
 	<artifactId>frontend-server</artifactId>
 	<name>frontend-server</name>
-	
+
 	<properties>
-	   <jib.skip>false</jib.skip>
+		<jib.skip>false</jib.skip>
 	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>de.skuzzle.cmp</groupId>
+			<groupId>de.skuzzle.cmp.ui</groupId>
+			<artifactId>fragments</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.skuzzle.cmp.common</groupId>
 			<artifactId>frontend-auth</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>de.skuzzle.cmp.counter</groupId>
-            <artifactId>counter-frontend</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>de.skuzzle.cmp.common</groupId>
+			<artifactId>http</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.skuzzle.cmp.counter</groupId>
+			<artifactId>counter-frontend</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -124,47 +132,6 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>com.github.eirslett</groupId>
-				<artifactId>frontend-maven-plugin</artifactId>
-				<version>1.6</version>
-				<configuration>
-					<installDirectory>target</installDirectory>
-					<workingDirectory>${basedir}</workingDirectory>
-					<nodeVersion>${node.version}</nodeVersion>
-					<npmVersion>${npm.version}</npmVersion>
-					<yarnVersion>${yarn.version}</yarnVersion>
-				</configuration>
-				<executions>
-					<execution>
-						<id>install node and npm</id>
-						<goals>
-							<goal>install-node-and-npm</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>npm install</id>
-						<goals>
-							<goal>npm</goal>
-						</goals>
-						<configuration>
-							<!-- this calls yarn install -->
-							<arguments>install</arguments>
-						</configuration>
-					</execution>
-
-					<execution>
-						<id>npm build</id>
-						<goals>
-							<goal>npm</goal>
-						</goals>
-						<configuration>
-							<!-- this calls yarn build -->
-							<arguments>build</arguments>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
@@ -173,39 +140,6 @@
 				<artifactId>jib-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>com.github.eirslett</groupId>
-										<artifactId>frontend-maven-plugin</artifactId>
-										<versionRange>[0,)</versionRange>
-										<goals>
-											<goal>install-node-and-yarn</goal>
-											<goal>yarn</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<!-- ignore yarn builds triggered by eclipse -->
-										<ignore />
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 	</build>
 
 </project>

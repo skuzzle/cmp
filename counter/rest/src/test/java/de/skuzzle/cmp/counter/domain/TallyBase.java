@@ -43,7 +43,7 @@ public class TallyBase {
         @Bean
         @Primary
         public TallyUser testUser() {
-            return TallyUser.forTest("user1", false);
+            return TallyUser.forTestWithId("user1");
         }
     }
 

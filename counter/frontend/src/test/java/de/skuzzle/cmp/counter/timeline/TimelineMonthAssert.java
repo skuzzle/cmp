@@ -5,8 +5,6 @@ import java.time.Month;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
 
-import de.skuzzle.cmp.counter.timeline.TimelineMonth;
-
 public class TimelineMonthAssert extends AbstractAssert<TimelineMonthAssert, TimelineMonth> {
 
     private TimelineMonthAssert(TimelineMonth actual) {

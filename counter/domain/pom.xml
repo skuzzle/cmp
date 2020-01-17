@@ -9,13 +9,17 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
-    
-    <groupId>de.skuzzle.cmp.counter</groupId>
+
+	<groupId>de.skuzzle.cmp.counter</groupId>
 	<artifactId>counter-domain</artifactId>
 	<name>counter-domain</name>
 	<packaging>jar</packaging>
 
 	<dependencies>
+		<dependency>
+			<groupId>de.skuzzle.cmp.common</groupId>
+			<artifactId>collections</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>

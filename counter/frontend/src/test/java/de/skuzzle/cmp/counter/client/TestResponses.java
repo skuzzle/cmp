@@ -5,12 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import de.skuzzle.cmp.counter.client.RestIncrements;
-import de.skuzzle.cmp.counter.client.RestTallyIncrement;
-import de.skuzzle.cmp.counter.client.RestTallyResponse;
-import de.skuzzle.cmp.counter.client.RestTallySheet;
-import de.skuzzle.cmp.counter.client.RestTallySheetsReponse;
-
 public class TestResponses {
 
     public static TallySheetResponseBuilder tallySheet() {

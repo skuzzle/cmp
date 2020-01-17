@@ -16,7 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.google.common.base.Preconditions;
 
-import de.skuzzle.cmp.counter.collections.Lists;
+import de.skuzzle.cmp.common.collections.Lists;
 
 @Document
 public class TallySheet implements ShallowTallySheet {

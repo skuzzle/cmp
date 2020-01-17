@@ -6,9 +6,6 @@ import java.util.stream.Collectors;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.api.Assertions;
 
-import de.skuzzle.cmp.counter.tagcloud.TagCloud;
-import de.skuzzle.cmp.counter.tagcloud.WeightedTag;
-
 public class TagCloudAssert extends AbstractAssert<TagCloudAssert, TagCloud> {
 
     private TagCloudAssert(TagCloud actual) {

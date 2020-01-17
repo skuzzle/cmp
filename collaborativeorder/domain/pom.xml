@@ -16,6 +16,10 @@
 	<name>collaborativeorder-domain</name>
 
 	<dependencies>
+        <dependency>
+            <groupId>de.skuzzle.cmp.common</groupId>
+            <artifactId>collections</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
