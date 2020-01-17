@@ -26,10 +26,4 @@ jobs:
           run: mvn -B install --file pom.xml
         
         - name: Release maven package
-          uses: samuelmeuli/action-maven-publish@v1
-          with:
-              nexus_username:  ${{ secrets.nexus_username }}
-              nexus_password: ${{ secrets.nexus_password }}
-              gpg_private_key: ${{ secrets.gpg_private_key }}
-              gpg_passphrase: ${{ secrets.gpg_passphrase }}
-              maven_goals_phases: "deploy"
+          run: mvn deploy -Dregistry=https://maven.pkg.github.com/skuzzle/cmp -Dtoken=${{ secrets.GITHUB_TOKEN }}
