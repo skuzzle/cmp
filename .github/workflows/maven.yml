@@ -32,4 +32,4 @@ jobs:
           run: mvn -B install --file pom.xml
         
         - name: Release maven package
-          run: mvn deploy -Dtoken=${{ secrets.GITHUB_TOKEN }}
+          run: mvn deploy -Ddeploy.username=${{ secrets.nexus_username }} -Ddeploy.password=${{ secrets.nexus_password }}
