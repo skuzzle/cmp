@@ -15,9 +15,12 @@ jobs:
           with:
               gist_token: ${{ secrets.gist_token }}
               set_env: true
-        
+
+        - name: print build number
+          run: echo Global Build Number is $BUILDNUM_FOR_GLOBAL
+          
         - name: Increment version
-          run: mvn -B versions:set -DnewVersion=$BUILDNUM_FOR_GLOBAL'
+          run: mvn -B versions:set -DnewVersion=$BUILDNUM_FOR_GLOBAL
         
         - name: Build with maven
           run: mvn -B install --file pom.xml
