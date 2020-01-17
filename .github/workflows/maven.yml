@@ -26,4 +26,4 @@ jobs:
           run: mvn -B install --file pom.xml
         
         - name: Release maven package
-          run: mvn deploy -Dregistry=https://maven.pkg.github.com/skuzzle/cmp -Dtoken=${{ secrets.GITHUB_TOKEN }}
+          run: mvn deploy -Dtoken=${{ secrets.GITHUB_TOKEN }}
