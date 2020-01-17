@@ -9,10 +9,19 @@ jobs:
           uses: actions/setup-java@v1
           with: 
             java-version: 13
+        
+        - name: Generate build number
+          uses: zyborgh/gh-action-buildnum@v1
+          with:
+              gist_token: ${{ secrets.gist_token }}
+              set_env: true
+        
         - name: Increment version
-          run: mvn -B versions:set -DnewVersion=${{job.container.id}}'
+          run: mvn -B versions:set -DnewVersion=$BUILDNUM_FOR_GLOBAL'
+        
         - name: Build with maven
           run: mvn -B install --file pom.xml
+        
         - name: Release maven package
           uses: samuelmeuli/action-maven-publish@v1
           with:
