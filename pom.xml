@@ -188,7 +188,11 @@
                             <image>openjdk:13</image>
                         </from>
                         <to>
-                            <image>skuzzle/${project.artifactId}</image>
+                            <image>docker.pkg.github.com/skuzzle/cmp/${project.artifactId}</image>
+                            <auth>
+                                <username>${deploy.username}</username>
+                                <password>${deploy.password}</password>
+                            </auth>
                             <tags>
                                 <tag>${project.version}</tag>
                                 <tag>latest</tag>
