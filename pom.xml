@@ -31,12 +31,20 @@
     <distributionManagement>
         <repository>
             <id>github</id>
-            <name>GitHub OWNER Apache Maven Packages</name>
+            <name>GitHub skuzzle Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/skuzzle/cmp</url>
         </repository>
     </distributionManagement>
 
     <repositories>
+        <repository>
+            <id>github</id>
+            <name>GitHub skuzzle Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/skuzzle/cmp</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
         <repository>
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
