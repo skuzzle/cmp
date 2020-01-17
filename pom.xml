@@ -30,6 +30,8 @@
         <node.version>v10.15.1</node.version>
         <yarn.version>v1.13.0</yarn.version>
         <npm.version>6.3.0</npm.version>
+        
+        <jib.skip>true</jib.skip>
     </properties>
     
     <distributionManagement>
