@@ -10,6 +10,10 @@
 	</parent>
 	<artifactId>tally-backend-server</artifactId>
 	<name>tally-backend-server</name>
+	
+	<properties>
+	   <jib.skip>false</jib.skip>
+	</properties>
 
 	<dependencies>
 		<dependency>
