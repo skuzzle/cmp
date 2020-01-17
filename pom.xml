@@ -10,11 +10,11 @@
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>de.skuzzle.tally</groupId>
-    <artifactId>tally-parent</artifactId>
+    <groupId>de.skuzzle.cmp</groupId>
+    <artifactId>cmp-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>tally-parent</name>
+    <name>cmp-parent</name>
 
     <properties>
         <!-- passed by commandline on deploy -->
@@ -72,8 +72,8 @@
         <module>rest-auth</module>
         <module>frontend-auth</module>
         
-        <module>tally-backend-server</module>
-        <module>tally-frontend-server</module>
+        <module>application/backend-server</module>
+        <module>application/frontend-server</module>
     </modules>
 
     <dependencyManagement>
@@ -81,35 +81,35 @@
           
             <!-- common -->
             <dependency>
-                <groupId>de.skuzzle.tally</groupId>
+                <groupId>de.skuzzle.cmp</groupId>
                 <artifactId>rest-auth</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.skuzzle.tally</groupId>
+                <groupId>de.skuzzle.cmp</groupId>
                 <artifactId>frontend-auth</artifactId>
                 <version>${project.version}</version>
             </dependency>
             
             <!-- counter -->
             <dependency>
-                <groupId>de.skuzzle.tally.counter</groupId>
+                <groupId>de.skuzzle.cmp.counter</groupId>
                 <artifactId>counter-domain</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.skuzzle.tally.counter</groupId>
+                <groupId>de.skuzzle.cmp.counter</groupId>
                 <artifactId>counter-rest</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.skuzzle.tally.counter</groupId>
+                <groupId>de.skuzzle.cmp.counter</groupId>
                 <artifactId>counter-frontend</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- collaborativeorder -->
             <dependency>
-                <groupId>de.skuzzle.tally.collaborativeorder</groupId>
+                <groupId>de.skuzzle.cmp.collaborativeorder</groupId>
                 <artifactId>collaborativeorder-domain</artifactId>
                 <version>${project.version}</version>
             </dependency>

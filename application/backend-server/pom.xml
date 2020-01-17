@@ -4,12 +4,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>de.skuzzle.tally</groupId>
-		<artifactId>tally-parent</artifactId>
+		<groupId>de.skuzzle.cmp</groupId>
+		<artifactId>cmp-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
 	</parent>
-	<artifactId>tally-backend-server</artifactId>
-	<name>tally-backend-server</name>
+    <groupId>de.skuzzle.cmp.application</groupId>
+	<artifactId>backend-server</artifactId>
+	<name>backend-server</name>
 	
 	<properties>
 	   <jib.skip>false</jib.skip>
@@ -17,11 +19,11 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>de.skuzzle.tally.counter</groupId>
+			<groupId>de.skuzzle.cmp.counter</groupId>
 			<artifactId>counter-rest</artifactId>
 		</dependency>
         <dependency>
-            <groupId>de.skuzzle.tally</groupId>
+            <groupId>de.skuzzle.cmp</groupId>
             <artifactId>rest-auth</artifactId>
         </dependency>
 		<dependency>
