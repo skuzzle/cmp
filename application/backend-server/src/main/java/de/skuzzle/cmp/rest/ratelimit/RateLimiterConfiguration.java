@@ -55,11 +55,10 @@ public class RateLimiterConfiguration {
 
         @Override
         public Optional<ApiClient> tryIdentifyClientFrom(HttpServletRequest hint) {
-            final TallyUser user = tallyUser;
-            if (user.isAnonymous()) {
+            if (tallyUser.isAnonymous()) {
                 return identifyByIp.tryIdentifyClientFrom(hint);
             }
-            return Optional.of(ApiClient.identifiedBy(user));
+            return Optional.of(ApiClient.identifiedBy(tallyUser));
         }
 
     }

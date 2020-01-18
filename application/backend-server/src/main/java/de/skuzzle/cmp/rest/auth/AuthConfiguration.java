@@ -10,6 +10,6 @@ class AuthConfiguration {
     @Bean
     @RequestScope
     public TallyUser tallyUser() {
-        return TallyUserImpl.fromCurrentAuthentication();
+        return TallyUserFactory.fromCurrentAuthentication();
     }
 }
