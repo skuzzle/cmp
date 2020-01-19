@@ -45,3 +45,5 @@ jobs:
           with:
             url: ${{ secrets.trigger_deployment_url }}
             method: GET
+            username: ${{ secrets.jenkins_username }}
+            password: ${{ secrets.jenkins_password }}
