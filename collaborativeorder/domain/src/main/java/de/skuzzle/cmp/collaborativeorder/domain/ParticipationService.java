@@ -41,6 +41,13 @@ public class ParticipationService {
         return participant;
     }
 
+    public Participant removeLineItem(String collaborativeOrderId, UserId userId, String lineItemId) {
+        final CollaborativeOrder collaborativeOrder = getOrder(collaborativeOrderId);
+        final Participant participant = collaborativeOrder.removeLineItemWithId(userId, lineItemId);
+        collaborativeOrderRepository.save(collaborativeOrder);
+        return participant;
+    }
+
     public Participant payTip(String collaborativeOrderId, UserId userId, Tip tip) {
         final CollaborativeOrder collaborativeOrder = getOrder(collaborativeOrderId);
         final Participant participant = collaborativeOrder.withTipBy(userId, tip);

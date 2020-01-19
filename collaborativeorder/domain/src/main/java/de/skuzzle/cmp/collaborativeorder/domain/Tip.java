@@ -11,7 +11,7 @@ public final class Tip {
     private final Percentage percentage;
     private final Money absolute;
 
-    public Tip(Percentage percentage, Money absolute) {
+    private Tip(Percentage percentage, Money absolute) {
         Preconditions.checkArgument(percentage != null ^ absolute != null, "tip can either be relative OR absolute");
         this.percentage = percentage;
         this.absolute = absolute;
@@ -31,6 +31,20 @@ public final class Tip {
         } else {
             return this.percentage.from(money);
         }
+    }
+
+    boolean isAbsolute() {
+        return absolute != null;
+    }
+
+    Money getAbsolute() {
+        Preconditions.checkState(isAbsolute(), "tip is not absolute");
+        return this.absolute;
+    }
+
+    Percentage getPercentage() {
+        Preconditions.checkState(!isAbsolute(), "tip is not relative");
+        return this.percentage;
     }
 
     @Override

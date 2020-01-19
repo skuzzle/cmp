@@ -176,6 +176,15 @@ public class CollaborativeOrder {
         return participant;
     }
 
+    Participant removeLineItemWithId(UserId userId, String lineItemId) {
+        Preconditions.checkState(isOpenForModify(),
+                "Can not remove line item %s from user %s: Order is closed for modification", lineItemId, userId);
+
+        final Participant participant = participantWithId(userId).removeLineItemWithId(lineItemId);
+        this.updateCalculation();
+        return participant;
+    }
+
     Participant withTipBy(UserId userId, Tip tip) {
         Preconditions.checkState(isOpenForModify(),
                 "Can not set tip %s for user %s: Order is closed for modification", tip, userId);
@@ -278,4 +287,5 @@ public class CollaborativeOrder {
         participants.forEach(participant -> participant.toTable(table));
         return table;
     }
+
 }

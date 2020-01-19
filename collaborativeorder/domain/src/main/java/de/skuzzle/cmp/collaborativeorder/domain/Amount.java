@@ -21,6 +21,10 @@ public final class Amount implements Comparable<Amount> {
         return money.multiply(BigDecimal.valueOf(amount));
     }
 
+    int getAmount() {
+        return this.amount;
+    }
+
     @Override
     public int hashCode() {
         return amount;

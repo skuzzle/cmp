@@ -71,6 +71,8 @@
         
         <!-- Collaborative Order -->
         <module>collaborativeorder/domain</module>
+        <module>collaborativeorder/rest</module>
+        <module>collaborativeorder/frontend</module>
         
         <!-- Common -->
         <module>common/rest-auth</module>
@@ -132,6 +134,16 @@
             <dependency>
                 <groupId>de.skuzzle.cmp.collaborativeorder</groupId>
                 <artifactId>collaborativeorder-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.skuzzle.cmp.collaborativeorder</groupId>
+                <artifactId>collaborativeorder-rest</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.skuzzle.cmp.collaborativeorder</groupId>
+                <artifactId>collaborativeorder-frontend</artifactId>
                 <version>${project.version}</version>
             </dependency>
             

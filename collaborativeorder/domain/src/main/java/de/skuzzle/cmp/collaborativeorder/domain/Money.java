@@ -30,6 +30,10 @@ public final class Money implements Comparable<Money> {
         return new Money(BigDecimal.valueOf(value));
     }
 
+    public static Money money(BigDecimal value) {
+        return new Money(value);
+    }
+
     public Percentage inRelationTo(Money other) {
         return Percentage.percent(monetaryAmount.divide(other.monetaryAmount, CTX));
     }
@@ -60,6 +64,10 @@ public final class Money implements Comparable<Money> {
 
     public Money multiply(BigDecimal bigDecimal) {
         return new Money(monetaryAmount.multiply(bigDecimal, CTX));
+    }
+
+    BigDecimal getMonetaryAmount() {
+        return this.monetaryAmount;
     }
 
     @Override

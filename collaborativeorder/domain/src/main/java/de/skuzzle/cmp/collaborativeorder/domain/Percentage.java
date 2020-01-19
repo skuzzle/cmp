@@ -45,6 +45,10 @@ public final class Percentage implements Comparable<Percentage> {
         return new Percentage(HOUNDRED.percentage.subtract(percentage, CTX));
     }
 
+    BigDecimal getPercentage() {
+        return this.percentage;
+    }
+
     @Override
     public int hashCode() {
         return rounded().hashCode();

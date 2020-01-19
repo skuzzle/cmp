@@ -29,9 +29,15 @@
             <groupId>de.skuzzle.cmp.common</groupId>
             <artifactId>http</artifactId>
         </dependency>
+        
+        <!-- Domain -->
         <dependency>
             <groupId>de.skuzzle.cmp.counter</groupId>
             <artifactId>counter-frontend</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.skuzzle.cmp.collaborativeorder</groupId>
+            <artifactId>collaborativeorder-frontend</artifactId>
         </dependency>
 
         <dependency>

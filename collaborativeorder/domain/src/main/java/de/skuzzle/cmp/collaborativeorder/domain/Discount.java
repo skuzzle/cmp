@@ -34,6 +34,20 @@ public final class Discount {
         }
     }
 
+    boolean isAbsolute() {
+        return absolute != null;
+    }
+
+    Money getAbsolute() {
+        Preconditions.checkState(isAbsolute(), "discount is not absolute");
+        return this.absolute;
+    }
+
+    Percentage getPercentage() {
+        Preconditions.checkState(!isAbsolute(), "discount is not relative");
+        return this.percentage;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(absolute, percentage);

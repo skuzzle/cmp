@@ -1,6 +1,7 @@
 package de.skuzzle.cmp.collaborativeorder.domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,6 +53,10 @@ public class Participant {
         return this.getUserId().equals(other);
     }
 
+    public List<LineItem> lineItems() {
+        return Collections.unmodifiableList(this.lineItems);
+    }
+
     CollaborativeOrder leave(CollaborativeOrder order) {
         Preconditions.checkArgument(order != null, "order must not be null");
         return order.expel(userId);
@@ -61,6 +66,10 @@ public class Participant {
         Preconditions.checkArgument(tip != null, "tip must not be null");
         this.tip = tip;
         return this;
+    }
+
+    public Tip getTip() {
+        return this.tip;
     }
 
     public boolean isReadyToOrder() {
@@ -84,6 +93,10 @@ public class Participant {
 
     public Money getAmountToPay() {
         return calculatedPrices.getTippedDiscountedPrice();
+    }
+
+    public CalculatedPrices getCalculatedPrices() {
+        return this.calculatedPrices;
     }
 
     Money sumOfItemPrices() {
@@ -123,16 +136,24 @@ public class Participant {
         return this;
     }
 
+    Participant removeLineItemWithId(String lineItemId) {
+        Preconditions.checkArgument(lineItemId != null, "lineItemId must not be null");
+        final boolean removed = this.lineItems.removeIf(item -> item.getId().equals(lineItemId));
+        Preconditions.checkArgument(removed, "There is no lineitem with id %s", lineItemId);
+        return this;
+    }
+
     public void toTable(ConsoleTable table) {
         table.addRow(RowData.of(
-                "  " + getUserId(), "", "", 
+                "  " + getUserId(), "", "",
                 calculatedPrices.getOriginalPrice(),
                 calculatedPrices.getRelativeDiscount(),
                 calculatedPrices.getAbsoluteDiscount(),
-                calculatedPrices.getDiscountedPrice(), 
+                calculatedPrices.getDiscountedPrice(),
                 calculatedPrices.getRelativeTip(),
                 calculatedPrices.getAbsoluteTip(),
                 calculatedPrices.getTippedDiscountedPrice()));
         this.lineItems.forEach(item -> item.toTable(table));
     }
+
 }
