@@ -1,5 +1,8 @@
 pipeline {
   agent any
+  environment {
+    DOCKER_REGISTRY = credentials('github_docker_registry')
+  }
   stages {
     stage('Undeploy') {
       steps {
@@ -8,6 +11,7 @@ pipeline {
     }
     stage('Pull latest') {
       steps {
+        sh 'docker login -u ${DOCKER_REGISTRY_USR} -p ${DOCKER_REGISTRY_PSW} docker.pkg.github.com'
         sh 'cd /docker/cmp && docker-compose pull'
       }
     }
