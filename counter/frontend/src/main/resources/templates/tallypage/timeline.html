@@ -46,12 +46,12 @@
                 
                 <div th:each="increment : ${day.increments}" class="notification box is-primary has-background-white has-text-black">
                     <a th:if="${timeline.admin}" 
-                        th:href="@{/{adminKey}/increment/{incrementId}?action=delete(adminKey=${timeline.adminKey}, incrementId=${increment.id})}" 
+                        th:href="@{/counter/{adminKey}/increment/{incrementId}?action=delete(adminKey=${timeline.adminKey}, incrementId=${increment.id})}" 
                         class="delete confirmable" 
                         title="Delete this increment..."></a>
                         
                     <edit-increment 
-                        th:attr="incrementDateUTC=${increment.incrementDateUTC}, description=${increment.description}, tags=${increment.tagsValue}, allowEdit=${timeline.admin}, updateUrl=@{/{adminKey}/increment/{incrementId}?action=updateIncrement(adminKey=${timeline.adminKey}, incrementId=${increment.id})}">
+                        th:attr="incrementDateUTC=${increment.incrementDateUTC}, description=${increment.description}, tags=${increment.tagsValue}, allowEdit=${timeline.admin}, updateUrl=@{/counter/{adminKey}/increment/{incrementId}?action=updateIncrement(adminKey=${timeline.adminKey}, incrementId=${increment.id})}">
                     
                         <th:block th:replace="this :: descriptionAndTags(${increment})"></th:block>                    
                     </edit-increment>

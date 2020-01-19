@@ -62,13 +62,13 @@ public class FrontpageController {
         return model;
     }
 
-    @PostMapping("/_create")
+    @PostMapping("/counter/_create")
     public String createTallySheet(@RequestParam("name") String name) {
         final RestTallyResponse response = client.createNewTallySheet(name);
-        return "redirect:/" + response.getTallySheet().getAdminKey();
+        return "redirect:/counter/" + response.getTallySheet().getAdminKey();
     }
 
-    @GetMapping(path = "/{key}", params = "action=delete")
+    @GetMapping(path = "/counter/{key}", params = "action=delete")
     public String deleteTallySheet(@PathVariable String key) {
         client.deleteTallySheet(key);
         return "redirect:/";

@@ -72,8 +72,8 @@ public class FrontpageControllerTest {
                 .withName(newCounterName)
                 .withAdminKey(expectedAdminKey)
                 .toResponse());
-        mockMvc.perform(post("/_create?name={name}", newCounterName))
-                .andExpect(redirectedUrlTemplate("/{adminKey}", expectedAdminKey));
+        mockMvc.perform(post("/counter/_create?name={name}", newCounterName))
+                .andExpect(redirectedUrlTemplate("/counter/{adminKey}", expectedAdminKey));
     }
 
     @Test
@@ -81,7 +81,7 @@ public class FrontpageControllerTest {
         testUser.anonymous();
 
         final String adminKeyToDelete = "adminKey";
-        mockMvc.perform(get("/{adminKey}?action=delete", adminKeyToDelete))
+        mockMvc.perform(get("/counter/{adminKey}?action=delete", adminKeyToDelete))
                 .andExpect(redirectedUrl("/"));
         verify(tallyClient).deleteTallySheet("adminKey");
     }

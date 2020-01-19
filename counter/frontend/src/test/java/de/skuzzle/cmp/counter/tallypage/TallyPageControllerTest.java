@@ -40,7 +40,7 @@ public class TallyPageControllerTest {
         // should give same result when logged in
         testUser.anonymous();
 
-        mockMvc.perform(get("/{publicKey}", clientConfigurer.getPublicKey()))
+        mockMvc.perform(get("/counter/{publicKey}", clientConfigurer.getPublicKey()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("tally", "timeline", "increments", "graph", "user", "tagCloud",
                         "version"));
@@ -59,7 +59,7 @@ public class TallyPageControllerTest {
                         .addIncrement("3", "third", LocalDateTime.now().minus(Period.ofMonths(1)))
                         .addIncrement("4", "fourth", LocalDateTime.now().minus(Period.ofMonths(2)), "tag"));
 
-        mockMvc.perform(get("/{adminKey}", clientConfigurer.getAdminKey()))
+        mockMvc.perform(get("/counter/{adminKey}", clientConfigurer.getAdminKey()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("tally", "timeline", "increments", "graph", "user"));
     }
@@ -70,7 +70,7 @@ public class TallyPageControllerTest {
 
         final String adminKey = clientConfigurer.getAdminKey();
 
-        mockMvc.perform(get("/{adminKey}?action=assignToCurrentUser", adminKey))
+        mockMvc.perform(get("/counter/{adminKey}?action=assignToCurrentUser", adminKey))
                 .andExpect(redirectedUrlTemplate("/{adminKey}", adminKey));
         clientConfigurer.verify().assignToCurrentUser(adminKey);
     }
@@ -82,7 +82,7 @@ public class TallyPageControllerTest {
         final String incrementId = "incrementId";
         final String adminKey = clientConfigurer.getAdminKey();
 
-        mockMvc.perform(get("/{adminKey}/increment/{incrementId}?action=delete", adminKey, incrementId))
+        mockMvc.perform(get("/counter/{adminKey}/increment/{incrementId}?action=delete", adminKey, incrementId))
                 .andExpect(redirectedUrlTemplate("/{adminKey}", adminKey));
 
         clientConfigurer.verify().deleteIncrement(adminKey, incrementId);
@@ -97,9 +97,10 @@ public class TallyPageControllerTest {
         final String tags = "comma,separated, leading space,trailing space ,, ";
         final String incrementDateUTC = "1987-12-09";
 
-        mockMvc.perform(post("/{adminKey}?description={description}&tags={tags}&incrementDateUTC={incrementDateUTC}",
-                adminKey, description, tags, incrementDateUTC))
-                .andExpect(redirectedUrlTemplate("/{adminKey}", adminKey));
+        mockMvc.perform(
+                post("/counter/{adminKey}?description={description}&tags={tags}&incrementDateUTC={incrementDateUTC}",
+                        adminKey, description, tags, incrementDateUTC))
+                .andExpect(redirectedUrlTemplate("/counter/{adminKey}", adminKey));
 
         final ArgumentCaptor<RestTallyIncrement> incrementCaptor = ArgumentCaptor.forClass(RestTallyIncrement.class);
         clientConfigurer.verify().increment(eq(adminKey), incrementCaptor.capture());

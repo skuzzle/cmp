@@ -64,7 +64,7 @@
                         </p>
                         <p th:if="!${user.loggedIn}" class="is-size-6"><strong>Hint:</strong> You can login later and assign the counter to your account if you want.</p>
                     </div>
-                    <form method="post" th:action="@{/_create}" >
+                    <form method="post" th:action="@{/counter/_create}" >
                         <div class="field has-addons">
                             <div class="control is-expanded">
                                 <input id="create-anchor" class="input" name="name" type="text" placeholder="Name your counter" required>

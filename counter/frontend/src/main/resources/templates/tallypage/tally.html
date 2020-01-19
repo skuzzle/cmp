@@ -25,17 +25,21 @@
 
 <div class="notification is-warning is-radiusless is-marginless" th:if="${tally.assignableToCurrentUser}">
     The counter you are viewing has not been assigned to a user. Do you want to assign it to <span th:text="${user.name}">user name</span>?
-    <a class="button" th:href="@{/{adminKey}?action=assignToCurrentUser(adminKey=${tally.adminKey})}" th:text="'Assign to ' + ${user.name}">User Name</a>
+    <a class="button" th:href="@{/counter/{adminKey}?action=assignToCurrentUser(adminKey=${tally.adminKey})}" th:text="'Assign to ' + ${user.name}">User Name</a>
+</div>
+
+<div class="notification is-warning is-radiusless is-marginless" th:if="${legacyWarning}">
+    You have accessed the counter using the legacy url <em>https://countmy.pizza/{key}</em>. This url will be inaccessible in an upcoming release. Please use the new url format https://countmy.pizza/<b>counter</b>/{key}.
 </div>
 
 <section class="hero">
     <div class="hero-body">
         <div class="container">
-            <editable-title th:text="${tally.name}" th:attr="changeNameAction=@{/{adminKey}?action=changeName&newName=(adminKey=${tally.adminKey})}, allowEdit=${tally.admin}">
+            <editable-title th:text="${tally.name}" th:attr="changeNameAction=@{/counter/{adminKey}?action=changeName&newName=(adminKey=${tally.adminKey})}, allowEdit=${tally.admin}">
                 Pizza Count 2018
             </editable-title>
             <h2 class="subtitle">
-                Share: <a th:href="@{/{publicKey}(publicKey=${tally.publicKey})}" title="Read-Only Link to share with your friends" th:text="${tally.publicKey}" href="#">Share:
+                Share: <a th:href="@{/counter/{publicKey}(publicKey=${tally.publicKey})}" title="Read-Only Link to share with your friends" th:text="${tally.publicKey}" href="#">Share:
                     http://tally.io/123547</a>
             </h2>
         </div>
@@ -52,7 +56,7 @@
                         <p class="card-header-title has-text-centered">New Entry</p>  
                     </header>   
                     <div class="card-content has-text-centered">  
-                        <form method="post" th:action="@{/{adminKey}(adminKey=${tally.adminKey})}" th:insert="tallypage/createItem :: formContent(${tagCloud.names})"></form>
+                        <form method="post" th:action="@{/counter/{adminKey}(adminKey=${tally.adminKey})}" th:insert="tallypage/createItem :: formContent(${tagCloud.names})"></form>
                     </div>  
                 </div>  
             </div>

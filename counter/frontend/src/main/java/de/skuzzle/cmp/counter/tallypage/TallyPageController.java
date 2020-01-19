@@ -47,7 +47,13 @@ public class TallyPageController {
     }
 
     @GetMapping("/{key}")
-    public ModelAndView showTallySheet(@PathVariable("key") String key, Device device) {
+    public String redirect(@PathVariable("key") String key) {
+        return "redirect:/counter/" + key + "?legacyWarning=true";
+    }
+
+    @GetMapping("/counter/{key}")
+    public ModelAndView showTallySheet(@PathVariable("key") String key,
+            @RequestParam(defaultValue = "false") boolean legacyWarning, Device device) {
         final RestTallyResponse response = client.getTallySheet(key);
 
         final RestTallySheet tallySheet = response.getTallySheet();
@@ -64,10 +70,11 @@ public class TallyPageController {
                 "timeline", timeline,
                 "increments", increments,
                 "graph", graph,
-                "mobile", mobile));
+                "mobile", mobile,
+                "legacyWarning", legacyWarning));
     }
 
-    @PostMapping("/{adminKey}")
+    @PostMapping("/counter/{adminKey}")
     public String incrementTallySheet(
             @PathVariable("adminKey") String adminKey,
             @RequestParam("description") String description,
@@ -79,10 +86,10 @@ public class TallyPageController {
                 LocalDateTime.of(incrementDate, LocalTime.now()), tagSet);
 
         client.increment(adminKey, increment);
-        return "redirect:/" + adminKey;
+        return "redirect:/counter/" + adminKey;
     }
 
-    @GetMapping(path = "{adminKey}/increment/{incrementId}", params = "action=updateIncrement")
+    @GetMapping(path = "/counter/{adminKey}/increment/{incrementId}", params = "action=updateIncrement")
     public String updateIncrement(
             @PathVariable("adminKey") String adminKey,
             @PathVariable("incrementId") String incrementId,
@@ -94,23 +101,23 @@ public class TallyPageController {
         final RestTallyIncrement increment = RestTallyIncrement.createWithId(incrementId, description,
                 LocalDateTime.of(incrementDate, LocalTime.now()), tagSet);
         client.updateIncrement(adminKey, increment);
-        return "redirect:/" + adminKey;
+        return "redirect:/counter/" + adminKey;
     }
 
-    @GetMapping(path = "/{key}", params = "action=assignToCurrentUser")
+    @GetMapping(path = "/counter/{key}", params = "action=assignToCurrentUser")
     public String assignToCurrentUser(@PathVariable String key) {
         Preconditions.checkState(this.currentUser.isLoggedIn(), "Can't assign to current user: user not logged in");
         client.assignToCurrentUser(key);
         return "redirect:/" + key;
     }
 
-    @GetMapping(path = "/{key}/increment/{incrementId}", params = "action=delete")
+    @GetMapping(path = "/counter/{key}/increment/{incrementId}", params = "action=delete")
     public String deleteIncrement(@PathVariable String key, @PathVariable String incrementId) {
         client.deleteIncrement(key, incrementId);
         return "redirect:/" + key;
     }
 
-    @GetMapping(path = "{adminKey}", params = { "action=changeName", "newName" })
+    @GetMapping(path = "/counter/{adminKey}", params = { "action=changeName", "newName" })
     public String changeTitle(@PathVariable String adminKey, @RequestParam String newName) {
         client.changeName(adminKey, newName);
         return "redirect:/" + adminKey;
