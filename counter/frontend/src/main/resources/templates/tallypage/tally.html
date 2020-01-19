@@ -30,6 +30,7 @@
 
 <div class="notification is-warning is-radiusless is-marginless" th:if="${legacyWarning}">
     You have accessed the counter using the legacy url <em>https://countmy.pizza/{key}</em>. This url will be inaccessible in an upcoming release. Please use the new url format https://countmy.pizza/<b>counter</b>/{key}.
+    <a class="button" th:href="@{/counter/{key}(key=${key})}">Got it</a>
 </div>
 
 <section class="hero">

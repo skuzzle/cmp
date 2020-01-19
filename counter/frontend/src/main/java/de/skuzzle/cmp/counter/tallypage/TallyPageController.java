@@ -65,6 +65,7 @@ public class TallyPageController {
 
         final boolean mobile = !device.isNormal();
         return new ModelAndView("tallypage/tally", Map.of(
+                "key", key,
                 "tagCloud", tagCloud,
                 "tally", tallySheet,
                 "timeline", timeline,

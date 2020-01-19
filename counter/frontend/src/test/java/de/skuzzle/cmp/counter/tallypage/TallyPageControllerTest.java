@@ -61,7 +61,7 @@ public class TallyPageControllerTest {
 
         mockMvc.perform(get("/counter/{adminKey}", clientConfigurer.getAdminKey()))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("tally", "timeline", "increments", "graph", "user"));
+                .andExpect(model().attributeExists("tally", "timeline", "increments", "graph", "user", "key"));
     }
 
     @Test
