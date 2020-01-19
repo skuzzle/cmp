@@ -46,14 +46,8 @@ public class TallyPageController {
         return currentUser;
     }
 
-    @GetMapping("/{key}")
-    public String redirect(@PathVariable("key") String key) {
-        return "redirect:/counter/" + key + "?legacyWarning=true";
-    }
-
     @GetMapping("/counter/{key}")
-    public ModelAndView showTallySheet(@PathVariable("key") String key,
-            @RequestParam(defaultValue = "false") boolean legacyWarning, Device device) {
+    public ModelAndView showTallySheet(@PathVariable("key") String key, Device device) {
         final RestTallyResponse response = client.getTallySheet(key);
 
         final RestTallySheet tallySheet = response.getTallySheet();
@@ -71,8 +65,7 @@ public class TallyPageController {
                 "timeline", timeline,
                 "increments", increments,
                 "graph", graph,
-                "mobile", mobile,
-                "legacyWarning", legacyWarning));
+                "mobile", mobile));
     }
 
     @PostMapping("/counter/{adminKey}")
