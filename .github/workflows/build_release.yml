@@ -34,8 +34,8 @@ jobs:
         - name: Build with maven
           run: mvn -B install
         
-        #- name: Release maven package
-        #  run: mvn -B deploy -s deploy-settings.xml -DskipTests -Ddeploy.username=${{ secrets.deploy_username }} -Ddeploy.password=${{ secrets.deploy_password }}
+        - name: Release maven package
+          run: mvn -B deploy -s deploy-settings.xml -DskipTests -Ddeploy.username=${{ secrets.deploy_username }} -Ddeploy.password=${{ secrets.deploy_password }}
           
         - name: Containerize
-          run: mvn -B jib:build -Ddeploy.username=${{ secrets.deploy_username }} -Ddeploy.password=${{ secrets.deploy_password }}
+          run: mvn -B jib:build -Ddocker=true -Ddeploy.username=${{ secrets.deploy_username }} -Ddeploy.password=${{ secrets.deploy_password }}

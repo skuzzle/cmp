@@ -7,14 +7,14 @@
 		<groupId>de.skuzzle.cmp</groupId>
 		<artifactId>cmp-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+		<relativePath>../../pom.xml</relativePath>
 	</parent>
-    <groupId>de.skuzzle.cmp.application</groupId>
+	<groupId>de.skuzzle.cmp.application</groupId>
 	<artifactId>backend-server</artifactId>
 	<name>backend-server</name>
-	
+
 	<properties>
-	   <jib.skip>false</jib.skip>
+		<jib.skip>false</jib.skip>
 	</properties>
 
 	<dependencies>
@@ -22,14 +22,14 @@
 			<groupId>de.skuzzle.cmp.counter</groupId>
 			<artifactId>counter-rest</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>de.skuzzle.cmp.common</groupId>
-            <artifactId>rest-auth</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>de.skuzzle.cmp.common</groupId>
-            <artifactId>http</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>de.skuzzle.cmp.common</groupId>
+			<artifactId>rest-auth</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.skuzzle.cmp.common</groupId>
+			<artifactId>http</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -105,7 +105,26 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
+	
+	<!-- Spring devtools must not be included when building the docker image. Must run with -Ddocker=true -->
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<property>
+					<name>!docker</name>
+				</property>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-devtools</artifactId>
+					<scope>runtime</scope>
+					<optional>true</optional>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 	<build>
 		<plugins>
 			<plugin>
