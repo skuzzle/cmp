@@ -65,7 +65,6 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <!-- this calls yarn install -->
                             <arguments>install</arguments>
                         </configuration>
                     </execution>
@@ -76,8 +75,7 @@
                             <goal>npm</goal>
                         </goals>
                         <configuration>
-                            <!-- this calls yarn build -->
-                            <arguments>build</arguments>
+                            <arguments>run build</arguments>
                         </configuration>
                     </execution>
                 </executions>
