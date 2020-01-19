@@ -203,7 +203,7 @@
                     <version>1.8.0</version>
                     <configuration>
                         <from>
-                            <image>openjdk:13</image>
+                            <image>openjdk:14</image>
                         </from>
                         <to>
                             <image>docker.pkg.github.com/skuzzle/cmp/${project.artifactId}</image>
