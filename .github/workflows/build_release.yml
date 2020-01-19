@@ -41,7 +41,7 @@ jobs:
           run: mvn -B jib:build -Ddocker=true -Ddeploy.username=${{ secrets.deploy_username }} -Ddeploy.password=${{ secrets.deploy_password }}
 
         - name: Trigger deployment
-          run: satak/webrequest-action@v1.2.2
+          uses: satak/webrequest-action@v1.2.2
           with:
             url: ${{ secrets.trigger_deployment_url }}
             method: GET
