@@ -17,7 +17,7 @@ pipeline {
     }
     stage('Deploy') {
       steps {
-        sh 'cd /docker/cmp && docker-compose up -d --pull'
+        sh 'cd /docker/cmp && docker-compose up -d'
       }
     }
   }
