@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/head :: head">
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Tally</title>
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <script defer src="https://code.jquery.com/jquery-3.4.0.slim.min.js"></script>
+
+    <link rel="stylesheet" href="../../../../target/classes/static/css/main.css"/>
+    <link rel="shortcut icon" type="image/x-icon" href="@{/favicon.ico}"/>
+</head>
+<body>
+
+<div class="container">
+    <nav th:replace="fragments/navigation :: navigation(${user})"></nav>
+</div>
+
+<div class="notification is-danger is-radiusless is-marginless" th:if="${tally.admin}">
+    You are viewing your counter using its admin link. If you want to share this counter, use the read-only link. Everyone who knows the admin link
+    will be able to update/delete this counter!
+</div>
+
+<div class="notification is-warning is-radiusless is-marginless" th:if="${tally.assignableToCurrentUser}">
+    The counter you are viewing has not been assigned to a user. Do you want to assign it to <span th:text="${user.name}">user name</span>?
+    <a class="button" th:href="@{/{adminKey}?action=assignToCurrentUser(adminKey=${tally.adminKey})}" th:text="'Assign to ' + ${user.name}">User Name</a>
+</div>
+
+<section class="hero">
+    <div class="hero-body">
+        <div class="container">
+            <editable-title th:text="${tally.name}" th:attr="changeNameAction=@{/{adminKey}?action=changeName&newName=(adminKey=${tally.adminKey})}, allowEdit=${tally.admin}">
+                Pizza Count 2018
+            </editable-title>
+            <h2 class="subtitle">
+                Share: <a th:href="@{/{publicKey}(publicKey=${tally.publicKey})}" title="Read-Only Link to share with your friends" th:text="${tally.publicKey}" href="#">Share:
+                    http://tally.io/123547</a>
+            </h2>
+        </div>
+    </div>
+</section>
+
+<section class="section has-background-white-bis">
+    <div class="container">
+        <div class="columns is-centered">
+        
+            <div class="column is-4" th:if="${tally.admin}">
+                <div class="card ">
+                    <header class="card-header has-background-white-ter">   
+                        <p class="card-header-title has-text-centered">New Entry</p>  
+                    </header>   
+                    <div class="card-content has-text-centered">  
+                        <form method="post" th:action="@{/{adminKey}(adminKey=${tally.adminKey})}" th:insert="tallypage/createItem :: formContent(${tagCloud.names})"></form>
+                    </div>  
+                </div>  
+            </div>
+        
+            <div class="column is-4">
+                <div class="card ">
+                    <header class="card-header has-background-white-ter">   
+                        <p class="card-header-title has-text-centered">Total count</p>  
+                    </header>   
+                    <div class="card-content has-text-centered">  
+                        <canvas th:replace="fragments/graph :: graph(${graph})"></canvas>   
+                        <p class="title is-size-2 " title="Total count" th:text="${increments.total}">1234</p>  
+                    </div>  
+                </div>  
+            </div>
+            
+            <div th:unless="${tagCloud.empty}" class="column is-4">
+                <div class="card ">
+                    <header class="card-header has-background-white-ter">   
+                        <p class="card-header-title has-text-centered">Tags</p>  
+                    </header>   
+                    <div class="card-content has-text-centered">  
+                        <div th:replace="tallypage/tagcloud :: tagCloud(${tagCloud})"></div>
+                    </div>  
+                </div>  
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container" th:insert="tallypage/timeline:: timeline(${timeline}, ${mobile})"></div>
+</section>
+
+<footer th:replace="fragments/footer :: footer"></footer>
+
+</body>
+
+</html>

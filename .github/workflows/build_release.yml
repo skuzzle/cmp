@@ -1,0 +1,47 @@
+name: Build Release
+on: 
+    push:
+        branches: 
+            - master
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v1
+        - name: Set Up JDK
+          uses: actions/setup-java@v1
+          with: 
+            java-version: 13
+            
+        - name: Cache m2
+          uses: actions/cache@v1
+          with:
+              path: ~/.m2
+              key: maven-cache
+        
+        - name: Generate build number
+          uses: zyborg/gh-action-buildnum@v1
+          with:
+              gist_token: ${{ secrets.gist_token }}
+              set_env: true
+
+        - name: print build number
+          run: echo Global Build Number is $BUILDNUM_FOR_GLOBAL
+          
+        - name: Increment version
+          run: mvn -B versions:set -DnewVersion=$BUILDNUM_FOR_GLOBAL
+        
+        - name: Build with maven
+          run: mvn -B install
+        
+        - name: Release maven package
+          run: mvn -B deploy -s deploy-settings.xml -DskipTests -Ddeploy.username=${{ secrets.deploy_username }} -Ddeploy.password=${{ secrets.deploy_password }}
+          
+        - name: Containerize
+          run: mvn -B jib:build -Ddocker=true -Ddeploy.username=${{ secrets.deploy_username }} -Ddeploy.password=${{ secrets.deploy_password }}
+
+        - name: Trigger deployment
+          run: satak/webrequest-action@v1.2.2
+          with:
+            url: ${{ secrets.trigger_deployment_url }}
+            method: GET
