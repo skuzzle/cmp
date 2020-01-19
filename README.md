@@ -50,4 +50,3 @@ As we currently run on docker-compose its not easy to achieve actualy _zero-down
 to fake it for the user:
 * The proxy serves an update notification if it encounters a gateway timeout from the application
 * The frontent is built resilient enough to not crash with an error in case the backend application has not fully booted
-
