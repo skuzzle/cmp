@@ -6,9 +6,14 @@ pipeline {
         sh 'cd /docker/cmp && docker-compose down || true'
       }
     }
+    stage('Pull latest') {
+      steps {
+        sh 'cd /docker/cmp && docker-compose pull'
+      }
+    }
     stage('Deploy') {
       steps {
-        sh 'cd /docker/cmp && docker-compose up -d'
+        sh 'cd /docker/cmp && docker-compose up -d --pull'
       }
     }
   }
