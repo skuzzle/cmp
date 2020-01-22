@@ -48,9 +48,9 @@ public class ParticipationService {
         return participant;
     }
 
-    public Participant payTip(String collaborativeOrderId, UserId userId, Tip tip) {
+    public Participant addTip(String collaborativeOrderId, UserId userId, Tip tip) {
         final CollaborativeOrder collaborativeOrder = getOrder(collaborativeOrderId);
-        final Participant participant = collaborativeOrder.withTipBy(userId, tip);
+        final Participant participant = collaborativeOrder.addTipFrom(userId, tip);
         collaborativeOrderRepository.save(collaborativeOrder);
         return participant;
     }
@@ -58,6 +58,13 @@ public class ParticipationService {
     public Participant setReadyToOrder(String collaborativeOrderId, UserId userId, boolean readyToOrder) {
         final CollaborativeOrder collaborativeOrder = getOrder(collaborativeOrderId);
         final Participant participant = collaborativeOrder.participantReady(userId, readyToOrder);
+        collaborativeOrderRepository.save(collaborativeOrder);
+        return participant;
+    }
+
+    public Participant registerPayment(String collaborativeOrderId, UserId participantId, Payment payment) {
+        final CollaborativeOrder collaborativeOrder = getOrder(collaborativeOrderId);
+        final Participant participant = collaborativeOrder.registerPaymentFrom(participantId, payment);
         collaborativeOrderRepository.save(collaborativeOrder);
         return participant;
     }

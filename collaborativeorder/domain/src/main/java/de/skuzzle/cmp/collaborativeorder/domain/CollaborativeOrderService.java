@@ -20,7 +20,7 @@ public class CollaborativeOrderService {
         return collaborativeOrderRepository.save(order);
     }
 
-    public CollaborativeOrder getOrderForOrganizator(String collaborativeOrderId, UserId organisatorId) {
+    public CollaborativeOrder getOrderForOrganisator(String collaborativeOrderId, UserId organisatorId) {
         final CollaborativeOrder order = collaborativeOrderRepository.findById(collaborativeOrderId)
                 .orElseThrow(() -> new UnknownOrderException(collaborativeOrderId));
 
@@ -33,33 +33,40 @@ public class CollaborativeOrderService {
     }
 
     public CollaborativeOrder closeOrderForJoining(String collaborativeOrderId, UserId organisatorId) {
-        final CollaborativeOrder order = getOrderForOrganizator(collaborativeOrderId, organisatorId);
+        final CollaborativeOrder order = getOrderForOrganisator(collaborativeOrderId, organisatorId);
         order.closeForJoining();
         return collaborativeOrderRepository.save(order);
     }
 
     public CollaborativeOrder closeOrderForModification(String collaborativeOrderId, UserId organisatorId) {
-        final CollaborativeOrder order = getOrderForOrganizator(collaborativeOrderId, organisatorId);
+        final CollaborativeOrder order = getOrderForOrganisator(collaborativeOrderId, organisatorId);
         order.closeForModify();
         return collaborativeOrderRepository.save(order);
     }
 
     public CollaborativeOrder placeOrder(String collaborativeOrderId, UserId organisatorId) {
-        final CollaborativeOrder order = getOrderForOrganizator(collaborativeOrderId, organisatorId);
+        final CollaborativeOrder order = getOrderForOrganisator(collaborativeOrderId, organisatorId);
         order.placeOrder();
         return collaborativeOrderRepository.save(order);
     }
 
-    public CollaborativeOrder setDiscount(String collaborativeOrderId, UserId organizatorId, Discount discount) {
-        final CollaborativeOrder order = getOrderForOrganizator(collaborativeOrderId, organizatorId);
+    public CollaborativeOrder setDiscount(String collaborativeOrderId, UserId organisatorId, Discount discount) {
+        final CollaborativeOrder order = getOrderForOrganisator(collaborativeOrderId, organisatorId);
         order.withGlobalDiscount(discount);
         return collaborativeOrderRepository.save(order);
     }
 
-    public CollaborativeOrder setDiscountedPrice(String collaborativeOrderId, UserId organizatorId,
+    public CollaborativeOrder setDiscountedPrice(String collaborativeOrderId, UserId organisatorId,
             Money discountedPrice) {
-        final CollaborativeOrder order = getOrderForOrganizator(collaborativeOrderId, organizatorId);
+        final CollaborativeOrder order = getOrderForOrganisator(collaborativeOrderId, organisatorId);
         order.withGlobalDiscountedPrice(discountedPrice);
+        return collaborativeOrderRepository.save(order);
+    }
+
+    public CollaborativeOrder registerPayment(String collaborativeOrderId, UserId organisatorId, UserId participantId,
+            Payment payment) {
+        final CollaborativeOrder order = getOrderForOrganisator(collaborativeOrderId, organisatorId);
+        order.registerPaymentFrom(participantId, payment);
         return collaborativeOrderRepository.save(order);
     }
 

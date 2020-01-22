@@ -35,14 +35,15 @@ public class CollaborativeOrderServiceTest {
         participants.addLineItem(order.getId(), SIMON, bread);
         participants.addLineItem(order.getId(), ROBERT, pizzaSalami);
 
-        return orders.getOrderForOrganizator(order.getId(), SIMON);
+        return orders.getOrderForOrganisator(order.getId(), SIMON);
     }
 
     @Test
     void testOrderToTable() throws Exception {
         final CollaborativeOrder organizeSampleOrder = organizeSampleOrder();
-        participants.payTip(organizeSampleOrder.getId(), SIMON, Tip.absolute(money(2)));
-        final CollaborativeOrder orderForOrganizator = orders.getOrderForOrganizator(organizeSampleOrder.getId(),
+        participants.addTip(organizeSampleOrder.getId(), SIMON, Tip.absolute(money(2)));
+        orders.setDiscount(organizeSampleOrder.getId(), SIMON, Discount.relative(Percentage.percent(0.1)));
+        final CollaborativeOrder orderForOrganizator = orders.getOrderForOrganisator(organizeSampleOrder.getId(),
                 SIMON);
         System.out.println(orderForOrganizator);
     }
@@ -79,8 +80,8 @@ public class CollaborativeOrderServiceTest {
     @Test
     void testOrderWithTip() throws Exception {
         final CollaborativeOrder order = organizeSampleOrder();
-        participants.payTip(order.getId(), SIMON, Tip.absolute(money(1.0)));
-        participants.payTip(order.getId(), SIMON, Tip.relative(percent(0.1)));
+        participants.addTip(order.getId(), SIMON, Tip.absolute(money(1.0)));
+        participants.addTip(order.getId(), SIMON, Tip.relative(percent(0.1)));
 
         final CalculatedPrices totals = order.getCalculatedPrices();
         totals.checkConsistency();
@@ -91,8 +92,8 @@ public class CollaborativeOrderServiceTest {
     void testOrderWithTipAndDiscount() throws Exception {
         final CollaborativeOrder order = organizeSampleOrder();
         orders.setDiscount(order.getId(), SIMON, Discount.absolute(money(5)));
-        participants.payTip(order.getId(), SIMON, Tip.absolute(money(1.0)));
-        participants.payTip(order.getId(), SIMON, Tip.relative(percent(0.1)));
+        participants.addTip(order.getId(), SIMON, Tip.absolute(money(1.0)));
+        participants.addTip(order.getId(), SIMON, Tip.relative(percent(0.1)));
 
         final CalculatedPrices totals = order.getCalculatedPrices();
         totals.checkConsistency();
@@ -102,7 +103,7 @@ public class CollaborativeOrderServiceTest {
     @Test
     void testAccessUnknownOrder() throws Exception {
         assertThatExceptionOfType(UnknownOrderException.class)
-                .isThrownBy(() -> orders.getOrderForOrganizator("unknownid", SIMON));
+                .isThrownBy(() -> orders.getOrderForOrganisator("unknownid", SIMON));
     }
 
     @Test
@@ -137,7 +138,7 @@ public class CollaborativeOrderServiceTest {
         final CollaborativeOrder order = organizeSampleOrder();
         orders.closeOrderForModification(order.getId(), SIMON);
         assertThatExceptionOfType(IllegalStateException.class)
-                .isThrownBy(() -> participants.payTip(order.getId(), SIMON, Tip.absolute(Money.ZERO)));
+                .isThrownBy(() -> participants.addTip(order.getId(), SIMON, Tip.absolute(Money.ZERO)));
     }
 
     @Test

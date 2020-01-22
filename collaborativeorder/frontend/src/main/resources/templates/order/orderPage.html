@@ -9,39 +9,47 @@
 
     <section class="section ">
         <div class="container">
-
-            <h1 class="title is-capitalized">Domino's</h1>
+            <h1 class="title is-capitalized">Lunch Pizza</h1>
             <h2 class="subtitle">
                 Invititation ID: <a title="Read-Only Link to share with your friends" href="#">8X6ShPtZ</a>
             </h2>
             
-
-            
-                                    <div class="dropdown is-hoverable">
-                                        <div class="dropdown-trigger">
-                                        
-                                            <div class="tags has-addons" aria-haspopup="true" aria-controls="dropdown-menu1">
-                                                <span class="tag is-dark is-medium">Status</span> 
-                                                <span class="tag is-medium is-success">
-                                                    <span>Open for participants</span>
-                                                    <span class="icon is-small"> 
-                                                        <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                                    </span>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="dropdown-menu" id="dropdown-menu1" role="menu">
-                                            <div class="dropdown-content">
-                                                <a href="#" class="dropdown-item">Open for participants</a>
-                                                <a href="#" class="dropdown-item">Waiting for orders</a>
-                                                <a href="#" class="dropdown-item">Order placed</a>
-                                            </div>
-                                        </div>
-                                    </div>
+            <div class="field is-grouped is-grouped-multiline">
+                <div class="control">
+                    <div class="dropdown is-hoverable">
+                        <div class="dropdown-trigger">
+                            <div class="tags has-addons" aria-controls="dropdown-menu1" aria-haspopup="true">
+                                <span class="tag is-dark is-medium">Status</span> 
+                                <span class="tag is-medium is-success">
+                                    <span>Open for participants</span>
+                                    <span class="icon is-small"> 
+                                        <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="dropdown-menu" id="dropdown-menu1" role="menu">
+                            <div class="dropdown-content">
+                                <a th:href="@{/order?status=openForJoining}" href="#" class="dropdown-item">Open for participants</a>
+                                <a th:href="@{/order?status=openForModify}" href="#" class="dropdown-item">Waiting for orders</a>
+                                <a th:href="@{/order?status=placed}" href="#" class="dropdown-item">Order placed</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="control">
+                    <div class="tags has-addons">
+                        <span class="tag is-dark is-medium">Payments</span>
+                        <span class="tag is-medium is-warning">Nothing paid yet</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section class="section ">
+
+    <th:block th:if="${status} eq 'openForJoining'">
+    <section class="section has-background-white-bis">
         <div class="container">
             <nav class="level box">
                 <div class="level-item has-text-centered">
@@ -77,6 +85,32 @@
             </nav>
         </div>
     </section>
+    
+
+    <section  class="section">
+        <div class="container">
+            <nav class="level">
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">Income Cash</p>
+                        <p class="title">1,00€</p>
+                    </div>
+                </div>
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">Income Online</p>
+                        <p class="title">35,00€</p>
+                    </div>
+                </div>
+            </nav>
+            
+            <div class="content">
+            You need 1€ additional <strong>cash</strong> to pay the tip in cash<br>
+            You need 35€ cash to pay the whole order in cash
+            </div>
+        </div>
+    </section>
+
     <!-- 
 <table class="table">
     <thead>
@@ -216,14 +250,16 @@
                             <div class="media-content">
                                 <div class="content">
 
-                                    <div class="dropdown is-hoverable is-pulled-right">
+                                    <div class="tags is-pulled-right">
+                                        <span class="tag is-success">Ready to order</span>
+                                        <span class="tag is-danger">Not paid yet</span>
+                                    </div>
+                                    
+                                    <div class="dropdown is-hoverable">
                                         <div class="dropdown-trigger">
-                                            <span class="tag is-success is-pulled-right" aria-haspopup="true" aria-controls="dropdown-menu4">
-                                                <span>Ready</span>
-                                                <span class="icon is-small"> 
-                                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                                </span>
-                                            </span>
+                                            <p aria-haspopup="true" aria-controls="dropdown-menu4">
+                                                <strong>Robert</strong>
+                                            </p>
                                         </div>
                                         <div class="dropdown-menu" id="dropdown-menu4" role="menu">
                                             <div class="dropdown-content">
@@ -234,10 +270,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                    <p>
-                                        <strong>Robert</strong>
-                                    </p>
                                     
                                     <table class="table">
                                         <tr>
@@ -274,12 +306,15 @@
                                   
                                     <div class="dropdown is-hoverable is-pulled-right">
                                         <div class="dropdown-trigger">
-                                            <span class="tag is-success is-pulled-right" aria-haspopup="true" aria-controls="dropdown-menu4">
-                                                <span>Ready</span>
-                                                <span class="icon is-small"> 
-                                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                            <div class="tags  is-pulled-right">
+                                                <span class="tag is-success">Paid!</span>
+                                                <span class="tag is-success" aria-haspopup="true" aria-controls="dropdown-menu4">
+                                                    <span>Ready to order</span>
+                                                    <span class="icon is-small"> 
+                                                        <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                                    </span>
                                                 </span>
-                                            </span>
+                                            </div>
                                         </div>
                                         <div class="dropdown-menu" id="dropdown-menu4" role="menu">
                                             <div class="dropdown-content">
@@ -420,7 +455,7 @@
             </div>
         </div>
     </section>
-
+    </th:block>
 
     <footer th:replace="fragments/footer :: footer"></footer>
 </body>

@@ -34,8 +34,8 @@ public class CollaborativeOrder {
 
     private final UserId organisatorId;
     private final List<Participant> participants;
-    private final List<Payment> payments;
 
+    private final TipSuggestion tipSuggestion;
     private Discount discount;
 
     @Transient
@@ -43,15 +43,15 @@ public class CollaborativeOrder {
 
     private CollaborativeOrder(String name, boolean openForJoining, boolean openForModify, boolean orderPlaced,
             UserId organisatorId,
-            List<Participant> participants, List<Payment> payments, Discount discount) {
+            List<Participant> participants, Discount discount, TipSuggestion tipSuggestion) {
         this.name = name;
         this.openForJoining = openForJoining;
         this.openForModify = openForJoining;
         this.orderPlaced = orderPlaced;
         this.organisatorId = organisatorId;
         this.participants = participants;
-        this.payments = payments;
         this.discount = discount;
+        this.tipSuggestion = tipSuggestion;
 
         this.updateCalculation();
     }
@@ -60,8 +60,8 @@ public class CollaborativeOrder {
         Preconditions.checkArgument(organisatorId != null, "organisatorId must not be null");
         Preconditions.checkArgument(name != null, "name must not be null");
 
-        return new CollaborativeOrder(name, true, true, false, organisatorId, new ArrayList<>(), new ArrayList<>(),
-                Discount.NONE);
+        return new CollaborativeOrder(name, true, true, false, organisatorId, new ArrayList<>(),
+                Discount.NONE, TipSuggestion.relativeWithMinimum(Percentage.percent(0.1), Money.money(0.5)));
     }
 
     public String getId() {
@@ -117,10 +117,6 @@ public class CollaborativeOrder {
         return Collections.unmodifiableList(this.participants);
     }
 
-    public List<Payment> payments() {
-        return Collections.unmodifiableList(this.payments);
-    }
-
     Participant incoporateUser(UserId userId) {
         Preconditions.checkArgument(userId != null, "userId must not be null");
         Preconditions.checkState(this.openForJoining, "Can not incorporate user %s: order is closed for joining",
@@ -166,6 +162,10 @@ public class CollaborativeOrder {
         return this.discount;
     }
 
+    public TipSuggestion getTipSuggestion() {
+        return this.tipSuggestion;
+    }
+
     Participant addLineItem(UserId userId, LineItem lineItem) {
         Preconditions.checkState(isOpenForModify(),
                 "Can not add line item %s to user %s: Order is closed for modification", lineItem, userId);
@@ -185,7 +185,7 @@ public class CollaborativeOrder {
         return participant;
     }
 
-    Participant withTipBy(UserId userId, Tip tip) {
+    Participant addTipFrom(UserId userId, Tip tip) {
         Preconditions.checkState(isOpenForModify(),
                 "Can not set tip %s for user %s: Order is closed for modification", tip, userId);
 

@@ -14,11 +14,10 @@ public class RestCollaborativeOrder {
     private final RestDiscount discount;
 
     private final List<String> participantIds;
-    private final List<String> paymentIds;
     private final RestCalculatedPrices calculatedPrices;
 
     private RestCollaborativeOrder(String id, String name, boolean openForJoining, boolean openForModify,
-            boolean orderPlaced, RestDiscount discount, List<String> participantIds, List<String> paymentIds,
+            boolean orderPlaced, RestDiscount discount, List<String> participantIds,
             RestCalculatedPrices calculatedPrices) {
         this.id = id;
         this.name = name;
@@ -27,7 +26,6 @@ public class RestCollaborativeOrder {
         this.orderPlaced = orderPlaced;
         this.discount = discount;
         this.participantIds = participantIds;
-        this.paymentIds = paymentIds;
         this.calculatedPrices = calculatedPrices;
     }
 
@@ -35,13 +33,15 @@ public class RestCollaborativeOrder {
         final List<String> participantIds = order.participants().stream()
                 .map(Participant::getId)
                 .collect(Collectors.toList());
-        final List<String> paymentIds = order.payments().stream()
-                .map(Payment::getId)
-                .collect(Collectors.toList());
 
-        return new RestCollaborativeOrder(order.getId(), order.getName(), order.isOpenForJoining(),
-                order.isOpenForModify(), order.isOrderPlaced(), RestDiscount.fromDomain(order.getDiscount()),
-                participantIds, paymentIds, RestCalculatedPrices.fromDomain(order.getCalculatedPrices()));
+        return new RestCollaborativeOrder(order.getId(),
+                order.getName(),
+                order.isOpenForJoining(),
+                order.isOpenForModify(),
+                order.isOrderPlaced(),
+                RestDiscount.fromDomain(order.getDiscount()),
+                participantIds,
+                RestCalculatedPrices.fromDomain(order.getCalculatedPrices()));
     }
 
     public String getId() {
@@ -70,10 +70,6 @@ public class RestCollaborativeOrder {
 
     public List<String> getParticipantIds() {
         return this.participantIds;
-    }
-
-    public List<String> getPaymentIds() {
-        return this.paymentIds;
     }
 
     public RestCalculatedPrices getCalculatedPrices() {

@@ -40,7 +40,7 @@ public class CollaborativeOrderController {
     @ResponseStatus(HttpStatus.OK)
     public RestCollaborativeOrder getCollaborativeOrder(@PathVariable("id") String id) {
         final UserId organisator = currentUser();
-        final CollaborativeOrder collaborativeOrder = collaborativeOrderService.getOrderForOrganizator(id, organisator);
+        final CollaborativeOrder collaborativeOrder = collaborativeOrderService.getOrderForOrganisator(id, organisator);
         return RestCollaborativeOrder.fromDomain(collaborativeOrder);
     }
 
