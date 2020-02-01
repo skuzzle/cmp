@@ -109,18 +109,18 @@ public class TallyPageController {
     public String assignToCurrentUser(@PathVariable String key) {
         Preconditions.checkState(this.currentUser.isLoggedIn(), "Can't assign to current user: user not logged in");
         client.assignToCurrentUser(key);
-        return "redirect:/" + key;
+        return "redirect:/counter/" + key;
     }
 
     @GetMapping(path = "/counter/{key}/increment/{incrementId}", params = "action=delete")
     public String deleteIncrement(@PathVariable String key, @PathVariable String incrementId) {
         client.deleteIncrement(key, incrementId);
-        return "redirect:/" + key;
+        return "redirect:/counter/" + key;
     }
 
     @GetMapping(path = "/counter/{adminKey}", params = { "action=changeName", "newName" })
     public String changeTitle(@PathVariable String adminKey, @RequestParam String newName) {
         client.changeName(adminKey, newName);
-        return "redirect:/" + adminKey;
+        return "redirect:/counter/" + adminKey;
     }
 }
