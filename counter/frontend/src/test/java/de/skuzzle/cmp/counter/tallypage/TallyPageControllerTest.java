@@ -71,7 +71,7 @@ public class TallyPageControllerTest {
         final String adminKey = clientConfigurer.getAdminKey();
 
         mockMvc.perform(get("/counter/{adminKey}?action=assignToCurrentUser", adminKey))
-                .andExpect(redirectedUrlTemplate("/{adminKey}", adminKey));
+                .andExpect(redirectedUrlTemplate("/counter/{adminKey}", adminKey));
         clientConfigurer.verify().assignToCurrentUser(adminKey);
     }
 
@@ -83,7 +83,7 @@ public class TallyPageControllerTest {
         final String adminKey = clientConfigurer.getAdminKey();
 
         mockMvc.perform(get("/counter/{adminKey}/increment/{incrementId}?action=delete", adminKey, incrementId))
-                .andExpect(redirectedUrlTemplate("/{adminKey}", adminKey));
+                .andExpect(redirectedUrlTemplate("/counter/{adminKey}", adminKey));
 
         clientConfigurer.verify().deleteIncrement(adminKey, incrementId);
     }
