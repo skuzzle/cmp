@@ -10,21 +10,14 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import de.skuzzle.cmp.counter.domain.IncrementQuery;
-import de.skuzzle.cmp.counter.domain.IncrementQueryResult;
-import de.skuzzle.cmp.counter.domain.TallyIncrement;
-import de.skuzzle.cmp.counter.domain.TallySheet;
-import de.skuzzle.cmp.counter.domain.UserAssignmentException;
-import de.skuzzle.cmp.counter.domain.UserId;
-
 public class TallySheetTest {
-    
+
     @Test
     void testIncrementCollectionIsImmutable() throws Exception {
         final TallySheet sheet = createWithIncrements(25,
                 LocalDate.of(2019, 01, 01).atStartOfDay(),
                 LocalDate.of(2019, 02, 01).atStartOfDay());
-        
+
         assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(
                 () -> sheet.getIncrements().add(TallyIncrement.newIncrement("foo", LocalDateTime.now(), Set.of())));
     }
@@ -102,6 +95,19 @@ public class TallySheetTest {
                 .from(LocalDate.of(2019, 01, 05).atStartOfDay())
                 .until(LocalDate.of(2019, 01, 11).atStartOfDay()));
         assertThat(queryResult.getIncrements()).hasSize(5);
+    }
+
+    @Test
+    void testFilterByTags() throws Exception {
+        final TallySheet sheet = TallySheet.newTallySheet(UserId.wellKnown("google", "foo@gmail.com"), "name",
+                "adminKey", "publicKey");
+        sheet.incrementWith(TallyIncrement.newIncrement("first", LocalDateTime.now(), Set.of("tag1", "tag2", "tag3")));
+        sheet.incrementWith(TallyIncrement.newIncrement("first", LocalDateTime.now(), Set.of("tag1", "tag3")));
+        sheet.incrementWith(TallyIncrement.newIncrement("first", LocalDateTime.now(), Set.of("tag1", "tag2")));
+
+        final IncrementQueryResult queryResult = sheet.selectIncrements(IncrementQuery.all()
+                .havingAllTags(Set.of("tag1", "tag2")));
+        assertThat(queryResult.getIncrements()).hasSize(2);
     }
 
     private TallySheet createWithIncrements(int count, LocalDateTime from, LocalDateTime until) {

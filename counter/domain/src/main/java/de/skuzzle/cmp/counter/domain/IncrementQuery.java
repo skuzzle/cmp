@@ -5,6 +5,7 @@ import static java.util.Comparator.comparing;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
@@ -15,6 +16,7 @@ public class IncrementQuery {
     private LocalDateTime until = LocalDateTime.MAX;
     private int start = 0;
     private int maxResults = Integer.MAX_VALUE;
+    private Set<String> tags = Set.of();
 
     private IncrementQuery() {
         // hidden
@@ -60,16 +62,27 @@ public class IncrementQuery {
         return this;
     }
 
+    public IncrementQuery havingAllTags(Set<String> tags) {
+        Preconditions.checkArgument(tags != null, "tags must not be null");
+        this.tags = tags;
+        return this;
+    }
+
     public IncrementQueryResult select(Collection<TallyIncrement> allIncrements) {
         Preconditions.checkArgument(allIncrements != null, "allIncrements must not be null");
         final List<TallyIncrement> increments = allIncrements.stream()
                 .filter(increment -> increment.getIncrementDateUTC().isAfter(from))
                 .filter(increment -> increment.getIncrementDateUTC().isBefore(until))
+                .filter(this::byTags)
                 .skip(start)
                 .limit(maxResults)
                 .sorted(comparing(TallyIncrement::getIncrementDateUTC))
                 .collect(Collectors.toList());
 
         return new IncrementQueryResult(increments, this, allIncrements.size());
+    }
+
+    private boolean byTags(TallyIncrement increment) {
+        return this.tags.isEmpty() || increment.getTags().containsAll(tags);
     }
 }
