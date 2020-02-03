@@ -33,6 +33,8 @@
     <a class="button" th:href="@{/counter/{key}(key=${key})}">Got it</a>
 </div>
 
+
+
 <section class="hero">
     <div class="hero-body">
         <div class="container">
@@ -88,13 +90,9 @@
     </div>
 </section>
 
-<section class="section" th:if="${filterActive}">
-    <div class="container">
-        <div class="notification is-success is-radiusless is-marginless">
-            Only showing filtered entries. Totals below refer to the currently shown entries. 
-        </div>
-    </div>
-</section>
+<div class="notification is-success is-radiusless is-marginless" th:if="${currentFilter.active}">
+    Only showing filtered entries. Totals below refer to the currently shown entries. 
+</div>
 
 
 <section class="section">

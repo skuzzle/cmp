@@ -3,12 +3,13 @@
     <div th:fragment="tagCloud(cloud)" class="tags">
         <th:block th:each="weightedTag : ${cloud.tags}">
         
-            <a class="tag" 
+            <a class="tag is-primary" 
                 href="#" 
                 th:if="${weightedTag.isSelected(cloud)}" 
                 th:href="${weightedTag.getDeleteLink(cloud)}" 
                 th:classappend="${weightedTag.cssSize}" 
                 th:title="'Occurrences: ' + ${weightedTag.count}">
+                
                 <span th:text="${weightedTag.name}"></span>
                 <button class="delete"></button>
             </a>
