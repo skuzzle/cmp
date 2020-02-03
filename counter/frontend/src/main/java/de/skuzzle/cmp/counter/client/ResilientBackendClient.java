@@ -42,8 +42,8 @@ class ResilientBackendClient implements BackendClient {
     @Override
     @CircuitBreaker(name = "backendClient")
     @Retry(name = "backendClient")
-    public RestTallyResponse getTallySheet(String publicKey, Tags filterTags) {
-        return delegate.getTallySheet(publicKey, filterTags);
+    public RestTallyResponse getTallySheet(String publicKey, Filter filter) {
+        return delegate.getTallySheet(publicKey, filter);
     }
 
     @Override

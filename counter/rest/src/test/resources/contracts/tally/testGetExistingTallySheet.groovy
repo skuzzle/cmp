@@ -17,7 +17,7 @@ org.springframework.cloud.contract.spec.Contract.make {
     name("getExistingTallySheet")
     request {
         method GET()
-        url '/publicKey1?tags='
+        url '/publicKey1'
         headers {}
     }
     response {

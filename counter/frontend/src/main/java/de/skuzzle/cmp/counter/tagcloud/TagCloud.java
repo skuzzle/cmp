@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Ints;
 
+import de.skuzzle.cmp.counter.client.Filter;
 import de.skuzzle.cmp.counter.client.RestTallyIncrement;
 import de.skuzzle.cmp.counter.client.RestTallyResponse;
 import de.skuzzle.cmp.counter.client.Tags;
@@ -19,17 +20,17 @@ public class TagCloud {
 
     private final String counterKey;
     private final Set<String> names;
-    private final Tags filterTags;
+    private final Filter currentFilter;
     private final List<WeightedTag> tags;
 
-    private TagCloud(String counterKey, Set<String> names, Tags filterTags, List<WeightedTag> tags) {
+    private TagCloud(String counterKey, Set<String> names, Filter currentFilter, List<WeightedTag> tags) {
         this.counterKey = counterKey;
         this.names = names;
-        this.filterTags = filterTags;
+        this.currentFilter = currentFilter;
         this.tags = tags;
     }
 
-    public static TagCloud fromBackendResponse(String counterKey, RestTallyResponse response, Tags filterTags) {
+    public static TagCloud fromBackendResponse(String counterKey, RestTallyResponse response, Filter currentFilter) {
         final List<RestTallyIncrement> increments = response.getIncrements().getEntries();
 
         final Map<String, Long> tagToCount = increments.stream()
@@ -45,7 +46,7 @@ public class TagCloud {
                 .map(mapEntry -> toWeightedTag(maxCount, differenCounts, mapEntry))
                 .collect(Collectors.toList());
 
-        return new TagCloud(counterKey, tagToCount.keySet(), filterTags, weightedTags);
+        return new TagCloud(counterKey, tagToCount.keySet(), currentFilter, weightedTags);
     }
 
     private static WeightedTag toWeightedTag(int maxCount, int differentTags,
@@ -68,8 +69,8 @@ public class TagCloud {
         return this.tags;
     }
 
-    public Tags getFilterTags() {
-        return this.filterTags;
+    public Filter filter() {
+        return this.currentFilter;
     }
 
     public boolean isEmpty() {

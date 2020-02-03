@@ -20,6 +20,7 @@ import com.google.common.base.Preconditions;
 
 import de.skuzzle.cmp.auth.TallyUser;
 import de.skuzzle.cmp.counter.client.BackendClient;
+import de.skuzzle.cmp.counter.client.Filter;
 import de.skuzzle.cmp.counter.client.RestIncrements;
 import de.skuzzle.cmp.counter.client.RestTallyIncrement;
 import de.skuzzle.cmp.counter.client.RestTallyResponse;
@@ -29,6 +30,7 @@ import de.skuzzle.cmp.counter.graphs.Graph;
 import de.skuzzle.cmp.counter.tagcloud.TagCloud;
 import de.skuzzle.cmp.counter.timeline.Timeline;
 import de.skuzzle.cmp.counter.timeline.TimelineBuilder;
+import de.skuzzle.cmp.counter.urls.KnownUrls;
 
 @Controller
 public class TallyPageController {
@@ -48,10 +50,10 @@ public class TallyPageController {
 
     @GetMapping("/{key}")
     public String redirect(@PathVariable("key") String key) {
-        return "redirect:/counter/" + key + "?legacyWarning=true";
+        return KnownUrls.VIEW_COUNTER.redirectResolve(key) + "?legacyWarning=true";
     }
 
-    @GetMapping("/counter/{key}")
+    @GetMapping(KnownUrls.VIEW_COUNTER_STRING)
     public ModelAndView showTallySheet(
             @PathVariable("key") String key,
             @RequestParam(defaultValue = "false") boolean legacyWarning,
@@ -59,18 +61,20 @@ public class TallyPageController {
             Device device) {
 
         final Tags filterTags = Tags.fromCollection(tags);
-        final RestTallyResponse response = client.getTallySheet(key, filterTags);
+        final Filter currentFilter = Filter.all().withTags(filterTags);
+
+        final RestTallyResponse response = client.getTallySheet(key, currentFilter);
 
         final RestTallySheet tallySheet = response.getTallySheet();
         final RestIncrements increments = response.getIncrements();
 
         final Graph graph = Graph.fromHistory(increments.getEntries());
         final Timeline timeline = TimelineBuilder.fromBackendResponse(response);
-        final TagCloud tagCloud = TagCloud.fromBackendResponse(key, response, filterTags);
+        final TagCloud tagCloud = TagCloud.fromBackendResponse(key, response, currentFilter);
 
         final boolean mobile = !device.isNormal();
         return new ModelAndView("tallypage/tally", Map.of(
-                "filterActive", !filterTags.all().isEmpty(),
+                "currentFilter", currentFilter,
                 "key", key,
                 "tagCloud", tagCloud,
                 "tally", tallySheet,
@@ -81,9 +85,9 @@ public class TallyPageController {
                 "legacyWarning", legacyWarning));
     }
 
-    @PostMapping("/counter/{adminKey}")
+    @PostMapping(KnownUrls.VIEW_COUNTER_STRING)
     public String incrementTallySheet(
-            @PathVariable("adminKey") String adminKey,
+            @PathVariable("key") String key,
             @RequestParam("description") String description,
             @RequestParam("tags") String tags,
             @RequestParam("incrementDateUTC") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate incrementDate) {
@@ -92,18 +96,18 @@ public class TallyPageController {
         final RestTallyIncrement increment = RestTallyIncrement.createNew(description,
                 LocalDateTime.of(incrementDate, LocalTime.now()), tagSet);
 
-        client.increment(adminKey, increment);
-        return "redirect:/counter/" + adminKey;
+        client.increment(key, increment);
+        return KnownUrls.VIEW_COUNTER.redirectResolve(key);
     }
 
-    @GetMapping(path = "counter/{key}", params = "action=addTag")
+    @GetMapping(path = KnownUrls.VIEW_COUNTER_STRING, params = "action=addTag")
     public String addFilterTag(@PathVariable String key) {
         return "redirect:/counter/" + key;
     }
 
-    @GetMapping(path = "/counter/{adminKey}/increment/{incrementId}", params = "action=updateIncrement")
+    @GetMapping(path = KnownUrls.INCREMENT_COUNTER_STRING, params = "action=updateIncrement")
     public String updateIncrement(
-            @PathVariable("adminKey") String adminKey,
+            @PathVariable("key") String key,
             @PathVariable("incrementId") String incrementId,
             @RequestParam("description") String description,
             @RequestParam("tags") String tags,
@@ -112,26 +116,26 @@ public class TallyPageController {
         final Set<String> tagSet = Tags.fromString(tags).all();
         final RestTallyIncrement increment = RestTallyIncrement.createWithId(incrementId, description,
                 LocalDateTime.of(incrementDate, LocalTime.now()), tagSet);
-        client.updateIncrement(adminKey, increment);
-        return "redirect:/counter/" + adminKey;
+        client.updateIncrement(key, increment);
+        return KnownUrls.VIEW_COUNTER.redirectResolve(key);
     }
 
-    @GetMapping(path = "/counter/{key}", params = "action=assignToCurrentUser")
+    @GetMapping(path = KnownUrls.VIEW_COUNTER_STRING, params = "action=assignToCurrentUser")
     public String assignToCurrentUser(@PathVariable String key) {
         Preconditions.checkState(this.currentUser.isLoggedIn(), "Can't assign to current user: user not logged in");
         client.assignToCurrentUser(key);
-        return "redirect:/counter/" + key;
+        return KnownUrls.VIEW_COUNTER.redirectResolve(key);
     }
 
-    @GetMapping(path = "/counter/{key}/increment/{incrementId}", params = "action=delete")
+    @GetMapping(path = KnownUrls.INCREMENT_COUNTER_STRING, params = "action=delete")
     public String deleteIncrement(@PathVariable String key, @PathVariable String incrementId) {
         client.deleteIncrement(key, incrementId);
-        return "redirect:/counter/" + key;
+        return KnownUrls.VIEW_COUNTER.redirectResolve(key);
     }
 
-    @GetMapping(path = "/counter/{adminKey}", params = { "action=changeName", "newName" })
-    public String changeTitle(@PathVariable String adminKey, @RequestParam String newName) {
-        client.changeName(adminKey, newName);
-        return "redirect:/counter/" + adminKey;
+    @GetMapping(path = KnownUrls.VIEW_COUNTER_STRING, params = { "action=changeName", "newName" })
+    public String changeTitle(@PathVariable String key, @RequestParam String newName) {
+        client.changeName(key, newName);
+        return KnownUrls.VIEW_COUNTER.redirectResolve(key);
     }
 }

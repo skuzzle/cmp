@@ -1,6 +1,6 @@
 package de.skuzzle.cmp.counter.tagcloud;
 
-import de.skuzzle.cmp.counter.client.Tags;
+import de.skuzzle.cmp.counter.client.Filter;
 
 public class WeightedTag {
 
@@ -25,20 +25,17 @@ public class WeightedTag {
     }
 
     public boolean isSelected(TagCloud cloud) {
-        return cloud.getFilterTags().contains(name);
+        return cloud.filter().containsTag(name);
     }
 
     public String getSelectLink(TagCloud cloud) {
-        final Tags newFilterTags = cloud.getFilterTags().copyAndAdd(name);
-        return String.format("%s?tags=%s", cloud.getCounterKey(), newFilterTags);
+        final Filter updatedFilter = cloud.filter().addTag(name);
+        return updatedFilter.getCounterLink(cloud.getCounterKey());
     }
 
     public String getDeleteLink(TagCloud cloud) {
-        final Tags newFilterTags = cloud.getFilterTags().copyAndRemove(name);
-        if (newFilterTags.all().isEmpty()) {
-            return cloud.getCounterKey();
-        }
-        return String.format("%s?tags=%s", cloud.getCounterKey(), newFilterTags);
+        final Filter updatedFilter = cloud.filter().removeTag(name);
+        return updatedFilter.getCounterLink(cloud.getCounterKey());
     }
 
     public String getCssSize() {

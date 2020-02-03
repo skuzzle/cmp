@@ -58,13 +58,13 @@ public class TallyClientIntegrationTest {
     @Test
     void testGetUnknownTallySheet() {
         assertThatExceptionOfType(HttpStatusCodeException.class)
-                .isThrownBy(() -> tallyClient.getTallySheet("unknownPublicKey", Tags.none()))
+                .isThrownBy(() -> tallyClient.getTallySheet("unknownPublicKey", Filter.all()))
                 .matches(e -> e.getStatusCode() == HttpStatus.NOT_FOUND);
     }
 
     @Test
     void testGetExistingTallySheet() {
-        final var apiResponse = tallyClient.getTallySheet("publicKey1", Tags.none());
+        final var apiResponse = tallyClient.getTallySheet("publicKey1", Filter.all());
         assertThat(apiResponse.getTallySheet().getPublicKey()).isEqualTo("publicKey1");
     }
 

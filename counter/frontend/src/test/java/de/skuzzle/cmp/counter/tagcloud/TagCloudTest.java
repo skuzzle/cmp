@@ -9,10 +9,12 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
+import de.skuzzle.cmp.counter.client.Filter;
 import de.skuzzle.cmp.counter.client.RestTallyResponse;
 import de.skuzzle.cmp.counter.client.Tags;
 import de.skuzzle.cmp.counter.client.TestResponses;
 import de.skuzzle.cmp.counter.client.TestResponses.TallySheetResponseBuilder;
+import de.skuzzle.cmp.counter.urls.KnownUrls;
 
 public class TagCloudTest {
 
@@ -21,10 +23,10 @@ public class TagCloudTest {
         final RestTallyResponse response = prepareResponse(Map.of(
                 "tag1", 1));
 
-        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response, Tags.none());
+        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response, Filter.all());
         final WeightedTag onlyTag = tagCloud.getTags().get(0);
         final String selectLink = onlyTag.getSelectLink(tagCloud);
-        assertThat(selectLink).isEqualTo("anyKey?tags=tag1");
+        assertThat(selectLink).isEqualTo(KnownUrls.VIEW_COUNTER.resolve("anyKey") + "?tags=tag1");
     }
 
     @Test
@@ -32,10 +34,11 @@ public class TagCloudTest {
         final RestTallyResponse response = prepareResponse(Map.of(
                 "tag1", 1));
 
-        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response, Tags.fromString("tag1"));
+        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response,
+                Filter.all().withTags(Tags.fromString("tag1")));
         final WeightedTag onlyTag = tagCloud.getTags().get(0);
         final String selectLink = onlyTag.getDeleteLink(tagCloud);
-        assertThat(selectLink).isEqualTo("anyKey");
+        assertThat(selectLink).isEqualTo(KnownUrls.VIEW_COUNTER.resolve("anyKey"));
     }
 
     @Test
@@ -44,10 +47,11 @@ public class TagCloudTest {
                 "tag1", 1,
                 "tag2", 1));
 
-        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response, Tags.fromString("tag1"));
+        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response,
+                Filter.all().withTags(Tags.fromString("tag1")));
         final WeightedTag onlyTag = tagCloud.getTags().get(1);
         final String selectLink = onlyTag.getDeleteLink(tagCloud);
-        assertThat(selectLink).isEqualTo("anyKey?tags=tag1");
+        assertThat(selectLink).isEqualTo(KnownUrls.VIEW_COUNTER.resolve("anyKey") + "?tags=tag1");
     }
 
     @Test
@@ -55,7 +59,7 @@ public class TagCloudTest {
         final RestTallyResponse response = prepareResponse(Map.of(
                 "tag", 3));
 
-        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response, Tags.none());
+        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response, Filter.all());
         assertThat(tagCloud).hasTags("tag");
         assertThat(tagCloud).hasTagWithName("tag")
                 .withCount(3)
@@ -68,7 +72,7 @@ public class TagCloudTest {
                 "tag1", 1,
                 "tag2", 1));
 
-        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response, Tags.none());
+        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response, Filter.all());
         assertThat(tagCloud).hasTags("tag1", "tag2");
         assertThat(tagCloud)
                 .hasTagWithName("tag1")
@@ -87,7 +91,7 @@ public class TagCloudTest {
                 "tag1", 2,
                 "tag2", 1));
 
-        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response, Tags.none());
+        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response, Filter.all());
         assertThat(tagCloud).hasTagWithName("tag1")
                 .withCount(2)
                 .withCssSize("is-size-6");
@@ -104,7 +108,7 @@ public class TagCloudTest {
                 "tag2", 2,
                 "tag3", 1));
 
-        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response, Tags.none());
+        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response, Filter.all());
         assertThat(tagCloud).hasTagWithName("tag1")
                 .withCount(3)
                 .withCssSize("is-size-5");
@@ -126,7 +130,7 @@ public class TagCloudTest {
                 "tag3", 2,
                 "tag4", 1));
 
-        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response, Tags.none());
+        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response, Filter.all());
         assertThat(tagCloud).hasTagWithName("tag1")
                 .withCount(4)
                 .withCssSize("is-size-4");
@@ -153,7 +157,7 @@ public class TagCloudTest {
                 "tag4", 2,
                 "tag5", 1));
 
-        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response, Tags.none());
+        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response, Filter.all());
         assertThat(tagCloud).hasTagWithName("tag1")
                 .withCount(5)
                 .withCssSize("is-size-3");
@@ -185,7 +189,7 @@ public class TagCloudTest {
                 "tag5", 1,
                 "tag6", 1));
 
-        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response, Tags.none());
+        final TagCloud tagCloud = TagCloud.fromBackendResponse("anyKey", response, Filter.all());
         assertThat(tagCloud).hasTagWithName("tag1")
                 .withCount(5)
                 .withCssSize("is-size-3");
