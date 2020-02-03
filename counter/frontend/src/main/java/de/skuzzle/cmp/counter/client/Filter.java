@@ -15,12 +15,18 @@ import de.skuzzle.cmp.counter.urls.KnownUrls;
 
 public class Filter {
 
-    private LocalDate from;
-    private LocalDate until;
-    private Tags filterTags = Tags.none();
+    private final LocalDate from;
+    private final LocalDate until;
+    private final Tags filterTags;
+
+    private Filter(LocalDate from, LocalDate until, Tags filterTags) {
+        this.from = from;
+        this.until = until;
+        this.filterTags = filterTags;
+    }
 
     public static Filter all() {
-        return new Filter();
+        return new Filter(null, null, Tags.none());
     }
 
     public boolean isActive() {
@@ -28,29 +34,24 @@ public class Filter {
     }
 
     public Filter from(LocalDate from) {
-        this.from = from;
-        return this;
+        return new Filter(from, until, filterTags);
     }
 
-    public Filter until(LocalDate to) {
-        this.until = to;
-        return this;
+    public Filter until(LocalDate until) {
+        return new Filter(from, until, filterTags);
     }
 
     public Filter withTags(Tags filterTags) {
         Preconditions.checkArgument(filterTags != null, "filterTags must not be null");
-        this.filterTags = filterTags;
-        return this;
+        return new Filter(from, until, filterTags);
     }
 
     public Filter removeTag(String name) {
-        filterTags = filterTags.copyAndRemove(name);
-        return this;
+        return new Filter(from, until, filterTags.copyAndRemove(name));
     }
 
     public Filter addTag(String name) {
-        filterTags = filterTags.copyAndAdd(name);
-        return this;
+        return new Filter(from, until, filterTags.copyAndAdd(name));
     }
 
     RestTallyResponse callBackendUsing(RestTemplate restTemplate, String publicKey) {
@@ -85,7 +86,7 @@ public class Filter {
         if (until != null) {
             params.put("to", until.format(DateTimeFormatter.ISO_LOCAL_DATE));
         }
-        if (filterTags != null && !filterTags.all().isEmpty()) {
+        if (!filterTags.all().isEmpty()) {
             params.put("tags", filterTags.toString());
         }
         return params;
