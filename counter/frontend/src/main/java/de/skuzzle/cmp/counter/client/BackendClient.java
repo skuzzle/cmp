@@ -10,7 +10,7 @@ public interface BackendClient {
 
     RestTallyResponse createNewTallySheet(String name);
 
-    RestTallyResponse getTallySheet(String publicKey);
+    RestTallyResponse getTallySheet(String publicKey, Tags filterTags);
 
     void increment(String adminKey, RestTallyIncrement increment);
 

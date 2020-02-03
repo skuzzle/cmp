@@ -52,19 +52,25 @@ public class TallyPageController {
     }
 
     @GetMapping("/counter/{key}")
-    public ModelAndView showTallySheet(@PathVariable("key") String key,
-            @RequestParam(defaultValue = "false") boolean legacyWarning, Device device) {
-        final RestTallyResponse response = client.getTallySheet(key);
+    public ModelAndView showTallySheet(
+            @PathVariable("key") String key,
+            @RequestParam(defaultValue = "false") boolean legacyWarning,
+            @RequestParam(defaultValue = "") Set<String> tags,
+            Device device) {
+
+        final Tags filterTags = Tags.fromCollection(tags);
+        final RestTallyResponse response = client.getTallySheet(key, filterTags);
 
         final RestTallySheet tallySheet = response.getTallySheet();
         final RestIncrements increments = response.getIncrements();
 
         final Graph graph = Graph.fromHistory(increments.getEntries());
         final Timeline timeline = TimelineBuilder.fromBackendResponse(response);
-        final TagCloud tagCloud = TagCloud.fromBackendResponse(response);
+        final TagCloud tagCloud = TagCloud.fromBackendResponse(key, response, filterTags);
 
         final boolean mobile = !device.isNormal();
         return new ModelAndView("tallypage/tally", Map.of(
+                "filterActive", !filterTags.all().isEmpty(),
                 "key", key,
                 "tagCloud", tagCloud,
                 "tally", tallySheet,
@@ -88,6 +94,11 @@ public class TallyPageController {
 
         client.increment(adminKey, increment);
         return "redirect:/counter/" + adminKey;
+    }
+
+    @GetMapping(path = "counter/{key}", params = "action=addTag")
+    public String addFilterTag(@PathVariable String key) {
+        return "redirect:/counter/" + key;
     }
 
     @GetMapping(path = "/counter/{adminKey}/increment/{incrementId}", params = "action=updateIncrement")

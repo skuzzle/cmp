@@ -4,6 +4,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -63,6 +64,7 @@ public class TallyRestController {
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate until,
             @RequestParam(required = false, defaultValue = "-1") int start,
             @RequestParam(required = false, defaultValue = "-1") int max,
+            @RequestParam(required = false, defaultValue = "") Set<String> tags,
             HttpServletRequest request) {
 
         final TallySheet tallySheet = tallyService.getTallySheet(key);
@@ -71,7 +73,8 @@ public class TallyRestController {
                 .from(from == null ? LocalDateTime.MIN : from.atStartOfDay())
                 .until(until == null ? LocalDateTime.MAX : until.atStartOfDay())
                 .start(start < 0 ? 0 : start)
-                .maxResults(max < 0 ? Integer.MAX_VALUE : max));
+                .maxResults(max < 0 ? Integer.MAX_VALUE : max)
+                .havingAllTags(tags));
 
         final UserId currentUser = currentUser();
         final RestIncrements increments = RestIncrements.of(incrementQueryResult);

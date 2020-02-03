@@ -88,6 +88,15 @@
     </div>
 </section>
 
+<section class="section" th:if="${filterActive}">
+    <div class="container">
+        <div class="notification is-success is-radiusless is-marginless">
+            Only showing filtered entries. Totals below refer to the currently shown entries. 
+        </div>
+    </div>
+</section>
+
+
 <section class="section">
     <div class="container" th:insert="tallypage/timeline:: timeline(${timeline}, ${mobile})"></div>
 </section>
