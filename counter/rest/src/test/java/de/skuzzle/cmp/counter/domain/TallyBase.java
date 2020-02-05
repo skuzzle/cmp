@@ -6,6 +6,8 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +19,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.web.context.WebApplicationContext;
 
+import de.skuzzle.cmp.common.ratelimit.ApiRateLimiter;
 import de.skuzzle.cmp.counter.domain.TallyBase.UserConfig;
 import de.skuzzle.cmp.rest.auth.TallyUser;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -36,6 +39,8 @@ public class TallyBase {
     private TallyService tallyService;
     @Autowired
     private MongoTemplate mongoTemplate;
+    @MockBean
+    private ApiRateLimiter<HttpServletRequest> rateLimiter;
 
     @TestConfiguration
     static class UserConfig {
