@@ -38,7 +38,7 @@
 <section class="hero">
     <div class="hero-body">
         <div class="container">
-            <editable-title th:text="${tally.name}" th:attr="changeNameAction=@{/counter/{adminKey}?action=changeName&newName=(adminKey=${tally.adminKey})}, allowEdit=${tally.admin}">
+            <editable-title th:text="${tally.name}" th:attr="name=${tally.name}, changeNameAction=@{/counter/{adminKey}?action=changeName&newName=(adminKey=${tally.adminKey})}, allowEdit=${tally.admin}">
                 Pizza Count 2018
             </editable-title>
             <h2 class="subtitle">

@@ -17,16 +17,17 @@
     <script defer th:src="@{/static/vendors~icons.js}"></script>
     <link rel="stylesheet" th:href="@{/static/css.css}"></link>
     
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/static/favicon/site.webmanifest">
-    <link rel="mask-icon" href="/static/favicon/safari-pinned-tab.svg" color="#5bbad5">
-    <link rel="shortcut icon" href="/static/favicon/favicon.ico">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="msapplication-config" content="/static/favicon/browserconfig.xml">
+    <link rel="apple-touch-icon" sizes="180x180" th:href="@{/apple-touch-icon.png}">
+    <link rel="icon" type="image/png" sizes="32x32" th:href="@{/favicon-32x32.png}">
+    <link rel="icon" type="image/png" sizes="16x16" th:href="@{/favicon-16x16.png}">
+    <link rel="manifest" th:href="@{/site.webmanifest}">
+    <link rel="mask-icon" th:href="@{/safari-pinned-tab.svg}" color="#5bbad5">
+    <link rel="shortcut icon" th:href="@{/favicon.ico}">
+    <meta name="apple-mobile-web-app-title" content="Count My Pizza">
+    <meta name="application-name" content="Count My Pizza">
+    <meta name="msapplication-config" th:content="@{/browserconfig.xml}">
     <meta name="msapplication-TileColor" content="#ffffff"></meta>
-    <meta name="msapplication-TileImage" th:content="@{/static/favicon/ms-icon-144x144.png}"></meta>
+    <meta name="msapplication-TileImage" th:content="@{/ms-icon-144x144.png}"></meta>
     <meta name="theme-color" content="#ffffff"></meta>
 </head>
 
