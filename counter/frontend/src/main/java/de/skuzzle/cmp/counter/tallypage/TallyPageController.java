@@ -48,15 +48,9 @@ public class TallyPageController {
         return currentUser;
     }
 
-    @GetMapping("/{key}")
-    public String redirect(@PathVariable("key") String key) {
-        return KnownUrls.VIEW_COUNTER.redirectResolve(key) + "?legacyWarning=true";
-    }
-
     @GetMapping(KnownUrls.VIEW_COUNTER_STRING)
     public ModelAndView showTallySheet(
-            @PathVariable("key") String key,
-            @RequestParam(defaultValue = "false") boolean legacyWarning,
+            @PathVariable String key,
             @RequestParam(defaultValue = "") Set<String> tags,
             Device device) {
 
@@ -81,20 +75,19 @@ public class TallyPageController {
                 "timeline", timeline,
                 "increments", increments,
                 "graph", graph,
-                "mobile", mobile,
-                "legacyWarning", legacyWarning));
+                "mobile", mobile));
     }
 
     @PostMapping(KnownUrls.VIEW_COUNTER_STRING)
     public String incrementTallySheet(
-            @PathVariable("key") String key,
-            @RequestParam("description") String description,
-            @RequestParam("tags") String tags,
-            @RequestParam("incrementDateUTC") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate incrementDate) {
+            @PathVariable String key,
+            @RequestParam String description,
+            @RequestParam String tags,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate incrementDateUTC) {
 
         final Set<String> tagSet = Tags.fromString(tags).all();
         final RestTallyIncrement increment = RestTallyIncrement.createNew(description,
-                LocalDateTime.of(incrementDate, LocalTime.now()), tagSet);
+                LocalDateTime.of(incrementDateUTC, LocalTime.now()), tagSet);
 
         client.increment(key, increment);
         return KnownUrls.VIEW_COUNTER.redirectResolve(key);
@@ -107,15 +100,15 @@ public class TallyPageController {
 
     @GetMapping(path = KnownUrls.INCREMENT_COUNTER_STRING, params = "action=updateIncrement")
     public String updateIncrement(
-            @PathVariable("key") String key,
-            @PathVariable("incrementId") String incrementId,
-            @RequestParam("description") String description,
-            @RequestParam("tags") String tags,
-            @RequestParam("incrementDateUTC") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate incrementDate) {
+            @PathVariable String key,
+            @PathVariable String incrementId,
+            @RequestParam String description,
+            @RequestParam String tags,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate incrementDateUTC) {
 
         final Set<String> tagSet = Tags.fromString(tags).all();
         final RestTallyIncrement increment = RestTallyIncrement.createWithId(incrementId, description,
-                LocalDateTime.of(incrementDate, LocalTime.now()), tagSet);
+                LocalDateTime.of(incrementDateUTC, LocalTime.now()), tagSet);
         client.updateIncrement(key, increment);
         return KnownUrls.VIEW_COUNTER.redirectResolve(key);
     }
