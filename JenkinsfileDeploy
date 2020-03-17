@@ -7,8 +7,8 @@ pipeline {
     stage('Pull latest') {
       steps {
         sh 'docker login -u ${DOCKER_REGISTRY_USR} -p ${DOCKER_REGISTRY_PSW} docker.pkg.github.com'
-        sh 'docker.pkg.github.com/skuzzle/cmp/backend-server:latest'
-        sh 'docker.pkg.github.com/skuzzle/cmp/frontend-server:latest'
+        sh 'docker pull docker.pkg.github.com/skuzzle/cmp/backend-server:latest'
+        sh 'docker pull docker.pkg.github.com/skuzzle/cmp/frontend-server:latest'
       }
     }
     stage('Deploy') {
