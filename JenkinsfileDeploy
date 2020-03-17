@@ -4,20 +4,16 @@ pipeline {
     DOCKER_REGISTRY = credentials('github_docker_registry')
   }
   stages {
-    stage('Undeploy') {
-      steps {
-        sh 'cd /docker/cmp && docker-compose down || true'
-      }
-    }
     stage('Pull latest') {
       steps {
         sh 'docker login -u ${DOCKER_REGISTRY_USR} -p ${DOCKER_REGISTRY_PSW} docker.pkg.github.com'
-        sh 'cd /docker/cmp && docker-compose pull'
+        sh 'docker.pkg.github.com/skuzzle/cmp/backend-server:latest'
+        sh 'docker.pkg.github.com/skuzzle/cmp/frontend-server:latest'
       }
     }
     stage('Deploy') {
       steps {
-        sh 'cd /docker/cmp && docker-compose up -d'
+        sh 'docker stack deploy --compose-file /docker/cmp/docker-compose.yml cmp'
       }
     }
   }
