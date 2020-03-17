@@ -4,16 +4,23 @@ pipeline {
     DOCKER_REGISTRY = credentials('github_docker_registry')
   }
   stages {
-    stage('Pull latest') {
+    stage('Login Docker') {
       steps {
         sh 'docker login -u ${DOCKER_REGISTRY_USR} -p ${DOCKER_REGISTRY_PSW} docker.pkg.github.com'
-        sh 'docker pull docker.pkg.github.com/skuzzle/cmp/backend-server:latest'
-        sh 'docker pull docker.pkg.github.com/skuzzle/cmp/frontend-server:latest'
+
+
       }
     }
-    stage('Deploy') {
+    stage('Deploy Backend') {
       steps {
-        sh 'docker stack deploy --compose-file /docker/cmp/docker-compose.yml cmp'
+        sh 'docker pull docker.pkg.github.com/skuzzle/cmp/backend-server:latest'
+        sh 'docker service update --image docker.pkg.github.com/skuzzle/cmp/backend-server:latest cmp_cmpbackend'
+      }
+    }
+    stage('Deploy Frontend') {
+      steps {
+        sh 'docker pull docker.pkg.github.com/skuzzle/cmp/frontend-server:latest'
+        sh 'docker service update --image docker.pkg.github.com/skuzzle/cmp/backend-server:latest cmp_cmpfrontend'
       }
     }
   }
