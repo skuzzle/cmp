@@ -7,8 +7,6 @@ pipeline {
     stage('Login Docker') {
       steps {
         sh 'docker login -u ${DOCKER_REGISTRY_USR} -p ${DOCKER_REGISTRY_PSW} docker.pkg.github.com'
-
-
       }
     }
     stage('Deploy Backend') {
@@ -20,7 +18,7 @@ pipeline {
     stage('Deploy Frontend') {
       steps {
         sh 'docker pull docker.pkg.github.com/skuzzle/cmp/frontend-server:latest'
-        sh 'docker service update --image docker.pkg.github.com/skuzzle/cmp/backend-server:latest cmp_cmpfrontend'
+        sh 'docker service update --image docker.pkg.github.com/skuzzle/cmp/frontend-server:latest cmp_cmpfrontend'
       }
     }
   }
