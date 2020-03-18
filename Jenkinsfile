@@ -14,7 +14,7 @@ pipeline {
     }
     stage('Containerize') {
       steps {
-        sh 'mvn -B jib:dockerBuild'
+        sh 'mvn -B spring-boot:build-image'
       }
     }
   }
