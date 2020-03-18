@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.3.0.M3</version>
-		<relativePath /> <!-- lookup parent from repository -->
-	</parent>
+        <relativePath /> <!-- lookup parent from repository -->
+    </parent>
 
-	<groupId>de.skuzzle.cmp</groupId>
-	<artifactId>cmp-parent</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<packaging>pom</packaging>
-	<name>cmp-parent</name>
+    <groupId>de.skuzzle.cmp</groupId>
+    <artifactId>cmp-parent</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>cmp-parent</name>
 
-	<properties>
+    <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         
-		<!-- passed by commandline on deploy -->
-		<username>${deploy.username}</username>
-		<password>${deploy.password}</password>
-
+        <!-- passed by commandline on deploy -->
+        <username>${deploy.username}</username>
+        <password>${deploy.password}</password>
+        
         <!-- Injected into spring boot properties for being displayed on ui and metrics -->
-		<application.version.number>${project.version}</application.version.number>
+        <application.version.number>${project.version}</application.version.number>
 
         <!-- Runtime / Tools Versions -->
-		<java.version>13</java.version>
+        <java.version>13</java.version>
         <node.version>v10.15.1</node.version>
         <yarn.version>v1.13.0</yarn.version>
         <npm.version>6.3.0</npm.version>
@@ -41,33 +41,33 @@
 		<guava.version>28.2-jre</guava.version>
 		<equalsverifier.version>3.1.11</equalsverifier.version>
 
-		<!-- per default, skip docker build. Will be enabled in sub modules -->
-		<spring-boot.build-image.skip>true</spring-boot.build-image.skip>
-	</properties>
+        <!-- per default, skip docker build. Will be enabled in sub modules -->
+        <jib.skip>true</jib.skip>
+    </properties>
+    
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub skuzzle Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/skuzzle/cmp</url>
+        </repository>
+    </distributionManagement>
 
-	<distributionManagement>
-		<repository>
-			<id>github</id>
-			<name>GitHub skuzzle Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/skuzzle/cmp</url>
-		</repository>
-	</distributionManagement>
-
-	<repositories>
-		<repository>
-			<id>github</id>
-			<name>GitHub skuzzle Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/skuzzle/cmp</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
+    <repositories>
+        <repository>
+            <id>github</id>
+            <name>GitHub skuzzle Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/skuzzle/cmp</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
 			<url>https://repo.spring.io/milestone</url>
-		</repository>
-	</repositories>
+        </repository>
+    </repositories>
 
 	<pluginRepositories>
 		<pluginRepository>
@@ -77,32 +77,34 @@
 		</pluginRepository>
 	</pluginRepositories>
 
-	<modules>
-		<!-- Domain -->
-		<!-- Counter -->
-		<module>counter/domain</module>
-		<module>counter/rest</module>
-		<module>counter/frontend</module>
+    <modules>
+        <!-- Domain -->
+        <!-- Counter -->
+        <module>counter/domain</module>
+        <module>counter/rest</module>
+        <module>counter/frontend</module>
+        
+        <!-- Collaborative Order -->
+        <module>collaborativeorder/domain</module>
+        <module>collaborativeorder/rest</module>
+        <module>collaborativeorder/frontend</module>
+        
+        <!-- Common -->
+        <module>common/rest-auth</module>
+        <module>common/frontend-auth</module>
+        <module>common/http</module>
+        <module>common/collections</module>
+        
+        <!-- UI -->
+        <module>ui/fragments</module>
+        
+        <!-- Application -->
+        <module>application/backend-server</module>
+        <module>application/frontend-server</module>
+    </modules>
 
-		<!-- Collaborative Order -->
-		<module>collaborativeorder/domain</module>
-
-		<!-- Common -->
-		<module>common/rest-auth</module>
-		<module>common/frontend-auth</module>
-		<module>common/http</module>
-		<module>common/collections</module>
-
-		<!-- UI -->
-		<module>ui/fragments</module>
-
-		<!-- Application -->
-		<module>application/backend-server</module>
-		<module>application/frontend-server</module>
-	</modules>
-
-	<dependencyManagement>
-		<dependencies>
+    <dependencyManagement>
+        <dependencies>
 			<!-- Import -->
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
@@ -111,75 +113,85 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			<!-- common -->
-			<dependency>
-				<groupId>de.skuzzle.cmp.common</groupId>
-				<artifactId>rest-auth</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>de.skuzzle.cmp.common</groupId>
-				<artifactId>frontend-auth</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>de.skuzzle.cmp.common</groupId>
-				<artifactId>http</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>de.skuzzle.cmp.common</groupId>
-				<artifactId>collections</artifactId>
-				<version>${project.version}</version>
-			</dependency>
+            <!-- common -->
+            <dependency>
+                <groupId>de.skuzzle.cmp.common</groupId>
+                <artifactId>rest-auth</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.skuzzle.cmp.common</groupId>
+                <artifactId>frontend-auth</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.skuzzle.cmp.common</groupId>
+                <artifactId>http</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.skuzzle.cmp.common</groupId>
+                <artifactId>collections</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            
+            <!-- counter -->
+            <dependency>
+                <groupId>de.skuzzle.cmp.counter</groupId>
+                <artifactId>counter-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.skuzzle.cmp.counter</groupId>
+                <artifactId>counter-rest</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.skuzzle.cmp.counter</groupId>
+                <artifactId>counter-frontend</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            
+            <!-- collaborativeorder -->
+            <dependency>
+                <groupId>de.skuzzle.cmp.collaborativeorder</groupId>
+                <artifactId>collaborativeorder-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.skuzzle.cmp.collaborativeorder</groupId>
+                <artifactId>collaborativeorder-rest</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.skuzzle.cmp.collaborativeorder</groupId>
+                <artifactId>collaborativeorder-frontend</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            
+            <!-- UI -->
+            <dependency>
+                <groupId>de.skuzzle.cmp.ui</groupId>
+                <artifactId>fragments</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-			<!-- counter -->
-			<dependency>
-				<groupId>de.skuzzle.cmp.counter</groupId>
-				<artifactId>counter-domain</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>de.skuzzle.cmp.counter</groupId>
-				<artifactId>counter-rest</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>de.skuzzle.cmp.counter</groupId>
-				<artifactId>counter-frontend</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-
-			<!-- collaborativeorder -->
-			<dependency>
-				<groupId>de.skuzzle.cmp.collaborativeorder</groupId>
-				<artifactId>collaborativeorder-domain</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-
-			<!-- UI -->
-			<dependency>
-				<groupId>de.skuzzle.cmp.ui</groupId>
-				<artifactId>fragments</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.google.guava</groupId>
-				<artifactId>guava</artifactId>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
 				<version>${guava.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>nl.jqno.equalsverifier</groupId>
-				<artifactId>equalsverifier</artifactId>
-				<scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>nl.jqno.equalsverifier</groupId>
+                <artifactId>equalsverifier</artifactId>
+                <scope>test</scope>
 				<version>${equalsverifier.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.github.resilience4j</groupId>
-				<artifactId>resilience4j-spring-boot2</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-spring-boot2</artifactId>
 				<version>${resilience4j.version}</version>
-			</dependency>
+            </dependency>
             <dependency>
                 <groupId>io.github.resilience4j</groupId>
                 <artifactId>resilience4j-circuitbreaker</artifactId>
@@ -191,42 +203,61 @@
                 <version>${resilience4j.version}</version>
             </dependency>
 			<dependency>
-				<groupId>org.springframework.metrics</groupId>
-				<artifactId>spring-metrics</artifactId>
+                <groupId>org.springframework.metrics</groupId>
+                <artifactId>spring-metrics</artifactId>
 				<version>${spring-metrics.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.mobile</groupId>
-				<artifactId>spring-mobile-device</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.mobile</groupId>
+                <artifactId>spring-mobile-device</artifactId>
 				<version>${spring-mobile-device.version}</version>
-			</dependency>
+            </dependency>
 
-			<dependency>
-				<groupId>io.florianlopes</groupId>
-				<artifactId>spring-mvc-test-utils</artifactId>
-				<version>2.2.1</version>
-				<scope>test</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+            <dependency>
+                <groupId>io.florianlopes</groupId>
+                <artifactId>spring-mvc-test-utils</artifactId>
+                <version>2.2.1</version>
+                <scope>test</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.springframework.cloud</groupId>
-					<artifactId>spring-cloud-contract-maven-plugin</artifactId>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-contract-maven-plugin</artifactId>
 					<version>2.2.2.RELEASE</version>
-				</plugin>
-				<!-- <plugin> <groupId>com.google.cloud.tools</groupId> <artifactId>jib-maven-plugin</artifactId> 
-					<version>1.8.0</version> <configuration> <from> <image>openjdk:14</image> 
-					</from> <to> <image>docker.pkg.github.com/skuzzle/cmp/${project.artifactId}</image> 
-					<auth> <username>${deploy.username}</username> <password>${deploy.password}</password> 
-					</auth> <tags> <tag>${project.version}</tag> <tag>latest</tag> </tags> </to> 
-					<container> <jvmFlags> <jvmFlag>-XX:+UnlockExperimentalVMOptions</jvmFlag> 
-					<jvmFlag>-XX:+UseJVMCICompiler</jvmFlag> </jvmFlags> </container> </configuration> 
-					</plugin> -->
-			</plugins>
-		</pluginManagement>
-	</build>
+                </plugin>
+                <plugin>
+                    <groupId>com.google.cloud.tools</groupId>
+                    <artifactId>jib-maven-plugin</artifactId>
+                    <version>1.8.0</version>
+                    <configuration>
+                        <from>
+                            <image>openjdk:14</image>
+                        </from>
+                        <to>
+                            <image>docker.pkg.github.com/skuzzle/cmp/${project.artifactId}</image>
+                            <auth>
+                                <username>${deploy.username}</username>
+                                <password>${deploy.password}</password>
+                            </auth>
+                            <tags>
+                                <tag>${project.version}</tag>
+                                <tag>latest</tag>
+                            </tags>
+                        </to>
+                        <container>
+                            <jvmFlags>
+                                <jvmFlag>-XX:+UnlockExperimentalVMOptions</jvmFlag>
+                                <jvmFlag>-XX:+UseJVMCICompiler</jvmFlag>
+                            </jvmFlags>
+                        </container>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

@@ -13,7 +13,7 @@
 	<name>frontend-server</name>
 
 	<properties>
-		<spring-boot.build-image.skip>true</spring-boot.build-image.skip>
+		<jib.skip>false</jib.skip>
 	</properties>
 
 	<dependencies>

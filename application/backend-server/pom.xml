@@ -14,7 +14,7 @@
     <name>backend-server</name>
 
     <properties>
-        <spring-boot.build-image.skip>false</spring-boot.build-image.skip>
+        <jib.skip>false</jib.skip>
     </properties>
 
     <dependencies>
