@@ -24,7 +24,8 @@
         <username>${deploy.username}</username>
         <password>${deploy.password}</password>
         
-        <!-- Injected into spring boot properties for being displayed on ui and metrics -->
+        <!-- Injected into spring boot properties for being displayed on 
+            ui and metrics -->
         <application.version.number>${project.version}</application.version.number>
 
         <!-- Runtime / Tools Versions -->
@@ -42,7 +43,7 @@
 		<equalsverifier.version>3.1.11</equalsverifier.version>
 
         <!-- per default, skip docker build. Will be enabled in sub modules -->
-		<spring-boot.build-image.skip>true</spring-boot.build-image.skip>
+        <jib.skip>true</jib.skip>
     </properties>
     
     <distributionManagement>
@@ -230,14 +231,33 @@
                     <artifactId>spring-cloud-contract-maven-plugin</artifactId>
 					<version>2.2.2.RELEASE</version>
                 </plugin>
-				<!-- <plugin> <groupId>com.google.cloud.tools</groupId> <artifactId>jib-maven-plugin</artifactId> 
-					<version>1.8.0</version> <configuration> <from> <image>openjdk:14</image> 
-					</from> <to> <image>docker.pkg.github.com/skuzzle/cmp/${project.artifactId}</image> 
-					<auth> <username>${deploy.username}</username> <password>${deploy.password}</password> 
-					</auth> <tags> <tag>${project.version}</tag> <tag>latest</tag> </tags> </to> 
-					<container> <jvmFlags> <jvmFlag>-XX:+UnlockExperimentalVMOptions</jvmFlag> 
-					<jvmFlag>-XX:+UseJVMCICompiler</jvmFlag> </jvmFlags> </container> </configuration> 
-					</plugin> -->
+                <plugin>
+                    <groupId>com.google.cloud.tools</groupId>
+                    <artifactId>jib-maven-plugin</artifactId>
+                    <version>1.8.0</version>
+                    <configuration>
+                        <from>
+                            <image>openjdk:14</image>
+                        </from>
+                        <to>
+                            <image>docker.pkg.github.com/skuzzle/cmp/${project.artifactId}</image>
+                            <auth>
+                                <username>${deploy.username}</username>
+                                <password>${deploy.password}</password>
+                            </auth>
+                            <tags>
+                                <tag>${project.version}</tag>
+                                <tag>latest</tag>
+                            </tags>
+                        </to>
+                        <container>
+                            <jvmFlags>
+                                <jvmFlag>-XX:+UnlockExperimentalVMOptions</jvmFlag>
+                                <jvmFlag>-XX:+UseJVMCICompiler</jvmFlag>
+                            </jvmFlags>
+                        </container>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
