@@ -4,6 +4,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.skuzzle.cmp.common.ratelimit.ApiRateLimiter;
 import de.skuzzle.cmp.rest.auth.TallyUser;
 
 @RestController
@@ -30,10 +32,13 @@ public class TallyRestController {
 
     private final TallyService tallyService;
     private final TallyUser currentUser;
+    private final ApiRateLimiter<HttpServletRequest> rateLimiter;
 
-    TallyRestController(TallyService tallyService, TallyUser currentUser) {
+    TallyRestController(TallyService tallyService, TallyUser currentUser,
+            ApiRateLimiter<HttpServletRequest> rateLimiter) {
         this.tallyService = tallyService;
         this.currentUser = currentUser;
+        this.rateLimiter = rateLimiter;
     }
 
     private UserId currentUser() {
@@ -42,6 +47,8 @@ public class TallyRestController {
 
     @GetMapping("/_meta")
     public ResponseEntity<RestTallyMetaInfoResponse> getMetaInfo(HttpServletRequest request) {
+        rateLimiter.blockIfRateLimitIsExceeded(request);
+
         final int countAllTallySheets = tallyService.countAllTallySheets();
         final RestTallyMetaInfoResponse body = RestTallyMetaInfoResponse.of(countAllTallySheets);
         return ResponseEntity.ok(body);
@@ -49,6 +56,8 @@ public class TallyRestController {
 
     @GetMapping("/")
     public ResponseEntity<RestTallySheetsReponse> getAllTallies(HttpServletRequest request) {
+        rateLimiter.blockIfRateLimitIsExceeded(request);
+
         final UserId currentUser = currentUser();
 
         final List<ShallowTallySheet> tallySheets = tallyService.getTallySheetsFor(currentUser);
@@ -63,7 +72,9 @@ public class TallyRestController {
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate until,
             @RequestParam(required = false, defaultValue = "-1") int start,
             @RequestParam(required = false, defaultValue = "-1") int max,
+            @RequestParam(required = false, defaultValue = "") Set<String> tags,
             HttpServletRequest request) {
+        rateLimiter.blockIfRateLimitIsExceeded(request);
 
         final TallySheet tallySheet = tallyService.getTallySheet(key);
 
@@ -71,7 +82,8 @@ public class TallyRestController {
                 .from(from == null ? LocalDateTime.MIN : from.atStartOfDay())
                 .until(until == null ? LocalDateTime.MAX : until.atStartOfDay())
                 .start(start < 0 ? 0 : start)
-                .maxResults(max < 0 ? Integer.MAX_VALUE : max));
+                .maxResults(max < 0 ? Integer.MAX_VALUE : max)
+                .havingAllTags(tags));
 
         final UserId currentUser = currentUser();
         final RestIncrements increments = RestIncrements.of(incrementQueryResult);
@@ -83,6 +95,7 @@ public class TallyRestController {
     @PostMapping("/{name}")
     public ResponseEntity<RestTallyResponse> createTally(@PathVariable @NotEmpty String name,
             HttpServletRequest request) {
+        rateLimiter.blockIfRateLimitIsExceeded(request);
 
         final UserId currentUser = currentUser();
         final TallySheet tallySheet = tallyService.createNewTallySheet(currentUser, name);
@@ -99,6 +112,8 @@ public class TallyRestController {
     @DeleteMapping("/{key}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteTallySheet(@PathVariable String key, HttpServletRequest request) {
+        rateLimiter.blockIfRateLimitIsExceeded(request);
+
         tallyService.deleteTallySheet(key);
     }
 
@@ -106,6 +121,8 @@ public class TallyRestController {
     @ResponseStatus(HttpStatus.OK)
     public void assignToCurrentUser(@PathVariable @NotEmpty String key,
             HttpServletRequest request) {
+        rateLimiter.blockIfRateLimitIsExceeded(request);
+
         final UserId currentUser = currentUser();
         tallyService.assignToUser(key, currentUser);
 
@@ -115,6 +132,8 @@ public class TallyRestController {
     @ResponseStatus(HttpStatus.OK)
     public void changeName(@PathVariable @NotEmpty String key, @PathVariable String newName,
             HttpServletRequest request) {
+        rateLimiter.blockIfRateLimitIsExceeded(request);
+
         tallyService.changeName(key, newName);
     }
 
@@ -123,6 +142,8 @@ public class TallyRestController {
     public void increment(@PathVariable String key,
             @RequestBody @Valid RestTallyIncrement increment,
             HttpServletRequest request) {
+        rateLimiter.blockIfRateLimitIsExceeded(request);
+
         tallyService.increment(key, increment.toDomainObjectWithoutId());
     }
 
@@ -130,12 +151,16 @@ public class TallyRestController {
     @ResponseStatus(HttpStatus.OK)
     public void updateIncrement(@PathVariable String key, @RequestBody RestTallyIncrement increment,
             HttpServletRequest request) {
+        rateLimiter.blockIfRateLimitIsExceeded(request);
+
         tallyService.updateIncrement(key, increment.toDomainObjectWithId());
     }
 
     @DeleteMapping("/{key}/increment/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteIncrement(@PathVariable String key, @PathVariable String id, HttpServletRequest request) {
+        rateLimiter.blockIfRateLimitIsExceeded(request);
+
         tallyService.deleteIncrement(key, id);
     }
 

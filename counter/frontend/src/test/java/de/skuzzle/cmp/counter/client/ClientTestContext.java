@@ -47,14 +47,16 @@ class ClientTestContext {
     public ClientTestContext configurePublic(Consumer<TallySheetResponseBuilder> tallySheet) {
         this.publicTallySheet = TestResponses.tallySheet().withAdminKey(null);
         tallySheet.accept(publicTallySheet);
-        when(tallyClientMock.getTallySheet(publicTallySheet.getPublicKey())).thenReturn(publicTallySheet.toResponse());
+        when(tallyClientMock.getTallySheet(publicTallySheet.getPublicKey(), Filter.all()))
+                .thenReturn(publicTallySheet.toResponse());
         return this;
     }
 
     public ClientTestContext configureAdminReply(Consumer<TallySheetResponseBuilder> tallySheet) {
         this.adminTallySheet = TestResponses.tallySheet();
         tallySheet.accept(adminTallySheet);
-        when(tallyClientMock.getTallySheet(adminTallySheet.getAdminKey())).thenReturn(adminTallySheet.toResponse());
+        when(tallyClientMock.getTallySheet(adminTallySheet.getAdminKey(), Filter.all()))
+                .thenReturn(adminTallySheet.toResponse());
         return this;
     }
 

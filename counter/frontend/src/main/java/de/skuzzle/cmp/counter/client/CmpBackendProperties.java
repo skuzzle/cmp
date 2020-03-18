@@ -5,13 +5,13 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 
 @ConstructorBinding
 @ConfigurationProperties(prefix = "cmp.backend")
-class TallyBackendProperties {
+class CmpBackendProperties {
 
     private final String url;
     private final String healthUrl;
     private final boolean useResilienceFeatures;
 
-    public TallyBackendProperties(String url, String healthUrl, boolean useResilienceFeatures) {
+    public CmpBackendProperties(String url, String healthUrl, boolean useResilienceFeatures) {
         this.url = url;
         this.healthUrl = healthUrl;
         this.useResilienceFeatures = useResilienceFeatures;

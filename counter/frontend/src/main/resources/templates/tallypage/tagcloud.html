@@ -1,12 +1,28 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
     <div th:fragment="tagCloud(cloud)" class="tags">
-        <span class="tag" 
-            th:each="weightedTag : ${cloud.tags}"
-            th:classappend="${weightedTag.cssSize}" 
-            th:text="${weightedTag.name}"
-            th:title="'Occurrences: ' + ${weightedTag.count}">
-        </span>
+        <th:block th:each="weightedTag : ${cloud.tags}">
+        
+            <a class="tag is-primary" 
+                href="#" 
+                th:if="${weightedTag.isSelected(cloud)}" 
+                th:href="${weightedTag.getDeleteLink(cloud)}" 
+                th:classappend="${weightedTag.cssSize}" 
+                th:title="'Occurrences: ' + ${weightedTag.count}">
+                
+                <span th:text="${weightedTag.name}"></span>
+                <button class="delete"></button>
+            </a>
+            
+            <a class="tag" 
+                href="#" 
+                th:unless="${weightedTag.isSelected(cloud)}"
+                th:href="${weightedTag.getSelectLink(cloud)}" 
+                th:classappend="${weightedTag.cssSize}" 
+                th:text="${weightedTag.name}"
+                th:title="'Occurrences: ' + ${weightedTag.count}">
+            </a>
+        </th:block>
     </div>
 
 </html>

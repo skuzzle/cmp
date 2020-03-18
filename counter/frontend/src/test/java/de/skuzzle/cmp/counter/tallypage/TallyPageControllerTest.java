@@ -23,6 +23,7 @@ import de.skuzzle.cmp.counter.FrontendTestSlice;
 import de.skuzzle.cmp.counter.TestUserConfigurer;
 import de.skuzzle.cmp.counter.client.RestTallyIncrement;
 import de.skuzzle.cmp.counter.client.TestTallyClientConfigurer;
+import de.skuzzle.cmp.counter.urls.KnownUrls;
 
 @FrontendTestSlice
 @WebMvcTest(controllers = TallyPageController.class)
@@ -40,9 +41,10 @@ public class TallyPageControllerTest {
         // should give same result when logged in
         testUser.anonymous();
 
-        mockMvc.perform(get("/counter/{publicKey}", clientConfigurer.getPublicKey()))
+        mockMvc.perform(get(KnownUrls.VIEW_COUNTER_STRING, clientConfigurer.getPublicKey()))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("tally", "timeline", "increments", "graph", "user", "tagCloud",
+                .andExpect(model().attributeExists("currentFilter", "tally", "timeline", "increments", "graph", "user",
+                        "tagCloud",
                         "version"));
     }
 
@@ -59,7 +61,7 @@ public class TallyPageControllerTest {
                         .addIncrement("3", "third", LocalDateTime.now().minus(Period.ofMonths(1)))
                         .addIncrement("4", "fourth", LocalDateTime.now().minus(Period.ofMonths(2)), "tag"));
 
-        mockMvc.perform(get("/counter/{adminKey}", clientConfigurer.getAdminKey()))
+        mockMvc.perform(get(KnownUrls.VIEW_COUNTER_STRING, clientConfigurer.getAdminKey()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("tally", "timeline", "increments", "graph", "user", "key"));
     }
@@ -70,8 +72,8 @@ public class TallyPageControllerTest {
 
         final String adminKey = clientConfigurer.getAdminKey();
 
-        mockMvc.perform(get("/counter/{adminKey}?action=assignToCurrentUser", adminKey))
-                .andExpect(redirectedUrlTemplate("/{adminKey}", adminKey));
+        mockMvc.perform(get("/counter/{key}?action=assignToCurrentUser", adminKey))
+                .andExpect(redirectedUrlTemplate(KnownUrls.VIEW_COUNTER_STRING, adminKey));
         clientConfigurer.verify().assignToCurrentUser(adminKey);
     }
 
@@ -83,7 +85,7 @@ public class TallyPageControllerTest {
         final String adminKey = clientConfigurer.getAdminKey();
 
         mockMvc.perform(get("/counter/{adminKey}/increment/{incrementId}?action=delete", adminKey, incrementId))
-                .andExpect(redirectedUrlTemplate("/{adminKey}", adminKey));
+                .andExpect(redirectedUrlTemplate(KnownUrls.VIEW_COUNTER_STRING, adminKey));
 
         clientConfigurer.verify().deleteIncrement(adminKey, incrementId);
     }

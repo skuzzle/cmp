@@ -24,9 +24,10 @@ import de.skuzzle.cmp.counter.TestUserConfigurer;
         "cmp.backend.url=http://localhost:6565",
         "cmp.backend.healthUrl=http://not.used.in.this.test",
         "cmp.version=1" })
-@AutoConfigureStubRunner(ids = "de.skuzzle.cmp.counter:counter-rest:+:stubs:6565",
+@AutoConfigureStubRunner(
+        ids = "de.skuzzle.cmp.counter:counter-rest:+:stubs:6565",
         stubsMode = StubRunnerProperties.StubsMode.LOCAL)
-public class TallyClientIntegrationTest {
+public class BackendClientIntegrationTest {
 
     @Autowired
     private BackendClient tallyClient;
@@ -58,13 +59,13 @@ public class TallyClientIntegrationTest {
     @Test
     void testGetUnknownTallySheet() {
         assertThatExceptionOfType(HttpStatusCodeException.class)
-                .isThrownBy(() -> tallyClient.getTallySheet("unknownPublicKey"))
+                .isThrownBy(() -> tallyClient.getTallySheet("unknownPublicKey", Filter.all()))
                 .matches(e -> e.getStatusCode() == HttpStatus.NOT_FOUND);
     }
 
     @Test
     void testGetExistingTallySheet() {
-        final var apiResponse = tallyClient.getTallySheet("publicKey1");
+        final var apiResponse = tallyClient.getTallySheet("publicKey1", Filter.all());
         assertThat(apiResponse.getTallySheet().getPublicKey()).isEqualTo("publicKey1");
     }
 

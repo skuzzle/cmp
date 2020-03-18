@@ -12,14 +12,14 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
-@EnableConfigurationProperties(TallyBackendProperties.class)
-public class TallyClientConfiguration {
+@EnableConfigurationProperties(CmpBackendProperties.class)
+public class BackendClientConfiguration {
 
-    private final TallyBackendProperties tallyProperties;
+    private final CmpBackendProperties tallyProperties;
     private final ObjectMapper objectMapper;
     private final ClientId clientId;
 
-    public TallyClientConfiguration(TallyBackendProperties tallyProperties, ObjectMapper objectMapper,
+    public BackendClientConfiguration(CmpBackendProperties tallyProperties, ObjectMapper objectMapper,
             ClientId clientId) {
         this.tallyProperties = tallyProperties;
         this.objectMapper = objectMapper;
@@ -30,7 +30,7 @@ public class TallyClientConfiguration {
         return new ClientIdInterceptor(clientId);
     }
 
-    public RestTemplate restTemplate(String baseUrl) {
+    private RestTemplate restTemplate(String baseUrl) {
         final var jacksonMessageConverter = new MappingJackson2HttpMessageConverter(objectMapper);
         final var restTemplate = new RestTemplate(Arrays.asList(jacksonMessageConverter));
         final var uriBuilderFactory = new DefaultUriBuilderFactory(baseUrl);

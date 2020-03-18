@@ -46,9 +46,9 @@ class DefaultBackendClient implements BackendClient {
     }
 
     @Override
-    public RestTallyResponse getTallySheet(String publicKey) {
+    public RestTallyResponse getTallySheet(String publicKey, Filter filter) {
         Preconditions.checkArgument(publicKey != null, "publicKey must not be null");
-        return restTemplate.getForObject("/{key}", RestTallyResponse.class, publicKey);
+        return filter.callBackendUsing(restTemplate, publicKey);
     }
 
     @Override
