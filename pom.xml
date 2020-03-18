@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.1.RELEASE</version>
+        <version>2.3.0.M3</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
@@ -17,24 +17,35 @@
     <name>cmp-parent</name>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
         <!-- passed by commandline on deploy -->
         <username>${deploy.username}</username>
         <password>${deploy.password}</password>
-        
+
+        <!-- Injected into spring boot properties for being displayed on 
+            ui and metrics -->
         <application.version.number>${project.version}</application.version.number>
 
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- Runtime / Tools Versions -->
         <java.version>13</java.version>
-        <spring-cloud.version>2.2.1.RELEASE</spring-cloud.version>
         <node.version>v10.15.1</node.version>
         <yarn.version>v1.13.0</yarn.version>
         <npm.version>6.3.0</npm.version>
-        
+
+        <!-- Dependency Versions -->
+        <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
+        <spring-metrics.version>0.5.1.RELEASE</spring-metrics.version>
+        <spring-mobile-device.version>2.0.0.M3</spring-mobile-device.version>
+        <resilience4j.version>1.3.0</resilience4j.version>
+        <guava.version>28.2-jre</guava.version>
+        <equalsverifier.version>3.1.11</equalsverifier.version>
+
         <!-- per default, skip docker build. Will be enabled in sub modules -->
         <jib.skip>true</jib.skip>
     </properties>
-    
+
     <distributionManagement>
         <repository>
             <id>github</id>
@@ -55,12 +66,17 @@
         <repository>
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
-            <url>https://repo.spring.io/libs-milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
+            <url>https://repo.spring.io/milestone</url>
         </repository>
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <modules>
         <!-- Domain -->
@@ -68,19 +84,19 @@
         <module>counter/domain</module>
         <module>counter/rest</module>
         <module>counter/frontend</module>
-        
+
         <!-- Collaborative Order -->
         <module>collaborativeorder/domain</module>
-        
+
         <!-- Common -->
         <module>common/rest-auth</module>
         <module>common/frontend-auth</module>
         <module>common/http</module>
         <module>common/collections</module>
-        
+
         <!-- UI -->
         <module>ui/fragments</module>
-        
+
         <!-- Application -->
         <module>application/backend-server</module>
         <module>application/frontend-server</module>
@@ -88,7 +104,14 @@
 
     <dependencyManagement>
         <dependencies>
-          
+            <!-- Import -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <!-- common -->
             <dependency>
                 <groupId>de.skuzzle.cmp.common</groupId>
@@ -110,7 +133,7 @@
                 <artifactId>collections</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            
+
             <!-- counter -->
             <dependency>
                 <groupId>de.skuzzle.cmp.counter</groupId>
@@ -127,14 +150,24 @@
                 <artifactId>counter-frontend</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            
+
             <!-- collaborativeorder -->
             <dependency>
                 <groupId>de.skuzzle.cmp.collaborativeorder</groupId>
                 <artifactId>collaborativeorder-domain</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            
+            <dependency>
+                <groupId>de.skuzzle.cmp.collaborativeorder</groupId>
+                <artifactId>collaborativeorder-rest</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.skuzzle.cmp.collaborativeorder</groupId>
+                <artifactId>collaborativeorder-frontend</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <!-- UI -->
             <dependency>
                 <groupId>de.skuzzle.cmp.ui</groupId>
@@ -145,41 +178,40 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>28.2-jre</version>
+                <version>${guava.version}</version>
             </dependency>
             <dependency>
                 <groupId>nl.jqno.equalsverifier</groupId>
                 <artifactId>equalsverifier</artifactId>
                 <scope>test</scope>
-                <version>3.1.11</version>
+                <version>${equalsverifier.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.github.resilience4j</groupId>
                 <artifactId>resilience4j-spring-boot2</artifactId>
-                <version>1.3.0</version>
+                <version>${resilience4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-circuitbreaker</artifactId>
+                <version>${resilience4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-timelimiter</artifactId>
+                <version>${resilience4j.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.metrics</groupId>
                 <artifactId>spring-metrics</artifactId>
-                <version>0.5.1.RELEASE</version>
+                <version>${spring-metrics.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.mobile</groupId>
                 <artifactId>spring-mobile-device</artifactId>
-                <version>2.0.0.M3</version>
+                <version>${spring-mobile-device.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
-                <version>${spring-cloud.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-contract-verifier</artifactId>
-                <version>${spring-cloud.version}</version>
-                <scope>test</scope>
-            </dependency>
+
             <dependency>
                 <groupId>io.florianlopes</groupId>
                 <artifactId>spring-mvc-test-utils</artifactId>
@@ -195,7 +227,7 @@
                 <plugin>
                     <groupId>org.springframework.cloud</groupId>
                     <artifactId>spring-cloud-contract-maven-plugin</artifactId>
-                    <version>${spring-cloud.version}</version>
+                    <version>2.2.2.RELEASE</version>
                 </plugin>
                 <plugin>
                     <groupId>com.google.cloud.tools</groupId>

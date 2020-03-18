@@ -123,7 +123,9 @@
         </dependency>
     </dependencies>
 
-    <!-- Spring devtools must not be included when building the docker image. Must run with -Ddocker=true -->
+
+    <!-- Spring devtools must not be included when building the docker image. 
+        Must run with -Ddocker=true -->
     <profiles>
         <profile>
             <id>dev</id>
