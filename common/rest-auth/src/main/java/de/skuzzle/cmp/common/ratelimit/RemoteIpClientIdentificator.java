@@ -13,7 +13,7 @@ public class RemoteIpClientIdentificator implements ClientIdentificator<HttpServ
     }
 
     private String getClientIP(HttpServletRequest request) {
-        final String xrealIp = request.getHeader("X-Real-IP");
+        final String xrealIp = request.getHeader("X-Real-Ip");
         if (xrealIp == null) {
             return request.getRemoteAddr();
         }
