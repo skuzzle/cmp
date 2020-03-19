@@ -5,7 +5,7 @@
 </div>
 
 <div class="box is-radiusless" th:fragment="tallyEntry(tally, user)">
-	<nav class="level">
+    <nav class="level">
         <div class="level-left">
             <div class="level-item">
                 <strong class="truncate-text" th:title="${tally.name}" th:text="${tally.name}">Pizza Counter</strong>
@@ -23,7 +23,7 @@
                 <p class="subtitle" th:text="${tally.totalCount}">90</p>
             </div>
         </div>
-	    <div class="level-right">
+        <div class="level-right">
             <div class="level-item">
                 <div class="field is-grouped">
                     <p class="control"><a class="button is-light" th:href="@{/counter/{adminKey}(adminKey=${entry.publicKey})}">View</a></p>    
@@ -31,8 +31,8 @@
                     <p class="control"><a class="button is-danger confirmable" th:href="@{/counter/{adminKey}?action=delete(adminKey=${entry.adminKey})}">Delete</a></p>
                 </div>
             </div>
-	    </div>
-	</nav>
+        </div>
+    </nav>
     
     <div class="notification is-light is-paddingless">
     <p class="content is-size-7">

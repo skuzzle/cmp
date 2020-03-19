@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlTemplate;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 
 import de.skuzzle.cmp.counter.FrontendTestSlice;
@@ -35,6 +37,26 @@ public class TallyPageControllerTest {
     private TestTallyClientConfigurer clientConfigurer;
     @Autowired
     private MockMvc mockMvc;
+
+    @Test
+    void testServerError() throws Exception {
+        testUser.anonymous();
+        clientConfigurer.configureServerErrorReply("publicKey", HttpStatus.INTERNAL_SERVER_ERROR);
+
+        mockMvc.perform(get(KnownUrls.VIEW_COUNTER_STRING, "publicKey"))
+                .andExpect(status().isInternalServerError())
+                .andExpect(view().name("error"));
+    }
+
+    @Test
+    void testViewNonExistentCounter() throws Exception {
+        testUser.anonymous();
+        clientConfigurer.configureClientErrorReply("publicKey", HttpStatus.NOT_FOUND);
+
+        mockMvc.perform(get(KnownUrls.VIEW_COUNTER_STRING, "publicKey"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("error/404"));
+    }
 
     @Test
     void testViewEmptyCounter() throws Exception {

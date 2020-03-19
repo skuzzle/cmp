@@ -4,7 +4,12 @@ import static org.mockito.Mockito.when;
 
 import java.util.function.Consumer;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestContext;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+
+import com.google.common.base.Preconditions;
 
 import de.skuzzle.cmp.counter.client.TestResponses.TallySheetResponseBuilder;
 
@@ -57,6 +62,22 @@ class ClientTestContext {
         tallySheet.accept(adminTallySheet);
         when(tallyClientMock.getTallySheet(adminTallySheet.getAdminKey(), Filter.all()))
                 .thenReturn(adminTallySheet.toResponse());
+        return this;
+    }
+
+    public ClientTestContext configureClientErrorReply(String key, HttpStatus status) {
+        Preconditions.checkArgument(status.is4xxClientError(), "Expected a Http Status in 4xx range, but got %s",
+                status);
+        final HttpClientErrorException exception = new HttpClientErrorException(status);
+        when(tallyClientMock.getTallySheet(key, Filter.all())).thenThrow(exception);
+        return this;
+    }
+
+    public ClientTestContext configureServerErrorReply(String key, HttpStatus status) {
+        Preconditions.checkArgument(status.is5xxServerError(), "Expected a Http Status in 5xx range, but got %s",
+                status);
+        final HttpServerErrorException exception = new HttpServerErrorException(status);
+        when(tallyClientMock.getTallySheet(key, Filter.all())).thenThrow(exception);
         return this;
     }
 
