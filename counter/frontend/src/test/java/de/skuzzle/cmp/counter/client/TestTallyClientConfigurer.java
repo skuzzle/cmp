@@ -3,6 +3,7 @@ package de.skuzzle.cmp.counter.client;
 import java.util.function.Consumer;
 
 import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.TestExecutionListener;
 
@@ -35,6 +36,16 @@ public class TestTallyClientConfigurer implements TestExecutionListener {
 
     public TestTallyClientConfigurer configureAdminReply(Consumer<TallySheetResponseBuilder> tallySheet) {
         ClientTestContext.getContext().configureAdminReply(tallySheet);
+        return this;
+    }
+
+    public TestTallyClientConfigurer configureClientErrorReply(String key, HttpStatus status) {
+        ClientTestContext.getContext().configureClientErrorReply(key, status);
+        return this;
+    }
+
+    public TestTallyClientConfigurer configureServerErrorReply(String key, HttpStatus status) {
+        ClientTestContext.getContext().configureServerErrorReply(key, status);
         return this;
     }
 

@@ -7,13 +7,16 @@ import java.util.Map;
 import java.util.Set;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.base.Preconditions;
@@ -46,6 +49,19 @@ public class TallyPageController {
     @ModelAttribute("user")
     public TallyUser getUser() {
         return currentUser;
+    }
+
+    @ExceptionHandler(HttpStatusCodeException.class)
+    public ModelAndView handleClientError(HttpStatusCodeException e) {
+        final ModelAndView modelAndView = new ModelAndView();
+        final HttpStatus statusCode = e.getStatusCode();
+        if (statusCode == HttpStatus.NOT_FOUND) {
+            modelAndView.setViewName("/error/404");
+        } else {
+            modelAndView.setViewName("/error");
+        }
+        modelAndView.setStatus(statusCode);
+        return modelAndView;
     }
 
     @GetMapping(KnownUrls.VIEW_COUNTER_STRING)
