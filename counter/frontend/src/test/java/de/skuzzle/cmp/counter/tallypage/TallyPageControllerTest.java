@@ -45,7 +45,7 @@ public class TallyPageControllerTest {
 
         mockMvc.perform(get(KnownUrls.VIEW_COUNTER_STRING, "publicKey"))
                 .andExpect(status().isInternalServerError())
-                .andExpect(view().name("/error"));
+                .andExpect(view().name("error"));
     }
 
     @Test
@@ -55,7 +55,7 @@ public class TallyPageControllerTest {
 
         mockMvc.perform(get(KnownUrls.VIEW_COUNTER_STRING, "publicKey"))
                 .andExpect(status().isNotFound())
-                .andExpect(view().name("/error/404"));
+                .andExpect(view().name("error/404"));
     }
 
     @Test

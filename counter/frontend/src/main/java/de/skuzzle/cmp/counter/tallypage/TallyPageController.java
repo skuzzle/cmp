@@ -56,9 +56,9 @@ public class TallyPageController {
         final ModelAndView modelAndView = new ModelAndView();
         final HttpStatus statusCode = e.getStatusCode();
         if (statusCode == HttpStatus.NOT_FOUND) {
-            modelAndView.setViewName("/error/404");
+            modelAndView.setViewName("error/404");
         } else {
-            modelAndView.setViewName("/error");
+            modelAndView.setViewName("error");
         }
         modelAndView.setStatus(statusCode);
         return modelAndView;
