@@ -17,7 +17,8 @@ pipeline {
     }
     stage('Update Stack') {
       steps {
-        sh 'docker stack deploy --compose-file /docker/cmp/docker-compose.yml cmp'
+        sh 'docker service update cmp_cmpbackend docker.pkg.github.com/skuzzle/cmp/backend-server:latest --force'
+        sh 'docker service update cmp_cmpfrontend docker.pkg.github.com/skuzzle/cmp/frontend-server:latest --force'
       }
     }
   }
