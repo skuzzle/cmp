@@ -17,8 +17,8 @@ pipeline {
     }
     stage('Update Stack') {
       steps {
-        sh 'docker service update cmp_cmpbackend docker.pkg.github.com/skuzzle/cmp/backend-server:latest --force'
-        sh 'docker service update cmp_cmpfrontend docker.pkg.github.com/skuzzle/cmp/frontend-server:latest --force'
+        sh 'docker service update cmp_cmpbackend --image docker.pkg.github.com/skuzzle/cmp/backend-server:latest --force'
+        sh 'docker service update cmp_cmpfrontend --image docker.pkg.github.com/skuzzle/cmp/frontend-server:latest --force'
       }
     }
   }
