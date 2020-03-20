@@ -8,10 +8,13 @@
     <nav class="level">
         <div class="level-left">
             <div class="level-item">
-                <strong class="truncate-text" th:title="${tally.name}" th:text="${tally.name}">Pizza Counter</strong>
+                <div>
+                    <p class="heading">Name</p>
+                    <p class="subtitle"><strong th:text="${entry.name}">Pizza Counter</strong></p>
+                </div>
             </div>
         </div>
-        <div class="level-item has-text-centered">
+        <div th:if="false" class="level-item has-text-centered">
             <div>
                 <p class="heading">Created</p>
                 <p class="subtitle"><date-label th:text="${entry.creationDateUTC}">2019-09-09</date-label></p>
