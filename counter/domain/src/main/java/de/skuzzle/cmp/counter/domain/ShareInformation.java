@@ -11,12 +11,12 @@ public final class ShareInformation {
 
     private final boolean showIncrements;
     private final boolean showIncrementTags;
-    private final boolean showIncrementTitle;
+    private final boolean showIncrementDescription;
 
-    private ShareInformation(boolean showIncrements, boolean showIncrementTags, boolean showIncrementTitle) {
+    private ShareInformation(boolean showIncrements, boolean showIncrementTags, boolean showIncrementDescription) {
         this.showIncrements = showIncrements;
         this.showIncrementTags = showIncrementTags;
-        this.showIncrementTitle = showIncrementTitle;
+        this.showIncrementDescription = showIncrementDescription;
     }
 
     boolean isShowIncrements() {
@@ -28,7 +28,7 @@ public final class ShareInformation {
     }
 
     boolean isShowIncrementDescription() {
-        return this.showIncrementTitle;
+        return this.showIncrementDescription;
     }
 
     public static ShareInformationBuilder builder() {
@@ -43,7 +43,7 @@ public final class ShareInformation {
     }
 
     public String getIncrementTitle(String incrementTitle) {
-        return showIncrements && showIncrementTitle
+        return showIncrements && showIncrementDescription
                 ? incrementTitle
                 : "<hidden>";
     }
@@ -57,7 +57,7 @@ public final class ShareInformation {
     public static class ShareInformationBuilder {
         private boolean showIncrements;
         private boolean showIncrementTags;
-        private boolean showIncrementTitle;
+        private boolean showIncrementDescription;
 
         private ShareInformationBuilder() {
             // hidden
@@ -73,13 +73,13 @@ public final class ShareInformation {
             return this;
         }
 
-        public ShareInformationBuilder showIncrementDescription(boolean showIncrementTitle) {
-            this.showIncrementTitle = showIncrementTitle;
+        public ShareInformationBuilder showIncrementDescription(boolean showIncrementDescription) {
+            this.showIncrementDescription = showIncrementDescription;
             return this;
         }
 
         public ShareInformation build() {
-            return new ShareInformation(showIncrements, showIncrementTags, showIncrementTitle);
+            return new ShareInformation(showIncrements, showIncrementTags, showIncrementDescription);
         }
     }
 }

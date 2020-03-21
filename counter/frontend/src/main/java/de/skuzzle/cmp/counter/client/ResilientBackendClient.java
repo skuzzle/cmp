@@ -87,4 +87,18 @@ class ResilientBackendClient implements BackendClient {
     public void changeName(String adminKey, String newTitle) {
         delegate.changeName(adminKey, newTitle);
     }
+
+    @Override
+    @CircuitBreaker(name = "backendClient")
+    @Retry(name = "backendClient")
+    public void addShare(String adminKey, RestShareInformation shareInformation) {
+        delegate.addShare(adminKey, shareInformation);
+    }
+
+    @Override
+    @CircuitBreaker(name = "backendClient")
+    @Retry(name = "backendClient")
+    public void deleteShare(String adminKey, String shareId) {
+        delegate.deleteShare(adminKey, shareId);
+    }
 }

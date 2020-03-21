@@ -120,4 +120,14 @@ public class BackendClientIntegrationTest {
         tallyClient.updateIncrement("adminKey2", RestTallyIncrement.createWithId("incrementId",
                 "Description", LocalDateTime.now(), Set.of("tag1", "tag2")));
     }
+
+    @Test
+    void testAddShare() throws Exception {
+        tallyClient.addShare("adminKey1", RestShareInformation.create(true, true, true));
+    }
+
+    @Test
+    void testDeleteShare() throws Exception {
+        tallyClient.deleteShare("adminKey1", "shareId1");
+    }
 }

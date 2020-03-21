@@ -91,4 +91,18 @@ class DefaultBackendClient implements BackendClient {
         restTemplate.put("/{key}/changeName/{newName}", null, adminKey, newName);
     }
 
+    @Override
+    public void addShare(String adminKey, RestShareInformation shareInformation) {
+        Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
+        Preconditions.checkArgument(shareInformation != null, "shareInformation must not be null");
+        restTemplate.postForEntity("/{key}/share", shareInformation, Object.class, adminKey);
+    }
+
+    @Override
+    public void deleteShare(String adminKey, String shareId) {
+        Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
+        Preconditions.checkArgument(shareId != null, "shareId must not be null");
+        restTemplate.delete("/{key}/share/{shareId}", adminKey, shareId);
+    }
+
 }

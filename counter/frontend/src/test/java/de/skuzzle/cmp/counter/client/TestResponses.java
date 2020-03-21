@@ -38,6 +38,7 @@ public class TestResponses {
         private boolean assignableToCurrentUser = false;
         private int totalCount = 0;
         private final List<RestTallyIncrement> increments = new ArrayList<>();
+        private final List<RestShareDefinition> shareDefinitions = new ArrayList<>();
 
         public String getName() {
             return this.name;
@@ -108,6 +109,15 @@ public class TestResponses {
             return this;
         }
 
+        public TallySheetResponseBuilder addShare(String shareId, boolean showIncrements, boolean showIncrementTags,
+                boolean showIncrementDescription) {
+
+            final RestShareDefinition shareDefinition = new RestShareDefinition(shareId,
+                    new RestShareInformation(showIncrements, showIncrementTags, showIncrementDescription));
+            this.shareDefinitions.add(shareDefinition);
+            return this;
+        }
+
         public RestTallySheet toTallySheet() {
             return new RestTallySheet(name,
                     adminKey,
@@ -121,7 +131,8 @@ public class TestResponses {
         public RestTallyResponse toResponse() {
             final RestTallySheet tallySheet = toTallySheet();
             final RestIncrements increments = new RestIncrements(this.increments, 0, 0);
-            final RestTallyResponse restTallyResponse = new RestTallyResponse(tallySheet, increments);
+            final RestTallyResponse restTallyResponse = new RestTallyResponse(tallySheet, increments,
+                    shareDefinitions);
             return restTallyResponse;
         }
     }

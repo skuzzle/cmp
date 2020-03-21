@@ -21,7 +21,7 @@ org.springframework.cloud.contract.spec.Contract.make {
         body([
                 showIncrements: true,
                 showIncrementTags: true,
-                showIncrementTitle: true
+                showIncrementDescription: true
         ])
         headers {
             contentType(applicationJson())
