@@ -10,15 +10,15 @@ public class SocialCard {
     // static for now
     private final String card = "summary";
     private final String site = "@CountMyPizza";
+    private final String image = "https://countmy.pizza/android-chrome-192x192.png";
+
     private final String title;
     private final String description;
-    private final String image;
     private final String imageAlt;
 
     private SocialCard(String title, String description, String image, String imageAlt) {
         this.title = title;
         this.description = description;
-        this.image = image;
         this.imageAlt = imageAlt;
     }
 
