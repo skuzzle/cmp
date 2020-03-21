@@ -6,8 +6,6 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 
-import de.skuzzle.cmp.counter.domain.UserId;
-
 public class UserIdTest {
 
     @Test

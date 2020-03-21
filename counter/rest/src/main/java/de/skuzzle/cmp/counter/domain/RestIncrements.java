@@ -5,9 +5,6 @@ import java.util.List;
 
 import com.google.common.base.Preconditions;
 
-import de.skuzzle.cmp.counter.domain.IncrementQueryResult;
-import de.skuzzle.cmp.counter.domain.TallyIncrement;
-
 public class RestIncrements {
 
     private final List<RestTallyIncrement> entries;

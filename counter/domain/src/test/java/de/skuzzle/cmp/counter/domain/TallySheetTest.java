@@ -122,4 +122,46 @@ public class TallySheetTest {
         }
         return sheet;
     }
+
+    @Test
+    void testWipeForShareDefinitionWithIdShareNoIncrements() throws Exception {
+        final TallySheet sheet = TallySheet.newTallySheet(UserId.wellKnown("google", "foo@gmail.com"), "name",
+                "adminKey", "publicKey");
+        sheet.incrementWith(TallyIncrement.newIncrement("first", LocalDateTime.now(), Set.of("tag1", "tag2", "tag3")));
+        sheet.share(ShareDefinition.of("shareId", ShareInformation.builder().showIncrements(false).build()));
+        final TallySheet wiped = sheet.wipeForShareDefinitionWithId("shareId");
+        assertThat(wiped.getIncrements()).isEmpty();
+    }
+
+    @Test
+    void testWipeForShareDefinitionWithIdShareIncrementsWipeTags() throws Exception {
+        final TallySheet sheet = TallySheet.newTallySheet(UserId.wellKnown("google", "foo@gmail.com"), "name",
+                "adminKey", "publicKey");
+        sheet.incrementWith(TallyIncrement.newIncrement("first", LocalDateTime.now(), Set.of("tag1", "tag2", "tag3")));
+        sheet.share(ShareDefinition.of("shareId", ShareInformation.builder()
+                .showIncrements(true)
+                .showIncrementTags(false)
+                .showIncrementDescription(true)
+                .build()));
+
+        final TallySheet wiped = sheet.wipeForShareDefinitionWithId("shareId");
+        final TallyIncrement increment = wiped.getIncrements().get(0);
+        assertThat(increment.getTags()).isEmpty();
+    }
+
+    @Test
+    void testWipeForShareDefinitionWithIdShareIncrementsWipeDescription() throws Exception {
+        final TallySheet sheet = TallySheet.newTallySheet(UserId.wellKnown("google", "foo@gmail.com"), "name",
+                "adminKey", "publicKey");
+        sheet.incrementWith(TallyIncrement.newIncrement("first", LocalDateTime.now(), Set.of("tag1", "tag2", "tag3")));
+        sheet.share(ShareDefinition.of("shareId", ShareInformation.builder()
+                .showIncrements(true)
+                .showIncrementTags(true)
+                .showIncrementDescription(false)
+                .build()));
+
+        final TallySheet wiped = sheet.wipeForShareDefinitionWithId("shareId");
+        final TallyIncrement increment = wiped.getIncrements().get(0);
+        assertThat(increment.getDescription()).isEqualTo("<hidden>");
+    }
 }

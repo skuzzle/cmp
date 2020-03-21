@@ -31,6 +31,8 @@ public class TallySheet implements ShallowTallySheet {
 
     @Transient
     private UserId assignedUser;
+    @Transient
+    private int totalCount;
 
     private String name;
     @Indexed
@@ -38,6 +40,7 @@ public class TallySheet implements ShallowTallySheet {
     @Indexed
     private final String publicKey;
     private final List<TallyIncrement> increments;
+    private final List<ShareDefinition> shareDefinitions;
 
     // dates in UTC+0
     @CreatedDate
@@ -46,12 +49,15 @@ public class TallySheet implements ShallowTallySheet {
     private LocalDateTime lastModifiedDateUTC;
 
     // private c'tor without validation only for spring-data
-    private TallySheet(String userId, String name, String adminKey, String publicKey, List<TallyIncrement> increments) {
+    private TallySheet(String userId, String name, String adminKey, String publicKey, List<TallyIncrement> increments,
+            List<ShareDefinition> shareDefinitions) {
         this.userId = userId;
         this.name = name;
         this.adminKey = adminKey;
         this.publicKey = publicKey;
         this.increments = increments;
+        this.shareDefinitions = shareDefinitions;
+        this.totalCount = increments.size();
         this.assignedUser = UserId.fromLegacyStringId(userId);
     }
 
@@ -61,7 +67,7 @@ public class TallySheet implements ShallowTallySheet {
         Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
         Preconditions.checkArgument(publicKey != null, "publicKey must not be null");
 
-        return new TallySheet(userId.toString(), name, adminKey, publicKey, new ArrayList<>());
+        return new TallySheet(userId.toString(), name, adminKey, publicKey, new ArrayList<>(), new ArrayList<>());
     }
 
     @Override
@@ -93,6 +99,26 @@ public class TallySheet implements ShallowTallySheet {
         return this;
     }
 
+    public TallySheet wipeForShareDefinitionWithId(String shareId) {
+        Preconditions.checkArgument(shareId != null, "shareId must not be null");
+
+        final ShareInformation share = this.shareDefinitions.stream()
+                .filter(shareDefinition -> shareId.equals(shareId))
+                .map(ShareDefinition::getShareInformation)
+                .findFirst()
+                .orElseThrow(() -> new ShareNotAvailableException(shareId));
+
+        final TallySheet result = new TallySheet(userId, name, adminKey, publicKey,
+                share.getIncrements(increments), shareDefinitions);
+        result.id = id;
+        result.version = version;
+        result.createDateUTC = createDateUTC;
+        result.lastModifiedDateUTC = lastModifiedDateUTC;
+        result.totalCount = totalCount;
+        result.adminKey = null;
+        return result;
+    }
+
     @Override
     public String getPublicKey() {
         return this.publicKey;
@@ -100,7 +126,7 @@ public class TallySheet implements ShallowTallySheet {
 
     @Override
     public int getTotalCount() {
-        return increments.size();
+        return totalCount;
     }
 
     public List<TallyIncrement> getIncrements() {
@@ -140,7 +166,9 @@ public class TallySheet implements ShallowTallySheet {
 
     public boolean deleteIncrementWithId(String incrementId) {
         Preconditions.checkArgument(incrementId != null, "incrementId must not be null");
-        return this.increments.removeIf(increment -> increment.getId().equals(incrementId));
+        final boolean removed = this.increments.removeIf(increment -> increment.getId().equals(incrementId));
+        this.totalCount = increments.size();
+        return removed;
     }
 
     public void incrementWith(TallyIncrement increment) {
@@ -151,6 +179,7 @@ public class TallySheet implements ShallowTallySheet {
                                 increment.getId(), getId())));
 
         this.increments.add(increment);
+        this.totalCount = increments.size();
     }
 
     public void updateIncrement(TallyIncrement increment) {
@@ -167,5 +196,23 @@ public class TallySheet implements ShallowTallySheet {
         Preconditions.checkArgument(newName != null, "newName must not be null");
         Preconditions.checkArgument(!newName.isEmpty(), "newName must not be empty");
         this.name = newName;
+    }
+
+    public List<ShareDefinition> getShareDefinitions() {
+        return Collections.unmodifiableList(this.shareDefinitions);
+    }
+
+    void share(ShareDefinition shareDefinition) {
+        Preconditions.checkArgument(shareDefinition != null, "shareDefinition must not be null");
+        this.shareDefinitions.add(shareDefinition);
+    }
+
+    void unshare(String shareId) {
+        Preconditions.checkArgument(shareId != null, "shareId must not be null");
+        final boolean deleted = this.shareDefinitions
+                .removeIf(share -> shareId.equals(share.getShareId()));
+        if (!deleted) {
+            throw new ShareNotAvailableException(shareId);
+        }
     }
 }

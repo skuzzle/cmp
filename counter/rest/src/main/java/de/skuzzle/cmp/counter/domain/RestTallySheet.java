@@ -6,9 +6,6 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
-import de.skuzzle.cmp.counter.domain.ShallowTallySheet;
-import de.skuzzle.cmp.counter.domain.UserId;
-
 public class RestTallySheet {
 
     private final String name;
