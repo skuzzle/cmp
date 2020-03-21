@@ -34,6 +34,7 @@ import de.skuzzle.cmp.counter.tagcloud.TagCloud;
 import de.skuzzle.cmp.counter.timeline.Timeline;
 import de.skuzzle.cmp.counter.timeline.TimelineBuilder;
 import de.skuzzle.cmp.counter.urls.KnownUrls;
+import de.skuzzle.cmp.ui.socialcard.SocialCard;
 
 @Controller
 public class TallyPageController {
@@ -81,6 +82,9 @@ public class TallyPageController {
         final Graph graph = Graph.fromHistory(increments.getEntries());
         final Timeline timeline = TimelineBuilder.fromBackendResponse(response);
         final TagCloud tagCloud = TagCloud.fromBackendResponse(key, response, currentFilter);
+        final SocialCard socialCard = SocialCard.withTitle(tallySheet.getName())
+                .withDescription("Count: " + tallySheet.getTotalCount())
+                .build();
 
         final boolean mobile = !device.isNormal();
         return new ModelAndView("tallypage/tally", Map.of(
@@ -91,7 +95,8 @@ public class TallyPageController {
                 "timeline", timeline,
                 "increments", increments,
                 "graph", graph,
-                "mobile", mobile));
+                "mobile", mobile,
+                "socialCard", socialCard));
     }
 
     @PostMapping(KnownUrls.VIEW_COUNTER_STRING)

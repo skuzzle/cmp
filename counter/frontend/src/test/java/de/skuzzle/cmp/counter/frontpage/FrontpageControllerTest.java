@@ -37,7 +37,7 @@ public class FrontpageControllerTest {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("user", "exampleGraph", "recentlyCreated",
-                        "totalTallySheetCount"));
+                        "totalTallySheetCount", "socialCard"));
     }
 
     @Test
