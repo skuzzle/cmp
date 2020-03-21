@@ -19,6 +19,7 @@ import de.skuzzle.cmp.counter.client.RestTallyResponse;
 import de.skuzzle.cmp.counter.client.RestTallySheet;
 import de.skuzzle.cmp.counter.client.RestTallySheetsReponse;
 import de.skuzzle.cmp.counter.graphs.Graph;
+import de.skuzzle.cmp.ui.socialcard.SocialCard;
 
 @Controller
 public class FrontpageController {
@@ -45,10 +46,14 @@ public class FrontpageController {
     public ModelAndView getIndex() {
         final TallyUser user = getUser();
         final RestTallyMetaInfoResponse metaInfo = client.getMetaInfo();
+        final SocialCard socialCard = SocialCard.withTitle("Count My Pizza")
+                .withDescription("Count pizzas - and more!")
+                .build();
 
         final ModelAndView model = new ModelAndView("frontpage/frontPage.html")
                 .addObject("totalTallySheetCount", metaInfo.getTotalTallySheetCount())
-                .addObject("recentlyCreated", List.of());
+                .addObject("recentlyCreated", List.of())
+                .addObject("socialCard", socialCard);
 
         if (user.isLoggedIn()) {
             final RestTallySheetsReponse result = client.listTallySheets();

@@ -1,0 +1,11 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="socialCard(card)">
+    <meta name="twitter:card" th:content="${card.card}"></meta>
+    <meta name="twitter:site" th:content="${card.site}"></meta>
+    <meta name="twitter:title" th:content="${card.title}"></meta>
+    <meta name="twitter:description" th:if="${card.description}" th:content="${card.description}"></meta>
+    <meta name="twitter:image" th:if="${card.image}" th:content="${card.image}"></meta>
+    <meta name="twitter:image:alt" th:if="${card.imageAlt}" th:content="${card.imageAlt}"></meta>
+</th:block>
+</html>

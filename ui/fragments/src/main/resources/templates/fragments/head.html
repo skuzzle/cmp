@@ -29,6 +29,10 @@
     <meta name="msapplication-TileColor" content="#ffffff"></meta>
     <meta name="msapplication-TileImage" th:content="@{/ms-icon-144x144.png}"></meta>
     <meta name="theme-color" content="#ffffff"></meta>
+    
+    <th:block  th:if="${socialCard}">
+        <th:block th:replace="fragments/socialCard :: socialCard(${socialCard})"/>
+    </th:block>
 </head>
 
 </html>

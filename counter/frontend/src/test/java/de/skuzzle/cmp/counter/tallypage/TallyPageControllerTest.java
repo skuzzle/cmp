@@ -67,7 +67,8 @@ public class TallyPageControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("currentFilter", "tally", "timeline", "increments", "graph", "user",
                         "tagCloud",
-                        "version"));
+                        "version",
+                        "socialCard"));
     }
 
     @Test
