@@ -40,6 +40,16 @@ org.springframework.cloud.contract.spec.Contract.make {
                 entries: [],
                 total: 0,
                 start: 0
+            ],
+            shareDefinitions: [
+                [
+                    shareId: 'shareId1',
+                    shareInformation: [
+                        showIncrements: true,
+                        showIncrementTags: true,
+                        showIncrementDescription: true
+                    ]
+                ]
             ]
         ])
         headers {

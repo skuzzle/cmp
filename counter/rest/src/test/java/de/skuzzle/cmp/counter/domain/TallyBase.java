@@ -67,10 +67,17 @@ public class TallyBase {
                 .thenReturn("adminKey4");
         when((randomKeyGenerator.generatePublicKey(anyInt())))
                 .thenReturn("publicKey1")
+                .thenReturn("shareId1")
                 .thenReturn("publicKey2")
                 .thenReturn("publicKey3")
                 .thenReturn("publicKey4");
-        tallyService.createNewTallySheet(USER1, "existing1");
+
+        final TallySheet withKey1 = tallyService.createNewTallySheet(USER1, "existing1");
+        tallyService.addShare(withKey1.getAdminKey().orElseThrow(), ShareInformation.builder()
+                .showIncrements(true)
+                .showIncrementDescription(true)
+                .showIncrementTags(true).build());
+
         tallyService.createNewTallySheet(USER1, "existing2");
         tallyService.createNewTallySheet(USER2, "existing3");
         tallyService.increment("adminKey2", increment);

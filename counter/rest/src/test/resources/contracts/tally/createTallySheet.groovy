@@ -42,7 +42,8 @@ org.springframework.cloud.contract.spec.Contract.make {
                 total: 0,
                 start: 0,
                 entries: []
-            ]
+            ],
+            shareDefinitions: []
         ])
         headers {
             contentType(applicationJson())

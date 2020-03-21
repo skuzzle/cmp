@@ -19,6 +19,18 @@ public final class ShareInformation {
         this.showIncrementTitle = showIncrementTitle;
     }
 
+    boolean isShowIncrements() {
+        return this.showIncrements;
+    }
+
+    boolean isShowIncrementTags() {
+        return this.showIncrementTags;
+    }
+
+    boolean isShowIncrementDescription() {
+        return this.showIncrementTitle;
+    }
+
     public static ShareInformationBuilder builder() {
         return new ShareInformationBuilder();
     }

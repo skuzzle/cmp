@@ -88,7 +88,9 @@ public class TallyRestController {
         final UserId currentUser = currentUser();
         final RestIncrements increments = RestIncrements.of(incrementQueryResult);
         final RestTallySheet restTallySheet = RestTallySheet.fromDomainObject(currentUser, tallySheet);
-        final RestTallyResponse response = RestTallyResponse.of(restTallySheet, increments);
+        final RestTallyResponse response = RestTallyResponse.of(restTallySheet, increments,
+                RestShareDefinition.fromDomainObjects(tallySheet.getShareDefinitions()));
+
         return ResponseEntity.ok(response);
     }
 
@@ -102,7 +104,8 @@ public class TallyRestController {
 
         final RestIncrements increments = RestIncrements.empty(0);
         final RestTallySheet restTallySheet = RestTallySheet.fromDomainObject(currentUser, tallySheet);
-        final RestTallyResponse response = RestTallyResponse.of(restTallySheet, increments);
+        final RestTallyResponse response = RestTallyResponse.of(restTallySheet, increments,
+                RestShareDefinition.fromDomainObjects(tallySheet.getShareDefinitions()));
 
         return ResponseEntity
                 .created(URI.create("/" + tallySheet.getAdminKey().orElseThrow()))
@@ -115,6 +118,21 @@ public class TallyRestController {
         rateLimiter.blockIfRateLimitIsExceeded(request);
 
         tallyService.deleteTallySheet(key);
+    }
+
+    @PostMapping("/{key}/share")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addShare(@PathVariable String key, @RequestBody RestShareInformation shareInformation,
+            HttpServletRequest request) {
+        rateLimiter.blockIfRateLimitIsExceeded(request);
+        tallyService.addShare(key, shareInformation.toDomainObject());
+    }
+
+    @DeleteMapping("/{key}/share/{shareId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteShare(@PathVariable String key, @PathVariable String shareId, HttpServletRequest request) {
+        rateLimiter.blockIfRateLimitIsExceeded(request);
+        tallyService.deleteShare(key, shareId);
     }
 
     @PostMapping("/{key}/assignToCurrentUser")
@@ -170,7 +188,8 @@ public class TallyRestController {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = { TallySheetNotAvailableException.class, IncrementNotAvailableException.class })
+    @ExceptionHandler(value = { TallySheetNotAvailableException.class, IncrementNotAvailableException.class,
+            ShareNotAvailableException.class })
     public ResponseEntity<RestErrorMessage> onTallySheetNotAvailable(Exception e) {
         final RestErrorMessage body = RestErrorMessage.of(e.getMessage(), e.getClass().getSimpleName());
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
