@@ -83,7 +83,7 @@ public class TallyPageController {
         final Timeline timeline = TimelineBuilder.fromBackendResponse(response);
         final TagCloud tagCloud = TagCloud.fromBackendResponse(key, response, currentFilter);
         final SocialCard socialCard = SocialCard.withTitle(tallySheet.getName())
-                .withDescription("Count: " + tallySheet.getTotalCount())
+                .withDescription("Current count: " + tallySheet.getTotalCount())
                 .build();
 
         final boolean mobile = !device.isNormal();
