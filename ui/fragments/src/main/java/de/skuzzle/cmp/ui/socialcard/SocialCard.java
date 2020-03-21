@@ -9,7 +9,7 @@ public class SocialCard {
 
     // static for now
     private final String card = "summary";
-    private final String site = "@ProjectPolly";
+    private final String site = "@CountMyPizza";
     private final String title;
     private final String description;
     private final String image;
