@@ -139,7 +139,8 @@ public class TallyServiceIntegrationTest {
         final TallySheet tallySheet = tallyService.createNewTallySheet(USER, "incrementMe");
 
         assertThatExceptionOfType(IncrementNotAvailableException.class)
-                .isThrownBy(() -> tallyService.deleteIncrement(tallySheet.getAdminKey().orElseThrow(), "foo"));
+                .isThrownBy(() -> tallyService.deleteIncrement(tallySheet.getAdminKey().orElseThrow(),
+                        "unknownIncrementId"));
     }
 
     @Test
@@ -227,6 +228,38 @@ public class TallyServiceIntegrationTest {
         tallyService.createNewTallySheet(UserId.unknown("unknown"), "newName");
 
         assertThat(tallyService.countAllTallySheets()).isEqualTo(3);
+    }
+
+    @Test
+    void testAddShareUnknownAdminKey() throws Exception {
+        assertThatExceptionOfType(TallySheetNotAvailableException.class)
+                .isThrownBy(() -> tallyService.addShare("adminKey", ShareInformation.ALL_DETAILS));
+    }
+
+    @Test
+    void testDeleteShareUnknownAdminKey() throws Exception {
+        assertThatExceptionOfType(TallySheetNotAvailableException.class)
+                .isThrownBy(() -> tallyService.deleteShare("adminKey", "shareId"));
+    }
+
+    @Test
+    void testDeleteLastShare() throws Exception {
+        final TallySheet tallySheet = tallyService.createNewTallySheet(UserId.unknown("Simon"), "My Counter");
+
+        assertThatExceptionOfType(IllegalStateException.class)
+                .isThrownBy(() -> tallyService.deleteShare(tallySheet.getAdminKey().orElseThrow(),
+                        tallySheet.getDefaultShareDefinition().getShareId()));
+    }
+
+    @Test
+    void testDeleteLastShareUnknownShareId() throws Exception {
+        final TallySheet tallySheet = tallyService.createNewTallySheet(UserId.unknown("Simon"), "My Counter");
+        final TallySheet updatedTallySheet = tallyService.addShare(tallySheet.getAdminKey().orElseThrow(),
+                ShareInformation.INCREMENTS_WITHOUT_DETAILS);
+
+        assertThatExceptionOfType(ShareNotAvailableException.class)
+                .isThrownBy(() -> tallyService.deleteShare(updatedTallySheet.getAdminKey().orElseThrow(),
+                        "unknownShareId"));
     }
 
     @Test
