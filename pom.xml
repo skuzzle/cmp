@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -24,8 +23,7 @@
         <username>${deploy.username}</username>
         <password>${deploy.password}</password>
 
-        <!-- Injected into spring boot properties for being displayed on 
-            ui and metrics -->
+        <!-- Injected into spring boot properties for being displayed on ui and metrics -->
         <application.version.number>${project.version}</application.version.number>
 
         <!-- Runtime / Tools Versions -->
@@ -144,6 +142,12 @@
                 <groupId>de.skuzzle.cmp.counter</groupId>
                 <artifactId>counter-rest</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.skuzzle.cmp.counter</groupId>
+                <artifactId>counter-rest</artifactId>
+                <version>${project.version}</version>
+                <classifier>stubs</classifier>
             </dependency>
             <dependency>
                 <groupId>de.skuzzle.cmp.counter</groupId>
