@@ -37,9 +37,12 @@ public class TallySheet implements ShallowTallySheet {
     private String name;
     @Indexed
     private String adminKey;
-    @Indexed
+
+    // this field will always be null!
+    // See also: https://github.com/skuzzle/cmp/issues/49
     @Deprecated
     private final String publicKey;
+
     private final List<TallyIncrement> increments;
     private final List<ShareDefinition> shareDefinitions;
 
@@ -55,36 +58,53 @@ public class TallySheet implements ShallowTallySheet {
         this.userId = userId;
         this.name = name;
         this.adminKey = adminKey;
-        this.publicKey = publicKey;
         this.increments = increments;
 
+        // publicKey no longer needed
+        this.publicKey = null;
         if (shareDefinitions == null) {
+            Preconditions.checkState(publicKey != null);
             // share definitions will be null on older counters until they've been saved
             // again
             this.shareDefinitions = new ArrayList<>();
+            // convert old public key to a proper share definition
+            this.share(ShareDefinition.of(publicKey, ShareInformation.ALL_DETAILS));
         } else {
             this.shareDefinitions = shareDefinitions;
-        }
-        // convert old public key to a proper share definition
-        if (this.shareDefinitions.isEmpty()) {
-            this.share(ShareDefinition.of(publicKey, ShareInformation.ALL_DETAILS));
         }
         this.totalCount = increments.size();
         this.assignedUser = UserId.fromLegacyStringId(userId);
     }
 
-    public static TallySheet newTallySheet(UserId userId, String name, String adminKey, String publicKey) {
+    public static TallySheet newTallySheet(UserId userId, String name, String adminKey,
+            ShareDefinition defaultShareDefinition) {
         Preconditions.checkArgument(userId != null, "userId must not be null");
         Preconditions.checkArgument(name != null, "name must not be null");
         Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
-        Preconditions.checkArgument(publicKey != null, "publicKey must not be null");
+        Preconditions.checkArgument(defaultShareDefinition != null, "defaultShareDefinition must not be null");
 
-        return new TallySheet(userId.toString(), name, adminKey, publicKey, new ArrayList<>(), new ArrayList<>());
+        return new TallySheet(
+                userId.toString(),
+                name,
+                adminKey,
+                null,
+                new ArrayList<>(),
+                new ArrayList<>(List.of(defaultShareDefinition)));
     }
 
     @Override
     public String getId() {
         return this.id;
+    }
+
+    /**
+     * Only exists for data base compatibility.
+     *
+     * @return
+     */
+    @Deprecated
+    public String getPublicKey() {
+        return this.publicKey;
     }
 
     public int getVersion() {
@@ -106,11 +126,6 @@ public class TallySheet implements ShallowTallySheet {
         return Optional.ofNullable(this.adminKey);
     }
 
-    public TallySheet withWipedAdminKey() {
-        this.adminKey = null;
-        return this;
-    }
-
     public TallySheet wipeForShareDefinitionWithId(String shareId) {
         Preconditions.checkArgument(shareId != null, "shareId must not be null");
 
@@ -123,7 +138,7 @@ public class TallySheet implements ShallowTallySheet {
                 userId,
                 name,
                 adminKey,
-                publicKey,
+                null,
                 share.getShareInformation().getIncrements(increments),
                 new ArrayList<>(List.of(share)));
 

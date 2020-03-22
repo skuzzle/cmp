@@ -31,6 +31,7 @@ public class TallyService {
         Metrics.counter("created_tally", "user_id", user.getMetricsId()).increment();
         final String adminKey = randomKeyGenerator.generateAdminKey();
         final String publicKey = randomKeyGenerator.generatePublicKey(PUBLIC_KEY_LENGTH);
+        final ShareDefinition defaultShareDefinition = ShareDefinition.of(publicKey, ShareInformation.ALL_DETAILS);
 
         // this should really not happen but better be safe here
         final Optional<TallySheet> existing = tallyRepository.findByShareDefinitions_shareId(publicKey);
@@ -41,7 +42,7 @@ public class TallyService {
                 user,
                 name,
                 adminKey,
-                publicKey));
+                defaultShareDefinition));
     }
 
     public TallySheet assignToUser(String adminKey, UserId userId) {
@@ -62,6 +63,16 @@ public class TallyService {
 
     public TallySheet getTallySheet(String publicKey) {
         Preconditions.checkArgument(publicKey != null, "publicKey must not be null");
+
+        // this legacy lookup is required to find the sheets that have not been opened
+        // since the changes in
+        // https://github.com/skuzzle/cmp/issues/49
+        final Optional<TallySheet> byPublicKey = tallyRepository.findByPublicKey(publicKey);
+        if (byPublicKey.isPresent()) {
+            return byPublicKey
+                    .map(tallySheet -> tallySheet.wipeForShareDefinitionWithId(publicKey))
+                    .orElseThrow();
+        }
 
         final Optional<TallySheet> byAdminKey = tallyRepository.findByAdminKey(publicKey);
         if (byAdminKey.isPresent()) {
