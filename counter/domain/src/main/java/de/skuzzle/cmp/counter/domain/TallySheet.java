@@ -114,14 +114,19 @@ public class TallySheet implements ShallowTallySheet {
     public TallySheet wipeForShareDefinitionWithId(String shareId) {
         Preconditions.checkArgument(shareId != null, "shareId must not be null");
 
-        final ShareInformation share = this.shareDefinitions.stream()
+        final ShareDefinition share = this.shareDefinitions.stream()
                 .filter(shareDefinition -> shareId.equals(shareDefinition.getShareId()))
-                .map(ShareDefinition::getShareInformation)
                 .findFirst()
                 .orElseThrow(() -> new ShareNotAvailableException(shareId));
 
-        final TallySheet result = new TallySheet(userId, name, adminKey, publicKey,
-                share.getIncrements(increments), new ArrayList<>(shareDefinitions));
+        final TallySheet result = new TallySheet(
+                userId,
+                name,
+                adminKey,
+                publicKey,
+                share.getShareInformation().getIncrements(increments),
+                new ArrayList<>(List.of(share)));
+
         result.id = id;
         result.version = version;
         result.createDateUTC = createDateUTC;

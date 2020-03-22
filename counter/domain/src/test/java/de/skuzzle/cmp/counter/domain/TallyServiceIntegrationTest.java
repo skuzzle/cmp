@@ -248,6 +248,7 @@ public class TallyServiceIntegrationTest {
 
         final ShareDefinition shareDefinition = updatedTallySheet.getShareDefinitions().get(1);
         final TallySheet fromShareId = tallyService.getTallySheet(shareDefinition.getShareId());
+        assertThat(fromShareId.getShareDefinitions()).hasSize(1);
         assertThat(fromShareId.getAdminKey()).isEmpty();
         assertThat(fromShareId.getIncrements()).isEmpty();
         assertThat(fromShareId.getTotalCount()).isEqualTo(1);
