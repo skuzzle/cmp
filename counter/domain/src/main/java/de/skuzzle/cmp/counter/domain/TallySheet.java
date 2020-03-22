@@ -72,6 +72,7 @@ public class TallySheet implements ShallowTallySheet {
         } else {
             this.shareDefinitions = shareDefinitions;
         }
+        Preconditions.checkState(this.shareDefinitions.size() > 0, "expected to have at least one share");
         this.totalCount = increments.size();
         this.assignedUser = UserId.fromLegacyStringId(userId);
     }
