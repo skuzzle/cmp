@@ -126,7 +126,7 @@ public class TallySheet implements ShallowTallySheet {
         return Optional.ofNullable(this.adminKey);
     }
 
-    public TallySheet wipeForShareDefinitionWithId(String shareId) {
+    public TallySheet wipedCopyForShareDefinitionWithId(String shareId) {
         Preconditions.checkArgument(shareId != null, "shareId must not be null");
 
         final ShareDefinition share = this.shareDefinitions.stream()

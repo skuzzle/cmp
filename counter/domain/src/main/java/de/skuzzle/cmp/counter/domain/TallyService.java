@@ -70,7 +70,7 @@ public class TallyService {
         final Optional<TallySheet> byPublicKey = tallyRepository.findByPublicKey(publicKey);
         if (byPublicKey.isPresent()) {
             return byPublicKey
-                    .map(tallySheet -> tallySheet.wipeForShareDefinitionWithId(publicKey))
+                    .map(tallySheet -> tallySheet.wipedCopyForShareDefinitionWithId(publicKey))
                     .orElseThrow();
         }
 
@@ -80,7 +80,7 @@ public class TallyService {
         }
 
         return tallyRepository.findByShareDefinitions_shareId(publicKey)
-                .map(tallySheet -> tallySheet.wipeForShareDefinitionWithId(publicKey))
+                .map(tallySheet -> tallySheet.wipedCopyForShareDefinitionWithId(publicKey))
                 .orElseThrow(() -> new TallySheetNotAvailableException(publicKey));
     }
 

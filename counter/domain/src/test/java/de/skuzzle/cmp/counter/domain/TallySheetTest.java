@@ -129,17 +129,17 @@ public class TallySheetTest {
     }
 
     @Test
-    void testWipeForShareDefinitionWithIdShareNoIncrements() throws Exception {
+    void testWipedCopyForShareDefinitionWithIdShareNoIncrements() throws Exception {
         final TallySheet sheet = TallySheet.newTallySheet(UserId.wellKnown("google", "foo@gmail.com"), "name",
                 "adminKey", shareDefinition("publicKey"));
         sheet.incrementWith(TallyIncrement.newIncrement("first", LocalDateTime.now(), Set.of("tag1", "tag2", "tag3")));
         sheet.share(ShareDefinition.of("shareId", ShareInformation.builder().showIncrements(false).build()));
-        final TallySheet wiped = sheet.wipeForShareDefinitionWithId("shareId");
+        final TallySheet wiped = sheet.wipedCopyForShareDefinitionWithId("shareId");
         assertThat(wiped.getIncrements()).isEmpty();
     }
 
     @Test
-    void testWipeForShareDefinitionWithIdShareIncrementsWipeTags() throws Exception {
+    void testWipedCopyForShareDefinitionWithIdShareIncrementsWipeTags() throws Exception {
         final TallySheet sheet = TallySheet.newTallySheet(UserId.wellKnown("google", "foo@gmail.com"), "name",
                 "adminKey", shareDefinition("publicKey"));
         sheet.incrementWith(TallyIncrement.newIncrement("first", LocalDateTime.now(), Set.of("tag1", "tag2", "tag3")));
@@ -149,13 +149,13 @@ public class TallySheetTest {
                 .showIncrementDescription(true)
                 .build()));
 
-        final TallySheet wiped = sheet.wipeForShareDefinitionWithId("shareId");
+        final TallySheet wiped = sheet.wipedCopyForShareDefinitionWithId("shareId");
         final TallyIncrement increment = wiped.getIncrements().get(0);
         assertThat(increment.getTags()).isEmpty();
     }
 
     @Test
-    void testWipeForShareDefinitionWithIdShareIncrementsWipeDescription() throws Exception {
+    void testWipedCopyForShareDefinitionWithIdShareIncrementsWipeDescription() throws Exception {
         final TallySheet sheet = TallySheet.newTallySheet(UserId.wellKnown("google", "foo@gmail.com"), "name",
                 "adminKey", shareDefinition("publicKey"));
         sheet.incrementWith(TallyIncrement.newIncrement("first", LocalDateTime.now(), Set.of("tag1", "tag2", "tag3")));
@@ -165,7 +165,7 @@ public class TallySheetTest {
                 .showIncrementDescription(false)
                 .build()));
 
-        final TallySheet wiped = sheet.wipeForShareDefinitionWithId("shareId");
+        final TallySheet wiped = sheet.wipedCopyForShareDefinitionWithId("shareId");
         final TallyIncrement increment = wiped.getIncrements().get(0);
         assertThat(increment.getDescription()).isEmpty();
     }

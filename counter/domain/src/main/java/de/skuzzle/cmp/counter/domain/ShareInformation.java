@@ -40,7 +40,7 @@ public final class ShareInformation {
 
     public List<TallyIncrement> getIncrements(List<TallyIncrement> increments) {
         return showIncrements
-                ? increments.stream().map(increment -> increment.wipeFor(this))
+                ? increments.stream().map(increment -> increment.wipedCopyFor(this))
                         .collect(Collectors.toList())
                 : Collections.emptyList();
     }
