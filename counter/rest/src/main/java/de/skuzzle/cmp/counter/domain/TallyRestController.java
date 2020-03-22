@@ -88,8 +88,7 @@ public class TallyRestController {
         final UserId currentUser = currentUser();
         final RestIncrements increments = RestIncrements.of(incrementQueryResult);
         final RestTallySheet restTallySheet = RestTallySheet.fromDomainObject(currentUser, tallySheet);
-        final RestTallyResponse response = RestTallyResponse.of(restTallySheet, increments,
-                RestShareDefinition.fromDomainObjects(tallySheet.getShareDefinitions()));
+        final RestTallyResponse response = RestTallyResponse.of(restTallySheet, increments);
 
         return ResponseEntity.ok(response);
     }
@@ -104,8 +103,7 @@ public class TallyRestController {
 
         final RestIncrements increments = RestIncrements.empty(0);
         final RestTallySheet restTallySheet = RestTallySheet.fromDomainObject(currentUser, tallySheet);
-        final RestTallyResponse response = RestTallyResponse.of(restTallySheet, increments,
-                RestShareDefinition.fromDomainObjects(tallySheet.getShareDefinitions()));
+        final RestTallyResponse response = RestTallyResponse.of(restTallySheet, increments);
 
         return ResponseEntity
                 .created(URI.create("/" + tallySheet.getAdminKey().orElseThrow()))

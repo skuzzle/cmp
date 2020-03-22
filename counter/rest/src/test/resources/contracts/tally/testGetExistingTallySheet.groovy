@@ -25,7 +25,23 @@ org.springframework.cloud.contract.spec.Contract.make {
         body([
             tallySheet: [
                 name: 'existing1',
-                publicKey: 'publicKey1',
+                shareDefinitions: [
+                    [
+                        shareId: 'publicKey1',
+                        shareInformation: [
+                            showIncrements: true,
+                            showIncrementTags: true,
+                            showIncrementDescription: true
+                        ]
+                    ],[
+                        shareId: 'shareId1',
+                        shareInformation: [
+                            showIncrements: true,
+                            showIncrementTags: true,
+                            showIncrementDescription: true
+                        ]
+                    ]
+                ],
                 adminKey: null,
                 createDateUTC: $(
                     consumer('1987-09-12T11:11:00.123'),
@@ -41,16 +57,6 @@ org.springframework.cloud.contract.spec.Contract.make {
                 total: 0,
                 start: 0
             ],
-            shareDefinitions: [
-                [
-                    shareId: 'shareId1',
-                    shareInformation: [
-                        showIncrements: true,
-                        showIncrementTags: true,
-                        showIncrementDescription: true
-                    ]
-                ]
-            ]
         ])
         headers {
             contentType(applicationJson())

@@ -11,7 +11,5 @@ interface TallyRepository extends MongoRepository<TallySheet, String> {
 
     Optional<TallySheet> findByAdminKey(String adminKey);
 
-    Optional<TallySheet> findByPublicKey(String publicKey);
-
     Optional<TallySheet> findByShareDefinitions_shareId(String shareId);
 }

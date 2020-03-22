@@ -29,14 +29,15 @@
 </div>
 
 
+
 <section class="hero">
     <div class="hero-body">
         <div class="container">
             <editable-title th:text="${tally.name}" th:attr="name=${tally.name}, changeNameAction=@{/counter/{adminKey}?action=changeName&newName=(adminKey=${tally.adminKey})}, allowEdit=${tally.admin}">
                 Pizza Count 2018
             </editable-title>
-            <h2 class="subtitle">
-                Share: <a th:href="@{/counter/{publicKey}(publicKey=${tally.publicKey})}" title="Read-Only Link to share with your friends" th:text="${tally.publicKey}" href="#">Share:
+            <h2 class="subtitle" th:each="share : ${tally.shareDefinitions}">
+                Share: <a th:href="@{/counter/{publicKey}(publicKey=${share.shareId})}" title="Read-Only Link to share with your friends" th:text="${share.shareId}" href="#">Share:
                     http://tally.io/123547</a>
             </h2>
         </div>

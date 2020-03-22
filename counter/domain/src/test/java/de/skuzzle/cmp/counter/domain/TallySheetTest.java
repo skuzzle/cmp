@@ -162,6 +162,6 @@ public class TallySheetTest {
 
         final TallySheet wiped = sheet.wipeForShareDefinitionWithId("shareId");
         final TallyIncrement increment = wiped.getIncrements().get(0);
-        assertThat(increment.getDescription()).isEqualTo("<hidden>");
+        assertThat(increment.getDescription()).isEmpty();
     }
 }

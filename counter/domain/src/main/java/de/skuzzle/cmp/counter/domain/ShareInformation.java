@@ -5,9 +5,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.google.common.base.MoreObjects;
+
 public final class ShareInformation {
 
     public static final ShareInformation INCREMENTS_WITHOUT_DETAILS = new ShareInformation(true, false, false);
+    public static final ShareInformation ALL_DETAILS = new ShareInformation(true, true, true);
 
     private final boolean showIncrements;
     private final boolean showIncrementTags;
@@ -45,13 +48,22 @@ public final class ShareInformation {
     public String getIncrementTitle(String incrementTitle) {
         return showIncrements && showIncrementDescription
                 ? incrementTitle
-                : "<hidden>";
+                : "";
     }
 
     public Set<String> getIncrementTags(Set<String> tags) {
         return showIncrements && showIncrementTags
                 ? tags
                 : Collections.emptySet();
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("showIncrements", showIncrements)
+                .add("showIncrementTags", showIncrementTags)
+                .add("showIncrementDescription", showIncrementDescription)
+                .toString();
     }
 
     public static class ShareInformationBuilder {

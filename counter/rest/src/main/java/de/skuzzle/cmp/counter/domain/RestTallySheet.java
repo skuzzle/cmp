@@ -10,24 +10,24 @@ public class RestTallySheet {
 
     private final String name;
     private final String adminKey;
-    private final String publicKey;
     private final boolean assignableToCurrentUser;
     private final int totalCount;
 
     // dates in UTC+0
     private final LocalDateTime createDateUTC;
     private final LocalDateTime lastModifiedDateUTC;
+    private final List<RestShareDefinition> shareDefinitions;
 
-    private RestTallySheet(String name, String adminKey, String publicKey,
+    private RestTallySheet(String name, String adminKey,
             LocalDateTime createDateUTC, LocalDateTime lastModifiedDateUTC, boolean assignableToCurrentUser,
-            int totalCount) {
+            int totalCount, List<RestShareDefinition> shareDefinitions) {
         this.name = name;
         this.adminKey = adminKey;
-        this.publicKey = publicKey;
         this.createDateUTC = createDateUTC;
         this.lastModifiedDateUTC = lastModifiedDateUTC;
         this.assignableToCurrentUser = assignableToCurrentUser;
         this.totalCount = totalCount;
+        this.shareDefinitions = shareDefinitions;
     }
 
     public static List<RestTallySheet> fromDomainObjects(UserId currentUser,
@@ -41,13 +41,16 @@ public class RestTallySheet {
     public static RestTallySheet fromDomainObject(UserId currentUser, ShallowTallySheet tallySheet) {
         Preconditions.checkArgument(currentUser != null, "currentUser must not be null");
         Preconditions.checkArgument(tallySheet != null, "tallySheet must not be null");
+        final List<RestShareDefinition> shareDefinitions = RestShareDefinition
+                .fromDomainObjects(tallySheet.getShareDefinitions());
+
         return new RestTallySheet(tallySheet.getName(),
                 tallySheet.getAdminKey().orElse(null),
-                tallySheet.getPublicKey(),
                 tallySheet.getCreateDateUTC(),
                 tallySheet.getLastModifiedDateUTC(),
                 tallySheet.isAssignableTo(currentUser),
-                tallySheet.getTotalCount());
+                tallySheet.getTotalCount(),
+                shareDefinitions);
     }
 
     public String getName() {
@@ -56,10 +59,6 @@ public class RestTallySheet {
 
     public String getAdminKey() {
         return this.adminKey;
-    }
-
-    public String getPublicKey() {
-        return this.publicKey;
     }
 
     public LocalDateTime getCreateDateUTC() {
@@ -76,5 +75,9 @@ public class RestTallySheet {
 
     public int getTotalCount() {
         return this.totalCount;
+    }
+
+    public List<RestShareDefinition> getShareDefinitions() {
+        return this.shareDefinitions;
     }
 }

@@ -55,12 +55,6 @@ public class TallyService {
     public TallySheet getTallySheet(String publicKey) {
         Preconditions.checkArgument(publicKey != null, "publicKey must not be null");
 
-        // legacy look up using the key stored directly on the TallySheet
-        final Optional<TallySheet> byPublicKey = tallyRepository.findByPublicKey(publicKey);
-        if (byPublicKey.isPresent()) {
-            final TallySheet publicTallySheet = byPublicKey.get();
-            return publicTallySheet.withWipedAdminKey();
-        }
         final Optional<TallySheet> byAdminKey = tallyRepository.findByAdminKey(publicKey);
         if (byAdminKey.isPresent()) {
             return byAdminKey.orElseThrow();

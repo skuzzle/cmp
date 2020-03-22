@@ -38,6 +38,7 @@ public class TallySheet implements ShallowTallySheet {
     @Indexed
     private String adminKey;
     @Indexed
+    @Deprecated
     private final String publicKey;
     private final List<TallyIncrement> increments;
     private final List<ShareDefinition> shareDefinitions;
@@ -56,7 +57,18 @@ public class TallySheet implements ShallowTallySheet {
         this.adminKey = adminKey;
         this.publicKey = publicKey;
         this.increments = increments;
-        this.shareDefinitions = shareDefinitions;
+
+        if (shareDefinitions == null) {
+            // share definitions will be null on older counters until they've been saved
+            // again
+            this.shareDefinitions = new ArrayList<>();
+        } else {
+            this.shareDefinitions = shareDefinitions;
+        }
+        // convert old public key to a proper share definition
+        if (this.shareDefinitions.isEmpty()) {
+            this.share(ShareDefinition.of(publicKey, ShareInformation.ALL_DETAILS));
+        }
         this.totalCount = increments.size();
         this.assignedUser = UserId.fromLegacyStringId(userId);
     }
@@ -103,13 +115,13 @@ public class TallySheet implements ShallowTallySheet {
         Preconditions.checkArgument(shareId != null, "shareId must not be null");
 
         final ShareInformation share = this.shareDefinitions.stream()
-                .filter(shareDefinition -> shareId.equals(shareId))
+                .filter(shareDefinition -> shareId.equals(shareDefinition.getShareId()))
                 .map(ShareDefinition::getShareInformation)
                 .findFirst()
                 .orElseThrow(() -> new ShareNotAvailableException(shareId));
 
         final TallySheet result = new TallySheet(userId, name, adminKey, publicKey,
-                share.getIncrements(increments), shareDefinitions);
+                share.getIncrements(increments), new ArrayList<>(shareDefinitions));
         result.id = id;
         result.version = version;
         result.createDateUTC = createDateUTC;
@@ -117,11 +129,6 @@ public class TallySheet implements ShallowTallySheet {
         result.totalCount = totalCount;
         result.adminKey = null;
         return result;
-    }
-
-    @Override
-    public String getPublicKey() {
-        return this.publicKey;
     }
 
     @Override
@@ -198,12 +205,23 @@ public class TallySheet implements ShallowTallySheet {
         this.name = newName;
     }
 
+    @Override
     public List<ShareDefinition> getShareDefinitions() {
         return Collections.unmodifiableList(this.shareDefinitions);
     }
 
+    public ShareDefinition getDefaultShareDefinition() {
+        return this.shareDefinitions.get(0);
+    }
+
     void share(ShareDefinition shareDefinition) {
         Preconditions.checkArgument(shareDefinition != null, "shareDefinition must not be null");
+        final String shareId = shareDefinition.getShareId();
+        final boolean idExists = shareDefinitions.stream()
+                .filter(share -> shareId.equals(share.getShareId()))
+                .findAny()
+                .isPresent();
+        Preconditions.checkArgument(!idExists, "There is already a share with id %s", shareId);
         this.shareDefinitions.add(shareDefinition);
     }
 

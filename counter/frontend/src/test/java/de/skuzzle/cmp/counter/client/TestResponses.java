@@ -119,20 +119,20 @@ public class TestResponses {
         }
 
         public RestTallySheet toTallySheet() {
+            this.shareDefinitions.add(0,
+                    new RestShareDefinition(publicKey, new RestShareInformation(true, true, true)));
             return new RestTallySheet(name,
                     adminKey,
-                    publicKey,
                     createDateUTC,
                     lastModifiedDateUTC,
                     assignableToCurrentUser,
-                    totalCount);
+                    totalCount, shareDefinitions);
         }
 
         public RestTallyResponse toResponse() {
             final RestTallySheet tallySheet = toTallySheet();
             final RestIncrements increments = new RestIncrements(this.increments, 0, 0);
-            final RestTallyResponse restTallyResponse = new RestTallyResponse(tallySheet, increments,
-                    shareDefinitions);
+            final RestTallyResponse restTallyResponse = new RestTallyResponse(tallySheet, increments);
             return restTallyResponse;
         }
     }

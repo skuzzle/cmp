@@ -66,7 +66,7 @@ public class BackendClientIntegrationTest {
     @Test
     void testGetExistingTallySheet() {
         final var apiResponse = tallyClient.getTallySheet("publicKey1", Filter.all());
-        assertThat(apiResponse.getTallySheet().getPublicKey()).isEqualTo("publicKey1");
+        assertThat(apiResponse.getTallySheet().getDefaultShareDefinition().getShareId()).isEqualTo("publicKey1");
     }
 
     @Test

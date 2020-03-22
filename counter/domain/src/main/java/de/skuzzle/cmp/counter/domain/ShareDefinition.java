@@ -1,5 +1,6 @@
 package de.skuzzle.cmp.counter.domain;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 public class ShareDefinition {
@@ -24,5 +25,13 @@ public class ShareDefinition {
 
     public ShareInformation getShareInformation() {
         return this.shareInformation;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("shareId", shareId)
+                .add("shareInformation", shareInformation)
+                .toString();
     }
 }
