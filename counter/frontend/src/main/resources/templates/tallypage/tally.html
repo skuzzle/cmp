@@ -29,17 +29,13 @@
 </div>
 
 
-
 <section class="hero">
     <div class="hero-body">
         <div class="container">
             <editable-title th:text="${tally.name}" th:attr="name=${tally.name}, changeNameAction=@{/counter/{adminKey}?action=changeName&newName=(adminKey=${tally.adminKey})}, allowEdit=${tally.admin}">
                 Pizza Count 2018
             </editable-title>
-            <h2 class="subtitle" th:each="share : ${tally.shareDefinitions}">
-                Share: <a th:href="@{/counter/{publicKey}(publicKey=${share.shareId})}" title="Read-Only Link to share with your friends" th:text="${share.shareId}" href="#">Share:
-                    http://tally.io/123547</a>
-            </h2>
+            <th:block th:if="${tally.admin}" th:insert="tallypage/share :: renderShares(${shares}, ${tally.adminKey})"/>
         </div>
     </div>
 </section>
@@ -54,7 +50,7 @@
                         <p class="card-header-title has-text-centered">New Entry</p>  
                     </header>   
                     <div class="card-content has-text-centered">  
-                        <form method="post" th:action="@{/counter/{adminKey}(adminKey=${tally.adminKey})}" th:insert="tallypage/createItem :: formContent(${tagCloud.names})"></form>
+                        <form method="post" th:action="@{/counter/{adminKey}?action=increment(adminKey=${tally.adminKey})}" th:insert="tallypage/createItem :: formContent(${tagCloud.names})"></form>
                     </div>  
                 </div>  
             </div>

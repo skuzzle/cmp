@@ -3,6 +3,7 @@ package de.skuzzle.cmp.counter.tallypage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,6 +26,7 @@ import de.skuzzle.cmp.auth.TallyUser;
 import de.skuzzle.cmp.counter.client.BackendClient;
 import de.skuzzle.cmp.counter.client.Filter;
 import de.skuzzle.cmp.counter.client.RestIncrements;
+import de.skuzzle.cmp.counter.client.RestShareInformation;
 import de.skuzzle.cmp.counter.client.RestTallyIncrement;
 import de.skuzzle.cmp.counter.client.RestTallyResponse;
 import de.skuzzle.cmp.counter.client.RestTallySheet;
@@ -85,6 +87,7 @@ public class TallyPageController {
         final SocialCard socialCard = SocialCard.withTitle(tallySheet.getName())
                 .withDescription("Current count: " + tallySheet.getTotalCount())
                 .build();
+        final List<Share> shares = Share.fromBackendResponse(tallySheet);
 
         final boolean mobile = !device.isNormal();
         return new ModelAndView("tallypage/tally", Map.of(
@@ -96,10 +99,11 @@ public class TallyPageController {
                 "increments", increments,
                 "graph", graph,
                 "mobile", mobile,
-                "socialCard", socialCard));
+                "socialCard", socialCard,
+                "shares", shares));
     }
 
-    @PostMapping(KnownUrls.VIEW_COUNTER_STRING)
+    @PostMapping(path = KnownUrls.VIEW_COUNTER_STRING, params = "action=increment")
     public String incrementTallySheet(
             @PathVariable String key,
             @RequestParam String description,
@@ -150,6 +154,24 @@ public class TallyPageController {
     @GetMapping(path = KnownUrls.VIEW_COUNTER_STRING, params = { "action=changeName", "newName" })
     public String changeTitle(@PathVariable String key, @RequestParam String newName) {
         client.changeName(key, newName);
+        return KnownUrls.VIEW_COUNTER.redirectResolve(key);
+    }
+
+    @PostMapping(path = KnownUrls.VIEW_COUNTER_STRING, params = { "action=share" })
+    public String addShare(@PathVariable String key,
+            @RequestParam(name = "showIncrements", defaultValue = "false") boolean showIncrements,
+            @RequestParam(name = "showIncrementTags", defaultValue = "false") boolean showIncrementTags,
+            @RequestParam(name = "showIncrementDescription", defaultValue = "false") boolean showIncrementDescription) {
+
+        client.addShare(key, RestShareInformation.create(showIncrements, showIncrementTags, showIncrementDescription));
+        return KnownUrls.VIEW_COUNTER.redirectResolve(key);
+    }
+
+    @GetMapping(path = KnownUrls.VIEW_COUNTER_STRING, params = { "action=deleteShare", "shareId" })
+    public String deleteShare(@PathVariable String key,
+            @RequestParam("shareId") String shareId) {
+
+        client.deleteShare(key, shareId);
         return KnownUrls.VIEW_COUNTER.redirectResolve(key);
     }
 }

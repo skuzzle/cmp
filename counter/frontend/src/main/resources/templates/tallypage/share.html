@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <th:block th:fragment="renderShares(shares, adminKey)">
+        <h2  class="subtitle is-marginless">Shares:</h2>
+        <div th:each="share : ${shares}">
+            <a class="is-family-monospace" 
+                th:href="@{/counter/{publicKey}(publicKey=${share.shareId})}" 
+                title="Read-Only Link to share with your friends" th:text="${share.shareId}" href="#">123547</a>
+                
+            <fieldset style="display: inline" disabled>
+                <label class="checkbox">
+                    <input type="checkbox" th:checked="${share.showIncrements}" disabled>
+                    Increments
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" th:checked="${share.showIncrementTags}" disabled>
+                    Tags
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" th:checked="${share.showIncrementDescription}" disabled>
+                    Descriptions
+                </label>
+                <a th:if="${share.canBeDeleted()}" href="#" 
+                    th:href="@{/counter/{adminKey}?action=deleteShare&shareId={shareId}(adminKey=${adminKey}, shareId=${share.shareId})}" 
+                    class="delete confirmable" 
+                    title="Delete this share link. The counter will be no longer accessible using this id."></a>
+            </fieldset>
+        </div>
+        
+        <form th:action="@{/counter/{adminKey}?action=share(adminKey=${adminKey})}" method="post">
+            <input type="submit" class="button is-info is-small" value="New Share with">
+            <label class="checkbox" title="When disabled the graph and the timeline will be empty">
+                <input name="showIncrements" type="checkbox">
+                Increments
+            </label>
+            <label class="checkbox" title="When disabled the tag cloud and the tags on single increments are not shown">
+                <input name="showIncrementTags" type="checkbox">
+                Tags
+            </label>
+            <label class="checkbox" title="When disabled the desciption of single increments is not shown">
+                <input name="showIncrementDescription" type="checkbox">
+                Descriptions
+            </label>
+        </form>
+    </th:block>
+</html>

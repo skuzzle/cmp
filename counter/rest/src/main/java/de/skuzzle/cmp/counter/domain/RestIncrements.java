@@ -21,12 +21,6 @@ public class RestIncrements {
         return new RestIncrements(Collections.emptyList(), 0, total);
     }
 
-    public static RestIncrements all(List<TallyIncrement> increments) {
-        Preconditions.checkArgument(increments != null, "increments must not be null");
-        final List<RestTallyIncrement> restIncrements = RestTallyIncrement.fromDomainObjects(increments);
-        return new RestIncrements(restIncrements, 0, increments.size());
-    }
-
     public static RestIncrements of(IncrementQueryResult result) {
         Preconditions.checkArgument(result != null, "result must not be null");
         return new RestIncrements(RestTallyIncrement.fromDomainObjects(result.getIncrements()),

@@ -68,7 +68,7 @@ public class TallyPageControllerTest {
                 .andExpect(model().attributeExists("currentFilter", "tally", "timeline", "increments", "graph", "user",
                         "tagCloud",
                         "version",
-                        "socialCard"));
+                        "socialCard", "shares"));
     }
 
     @Test
@@ -101,6 +101,26 @@ public class TallyPageControllerTest {
     }
 
     @Test
+    void testAddShare() throws Exception {
+        testUser.anonymous();
+
+        final String adminKey = clientConfigurer.getAdminKey();
+        mockMvc.perform(post("/counter/{adminKey}?action=share", adminKey)
+                .content("showIncrements=on&showIncrementTags=on&showIncrementDescription=on"))
+                .andExpect(redirectedUrlTemplate(KnownUrls.VIEW_COUNTER_STRING, adminKey));
+    }
+
+    @Test
+    void testDeleteShare() throws Exception {
+        testUser.anonymous();
+
+        final String adminKey = clientConfigurer.getAdminKey();
+        final String shareId = clientConfigurer.getPublicKey();
+        mockMvc.perform(get("/counter/{adminKey}?action=deleteShare&shareId={shareId}", adminKey, shareId))
+                .andExpect(redirectedUrlTemplate(KnownUrls.VIEW_COUNTER_STRING, adminKey));
+    }
+
+    @Test
     void testDeleteIncrement() throws Exception {
         testUser.anonymous();
 
@@ -123,7 +143,7 @@ public class TallyPageControllerTest {
         final String incrementDateUTC = "1987-12-09";
 
         mockMvc.perform(
-                post("/counter/{adminKey}?description={description}&tags={tags}&incrementDateUTC={incrementDateUTC}",
+                post("/counter/{adminKey}?action=increment&description={description}&tags={tags}&incrementDateUTC={incrementDateUTC}",
                         adminKey, description, tags, incrementDateUTC))
                 .andExpect(redirectedUrlTemplate("/counter/{adminKey}", adminKey));
 

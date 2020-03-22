@@ -33,13 +33,6 @@ org.springframework.cloud.contract.spec.Contract.make {
                             showIncrementTags: true,
                             showIncrementDescription: true
                         ]
-                    ],[
-                        shareId: 'shareId1',
-                        shareInformation: [
-                            showIncrements: true,
-                            showIncrementTags: true,
-                            showIncrementDescription: true
-                        ]
                     ]
                 ],
                 adminKey: null,
