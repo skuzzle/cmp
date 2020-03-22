@@ -7,8 +7,6 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import de.skuzzle.cmp.counter.domain.TallyIncrement;
-
 public class TallyIncrementTest {
 
     @Test

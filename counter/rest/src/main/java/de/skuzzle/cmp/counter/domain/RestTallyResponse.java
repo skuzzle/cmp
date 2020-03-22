@@ -25,5 +25,4 @@ public class RestTallyResponse {
     public RestIncrements getIncrements() {
         return this.increments;
     }
-
 }

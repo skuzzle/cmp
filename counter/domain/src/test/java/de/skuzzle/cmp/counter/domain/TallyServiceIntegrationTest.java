@@ -37,7 +37,8 @@ public class TallyServiceIntegrationTest {
             softly.assertThat(sheet.getAdminKey()).isNotEmpty();
             softly.assertThat(sheet.getName()).isEqualTo("test");
             softly.assertThat(sheet.getAssignedUser()).isEqualTo(USER);
-            softly.assertThat(sheet.getPublicKey()).isNotEmpty();
+            softly.assertThat(sheet.getDefaultShareDefinition().getShareId()).isNotEmpty();
+            softly.assertThat(sheet.getShareDefinitions()).hasSize(1);
             softly.assertThat(sheet.getLastModifiedDateUTC()).isNotNull();
             softly.assertThat(sheet.getCreateDateUTC()).isNotNull();
         });
@@ -52,9 +53,9 @@ public class TallyServiceIntegrationTest {
     }
 
     @Test
-    void testGetTallySheetByPublicKey() throws Exception {
+    void testGetTallySheetByDefaultShare() throws Exception {
         final TallySheet sheet = tallyService.createNewTallySheet(USER, "test");
-        final TallySheet tallySheet = tallyService.getTallySheet(sheet.getPublicKey());
+        final TallySheet tallySheet = tallyService.getTallySheet(sheet.getDefaultShareDefinition().getShareId());
         assertThat(tallySheet.getName()).isEqualTo("test");
         assertThat(tallySheet.getAdminKey()).isEqualTo(Optional.empty());
     }
@@ -66,12 +67,13 @@ public class TallyServiceIntegrationTest {
     }
 
     @Test
-    void testIncrementWithPublicKey() throws Exception {
+    void testIncrementWithDefaultShareKey() throws Exception {
         final TallyIncrement validIncrement = TallyIncrement.newIncrement("test", LocalDateTime.now(), Set.of("pizza"));
 
         final TallySheet tallySheet = tallyService.createNewTallySheet(USER, "increment");
         assertThatExceptionOfType(TallySheetNotAvailableException.class)
-                .isThrownBy(() -> tallyService.increment(tallySheet.getPublicKey(), validIncrement));
+                .isThrownBy(() -> tallyService.increment(tallySheet.getDefaultShareDefinition().getShareId(),
+                        validIncrement));
     }
 
     @Test
@@ -81,10 +83,10 @@ public class TallyServiceIntegrationTest {
     }
 
     @Test
-    void testDeleteWithPublicKey() throws Exception {
+    void testDeleteWithDefaultShareKey() throws Exception {
         final TallySheet tallySheet = tallyService.createNewTallySheet(USER, "deleteMe");
         assertThatExceptionOfType(TallySheetNotAvailableException.class)
-                .isThrownBy(() -> tallyService.deleteTallySheet(tallySheet.getPublicKey()));
+                .isThrownBy(() -> tallyService.deleteTallySheet(tallySheet.getDefaultShareDefinition().getShareId()));
     }
 
     @Test
@@ -92,7 +94,7 @@ public class TallyServiceIntegrationTest {
         final TallySheet tallySheet = tallyService.createNewTallySheet(USER, "deleteMe");
         tallyService.deleteTallySheet(tallySheet.getAdminKey().orElseThrow());
         assertThatExceptionOfType(TallySheetNotAvailableException.class)
-                .isThrownBy(() -> tallyService.getTallySheet(tallySheet.getPublicKey()));
+                .isThrownBy(() -> tallyService.getTallySheet(tallySheet.getDefaultShareDefinition().getShareId()));
     }
 
     @Test
@@ -113,6 +115,7 @@ public class TallyServiceIntegrationTest {
         assertSoftly(softly -> {
             softly.assertThat(updated.getVersion()).isNotEqualTo(tallySheet.getVersion());
             softly.assertThat(updated.getIncrements()).hasSize(1);
+            softly.assertThat(updated.getTotalCount()).isEqualTo(1);
             softly.assertThat(updated.getIncrements()).first().extracting(TallyIncrement::getCreateDateUTC).isNotNull();
             softly.assertThat(updated.getIncrements()).first().extracting(TallyIncrement::getId).isNotNull();
         });
@@ -128,6 +131,7 @@ public class TallyServiceIntegrationTest {
 
         final TallySheet updated = tallyService.getTallySheet(tallySheet.getAdminKey().orElseThrow());
         assertThat(updated.getIncrements()).isEmpty();
+        assertThat(updated.getTotalCount()).isEqualTo(0);
     }
 
     @Test
@@ -144,7 +148,8 @@ public class TallyServiceIntegrationTest {
         final TallyIncrement validIncrement = TallyIncrement.newIncrement("test", LocalDateTime.now(), Set.of("pizza"));
 
         assertThatExceptionOfType(TallySheetNotAvailableException.class)
-                .isThrownBy(() -> tallyService.increment(tallySheet.getPublicKey(), validIncrement));
+                .isThrownBy(() -> tallyService.increment(tallySheet.getDefaultShareDefinition().getShareId(),
+                        validIncrement));
     }
 
     @Test
@@ -155,8 +160,9 @@ public class TallyServiceIntegrationTest {
         tallyService.increment(tallySheet.getAdminKey().orElseThrow(),
                 TallyIncrement.newIncrement("test", LocalDateTime.now(), Set.of("pizza")));
 
-        final TallySheet updated = tallyService.getTallySheet(tallySheet.getPublicKey());
+        final TallySheet updated = tallyService.getTallySheet(tallySheet.getDefaultShareDefinition().getShareId());
         assertThat(updated.getIncrements()).hasSize(2);
+        assertThat(updated.getTotalCount()).isEqualTo(2);
     }
 
     @Test
@@ -194,14 +200,14 @@ public class TallyServiceIntegrationTest {
         final UserId authenticated = UserId.wellKnown("google", "foo@gmail.com");
 
         assertThatExceptionOfType(TallySheetNotAvailableException.class).isThrownBy(
-                () -> tallyService.assignToUser(sheet.getPublicKey(), authenticated));
+                () -> tallyService.assignToUser(sheet.getDefaultShareDefinition().getShareId(), authenticated));
     }
 
     @Test
     void testChangeNameWithPublicKey() throws Exception {
         final TallySheet sheet = tallyService.createNewTallySheet(UserId.unknown("unknown"), "sheet");
         assertThatExceptionOfType(TallySheetNotAvailableException.class)
-                .isThrownBy(() -> tallyService.changeName(sheet.getPublicKey(), "newName"));
+                .isThrownBy(() -> tallyService.changeName(sheet.getDefaultShareDefinition().getShareId(), "newName"));
     }
 
     @Test
@@ -210,7 +216,8 @@ public class TallyServiceIntegrationTest {
         tallyService.changeName(sheet.getAdminKey().orElseThrow(), "newName");
 
         // look up again from database
-        assertThat(tallyService.getTallySheet(sheet.getPublicKey()).getName()).isEqualTo("newName");
+        assertThat(tallyService.getTallySheet(sheet.getDefaultShareDefinition().getShareId()).getName())
+                .isEqualTo("newName");
     }
 
     @Test
@@ -220,5 +227,48 @@ public class TallyServiceIntegrationTest {
         tallyService.createNewTallySheet(UserId.unknown("unknown"), "newName");
 
         assertThat(tallyService.countAllTallySheets()).isEqualTo(3);
+    }
+
+    @Test
+    void testAddShareAndGetTallySheet() throws Exception {
+        final TallySheet tallySheet = tallyService.createNewTallySheet(UserId.unknown("Simon"), "My Counter");
+        tallyService.increment(tallySheet.getAdminKey().orElseThrow(),
+                TallyIncrement.newIncrement("Description", LocalDateTime.now(), Set.of("tag")));
+        TallySheet updatedTallySheet = tallyService.addShare(tallySheet.getAdminKey().orElseThrow(),
+                ShareInformation.builder()
+                        .showIncrements(false)
+                        .showIncrementTags(false)
+                        .build());
+        updatedTallySheet = tallyService.addShare(tallySheet.getAdminKey().orElseThrow(), ShareInformation.builder()
+                .showIncrements(true)
+                .showIncrementTags(false)
+                .build());
+
+        assertThat(updatedTallySheet.getShareDefinitions()).hasSize(3);
+
+        final ShareDefinition shareDefinition = updatedTallySheet.getShareDefinitions().get(1);
+        final TallySheet fromShareId = tallyService.getTallySheet(shareDefinition.getShareId());
+        assertThat(fromShareId.getShareDefinitions()).hasSize(1);
+        assertThat(fromShareId.getAdminKey()).isEmpty();
+        assertThat(fromShareId.getIncrements()).isEmpty();
+        assertThat(fromShareId.getTotalCount()).isEqualTo(1);
+    }
+
+    @Test
+    void testDeleteShare() throws Exception {
+        final TallySheet tallySheet = tallyService.createNewTallySheet(UserId.unknown("Simon"), "My Counter");
+        tallyService.increment(tallySheet.getAdminKey().orElseThrow(),
+                TallyIncrement.newIncrement("Description", LocalDateTime.now(), Set.of("tag")));
+        final TallySheet updatedTallySheet = tallyService.addShare(tallySheet.getAdminKey().orElseThrow(),
+                ShareInformation.builder()
+                        .showIncrements(false)
+                        .showIncrementTags(false)
+                        .build());
+
+        final ShareDefinition shareDefinition = updatedTallySheet.getShareDefinitions().get(0);
+        tallyService.deleteShare(updatedTallySheet.getAdminKey().orElseThrow(), shareDefinition.getShareId());
+
+        assertThatExceptionOfType(TallySheetNotAvailableException.class)
+                .isThrownBy(() -> tallyService.getTallySheet(shareDefinition.getShareId()));
     }
 }

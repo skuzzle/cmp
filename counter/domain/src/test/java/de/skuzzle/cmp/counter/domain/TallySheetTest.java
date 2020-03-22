@@ -12,6 +12,10 @@ import org.junit.jupiter.api.Test;
 
 public class TallySheetTest {
 
+    private ShareDefinition shareDefinition(String publicKey) {
+        return ShareDefinition.of(publicKey, ShareInformation.ALL_DETAILS);
+    }
+
     @Test
     void testIncrementCollectionIsImmutable() throws Exception {
         final TallySheet sheet = createWithIncrements(25,
@@ -26,7 +30,7 @@ public class TallySheetTest {
     void testIsNotAssignableToAnonymous() throws Exception {
         final UserId anonymous = UserId.unknown("foo");
         final UserId anonymous2 = UserId.unknown("foo2");
-        final TallySheet sheet = TallySheet.newTallySheet(anonymous, "name", "adminKey", "publicKey");
+        final TallySheet sheet = TallySheet.newTallySheet(anonymous, "name", "adminKey", shareDefinition("publicKey"));
         assertThat(sheet.isAssignableTo(anonymous)).isFalse();
         assertThatExceptionOfType(UserAssignmentException.class).isThrownBy(() -> sheet.assignToUser(anonymous2));
     }
@@ -35,7 +39,8 @@ public class TallySheetTest {
     void testIsAlreadyAssigned() throws Exception {
         final UserId authenticated = UserId.wellKnown("google", "foo@gmail.com");
         final UserId authenticated2 = UserId.wellKnown("google", "bar@gmail.com");
-        final TallySheet sheet = TallySheet.newTallySheet(authenticated, "name", "adminKey", "publicKey");
+        final TallySheet sheet = TallySheet.newTallySheet(authenticated, "name", "adminKey",
+                shareDefinition("publicKey"));
         assertThat(sheet.isAssignableTo(authenticated2)).isFalse();
         assertThatExceptionOfType(UserAssignmentException.class).isThrownBy(() -> sheet.assignToUser(authenticated2));
     }
@@ -44,7 +49,7 @@ public class TallySheetTest {
     void testIsNotAssignableToAuthenticated() throws Exception {
         final UserId anonymous = UserId.unknown("foo");
         final UserId authenticated = UserId.wellKnown("google", "foo@gmail.com");
-        final TallySheet sheet = TallySheet.newTallySheet(anonymous, "name", "adminKey", "publicKey");
+        final TallySheet sheet = TallySheet.newTallySheet(anonymous, "name", "adminKey", shareDefinition("publicKey"));
         assertThat(sheet.isAssignableTo(authenticated)).isTrue();
     }
 
@@ -100,7 +105,7 @@ public class TallySheetTest {
     @Test
     void testFilterByTags() throws Exception {
         final TallySheet sheet = TallySheet.newTallySheet(UserId.wellKnown("google", "foo@gmail.com"), "name",
-                "adminKey", "publicKey");
+                "adminKey", shareDefinition("publicKey"));
         sheet.incrementWith(TallyIncrement.newIncrement("first", LocalDateTime.now(), Set.of("tag1", "tag2", "tag3")));
         sheet.incrementWith(TallyIncrement.newIncrement("first", LocalDateTime.now(), Set.of("tag1", "tag3")));
         sheet.incrementWith(TallyIncrement.newIncrement("first", LocalDateTime.now(), Set.of("tag1", "tag2")));
@@ -112,7 +117,7 @@ public class TallySheetTest {
 
     private TallySheet createWithIncrements(int count, LocalDateTime from, LocalDateTime until) {
         final TallySheet sheet = TallySheet.newTallySheet(UserId.wellKnown("google", "foo@gmail.com"), "name",
-                "adminKey", "publicKey");
+                "adminKey", shareDefinition("publicKey"));
         final long days = ChronoUnit.DAYS.between(from, until);
         final long avgBetween = days / count;
         for (int i = 0; i < count; i++) {
@@ -121,5 +126,47 @@ public class TallySheetTest {
             sheet.incrementWith(TallyIncrement.newIncrementWithId("" + i, "description", incrementDateUTC, Set.of()));
         }
         return sheet;
+    }
+
+    @Test
+    void testWipedCopyForShareDefinitionWithIdShareNoIncrements() throws Exception {
+        final TallySheet sheet = TallySheet.newTallySheet(UserId.wellKnown("google", "foo@gmail.com"), "name",
+                "adminKey", shareDefinition("publicKey"));
+        sheet.incrementWith(TallyIncrement.newIncrement("first", LocalDateTime.now(), Set.of("tag1", "tag2", "tag3")));
+        sheet.share(ShareDefinition.of("shareId", ShareInformation.builder().showIncrements(false).build()));
+        final TallySheet wiped = sheet.wipedCopyForShareDefinitionWithId("shareId");
+        assertThat(wiped.getIncrements()).isEmpty();
+    }
+
+    @Test
+    void testWipedCopyForShareDefinitionWithIdShareIncrementsWipeTags() throws Exception {
+        final TallySheet sheet = TallySheet.newTallySheet(UserId.wellKnown("google", "foo@gmail.com"), "name",
+                "adminKey", shareDefinition("publicKey"));
+        sheet.incrementWith(TallyIncrement.newIncrement("first", LocalDateTime.now(), Set.of("tag1", "tag2", "tag3")));
+        sheet.share(ShareDefinition.of("shareId", ShareInformation.builder()
+                .showIncrements(true)
+                .showIncrementTags(false)
+                .showIncrementDescription(true)
+                .build()));
+
+        final TallySheet wiped = sheet.wipedCopyForShareDefinitionWithId("shareId");
+        final TallyIncrement increment = wiped.getIncrements().get(0);
+        assertThat(increment.getTags()).isEmpty();
+    }
+
+    @Test
+    void testWipedCopyForShareDefinitionWithIdShareIncrementsWipeDescription() throws Exception {
+        final TallySheet sheet = TallySheet.newTallySheet(UserId.wellKnown("google", "foo@gmail.com"), "name",
+                "adminKey", shareDefinition("publicKey"));
+        sheet.incrementWith(TallyIncrement.newIncrement("first", LocalDateTime.now(), Set.of("tag1", "tag2", "tag3")));
+        sheet.share(ShareDefinition.of("shareId", ShareInformation.builder()
+                .showIncrements(true)
+                .showIncrementTags(true)
+                .showIncrementDescription(false)
+                .build()));
+
+        final TallySheet wiped = sheet.wipedCopyForShareDefinitionWithId("shareId");
+        final TallyIncrement increment = wiped.getIncrements().get(0);
+        assertThat(increment.getDescription()).isEmpty();
     }
 }

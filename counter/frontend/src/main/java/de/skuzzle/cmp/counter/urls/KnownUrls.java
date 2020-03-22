@@ -10,7 +10,7 @@ public enum KnownUrls {
 
     public static final String BASE_URL = "/counter";
     public static final String VIEW_COUNTER_STRING = BASE_URL + "/{key}";
-    public static final String INCREMENT_COUNTER_STRING = VIEW_COUNTER_STRING + "/increment/{incrementId}";
+    public static final String INCREMENT_COUNTER_STRING = BASE_URL + "/{key}/increment/{incrementId}";
 
     private final UriTemplate template;
 

@@ -26,7 +26,7 @@ import de.skuzzle.cmp.counter.TestUserConfigurer;
         "cmp.version=1" })
 @AutoConfigureStubRunner(
         ids = "de.skuzzle.cmp.counter:counter-rest:+:stubs:6565",
-        stubsMode = StubRunnerProperties.StubsMode.LOCAL)
+        stubsMode = StubRunnerProperties.StubsMode.CLASSPATH)
 public class BackendClientIntegrationTest {
 
     @Autowired
@@ -66,7 +66,7 @@ public class BackendClientIntegrationTest {
     @Test
     void testGetExistingTallySheet() {
         final var apiResponse = tallyClient.getTallySheet("publicKey1", Filter.all());
-        assertThat(apiResponse.getTallySheet().getPublicKey()).isEqualTo("publicKey1");
+        assertThat(apiResponse.getTallySheet().getDefaultShareDefinition().getShareId()).isEqualTo("publicKey1");
     }
 
     @Test
@@ -119,5 +119,15 @@ public class BackendClientIntegrationTest {
     void testUpdateIncrement() throws Exception {
         tallyClient.updateIncrement("adminKey2", RestTallyIncrement.createWithId("incrementId",
                 "Description", LocalDateTime.now(), Set.of("tag1", "tag2")));
+    }
+
+    @Test
+    void testAddShare() throws Exception {
+        tallyClient.addShare("adminKey1", RestShareInformation.create(true, true, true));
+    }
+
+    @Test
+    void testDeleteShare() throws Exception {
+        tallyClient.deleteShare("adminKey1", "shareId1");
     }
 }

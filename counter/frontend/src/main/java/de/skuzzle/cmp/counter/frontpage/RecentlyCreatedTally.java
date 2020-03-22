@@ -35,7 +35,7 @@ public class RecentlyCreatedTally {
                 response.getCreateDateUTC(),
                 response.getName(),
                 response.getAdminKey(),
-                response.getPublicKey(),
+                response.getDefaultShareDefinition().getShareId(),
                 response.getTotalCount());
     }
 

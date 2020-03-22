@@ -68,7 +68,7 @@ public class IncrementQuery {
         return this;
     }
 
-    public IncrementQueryResult select(Collection<TallyIncrement> allIncrements) {
+    public IncrementQueryResult select(int totalCount, Collection<TallyIncrement> allIncrements) {
         Preconditions.checkArgument(allIncrements != null, "allIncrements must not be null");
         final List<TallyIncrement> increments = allIncrements.stream()
                 .filter(increment -> increment.getIncrementDateUTC().isAfter(from))
@@ -79,7 +79,7 @@ public class IncrementQuery {
                 .sorted(comparing(TallyIncrement::getIncrementDateUTC))
                 .collect(Collectors.toList());
 
-        return new IncrementQueryResult(increments, this, allIncrements.size());
+        return new IncrementQueryResult(increments, this, totalCount);
     }
 
     private boolean byTags(TallyIncrement increment) {
