@@ -232,6 +232,7 @@ public class TallySheet implements ShallowTallySheet {
 
     void unshare(String shareId) {
         Preconditions.checkArgument(shareId != null, "shareId must not be null");
+        Preconditions.checkState(this.shareDefinitions.size() > 1, "can not delete the last share");
         final boolean deleted = this.shareDefinitions
                 .removeIf(share -> shareId.equals(share.getShareId()));
         if (!deleted) {
