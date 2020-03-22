@@ -147,7 +147,7 @@ public class TallySheet implements ShallowTallySheet {
 
     public IncrementQueryResult selectIncrements(IncrementQuery query) {
         Preconditions.checkArgument(query != null, "query must not be null");
-        return query.select(getIncrements());
+        return query.select(totalCount, getIncrements());
     }
 
     @Override
