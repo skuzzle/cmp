@@ -25,11 +25,9 @@ public class Share {
     }
 
     public static List<Share> fromBackendResponse(RestTallySheet tallySheet) {
+        final boolean canBeDeleted = tallySheet.getShareDefinitions().size() > 1;
         return tallySheet.getShareDefinitions().stream()
-                .map(shareDefinition -> {
-                    final boolean canBeDeleted = !shareDefinition.equals(tallySheet.getDefaultShareDefinition());
-                    return fromBackendResponse(canBeDeleted, shareDefinition);
-                })
+                .map(shareDefinition -> fromBackendResponse(canBeDeleted, shareDefinition))
                 .collect(Collectors.toList());
     }
 
