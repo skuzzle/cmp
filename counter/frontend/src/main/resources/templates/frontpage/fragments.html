@@ -29,8 +29,7 @@
         <div class="level-right">
             <div class="level-item">
                 <div class="field is-grouped">
-                    <p class="control"><a class="button is-light" th:href="@{/counter/{adminKey}(adminKey=${entry.publicKey})}">View</a></p>    
-                    <p class="control"><a class="button is-primary" th:href="@{/counter/{adminKey}(adminKey=${entry.adminKey})}">Edit</a></p>
+                    <p class="control"><a class="button is-primary" th:href="@{/counter/{adminKey}(adminKey=${entry.adminKey})}">Open</a></p>
                     <p class="control"><a class="button is-danger confirmable" th:href="@{/counter/{adminKey}?action=delete(adminKey=${entry.adminKey})}">Delete</a></p>
                 </div>
             </div>

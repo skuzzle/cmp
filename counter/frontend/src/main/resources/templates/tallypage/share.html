@@ -7,7 +7,7 @@
             <a class="is-family-monospace" 
                 th:href="@{/counter/{publicKey}(publicKey=${share.shareId})}" 
                 title="Read-Only Link to share with your friends" th:text="${share.shareId}" href="#">123547</a>
-                
+
             <fieldset style="display: inline" disabled>
                 <label class="checkbox">
                     <input type="checkbox" th:checked="${share.showIncrements}" disabled>
@@ -21,7 +21,7 @@
                     <input type="checkbox" th:checked="${share.showIncrementDescription}" disabled>
                     Descriptions
                 </label>
-                <a th:if="${share.canBeDeleted()}" href="#" 
+                <a href="#" 
                     th:href="@{/counter/{adminKey}?action=deleteShare&shareId={shareId}(adminKey=${adminKey}, shareId=${share.shareId})}" 
                     class="delete confirmable" 
                     title="Delete this share link. The counter will be no longer accessible using this id."></a>

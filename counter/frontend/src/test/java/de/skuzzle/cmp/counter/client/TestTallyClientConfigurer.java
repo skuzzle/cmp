@@ -20,7 +20,7 @@ public class TestTallyClientConfigurer implements TestExecutionListener {
     public void beforeTestMethod(TestContext testContext) throws Exception {
         ClientTestContext.initContext(testContext)
                 .configureAdminReply(defaultConfig())
-                .configurePublic(defaultConfig())
+                .configureShare(defaultConfig())
                 .configureMetaInfoResponse(RestTallyMetaInfoResponse.of(5));
     }
 
@@ -29,8 +29,8 @@ public class TestTallyClientConfigurer implements TestExecutionListener {
         ClientTestContext.cleanContext();
     }
 
-    public TestTallyClientConfigurer configurePublic(Consumer<TallySheetResponseBuilder> tallySheet) {
-        ClientTestContext.getContext().configurePublic(tallySheet);
+    public TestTallyClientConfigurer configureShare(Consumer<TallySheetResponseBuilder> tallySheet) {
+        ClientTestContext.getContext().configureShare(tallySheet);
         return this;
     }
 
@@ -51,10 +51,6 @@ public class TestTallyClientConfigurer implements TestExecutionListener {
 
     public BackendClient getClient() {
         return ClientTestContext.getContext().getTallyClientMock();
-    }
-
-    public String getPublicKey() {
-        return ClientTestContext.getContext().getPublicTallySheet().getPublicKey();
     }
 
     public String getAdminKey() {

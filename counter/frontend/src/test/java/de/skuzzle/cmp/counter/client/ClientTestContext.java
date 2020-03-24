@@ -33,8 +33,8 @@ class ClientTestContext {
     }
 
     private final BackendClient tallyClientMock;
-    private TallySheetResponseBuilder publicTallySheet;
     private TallySheetResponseBuilder adminTallySheet;
+    private TallySheetResponseBuilder sharedTallySheet;
 
     ClientTestContext(BackendClient tallyClientMock) {
         this.tallyClientMock = tallyClientMock;
@@ -49,19 +49,22 @@ class ClientTestContext {
         return this;
     }
 
-    public ClientTestContext configurePublic(Consumer<TallySheetResponseBuilder> tallySheet) {
-        this.publicTallySheet = TestResponses.tallySheet().withAdminKey(null);
-        tallySheet.accept(publicTallySheet);
-        when(tallyClientMock.getTallySheet(publicTallySheet.getPublicKey(), Filter.all()))
-                .thenReturn(publicTallySheet.toResponse());
-        return this;
-    }
-
     public ClientTestContext configureAdminReply(Consumer<TallySheetResponseBuilder> tallySheet) {
         this.adminTallySheet = TestResponses.tallySheet();
         tallySheet.accept(adminTallySheet);
         when(tallyClientMock.getTallySheet(adminTallySheet.getAdminKey(), Filter.all()))
                 .thenReturn(adminTallySheet.toResponse());
+        return this;
+    }
+
+    public ClientTestContext configureShare(Consumer<TallySheetResponseBuilder> tallySheet) {
+        this.sharedTallySheet = TestResponses.tallySheet();
+        tallySheet.accept(sharedTallySheet);
+        Preconditions.checkState(sharedTallySheet.getShareDefinitions().size() == 1,
+                "no or more than 1 share definitions configured");
+        final RestShareDefinition shareDefinition = sharedTallySheet.getShareDefinitions().get(0);
+        when(tallyClientMock.getTallySheet(shareDefinition.getShareId(), Filter.all()))
+                .thenReturn(sharedTallySheet.toResponse());
         return this;
     }
 
@@ -85,7 +88,8 @@ class ClientTestContext {
         return this.adminTallySheet;
     }
 
-    public TallySheetResponseBuilder getPublicTallySheet() {
-        return this.publicTallySheet;
+    public TallySheetResponseBuilder getSharedTallySheet() {
+        return this.sharedTallySheet;
     }
+
 }

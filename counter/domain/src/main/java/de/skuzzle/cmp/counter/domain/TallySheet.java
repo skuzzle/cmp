@@ -72,17 +72,14 @@ public class TallySheet implements ShallowTallySheet {
         } else {
             this.shareDefinitions = shareDefinitions;
         }
-        Preconditions.checkState(this.shareDefinitions.size() > 0, "expected to have at least one share");
         this.totalCount = increments.size();
         this.assignedUser = UserId.fromLegacyStringId(userId);
     }
 
-    public static TallySheet newTallySheet(UserId userId, String name, String adminKey,
-            ShareDefinition defaultShareDefinition) {
+    public static TallySheet newTallySheet(UserId userId, String name, String adminKey) {
         Preconditions.checkArgument(userId != null, "userId must not be null");
         Preconditions.checkArgument(name != null, "name must not be null");
         Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
-        Preconditions.checkArgument(defaultShareDefinition != null, "defaultShareDefinition must not be null");
 
         return new TallySheet(
                 userId.toString(),
@@ -90,7 +87,7 @@ public class TallySheet implements ShallowTallySheet {
                 adminKey,
                 null,
                 new ArrayList<>(),
-                new ArrayList<>(List.of(defaultShareDefinition)));
+                new ArrayList<>());
     }
 
     @Override
@@ -229,10 +226,6 @@ public class TallySheet implements ShallowTallySheet {
     @Override
     public List<ShareDefinition> getShareDefinitions() {
         return Collections.unmodifiableList(this.shareDefinitions);
-    }
-
-    public ShareDefinition getDefaultShareDefinition() {
-        return this.shareDefinitions.get(0);
     }
 
     void share(ShareDefinition shareDefinition) {

@@ -15,17 +15,14 @@ public class RecentlyCreatedTally {
     private final LocalDateTime creationDateUTC;
     private final String name;
     private final String adminKey;
-    private final String publicKey;
     private final int totalCount;
 
     private RecentlyCreatedTally(LocalDateTime lastModifiedDateUTC, LocalDateTime creationDateUTC, String name,
-            String adminKey, String publicKey,
-            int totalCount) {
+            String adminKey, int totalCount) {
         this.lastModifiedDateUTC = lastModifiedDateUTC;
         this.creationDateUTC = creationDateUTC;
         this.name = name;
         this.adminKey = adminKey;
-        this.publicKey = publicKey;
         this.totalCount = totalCount;
     }
 
@@ -35,7 +32,6 @@ public class RecentlyCreatedTally {
                 response.getCreateDateUTC(),
                 response.getName(),
                 response.getAdminKey(),
-                response.getDefaultShareDefinition().getShareId(),
                 response.getTotalCount());
     }
 
@@ -49,10 +45,6 @@ public class RecentlyCreatedTally {
 
     public String getAdminKey() {
         return this.adminKey;
-    }
-
-    public String getPublicKey() {
-        return this.publicKey;
     }
 
     public int getTotalCount() {

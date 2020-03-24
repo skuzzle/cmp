@@ -3,8 +3,6 @@ package de.skuzzle.cmp.counter.client;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.google.common.base.Preconditions;
-
 public class RestTallySheet {
 
     private final String name;
@@ -20,8 +18,6 @@ public class RestTallySheet {
     RestTallySheet(String name, String adminKey,
             LocalDateTime createDateUTC, LocalDateTime lastModifiedDateUTC, boolean assignableToCurrentUser,
             int totalCount, List<RestShareDefinition> shareDefinitions) {
-        Preconditions.checkArgument(shareDefinitions.size() > 0,
-                "first eleement in shareDefinitions should always be the defaul share, but list was empty");
         this.name = name;
         this.adminKey = adminKey;
         this.createDateUTC = createDateUTC;
@@ -57,10 +53,6 @@ public class RestTallySheet {
 
     public int getTotalCount() {
         return this.totalCount;
-    }
-
-    public RestShareDefinition getDefaultShareDefinition() {
-        return shareDefinitions.get(0);
     }
 
     public List<RestShareDefinition> getShareDefinitions() {
