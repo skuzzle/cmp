@@ -20,7 +20,7 @@ public class TestTallyClientConfigurer implements TestExecutionListener {
     public void beforeTestMethod(TestContext testContext) throws Exception {
         ClientTestContext.initContext(testContext)
                 .configureAdminReply(defaultConfig())
-                .configureShare(defaultConfig())
+                // .configureShare(defaultConfig())
                 .configureMetaInfoResponse(RestTallyMetaInfoResponse.of(5));
     }
 

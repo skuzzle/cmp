@@ -63,7 +63,7 @@ public class TallyPageControllerTest {
         // should give same result when logged in
         testUser.anonymous();
 
-        mockMvc.perform(get(KnownUrls.VIEW_COUNTER_STRING, clientConfigurer.getPublicKey()))
+        mockMvc.perform(get(KnownUrls.VIEW_COUNTER_STRING, clientConfigurer.getAdminKey()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("currentFilter", "tally", "timeline", "increments", "graph", "user",
                         "tagCloud",
@@ -115,7 +115,8 @@ public class TallyPageControllerTest {
         testUser.anonymous();
 
         final String adminKey = clientConfigurer.getAdminKey();
-        final String shareId = clientConfigurer.getPublicKey();
+        final String shareId = "";
+        // clientConfigurer.getPublicKey();
         mockMvc.perform(get("/counter/{adminKey}?action=deleteShare&shareId={shareId}", adminKey, shareId))
                 .andExpect(redirectedUrlTemplate(KnownUrls.VIEW_COUNTER_STRING, adminKey));
     }

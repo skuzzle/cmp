@@ -25,16 +25,7 @@ org.springframework.cloud.contract.spec.Contract.make {
         body([
             tallySheet: [
                 name: fromRequest().path(0),
-                shareDefinitions: [
-                    [
-                        shareId: 'publicKey4',
-                        shareInformation: [
-                            showIncrements: true,
-                            showIncrementTags: true,
-                            showIncrementDescription: true
-                        ]
-                    ]
-                ],
+                shareDefinitions: [],
                 adminKey: 'adminKey4',
                 createDateUTC: $(
                     consumer('1987-09-12T11:11:00.123'),

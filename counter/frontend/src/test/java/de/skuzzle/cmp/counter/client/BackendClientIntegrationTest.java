@@ -65,9 +65,9 @@ public class BackendClientIntegrationTest {
 
     @Test
     void testGetExistingTallySheet() {
-        final var apiResponse = tallyClient.getTallySheet("publicKey1", Filter.all());
+        final var apiResponse = tallyClient.getTallySheet("shareId1", Filter.all());
         final RestShareDefinition restShareDefinition = apiResponse.getTallySheet().getShareDefinitions().get(0);
-        assertThat(restShareDefinition.getShareId()).isEqualTo("publicKey1");
+        assertThat(restShareDefinition.getShareId()).isEqualTo("shareId1");
     }
 
     @Test
@@ -102,7 +102,7 @@ public class BackendClientIntegrationTest {
     @Test
     void testListTallySheets() throws Exception {
         final var apiResponse = tallyClient.listTallySheets();
-        assertThat(apiResponse.getTallySheets()).hasSize(2);
+        assertThat(apiResponse.getTallySheets()).hasSize(1);
     }
 
     @Test

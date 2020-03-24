@@ -14,7 +14,7 @@ class Helpers {
 }
 
 org.springframework.cloud.contract.spec.Contract.make {
-    name("addDeleteShareFromTallySheet")
+    name("deleteShareFromTallySheet")
     request {
         method DELETE()
         url '/adminKey1/share/shareId1'

@@ -66,11 +66,8 @@ public class TallyBase {
                 .thenReturn("adminKey3")
                 .thenReturn("adminKey4");
         when((randomKeyGenerator.generatePublicKey(anyInt())))
-                .thenReturn("publicKey1")
                 .thenReturn("shareId1")
-                .thenReturn("publicKey2")
-                .thenReturn("publicKey3")
-                .thenReturn("publicKey4");
+                .thenReturn("shareId2");
 
         final TallySheet withKey1 = tallyService.createNewTallySheet(USER1, "existing1");
         tallyService.addShare(withKey1.getAdminKey().orElseThrow(), ShareInformation.builder()
