@@ -28,7 +28,7 @@ public class MemoryCacheRateLimiter<T> implements ApiRateLimiter<T> {
     private final ClientIdentificator<T> clientIdentificator;
 
     public MemoryCacheRateLimiter(ClientIdentificator<T> clientIdentificator, double requestsPerSecond) {
-        Preconditions.checkArgument(clientIdentificator != null, "clientIDentificator must not be null");
+        Preconditions.checkArgument(clientIdentificator != null, "clientIdentificator must not be null");
 
         this.clientIdentificator = clientIdentificator;
         this.limiterCache = CacheBuilder.newBuilder()
