@@ -153,6 +153,31 @@ public class TallyServiceIntegrationTest {
     }
 
     @Test
+    void testUpdateUnknownIncrement() throws Exception {
+        final TallySheet tallySheet = tallyService.createNewTallySheet(USER, "incrementMe");
+        final TallyIncrement increment = TallyIncrement.newIncrementWithId("unknownId", "Description",
+                LocalDateTime.now(), Set.of());
+        assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(() -> tallyService.updateIncrement(tallySheet.getAdminKey().orElseThrow(), increment));
+    }
+
+    @Test
+    void testUpdateIncrement() throws Exception {
+        final TallySheet tallySheet = tallyService.createNewTallySheet(USER, "incrementMe");
+        final TallyIncrement increment = TallyIncrement.newIncrement("Description", LocalDateTime.now(), Set.of());
+
+        tallyService.increment(tallySheet.getAdminKey().orElseThrow(), increment);
+
+        final TallyIncrement updatedIncrement = TallyIncrement.newIncrementWithId(increment.getId(),
+                "Updated description", LocalDateTime.now(), Set.of("tag"));
+
+        final TallySheet updatedSheet = tallyService.updateIncrement(tallySheet.getAdminKey().orElseThrow(),
+                updatedIncrement);
+
+        assertThat(updatedSheet.getIncrements()).first().isEqualTo(updatedIncrement);
+    }
+
+    @Test
     void testDeleteIncrementSuccessfully() throws Exception {
         final TallySheet tallySheet = tallyService.createNewTallySheet(USER, "incrementMe");
         final TallyIncrement validIncrement = TallyIncrement.newIncrement("test", LocalDateTime.now(), Set.of("pizza"));

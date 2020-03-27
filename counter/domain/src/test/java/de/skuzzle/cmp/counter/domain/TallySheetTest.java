@@ -110,19 +110,6 @@ public class TallySheetTest {
         assertThat(queryResult.getIncrements()).hasSize(2);
     }
 
-    private TallySheet createWithIncrements(int count, LocalDateTime from, LocalDateTime until) {
-        final TallySheet sheet = TallySheet.newTallySheet(UserId.wellKnown("google", "foo@gmail.com"), "name",
-                "adminKey");
-        final long days = ChronoUnit.DAYS.between(from, until);
-        final long avgBetween = days / count;
-        for (int i = 0; i < count; i++) {
-            final LocalDateTime incrementDateUTC = from.plusDays(i * avgBetween);
-
-            sheet.incrementWith(TallyIncrement.newIncrementWithId("" + i, "description", incrementDateUTC, Set.of()));
-        }
-        return sheet;
-    }
-
     @Test
     void testWipedCopyForShareDefinitionWithIdShareNoIncrements() throws Exception {
         final TallySheet sheet = TallySheet.newTallySheet(UserId.wellKnown("google", "foo@gmail.com"), "name",
@@ -164,4 +151,18 @@ public class TallySheetTest {
         final TallyIncrement increment = wiped.getIncrements().get(0);
         assertThat(increment.getDescription()).isEmpty();
     }
+
+    private TallySheet createWithIncrements(int count, LocalDateTime from, LocalDateTime until) {
+        final TallySheet sheet = TallySheet.newTallySheet(UserId.wellKnown("google", "foo@gmail.com"), "name",
+                "adminKey");
+        final long days = ChronoUnit.DAYS.between(from, until);
+        final long avgBetween = days / count;
+        for (int i = 0; i < count; i++) {
+            final LocalDateTime incrementDateUTC = from.plusDays(i * avgBetween);
+
+            sheet.incrementWith(TallyIncrement.newIncrementWithId("" + i, "description", incrementDateUTC, Set.of()));
+        }
+        return sheet;
+    }
+
 }
