@@ -34,7 +34,6 @@ class ClientTestContext {
 
     private final BackendClient tallyClientMock;
     private TallySheetResponseBuilder adminTallySheet;
-    private TallySheetResponseBuilder sharedTallySheet;
 
     ClientTestContext(BackendClient tallyClientMock) {
         this.tallyClientMock = tallyClientMock;
@@ -57,17 +56,6 @@ class ClientTestContext {
         return this;
     }
 
-    public ClientTestContext configureShare(Consumer<TallySheetResponseBuilder> tallySheet) {
-        this.sharedTallySheet = TestResponses.tallySheet();
-        tallySheet.accept(sharedTallySheet);
-        Preconditions.checkState(sharedTallySheet.getShareDefinitions().size() == 1,
-                "no or more than 1 share definitions configured");
-        final RestShareDefinition shareDefinition = sharedTallySheet.getShareDefinitions().get(0);
-        when(tallyClientMock.getTallySheet(shareDefinition.getShareId(), Filter.all()))
-                .thenReturn(sharedTallySheet.toResponse());
-        return this;
-    }
-
     public ClientTestContext configureClientErrorReply(String key, HttpStatus status) {
         Preconditions.checkArgument(status.is4xxClientError(), "Expected a Http Status in 4xx range, but got %s",
                 status);
@@ -86,10 +74,6 @@ class ClientTestContext {
 
     public TallySheetResponseBuilder getAdminTallySheet() {
         return this.adminTallySheet;
-    }
-
-    public TallySheetResponseBuilder getSharedTallySheet() {
-        return this.sharedTallySheet;
     }
 
 }
