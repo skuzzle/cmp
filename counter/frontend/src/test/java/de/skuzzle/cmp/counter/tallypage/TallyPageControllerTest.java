@@ -116,7 +116,7 @@ public class TallyPageControllerTest {
 
         final String adminKey = clientConfigurer.getAdminKey();
         final String shareId = "";
-        // clientConfigurer.getPublicKey();
+
         mockMvc.perform(get("/counter/{adminKey}?action=deleteShare&shareId={shareId}", adminKey, shareId))
                 .andExpect(redirectedUrlTemplate(KnownUrls.VIEW_COUNTER_STRING, adminKey));
     }
