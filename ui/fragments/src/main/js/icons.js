@@ -8,7 +8,8 @@ import {
     faDizzy, 
     faPizzaSlice,
     faEdit,
-    faQuestionCircle
+    faQuestionCircle,
+    faShareAlt
 } from '@fortawesome/free-solid-svg-icons'
 
 
@@ -26,6 +27,7 @@ library.add(
     faDizzy, 
     faPizzaSlice,
     faQuestionCircle,
+    faShareAlt,
     
     // regular
     faEdit,

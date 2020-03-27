@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
     <th:block th:fragment="renderShares(shares, adminKey)">
-        <h2  class="subtitle is-marginless">Shares:</h2>
+        <h2 th:if="!${shares.empty}"  class="subtitle is-marginless">Shares:</h2>
         <div th:each="share : ${shares}">
             <a class="is-family-monospace" 
                 th:href="@{/counter/{publicKey}(publicKey=${share.shareId})}" 
@@ -29,7 +29,12 @@
         </div>
         
         <form th:action="@{/counter/{adminKey}?action=share(adminKey=${adminKey})}" method="post">
-            <input type="submit" class="button is-info is-small" value="New Share with">
+            <button class="button is-info is-small">
+                <span class="icon is-small">
+                    <i class="fas fa-share-alt"></i>
+                </span>
+                <span>New share with</span>
+            </button>
             <label class="checkbox" title="When disabled the graph and the timeline will be empty">
                 <input name="showIncrements" type="checkbox">
                 Increments
