@@ -72,17 +72,14 @@ public class TallySheet implements ShallowTallySheet {
         } else {
             this.shareDefinitions = shareDefinitions;
         }
-        Preconditions.checkState(this.shareDefinitions.size() > 0, "expected to have at least one share");
         this.totalCount = increments.size();
         this.assignedUser = UserId.fromLegacyStringId(userId);
     }
 
-    public static TallySheet newTallySheet(UserId userId, String name, String adminKey,
-            ShareDefinition defaultShareDefinition) {
+    public static TallySheet newTallySheet(UserId userId, String name, String adminKey) {
         Preconditions.checkArgument(userId != null, "userId must not be null");
         Preconditions.checkArgument(name != null, "name must not be null");
         Preconditions.checkArgument(adminKey != null, "adminKey must not be null");
-        Preconditions.checkArgument(defaultShareDefinition != null, "defaultShareDefinition must not be null");
 
         return new TallySheet(
                 userId.toString(),
@@ -90,7 +87,7 @@ public class TallySheet implements ShallowTallySheet {
                 adminKey,
                 null,
                 new ArrayList<>(),
-                new ArrayList<>(List.of(defaultShareDefinition)));
+                new ArrayList<>());
     }
 
     @Override
@@ -231,10 +228,6 @@ public class TallySheet implements ShallowTallySheet {
         return Collections.unmodifiableList(this.shareDefinitions);
     }
 
-    public ShareDefinition getDefaultShareDefinition() {
-        return this.shareDefinitions.get(0);
-    }
-
     void share(ShareDefinition shareDefinition) {
         Preconditions.checkArgument(shareDefinition != null, "shareDefinition must not be null");
         final String shareId = shareDefinition.getShareId();
@@ -248,7 +241,6 @@ public class TallySheet implements ShallowTallySheet {
 
     void unshare(String shareId) {
         Preconditions.checkArgument(shareId != null, "shareId must not be null");
-        Preconditions.checkState(this.shareDefinitions.size() > 1, "can not delete the last share");
         final boolean deleted = this.shareDefinitions
                 .removeIf(share -> shareId.equals(share.getShareId()));
         if (!deleted) {

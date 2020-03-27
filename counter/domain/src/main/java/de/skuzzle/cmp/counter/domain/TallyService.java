@@ -30,19 +30,11 @@ public class TallyService {
     public TallySheet createNewTallySheet(UserId user, String name) {
         Metrics.counter("created_tally", "user_id", user.getMetricsId()).increment();
         final String adminKey = randomKeyGenerator.generateAdminKey();
-        final String publicKey = randomKeyGenerator.generatePublicKey(PUBLIC_KEY_LENGTH);
-        final ShareDefinition defaultShareDefinition = ShareDefinition.of(publicKey, ShareInformation.ALL_DETAILS);
-
-        // this should really not happen but better be safe here
-        final Optional<TallySheet> existing = tallyRepository.findByShareDefinitions_shareId(publicKey);
-        Preconditions.checkState(existing.isEmpty(), "Cant create counter %s for %s: public key collision!", name,
-                user);
 
         return tallyRepository.save(TallySheet.newTallySheet(
                 user,
                 name,
-                adminKey,
-                defaultShareDefinition));
+                adminKey));
     }
 
     public TallySheet assignToUser(String adminKey, UserId userId) {

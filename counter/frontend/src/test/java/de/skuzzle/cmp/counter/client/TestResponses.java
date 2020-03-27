@@ -31,7 +31,6 @@ public class TestResponses {
     public static class TallySheetResponseBuilder {
         private String name = "name";
         private String adminKey = "adminKey";
-        private String publicKey = "publicKey";
 
         private LocalDateTime createDateUTC = LocalDateTime.of(1970, 1, 1, 0, 0);
         private LocalDateTime lastModifiedDateUTC = LocalDateTime.of(1970, 1, 1, 0, 0);
@@ -46,10 +45,6 @@ public class TestResponses {
 
         public String getAdminKey() {
             return this.adminKey;
-        }
-
-        public String getPublicKey() {
-            return this.publicKey;
         }
 
         public LocalDateTime getCreateDateUTC() {
@@ -68,6 +63,10 @@ public class TestResponses {
             return this.totalCount;
         }
 
+        public List<RestShareDefinition> getShareDefinitions() {
+            return this.shareDefinitions;
+        }
+
         public TallySheetResponseBuilder withName(String name) {
             this.name = name;
             return this;
@@ -75,11 +74,6 @@ public class TestResponses {
 
         public TallySheetResponseBuilder withAdminKey(String adminKey) {
             this.adminKey = adminKey;
-            return this;
-        }
-
-        public TallySheetResponseBuilder withPublicKey(String publicKey) {
-            this.publicKey = publicKey;
             return this;
         }
 
@@ -119,8 +113,6 @@ public class TestResponses {
         }
 
         public RestTallySheet toTallySheet() {
-            this.shareDefinitions.add(0,
-                    new RestShareDefinition(publicKey, new RestShareInformation(true, true, true)));
             return new RestTallySheet(name,
                     adminKey,
                     createDateUTC,

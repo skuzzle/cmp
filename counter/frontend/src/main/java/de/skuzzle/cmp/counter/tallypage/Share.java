@@ -8,38 +8,30 @@ import de.skuzzle.cmp.counter.client.RestTallySheet;
 
 public class Share {
 
-    private final boolean canBeDeleted;
-
     private final String shareId;
     private final boolean showIncrements;
     private final boolean showIncrementTags;
     private final boolean showIncrementDescription;
 
-    private Share(boolean canBeDeleted, String shareId, boolean showIncrements, boolean showIncrementTags,
+    private Share(String shareId, boolean showIncrements, boolean showIncrementTags,
             boolean showIncrementDescription) {
         this.shareId = shareId;
-        this.canBeDeleted = canBeDeleted;
         this.showIncrements = showIncrements;
         this.showIncrementTags = showIncrementTags;
         this.showIncrementDescription = showIncrementDescription;
     }
 
     public static List<Share> fromBackendResponse(RestTallySheet tallySheet) {
-        final boolean canBeDeleted = tallySheet.getShareDefinitions().size() > 1;
         return tallySheet.getShareDefinitions().stream()
-                .map(shareDefinition -> fromBackendResponse(canBeDeleted, shareDefinition))
+                .map(shareDefinition -> fromBackendResponse(shareDefinition))
                 .collect(Collectors.toList());
     }
 
-    private static Share fromBackendResponse(boolean canBeDeleted, RestShareDefinition shareDefinition) {
-        return new Share(canBeDeleted, shareDefinition.getShareId(),
+    private static Share fromBackendResponse(RestShareDefinition shareDefinition) {
+        return new Share(shareDefinition.getShareId(),
                 shareDefinition.getShareInformation().isShowIncrements(),
                 shareDefinition.getShareInformation().isShowIncrementTags(),
                 shareDefinition.getShareInformation().isShowIncrementDescription());
-    }
-
-    public boolean canBeDeleted() {
-        return this.canBeDeleted;
     }
 
     public String getShareId() {

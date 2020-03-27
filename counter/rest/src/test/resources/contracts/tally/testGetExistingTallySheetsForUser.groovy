@@ -28,13 +28,6 @@ org.springframework.cloud.contract.spec.Contract.make {
                     name: 'existing1',
                     shareDefinitions: [
                         [
-                            shareId: 'publicKey1',
-                            shareInformation: [
-                                showIncrements: true,
-                                showIncrementTags: true,
-                                showIncrementDescription: true
-                            ]
-                        ],[
                             shareId: 'shareId1',
                             shareInformation: [
                                 showIncrements: true,
@@ -44,27 +37,6 @@ org.springframework.cloud.contract.spec.Contract.make {
                         ]
                     ],
                     adminKey: 'adminKey1',
-                    createDateUTC: $(
-                        consumer('1987-09-12T11:11:00.123'),
-                        producer(regex(Helpers.isoDateTimeWithNanos()))
-                    ),
-                    lastModifiedDateUTC: $(
-                        consumer('1987-09-12T11:11:00.123'),
-                        producer(regex(Helpers.isoDateTimeWithNanos()))
-                    )
-                ], [
-                    name: 'existing2',
-                    shareDefinitions: [
-                        [
-                            shareId: 'publicKey2',
-                            shareInformation: [
-                                showIncrements: true,
-                                showIncrementTags: true,
-                                showIncrementDescription: true
-                            ]
-                        ]
-                    ],
-                    adminKey: 'adminKey2',
                     createDateUTC: $(
                         consumer('1987-09-12T11:11:00.123'),
                         producer(regex(Helpers.isoDateTimeWithNanos()))

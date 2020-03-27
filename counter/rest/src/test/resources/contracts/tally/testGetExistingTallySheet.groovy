@@ -17,7 +17,7 @@ org.springframework.cloud.contract.spec.Contract.make {
     name("getExistingTallySheet")
     request {
         method GET()
-        url '/publicKey1'
+        url '/shareId1'
         headers {}
     }
     response {
@@ -27,7 +27,7 @@ org.springframework.cloud.contract.spec.Contract.make {
                 name: 'existing1',
                 shareDefinitions: [
                     [
-                        shareId: 'publicKey1',
+                        shareId: 'shareId1',
                         shareInformation: [
                             showIncrements: true,
                             showIncrementTags: true,
