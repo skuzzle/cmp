@@ -4,23 +4,29 @@ Slim.tag(
 'editable-title',
 `<h1 s:if="!editing" class="title is-capitalized" bind>
 	{{currentTitle}} 
-	<button s:if="allowEdit" class="button" click="startEditing">
-		Change name
-	</button>
+	<a s:if="allowEdit" class="is-size-6" click="startEditing" title="Change name">
+		<span class="icon">
+			<i class="fas fa-edit"></i>
+		</span>
+	</a>
 </h1>
-<div s:if="editing" class="field is-grouped">
-	<div class="control">
-		<input s:id="titleInput" class="input" type="text" autofocus=true required="true" title="Enter the new title"></input>
+<div s:if="editing">
+	<div class="field">
+		<div class="control">
+			<input s:id="titleInput" class="input" type="text" autofocus=true required="true" title="Enter the new title"></input>
+		</div>
 	</div>
-	<div class="control">
-		<button class="button is-light" click="submitTitle" title="Change title"bind>
-			Save
-		</button>
-	</div>
-	<div class="control">
-		<button class="button is-outlined is-danger" click="finishEditing" title="Keep current title">
-			Cancel
-		</button>
+	<div class="field is-grouped">
+		<div class="control">
+			<button class="button is-light is-small" click="submitTitle" title="Change title"bind>
+				Save
+			</button>
+		</div>
+		<div class="control">
+			<button class="button is-outlined is-danger is-small" click="finishEditing" title="Keep current title">
+				Cancel
+			</button>
+		</div>
 	</div>
 </div>`,
 class EditableTitle extends Slim {

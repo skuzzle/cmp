@@ -9,7 +9,10 @@ import {
     faPizzaSlice,
     faEdit,
     faQuestionCircle,
-    faShareAlt
+    faShareAlt,
+    faTags,
+    faCommentAlt,
+    faListOl
 } from '@fortawesome/free-solid-svg-icons'
 
 
@@ -28,6 +31,9 @@ library.add(
     faPizzaSlice,
     faQuestionCircle,
     faShareAlt,
+    faTags,
+    faCommentAlt,
+    faListOl,
     
     // regular
     faEdit,

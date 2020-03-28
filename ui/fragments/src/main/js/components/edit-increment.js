@@ -20,29 +20,55 @@ Slim.tag(
 	</div>
 </div>
 <div s:if="editing">
+
     <div class="field">
         <div class="control is-expanded">
-            <input s:id="dateInput" bind:value="incrementDateUTC" name="incrementDateUTC" required="true" autofocus="true"  class="input" type="date"  title="The increment date">
-        </div>
-    </div>
-    <div class="field">
-        <div class="control is-expanded">
-            <input s:id="descriptionInput" bind:value="description" class="input" name="description" type="text" placeholder="Description" title="Increment description (optional)" autofocus="true" >
+            <input s:id="descriptionInput" 
+            		bind:value="description" 
+            		class="input" 
+            		name="description" 
+            		type="text" 
+            		placeholder="Description" 
+            		title="Increment description (optional)" 
+            		autofocus>
         </div>
     </div>
 
     <div class="field">
         <div class="control is-expanded">
-            <input s:id="tagsInput" bind:value="tags" list="tagnames" class="input" name="tags" type="tags" placeholder="Add some tags" title="Comma separated tags, leading and trailing spaces will be trimmed (optional)" autofocus="true"  >
+            <input s:id="tagsInput" 
+            		bind:value="tags" 
+            		list="tagnames" 
+            		class="input" 
+            		name="tags" 
+            		type="tags" 
+            		placeholder="Add some tags" 
+            		title="Comma separated tags, leading and trailing spaces will be trimmed (optional)" 
+            		autofocus>
+        </div>
+    </div>
+    
+    <div class="field">
+        <div class="control is-expanded">
+            <input s:id="dateInput" 
+            		bind:value="incrementDateUTC" 
+            		name="incrementDateUTC" 
+            		required="true" 
+            		class="input" 
+            		type="date" 
+            		title="The increment date"
+            		autofocus>
         </div>
     </div>
     
     <div class="field is-grouped">
         <div class="control">
-        	<button class="button is-light" click="submitIncrement">Update</button>
+        	<button class="button is-light is-small" 
+        			click="submitIncrement">Update</button>
         </div>
         <div class="control">
-        	<button class="button is-outlined is-danger"  click="stopEdit">Cancel</button>
+        	<button class="button is-outlined is-danger is-small" 
+        			click="stopEdit">Cancel</button>
         </div>
     </div>
 </div>

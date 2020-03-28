@@ -3,7 +3,7 @@
 <div th:fragment="login(user)" class="buttons">
     <div class="field has-addons" th:if="!${user.isLoggedIn()}">
         <p class="control">
-            <a class="button is-primary" 
+            <a class="button is-primary is-small" 
                     th:href="@{/oauth2/authorization/google}">
                 <span class="icon">
                     <i class="fab fa-google"></i>
@@ -16,14 +16,14 @@
             </a>
         </p>
         <p class="control is-hidden-mobile">
-            <span class="button is-static">to enjoy all features</span>
+            <span class="button is-static is-small">to enjoy all features</span>
         </p> 
     </div>
 </div>
  
 <th:block th:fragment="logout(user)">
     <div class="buttons"  th:if="${user.isLoggedIn()}">
-        <span class="button is-static" th:text="'Hi ' + ${user.name}">
+        <span class="button is-static is-small" th:text="'Hi ' + ${user.name}">
         </span>
     
         <form th:replace="this :: logoutForm"></form>
@@ -34,6 +34,6 @@
     <input th:replace="this :: submitLogout"></input>
 </form>
 
-<input th:fragment="submitLogout" type="submit" class="button is-danger is-outlined" value="Logout"></input>
+<input th:fragment="submitLogout" type="submit" class="button is-danger is-outlined is-small" value="Logout"></input>
 
  </html>
