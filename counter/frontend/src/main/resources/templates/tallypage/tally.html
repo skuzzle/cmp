@@ -29,67 +29,59 @@
     <a th:href="@{/counter/{adminKey}?action=assignToCurrentUser(adminKey=${tally.adminKey})}" th:text="'Click here to assign to ' + ${user.name}">User Name</a>
 </div>
 
-
-<section class="hero">
-    <div class="hero-body">
-        <div class="container">
-            <editable-title th:text="${tally.name}" th:attr="name=${tally.name}, changeNameAction=@{/counter/{adminKey}?action=changeName&newName=(adminKey=${tally.adminKey})}, allowEdit=${tally.admin}">
-                Pizza Count 2018
-            </editable-title>
-            <th:block th:if="${tally.admin}" th:insert="tallypage/share :: renderShares(${shares}, ${tally.adminKey})"/>
-        </div>
-    </div>
-</section>
-
-<section class="section has-background-white-bis">
+<section class="section">
     <div class="container">
-        <div class="columns is-centered">
-        
-            <div class="column is-4" th:if="${tally.admin}">
-                <div class="card ">
-                    <header class="card-header has-background-white-ter">   
-                        <p class="card-header-title has-text-centered">New Entry</p>  
-                    </header>   
-                    <div class="card-content has-text-centered">  
-                        <form method="post" th:action="@{/counter/{adminKey}?action=increment(adminKey=${tally.adminKey})}" th:insert="tallypage/createItem :: formContent(${tagCloud.names})"></form>
+        <div class="columns">
+
+            <div class="column is-3 has-background-white-bis">
+                <editable-title th:text="${tally.name}" th:attr="name=${tally.name}, changeNameAction=@{/counter/{adminKey}?action=changeName&newName=(adminKey=${tally.adminKey})}, allowEdit=${tally.admin}">
+                    Pizza Count 2018
+                </editable-title>
+                <h2 class="subtitle">Total: <span th:text="${tally.totalCount}">10</span></h2>
+                
+                <div class="content">
+                    <div class="card ">
+                        <div class="card-content has-text-centered">  
+                            <canvas th:replace="fragments/graph :: graph(${graph})"></canvas>   
+                        </div>  
+                    </div>
+                </div>
+                
+                <div th:unless="${tagCloud.empty}" class="content">
+                    <div   class="card ">
+                        <div class="card-content has-text-centered">  
+                            <div th:replace="tallypage/tagcloud :: tagCloud(${tagCloud})"></div>
+                        </div>  
                     </div>  
-                </div>  
-            </div>
-        
-            <div class="column is-4">
-                <div class="card ">
-                    <header class="card-header has-background-white-ter">   
-                        <p class="card-header-title has-text-centered">Total count</p>  
-                    </header>   
-                    <div class="card-content has-text-centered">  
-                        <canvas th:replace="fragments/graph :: graph(${graph})"></canvas>   
-                        <p class="title is-size-2 " title="Total count" th:text="${increments.total}">1234</p>  
-                    </div>  
-                </div>  
+                </div>
+                
+                <div th:if="${tally.admin}" class="content">
+                    <th:block th:insert="tallypage/share :: renderShares(${shares}, ${tally.adminKey})"/>
+                </div>
             </div>
             
-            <div th:unless="${tagCloud.empty}" class="column is-4">
-                <div class="card ">
-                    <header class="card-header has-background-white-ter">   
-                        <p class="card-header-title has-text-centered">Tags</p>  
-                    </header>   
+            
+            <div class="column">
+                <div class="card" th:if="${tally.admin}">
                     <div class="card-content has-text-centered">  
-                        <div th:replace="tallypage/tagcloud :: tagCloud(${tagCloud})"></div>
+                        <form method="post" 
+                                th:action="@{/counter/{adminKey}?action=increment(adminKey=${tally.adminKey})}" 
+                                th:insert="tallypage/createItem :: formContent(${tagCloud.names})">
+                        </form>
                     </div>  
-                </div>  
+                </div>
+                
+                <div class="notification is-success is-radiusless is-marginless is-size-7" th:if="${currentFilter.active}">
+                    Only showing filtered entries. Totals below refer to the currently shown entries. 
+                </div>
+
+                <div class="container" th:insert="tallypage/timeline:: timeline(${timeline}, ${mobile})"></div>
+                
             </div>
         </div>
     </div>
 </section>
 
-<div class="notification is-success is-radiusless is-marginless" th:if="${currentFilter.active}">
-    Only showing filtered entries. Totals below refer to the currently shown entries. 
-</div>
-
-
-<section class="section">
-    <div class="container" th:insert="tallypage/timeline:: timeline(${timeline}, ${mobile})"></div>
-</section>
 
 <footer th:replace="fragments/footer :: footer"></footer>
 

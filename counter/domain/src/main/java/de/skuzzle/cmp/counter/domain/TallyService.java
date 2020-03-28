@@ -87,11 +87,16 @@ public class TallyService {
         tallySheet.share(ShareDefinition.of(shareId, shareInformation));
 
         // this should really not happen but better be safe here
-        final Optional<TallySheet> existing = tallyRepository.findByShareDefinitions_shareId(shareId);
-        Preconditions.checkState(existing.isEmpty(), "Cant add share to counter: public key collision!");
+        ensureShareDoesntExist(shareId);
 
         Metrics.counter("share_added", "user_id", tallySheet.getAssignedUser().getMetricsId()).increment();
         return tallyRepository.save(tallySheet);
+    }
+
+    private void ensureShareDoesntExist(String shareId) {
+        // this should really not happen but better be safe here
+        final Optional<TallySheet> existing = tallyRepository.findByShareDefinitions_shareId(shareId);
+        Preconditions.checkState(existing.isEmpty(), "Cant add share to counter: public key collision!");
     }
 
     public TallySheet deleteShare(String adminKey, String shareId) {

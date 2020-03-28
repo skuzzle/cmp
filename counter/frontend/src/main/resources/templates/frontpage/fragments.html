@@ -6,6 +6,7 @@
 
 <div class="box is-radiusless" th:fragment="tallyEntry(tally, user)">
     <nav class="level">
+    
         <div class="level-left">
             <div class="level-item  has-text-centered">
                 <div>
@@ -14,31 +15,27 @@
                 </div>
             </div>
         </div>
-        <div th:if="false" class="level-item has-text-centered">
-            <div>
-                <p class="heading">Created</p>
-                <p class="subtitle"><date-label th:text="${entry.creationDateUTC}">2019-09-09</date-label></p>
-            </div>
-        </div>
+        
         <div class="level-item has-text-centered">
             <div>
                 <p class="heading">Count</p>
                 <p class="subtitle" th:text="${tally.totalCount}">90</p>
             </div>
         </div>
+        
         <div class="level-right">
             <div class="level-item">
                 <div class="field is-grouped">
-                    <p class="control"><a class="button is-primary" th:href="@{/counter/{adminKey}(adminKey=${entry.adminKey})}">Open</a></p>
-                    <p class="control"><a class="button is-danger confirmable" th:href="@{/counter/{adminKey}?action=delete(adminKey=${entry.adminKey})}">Delete</a></p>
+                    <p class="control"><a class="button is-primary is-small" th:href="@{/counter/{adminKey}(adminKey=${entry.adminKey})}">Open</a></p>
+                    <p class="control"><a class="button is-danger is-small confirmable" th:href="@{/counter/{adminKey}?action=delete(adminKey=${entry.adminKey})}">Delete</a></p>
                 </div>
             </div>
         </div>
     </nav>
     
     <div class="notification is-light is-paddingless">
-    <p class="content is-size-7">
-        Last Updated: <span th:text="${tally.lastModifiedInfo}"></span>
+        <p class="content is-size-7">
+            Last Updated: <span th:text="${tally.lastModifiedInfo}"></span>
         </p>
     </div>
 </div>
