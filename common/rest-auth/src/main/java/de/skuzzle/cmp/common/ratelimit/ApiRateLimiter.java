@@ -2,8 +2,8 @@ package de.skuzzle.cmp.common.ratelimit;
 
 public interface ApiRateLimiter<T> {
 
-    boolean exceedsLimit(T hint);
+    boolean exceedsLimit(RateLimitedOperation operation, T hint);
 
-    void blockIfRateLimitIsExceeded(T hint);
+    void blockIfRateLimitIsExceeded(RateLimitedOperation operation, T hint);
 
 }

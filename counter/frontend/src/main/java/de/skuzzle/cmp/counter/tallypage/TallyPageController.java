@@ -49,11 +49,6 @@ public class TallyPageController {
         this.currentUser = currentUser;
     }
 
-    @ModelAttribute("user")
-    public TallyUser getUser() {
-        return currentUser;
-    }
-
     @ExceptionHandler(HttpStatusCodeException.class)
     public ModelAndView handleClientError(HttpStatusCodeException e) {
         final ModelAndView modelAndView = new ModelAndView();
@@ -63,8 +58,14 @@ public class TallyPageController {
         } else {
             modelAndView.setViewName("error");
         }
+        modelAndView.addObject("statusCode", statusCode);
         modelAndView.setStatus(statusCode);
         return modelAndView;
+    }
+
+    @ModelAttribute("user")
+    public TallyUser getUser() {
+        return currentUser;
     }
 
     @GetMapping(KnownUrls.VIEW_COUNTER_STRING)

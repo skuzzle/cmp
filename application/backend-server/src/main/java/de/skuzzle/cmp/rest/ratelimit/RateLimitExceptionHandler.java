@@ -13,6 +13,6 @@ public class RateLimitExceptionHandler {
     @ExceptionHandler(RateLimitExceededException.class)
     public ResponseEntity<RestErrorMessage> onRateLimitExceeded(RateLimitExceededException e) {
         final RestErrorMessage body = RestErrorMessage.of(e.getMessage(), e.getClass().getSimpleName());
-        return new ResponseEntity<>(body, HttpStatus.BANDWIDTH_LIMIT_EXCEEDED);
+        return new ResponseEntity<>(body, HttpStatus.TOO_MANY_REQUESTS);
     }
 }
