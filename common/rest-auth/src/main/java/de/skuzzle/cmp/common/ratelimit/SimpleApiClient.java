@@ -16,7 +16,7 @@ final class SimpleApiClient implements ApiClient {
 
     @Override
     public boolean exceedsLimitOf(RateLimiter rateLimiter, RateLimitedOperation operation) {
-        final int costs = operation.costs();
+        final int costs = operation.calculatePermits(rateLimiter.getRate());
         return costs > 0 && !rateLimiter.tryAcquire(costs);
     }
 
