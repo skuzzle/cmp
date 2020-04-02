@@ -64,7 +64,7 @@ public class RegisteredUser {
                 dummyResetPasswordConfirmation,
                 registrationTimeUTC,
                 new HashSet<>(),
-                null);
+                Block.notBlocked());
     }
 
     public LocalDateTime registrationTimeUTC() {
@@ -114,7 +114,7 @@ public class RegisteredUser {
     public LoginAttempt tryLogin(LoginRequest loginRequest, PasswordEncoder passwordEncoder) {
         if (!registrationConfirmation.isConfirmed()) {
             return LoginAttempt.failed(loginRequest, LoginFailedReason.USER_NOT_CONFIRMED);
-        } else if (block != null && block.isBlocked(loginRequest.loginRequestTimeUTC())) {
+        } else if (block.isBlocked(loginRequest.loginRequestTimeUTC())) {
             return LoginAttempt.failed(loginRequest, LoginFailedReason.USER_BLOCKED);
         }
         final boolean passwordMatches = passwordEncoder.matches(
@@ -130,5 +130,9 @@ public class RegisteredUser {
     public RegisteredUser blockUntil(LocalDateTime blockedUntilUTC, LocalDateTime nowUTC, String reason) {
         this.block = Block.until(blockedUntilUTC, nowUTC, reason);
         return this;
+    }
+
+    public Block block() {
+        return this.block;
     }
 }

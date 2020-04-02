@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import com.google.common.base.Preconditions;
 
+import de.skuzzle.cmp.common.time.UTCDateTimeProvider;
+
 public final class TallyIncrement implements Comparable<TallyIncrement> {
 
     private final String id;

@@ -12,9 +12,25 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.mail.javamail.JavaMailSender;
+
+import de.skuzzle.cmp.common.time.UTCDateTimeProvider;
+import de.skuzzle.cmp.users.mailnotification.SystemOutMailSender;
 
 @SpringBootTest
 public class RegisterUserServiceTest {
+
+    @TestConfiguration
+    static class RegisterUserServiceTestSpringConfiguration {
+        @Bean
+        @Primary
+        public JavaMailSender sysoMailSender() {
+            return new SystemOutMailSender();
+        }
+    }
 
     private final LocalDateTime now = UTCDateTimeProvider.getInstance().getNowLocal();
 

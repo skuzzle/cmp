@@ -4,21 +4,32 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.google.common.base.Preconditions;
+
+import de.skuzzle.cmp.common.time.UTCDateTimeProvider;
 
 public class RegisterUserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UTCDateTimeProvider dateTimeProvider;
     private final RegisteredUserRepository registeredUserRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     RegisterUserService(PasswordEncoder passwordEncoder, UTCDateTimeProvider dateTimeProvider,
-            RegisteredUserRepository registeredUserRepository) {
+            RegisteredUserRepository registeredUserRepository,
+            ApplicationEventPublisher eventPublisher) {
         this.passwordEncoder = passwordEncoder;
         this.dateTimeProvider = dateTimeProvider;
         this.registeredUserRepository = registeredUserRepository;
+        this.eventPublisher = eventPublisher;
+    }
+
+    public Optional<RegisteredUser> findUser(String email) {
+        Preconditions.checkArgument(email != null, "email must not be null");
+        return registeredUserRepository.findByEmail(email);
     }
 
     public ConfirmationToken registerUser(String name, String email, CharSequence rawPassword) {
@@ -27,6 +38,8 @@ public class RegisterUserService {
 
         final Optional<RegisteredUser> existing = registeredUserRepository.findByEmail(email);
         if (existing.isPresent()) {
+            // TODO: if user exists and is unconfirmed, maybe send confirmation mail
+            // again?
             throw new RegisterFailedException(email);
         }
         final LocalDateTime nowUTC = dateTimeProvider.getNowLocal();
@@ -35,7 +48,7 @@ public class RegisterUserService {
         final Password password = Password.create(cryptedPassword, nowUTC);
         final ConfirmationToken confirmationToken = ConfirmationToken.randomValidFor(Duration.ofDays(1), nowUTC);
 
-        // TODO: send email with token
+        eventPublisher.publishEvent(UserRegisteredEvent.create(name, confirmationToken.token(), email));
 
         final RegisteredUser newUser = RegisteredUser.newUser(name, email, password, confirmationToken, nowUTC);
         registeredUserRepository.save(newUser);
@@ -61,7 +74,8 @@ public class RegisterUserService {
         final LocalDateTime nowUTC = dateTimeProvider.getNowLocal();
         final ConfirmationToken confirmationToken = ConfirmationToken.randomValidFor(Duration.ofHours(2), nowUTC);
 
-        // TODO: send email with token
+        eventPublisher.publishEvent(ResetPasswordRequestEvent.create(
+                registeredUser.name(), confirmationToken.token(), email));
 
         registeredUserRepository.save(registeredUser.requestResetPassword(confirmationToken));
         return confirmationToken;
