@@ -13,6 +13,6 @@ public class TallyServiceConfiguration {
 
     @Bean(TIME_PROVIDER_BEAN_NAME)
     public DateTimeProvider mongoUtcDateTimeProvider() {
-        return UTCDateTimeProvider.getInstance();
+        return new MongoDateTimeProvider();
     }
 }

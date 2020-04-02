@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.users.registration;
+package de.skuzzle.cmp.common.time;
 
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -6,12 +6,10 @@ import java.time.ZoneOffset;
 import java.time.temporal.TemporalAccessor;
 import java.util.Optional;
 
-import org.springframework.data.auditing.DateTimeProvider;
-
-enum UTCDateTimeProvider implements DateTimeProvider {
+public enum UTCDateTimeProvider {
     INSTANCE;
 
-    static UTCDateTimeProvider getInstance() {
+    public static UTCDateTimeProvider getInstance() {
         return INSTANCE;
     }
 
@@ -21,7 +19,6 @@ enum UTCDateTimeProvider implements DateTimeProvider {
                 .orElseThrow();
     }
 
-    @Override
     public Optional<TemporalAccessor> getNow() {
         return Optional.of(OffsetDateTime.now(ZoneOffset.UTC));
     }

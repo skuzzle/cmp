@@ -36,14 +36,14 @@ public final class ConfirmationToken {
     }
 
     public boolean validate(String token, LocalDateTime nowUTC) {
-        return matches(token) && !isExpired(nowUTC);
+        return matches(token) && !isExpiredAt(nowUTC);
     }
 
     public boolean matches(String token) {
         return this.token.equals(token);
     }
 
-    public boolean isExpired(LocalDateTime nowUTC) {
+    public boolean isExpiredAt(LocalDateTime nowUTC) {
         return issuedAtUTC.plusHours(validForHours).isBefore(nowUTC);
     }
 
