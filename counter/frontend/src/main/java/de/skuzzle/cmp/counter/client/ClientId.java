@@ -1,24 +1,19 @@
 package de.skuzzle.cmp.counter.client;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.google.common.net.HttpHeaders;
 
 import de.skuzzle.cmp.auth.TallyUser;
+import de.skuzzle.cmp.common.http.RequestId;
 
 @Component
 class ClientId {
 
-    private static final Logger log = LoggerFactory.getLogger(ClientId.class);
-
-    static final String REQUEST_ID = "X-Request-ID";
     static final String REAL_IP = "X-Real-Ip";
 
     private final HttpServletRequest request;
@@ -39,18 +34,7 @@ class ClientId {
     }
 
     public String getRequestId() {
-        final String requestIdHeaderValue = request.getHeader(REQUEST_ID);
-        if (requestIdHeaderValue != null) {
-            log.trace("Found existing request id in HTTP header: {}", requestIdHeaderValue);
-            return requestIdHeaderValue;
-        }
-        String requestId = (String) request.getAttribute(REQUEST_ID);
-        if (requestId == null) {
-            requestId = UUID.randomUUID().toString();
-            log.debug("Assigned new request id: {}", requestId);
-            request.setAttribute(REQUEST_ID, requestId);
-        }
-        return requestId;
+        return RequestId.forCurrentThread();
     }
 
     public String getRealIp() {

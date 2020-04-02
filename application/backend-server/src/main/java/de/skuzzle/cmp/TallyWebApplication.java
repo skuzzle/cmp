@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import de.skuzzle.cmp.common.http.RequestIdFilter;
 import de.skuzzle.cmp.common.http.RequestLoggingFilter;
 import de.skuzzle.cmp.common.http.ResponseSizeTrackingFilter;
 import io.micrometer.core.instrument.Metrics;
@@ -27,6 +28,11 @@ public class TallyWebApplication {
     private void reportVersionNumber(@Value("${version.number}") String versionNumber) {
         LOGGER.info("Running version '{}'", versionNumber);
         Metrics.counter("version_name", "version", versionNumber).increment();
+    }
+
+    @Bean
+    public Filter requestIdFilter() {
+        return new RequestIdFilter();
     }
 
     @Bean

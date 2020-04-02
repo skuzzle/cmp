@@ -11,6 +11,8 @@ import org.springframework.http.client.ClientHttpResponse;
 
 import com.google.common.net.HttpHeaders;
 
+import de.skuzzle.cmp.common.http.RequestId;
+
 class ClientIdInterceptor implements ClientHttpRequestInterceptor {
 
     private static final Logger log = LoggerFactory.getLogger(ClientIdInterceptor.class);
@@ -25,7 +27,8 @@ class ClientIdInterceptor implements ClientHttpRequestInterceptor {
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
             throws IOException {
 
-        request.getHeaders().add(ClientId.REQUEST_ID, clientId.getRequestId());
+        RequestId.addToHeaders(request.getHeaders());
+        request.getHeaders().add(RequestId.REQUEST_ID_HEADER, RequestId.forCurrentThread());
         request.getHeaders().add(ClientId.REAL_IP, clientId.getRealIp());
         request.getHeaders().add(HttpHeaders.X_FORWARDED_FOR, clientId.getForwardedFor());
 

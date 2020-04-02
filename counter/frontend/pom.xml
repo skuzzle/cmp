@@ -24,6 +24,10 @@
             <artifactId>frontend-auth</artifactId>
         </dependency>
         <dependency>
+            <groupId>de.skuzzle.cmp.common</groupId>
+            <artifactId>http</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
