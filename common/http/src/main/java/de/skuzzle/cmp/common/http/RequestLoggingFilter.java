@@ -12,10 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.google.common.collect.Iterables;
 
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class RequestLoggingFilter extends OncePerRequestFilter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestLoggingFilter.class);
@@ -24,27 +27,35 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        if (!LOGGER.isTraceEnabled()) {
-            filterChain.doFilter(request, response);
-            return;
+        if (LOGGER.isDebugEnabled()) {
+            final StringBuilder logMessage = new StringBuilder()
+                    .append(request.getMethod()).append(" ").append(getUri(request));
+
+            if (LOGGER.isTraceEnabled()) {
+                logMessage
+                        .append(System.lineSeparator())
+                        .append("RemoteAddr").append(": ").append(request.getRemoteAddr())
+                        .append(System.lineSeparator())
+                        .append("RemoteHost").append(": ").append(request.getRemoteHost())
+                        .append(System.lineSeparator())
+                        .append("Content-Length").append(": ").append(request.getContentLength())
+                        .append(System.lineSeparator())
+                        .append(System.lineSeparator());
+
+                logMessage.append("Headers: ").append(System.lineSeparator());
+                request.getHeaderNames().asIterator().forEachRemaining(headerName -> {
+                    final Enumeration<String> headerValues = request.getHeaders(headerName);
+                    final String headerValueString = getHeaderValueString(headerValues);
+                    logMessage.append(headerName).append(": ").append(headerValueString)
+                            .append(System.lineSeparator());
+                });
+
+                LOGGER.trace("Request: {}", logMessage);
+            } else {
+                LOGGER.debug("Request: {}", logMessage);
+            }
         }
 
-        final StringBuilder logMessage = new StringBuilder()
-                .append(request.getMethod()).append(" ").append(getUri(request)).append(System.lineSeparator())
-                .append("RemoteAddr").append(": ").append(request.getRemoteAddr()).append(System.lineSeparator())
-                .append("RemoteHost").append(": ").append(request.getRemoteHost()).append(System.lineSeparator())
-                .append("Content-Length").append(": ").append(request.getContentLength()).append(System.lineSeparator())
-                .append(System.lineSeparator());
-
-        logMessage.append("Headers: ").append(System.lineSeparator());
-        request.getHeaderNames().asIterator().forEachRemaining(headerName -> {
-            final Enumeration<String> headerValues = request.getHeaders(headerName);
-            final String headerValueString = getHeaderValueString(headerValues);
-            logMessage.append(headerName).append(": ").append(headerValueString)
-                    .append(System.lineSeparator());
-        });
-
-        LOGGER.trace("Request:\n{}", logMessage);
         filterChain.doFilter(request, response);
     }
 
