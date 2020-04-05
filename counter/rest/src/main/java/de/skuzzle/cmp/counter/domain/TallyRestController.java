@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.skuzzle.cmp.common.http.RequestId;
 import de.skuzzle.cmp.common.ratelimit.ApiRateLimiter;
 import de.skuzzle.cmp.common.ratelimit.RateLimitedOperations;
 import de.skuzzle.cmp.rest.auth.TallyUser;
@@ -183,14 +184,16 @@ public class TallyRestController {
 
     @ExceptionHandler(UserAssignmentException.class)
     public ResponseEntity<RestErrorMessage> onUserAssignmentFailed(UserAssignmentException e) {
-        final RestErrorMessage body = RestErrorMessage.of(e.getMessage(), e.getClass().getSimpleName());
+        final String requestId = RequestId.forCurrentThread();
+        final RestErrorMessage body = RestErrorMessage.of(e.getMessage(), e.getClass().getSimpleName(), requestId);
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = { TallySheetNotAvailableException.class, IncrementNotAvailableException.class,
             ShareNotAvailableException.class })
     public ResponseEntity<RestErrorMessage> onTallySheetNotAvailable(Exception e) {
-        final RestErrorMessage body = RestErrorMessage.of(e.getMessage(), e.getClass().getSimpleName());
+        final String requestId = RequestId.forCurrentThread();
+        final RestErrorMessage body = RestErrorMessage.of(e.getMessage(), e.getClass().getSimpleName(), requestId);
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
