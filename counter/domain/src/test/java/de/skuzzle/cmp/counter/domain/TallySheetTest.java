@@ -115,7 +115,7 @@ public class TallySheetTest {
         final TallySheet sheet = TallySheet.newTallySheet(UserId.wellKnown("google", "foo@gmail.com"), "name",
                 "adminKey");
         sheet.incrementWith(TallyIncrement.newIncrement("first", LocalDateTime.now(), Set.of("tag1", "tag2", "tag3")));
-        sheet.share(ShareDefinition.of("shareId", ShareInformation.builder().showIncrements(false).build()));
+        sheet.share(ShareDefinition.withId("shareId", ShareInformation.builder().showIncrements(false).build()));
         final TallySheet wiped = sheet.wipedCopyForShareDefinitionWithId("shareId");
         assertThat(wiped.getIncrements()).isEmpty();
     }
@@ -125,7 +125,7 @@ public class TallySheetTest {
         final TallySheet sheet = TallySheet.newTallySheet(UserId.wellKnown("google", "foo@gmail.com"), "name",
                 "adminKey");
         sheet.incrementWith(TallyIncrement.newIncrement("first", LocalDateTime.now(), Set.of("tag1", "tag2", "tag3")));
-        sheet.share(ShareDefinition.of("shareId", ShareInformation.builder()
+        sheet.share(ShareDefinition.withId("shareId", ShareInformation.builder()
                 .showIncrements(true)
                 .showIncrementTags(false)
                 .showIncrementDescription(true)
@@ -141,7 +141,7 @@ public class TallySheetTest {
         final TallySheet sheet = TallySheet.newTallySheet(UserId.wellKnown("google", "foo@gmail.com"), "name",
                 "adminKey");
         sheet.incrementWith(TallyIncrement.newIncrement("first", LocalDateTime.now(), Set.of("tag1", "tag2", "tag3")));
-        sheet.share(ShareDefinition.of("shareId", ShareInformation.builder()
+        sheet.share(ShareDefinition.withId("shareId", ShareInformation.builder()
                 .showIncrements(true)
                 .showIncrementTags(true)
                 .showIncrementDescription(false)

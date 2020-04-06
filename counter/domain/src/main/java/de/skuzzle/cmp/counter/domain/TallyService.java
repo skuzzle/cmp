@@ -17,14 +17,10 @@ public class TallyService {
 
     private static final Logger log = LoggerFactory.getLogger(TallyService.class);
 
-    private static final int PUBLIC_KEY_LENGTH = 8;
-
     private final TallyRepository tallyRepository;
-    private final RandomKeyGenerator randomKeyGenerator;
 
-    TallyService(TallyRepository tallyRepository, RandomKeyGenerator randomKeyGenerator) {
+    TallyService(TallyRepository tallyRepository) {
         this.tallyRepository = tallyRepository;
-        this.randomKeyGenerator = randomKeyGenerator;
     }
 
     public int countAllTallySheets() {
@@ -35,12 +31,9 @@ public class TallyService {
         Metrics.counter("created_tally", "user_id", user.getMetricsId()).increment();
         log.info("User {} created counter named {}", user.getMetricsId(), name);
 
-        final String adminKey = randomKeyGenerator.generateAdminKey();
-
-        return tallyRepository.save(TallySheet.newTallySheet(
+        return tallyRepository.save(TallySheet.newTallySheetWithRandomAdminKey(
                 user,
-                name,
-                adminKey));
+                name));
     }
 
     public TallySheet assignToUser(String adminKey, UserId userId) {
@@ -90,11 +83,10 @@ public class TallyService {
         final TallySheet tallySheet = tallyRepository.findByAdminKey(adminKey)
                 .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
 
-        final String shareId = randomKeyGenerator.generatePublicKey(PUBLIC_KEY_LENGTH);
-        tallySheet.share(ShareDefinition.of(shareId, shareInformation));
+        final ShareDefinition shareDefinition = tallySheet.share(ShareDefinition.withRandomId(shareInformation));
 
         // this should really not happen but better be safe here
-        ensureShareDoesntExist(shareId);
+        ensureShareDoesntExist(shareDefinition.getShareId());
 
         final UserId user = tallySheet.getAssignedUser();
         Metrics.counter("share_added", "user_id", user.getMetricsId()).increment();

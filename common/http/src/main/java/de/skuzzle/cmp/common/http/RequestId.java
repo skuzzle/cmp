@@ -1,21 +1,25 @@
 package de.skuzzle.cmp.common.http;
 
-import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.MDC;
 import org.springframework.http.HttpHeaders;
 
-public class RequestId {
+import de.skuzzle.cmp.common.random.RandomKey;
+
+public final class RequestId {
 
     public static final String REQUEST_ID_HEADER = "X-Request-ID";
     private static final String REQUEST_ID_MDC = "requestId";
 
+    private RequestId() {
+        // hidden
+    }
+
     public static String forCurrentThread() {
         String requestId = MDC.get(REQUEST_ID_MDC);
         if (requestId == null) {
-            requestId = UUID.randomUUID().toString();
+            requestId = RandomKey.randomUUID();
             MDC.put(REQUEST_ID_MDC, requestId);
         }
         return requestId;
@@ -29,7 +33,7 @@ public class RequestId {
     static void updateThreadFrom(HttpServletRequest request) {
         String idFromRequest = request.getHeader(REQUEST_ID_HEADER);
         if (idFromRequest == null) {
-            idFromRequest = UUID.randomUUID().toString();
+            idFromRequest = RandomKey.randomUUID();
         }
         MDC.put(REQUEST_ID_MDC, idFromRequest);
     }

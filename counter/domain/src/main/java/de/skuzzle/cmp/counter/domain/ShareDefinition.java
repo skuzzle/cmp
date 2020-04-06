@@ -3,6 +3,8 @@ package de.skuzzle.cmp.counter.domain;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
+import de.skuzzle.cmp.common.random.RandomKey;
+
 public class ShareDefinition {
 
     private final String shareId;
@@ -15,7 +17,11 @@ public class ShareDefinition {
         this.shareInformation = shareInformation;
     }
 
-    public static ShareDefinition of(String shareId, ShareInformation shareInformation) {
+    public static ShareDefinition withRandomId(ShareInformation shareInformation) {
+        return new ShareDefinition(RandomKey.ofDefaultLength(), shareInformation);
+    }
+
+    public static ShareDefinition withId(String shareId, ShareInformation shareInformation) {
         return new ShareDefinition(shareId, shareInformation);
     }
 

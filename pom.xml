@@ -92,6 +92,7 @@
         <module>common/frontend-auth</module>
         <module>common/http</module>
         <module>common/collections</module>
+        <module>common/random</module>
 
         <!-- UI -->
         <module>ui/fragments</module>
@@ -111,6 +112,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            
             <!-- common -->
             <dependency>
                 <groupId>de.skuzzle.cmp.common</groupId>
@@ -132,7 +134,12 @@
                 <artifactId>collections</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>de.skuzzle.cmp.common</groupId>
+                <artifactId>random</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            
             <!-- counter -->
             <dependency>
                 <groupId>de.skuzzle.cmp.counter</groupId>

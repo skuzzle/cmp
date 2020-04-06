@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.google.common.base.Preconditions;
 
 import de.skuzzle.cmp.common.collections.Lists;
+import de.skuzzle.cmp.common.random.RandomKey;
 
 @Document
 public class TallySheet implements ShallowTallySheet {
@@ -68,12 +69,16 @@ public class TallySheet implements ShallowTallySheet {
             // again
             this.shareDefinitions = new ArrayList<>();
             // convert old public key to a proper share definition
-            this.share(ShareDefinition.of(publicKey, ShareInformation.ALL_DETAILS));
+            this.share(ShareDefinition.withId(publicKey, ShareInformation.ALL_DETAILS));
         } else {
             this.shareDefinitions = shareDefinitions;
         }
         this.totalCount = increments.size();
         this.assignedUser = UserId.fromLegacyStringId(userId);
+    }
+
+    public static TallySheet newTallySheetWithRandomAdminKey(UserId userId, String name) {
+        return newTallySheet(userId, name, RandomKey.randomUUID());
     }
 
     public static TallySheet newTallySheet(UserId userId, String name, String adminKey) {
@@ -228,7 +233,7 @@ public class TallySheet implements ShallowTallySheet {
         return Collections.unmodifiableList(this.shareDefinitions);
     }
 
-    void share(ShareDefinition shareDefinition) {
+    ShareDefinition share(ShareDefinition shareDefinition) {
         Preconditions.checkArgument(shareDefinition != null, "shareDefinition must not be null");
         final String shareId = shareDefinition.getShareId();
         final boolean idExists = shareDefinitions.stream()
@@ -237,6 +242,7 @@ public class TallySheet implements ShallowTallySheet {
                 .isPresent();
         Preconditions.checkArgument(!idExists, "There is already a share with id %s", shareId);
         this.shareDefinitions.add(shareDefinition);
+        return shareDefinition;
     }
 
     void unshare(String shareId) {
