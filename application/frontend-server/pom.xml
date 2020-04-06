@@ -29,6 +29,10 @@
             <artifactId>http</artifactId>
         </dependency>
         <dependency>
+            <groupId>de.skuzzle.cmp.common</groupId>
+            <artifactId>spring-boot</artifactId>
+        </dependency>
+        <dependency>
             <groupId>de.skuzzle.cmp.counter</groupId>
             <artifactId>counter-frontend</artifactId>
         </dependency>

@@ -92,6 +92,7 @@
         <module>common/frontend-auth</module>
         <module>common/http</module>
         <module>common/collections</module>
+        <module>common/spring-boot</module>
 
         <!-- UI -->
         <module>ui/fragments</module>
@@ -132,7 +133,12 @@
                 <artifactId>collections</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>de.skuzzle.cmp.common</groupId>
+                <artifactId>spring-boot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            
             <!-- counter -->
             <dependency>
                 <groupId>de.skuzzle.cmp.counter</groupId>
