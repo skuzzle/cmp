@@ -3,6 +3,9 @@ pipeline {
   environment {
     DOCKER_REGISTRY = credentials('github_docker_registry')
   }
+  parameters {
+    string(name: 'Version', defaultValue: 'latest', description: 'The docker image version to deploy')
+  }
   stages {
     stage('Login Docker') {
       steps {
@@ -11,14 +14,14 @@ pipeline {
     }
     stage('Pull images') {
       steps {
-        sh 'docker pull docker.pkg.github.com/skuzzle/cmp/backend-server:latest'
-        sh 'docker pull docker.pkg.github.com/skuzzle/cmp/frontend-server:latest'
+        sh "docker pull docker.pkg.github.com/skuzzle/cmp/backend-server:${params.Version}"
+        sh "docker pull docker.pkg.github.com/skuzzle/cmp/frontend-server:${params.Version}"
       }
     }
     stage('Update Stack') {
       steps {
-        sh 'docker service update cmp_cmpbackend --image docker.pkg.github.com/skuzzle/cmp/backend-server:latest --force'
-        sh 'docker service update cmp_cmpfrontend --image docker.pkg.github.com/skuzzle/cmp/frontend-server:latest --force'
+        sh "docker service update cmp_cmpbackend --image docker.pkg.github.com/skuzzle/cmp/backend-server:${params.Version} --force"
+        sh "docker service update cmp_cmpfrontend --image docker.pkg.github.com/skuzzle/cmp/frontend-server:${params.Version} --force"
       }
     }
   }
