@@ -1,4 +1,4 @@
-package de.skuzzle.cmp;
+package de.skuzzle.cmp.spring.boot.properties;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.env.EnvironmentPostProcessor;
@@ -8,7 +8,7 @@ public class TestEnvironmentPostprocessor implements EnvironmentPostProcessor {
 
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-        FileContentPropertySource.addToEnvironment(environment);
+        FileContentsPropertySource.addToEnvironment(environment);
     }
 
 }

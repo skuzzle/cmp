@@ -30,11 +30,6 @@ public class TallyWebApplication {
         Metrics.counter("version_name", "version", versionNumber).increment();
     }
 
-    @Autowired
-    private void testFileContent(@Value("${cmp.test}") String content) {
-        System.out.println(content);
-    }
-
     @Bean
     public Filter requestIdFilter() {
         return new RequestIdFilter();

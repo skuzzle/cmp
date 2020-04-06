@@ -31,6 +31,10 @@
             <artifactId>http</artifactId>
         </dependency>
         <dependency>
+            <groupId>de.skuzzle.cmp.common</groupId>
+            <artifactId>spring-boot</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
