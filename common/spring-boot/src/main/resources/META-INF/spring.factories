@@ -1,1 +1,1 @@
-org.springframework.boot.env.EnvironmentPostProcessor=de.skuzzle.cmp.spring.boot.properties.TestEnvironmentPostprocessor
+org.springframework.boot.env.EnvironmentPostProcessor=de.skuzzle.cmp.spring.boot.properties.FileContentsEnvironmentPostprocessor
