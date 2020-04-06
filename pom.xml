@@ -93,6 +93,7 @@
         <module>common/http</module>
         <module>common/collections</module>
         <module>common/random</module>
+        <module>common/spring-boot</module>
 
         <!-- UI -->
         <module>ui/fragments</module>
@@ -112,7 +113,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            
+
             <!-- common -->
             <dependency>
                 <groupId>de.skuzzle.cmp.common</groupId>
@@ -139,7 +140,12 @@
                 <artifactId>random</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            
+            <dependency>
+                <groupId>de.skuzzle.cmp.common</groupId>
+                <artifactId>spring-boot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <!-- counter -->
             <dependency>
                 <groupId>de.skuzzle.cmp.counter</groupId>
