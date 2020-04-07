@@ -1,7 +1,7 @@
 pipeline {
   agent any
   parameters {
-    string(name: 'Version', defaultValue: 'latest', description: 'The docker image version to deploy')
+    string(name: 'VERSION', defaultValue: 'latest', description: 'The docker image version to deploy')
   }
   environment {
     DOCKER_REGISTRY = credentials('github_docker_registry')
@@ -19,9 +19,6 @@ pipeline {
       }
     }
     stage('Update Stack') {
-      environment {
-        VERSION = "${params.Version}"
-      }
       steps {
         sh 'printenv'
         sh 'docker stack deploy --compose-file swarm-stack/production.yml --prune cmp'
