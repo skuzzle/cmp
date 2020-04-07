@@ -36,5 +36,10 @@ jobs:
     - name: Containerize
       run: mvn -B -DskipTests=true jib:build -Ddocker=true -Ddeploy.username=${{ secrets.deploy_username }} -Ddeploy.password=${{ secrets.deploy_password }}
 
-        #- name: Release maven package
-        #  run: mvn -B deploy -s deploy-settings.xml -DskipTests -Ddeploy.username=${{ secrets.deploy_username }} -Ddeploy.password=${{ secrets.deploy_password }}
+    - name: Trigger deployment
+      uses: satak/webrequest-action@v1.2.2
+      with:
+        url: ${{ secrets. trigger_feature_deployment_url }}&VERSION=${{ steps.generateBuildNumber.outputs.global_build_number }}&STACK_NAME=${{ steps.extractBranch.outputs.branchName }}
+        method: GET
+        username: ${{ secrets.jenkins_username }}
+        password: ${{ secrets.jenkins_password }}
