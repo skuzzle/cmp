@@ -44,7 +44,7 @@ jobs:
         - name: Trigger deployment
           uses: satak/webrequest-action@v1.2.2
           with:
-            url: ${{ secrets.trigger_deployment_url }}&Version=${{ steps.generateBuildNumber.outputs.global_build_number }}
+            url: ${{ secrets.trigger_deployment_url }}&VERSION=${{ steps.generateBuildNumber.outputs.global_build_number }}
             method: GET
             username: ${{ secrets.jenkins_username }}
             password: ${{ secrets.jenkins_password }}
