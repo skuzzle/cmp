@@ -17,5 +17,11 @@ pipeline {
         sh 'docker stack deploy --compose-file swarm-stack/production.yml --prune --with-registry-auth cmp'
       }
     }
+    stage('Update Images') {
+      steps {
+        sh "docker service update cmp_cmpbackend --image docker.pkg.github.com/skuzzle/cmp/backend-server:${params.VERSION} --force"
+        sh "docker service update cmp_cmpfrontend --image docker.pkg.github.com/skuzzle/cmp/frontend-server:${params.VERSION} --force"
+      }
+    }
   }
 }
