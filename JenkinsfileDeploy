@@ -14,8 +14,8 @@ pipeline {
     }
     stage('Pull images') {
       steps {
-        sh "docker pull docker.pkg.github.com/skuzzle/cmp/backend-server:${params.Version}"
-        sh "docker pull docker.pkg.github.com/skuzzle/cmp/frontend-server:${params.Version}"
+        sh "docker pull docker.pkg.github.com/skuzzle/cmp/backend-server:${params.VERSION}"
+        sh "docker pull docker.pkg.github.com/skuzzle/cmp/frontend-server:${params.VERSION}"
       }
     }
     stage('Update Stack') {
