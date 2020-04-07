@@ -1,0 +1,20 @@
+name: Remove Feature Deployment
+on: 
+  delete
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: print build number
+      run: echo Global Build Number is ${{ github.event.ref }}
+
+    - name: Trigger deployment deletion
+      uses: satak/webrequest-action@v1.2.2
+      with:
+        url: ${{ secrets.trigger_remove_feature_deployment_url }}&VERSION=${{ github.event.ref }}
+        method: GET
+        username: ${{ secrets.jenkins_username }}
+        password: ${{ secrets.jenkins_password }}
