@@ -19,9 +19,12 @@ pipeline {
       }
     }
     stage('Update Stack') {
+      environment {
+        VERSION = "${params.Version}"
+      }
       steps {
-        sh "export VERSION=${params.Version}"
-        sh "docker stack deploy --compose-file swarm-stack/production.yml --prune cmp"
+        sh 'printenv'
+        sh 'docker stack deploy --compose-file swarm-stack/production.yml --prune cmp'
       }
     }
   }
