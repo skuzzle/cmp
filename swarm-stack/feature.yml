@@ -113,7 +113,7 @@ services:
     volumes:
     - 'data:/data/db'
     networks:
-    - mongo
+    - cmp
     environment:
     - 'MONGO_INITDB_ROOT_USERNAME=mongo'
     - 'MONGO_INITDB_ROOT_PASSWORD_FILE=/run/secrets/mongo_admin_pw'
