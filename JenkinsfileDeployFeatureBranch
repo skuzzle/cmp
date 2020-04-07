@@ -2,7 +2,7 @@ pipeline {
   agent any
   parameters {
     string(name: 'VERSION', defaultValue: 'latest', description: 'The docker image version to deploy')
-    string(name: 'STACK_NAME', defaultValue: 'cmp', description: 'The swarm stack name to deploy')
+    string(name: 'STACK_NAME', description: 'The swarm stack name to deploy')
   }
   environment {
     DOCKER_REGISTRY = credentials('github_docker_registry')
@@ -15,7 +15,7 @@ pipeline {
     }
     stage('Update Stack') {
       steps {
-        sh 'docker stack deploy --compose-file swarm-stack/feature.yml --prune --with-registry-auth ${params.STACK_NAME}'
+        sh "docker stack deploy --compose-file swarm-stack/feature.yml --prune --with-registry-auth ${params.STACK_NAME}"
       }
     }
     stage('Update Images') {
