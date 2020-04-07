@@ -21,7 +21,7 @@ pipeline {
     }
     stage('Update Stack') {
       steps {
-        sh "docker stack deploy --compose-file swarm-stack/production.yml --prune cmp
+        sh "docker stack deploy --compose-file swarm-stack/production.yml --prune cmp"
       }
     }
   }
