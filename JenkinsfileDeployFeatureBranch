@@ -20,8 +20,8 @@ pipeline {
     }
     stage('Update Images') {
       steps {
-        sh "docker service update ${STACK_NAME}_cmpbackend --image docker.pkg.github.com/skuzzle/cmp/backend-server:${params.VERSION} --force"
-        sh "docker service update ${STACK_NAME}_cmpfrontend --image docker.pkg.github.com/skuzzle/cmp/frontend-server:${params.VERSION} --force"
+        sh "docker service update ${params.STACK_NAME}_cmpbackend --image docker.pkg.github.com/skuzzle/cmp/backend-server:${params.VERSION} --force"
+        sh "docker service update ${params.STACK_NAME}_cmpfrontend --image docker.pkg.github.com/skuzzle/cmp/frontend-server:${params.VERSION} --force"
       }
     }
   }
