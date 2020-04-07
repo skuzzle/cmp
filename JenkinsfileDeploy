@@ -5,7 +5,7 @@ pipeline {
   }
   environment {
     DOCKER_REGISTRY = credentials('github_docker_registry')
-    VERSION = ${params.Version}
+    VERSION = "${params.Version}"
   }
   stages {
     stage('Login Docker') {
