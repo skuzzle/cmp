@@ -2,7 +2,6 @@ pipeline {
   agent any
   parameters {
     string(name: 'VERSION', defaultValue: 'latest', description: 'The docker image version to deploy')
-    string(name: 'STACK_NAME', description: 'The swarm stack name to deploy')
   }
   environment {
     DOCKER_REGISTRY = credentials('github_docker_registry')
@@ -15,13 +14,13 @@ pipeline {
     }
     stage('Update Stack') {
       steps {
-        sh "docker stack deploy --compose-file swarm-stack/feature.yml --prune --with-registry-auth ${params.STACK_NAME}"
+        sh "docker stack deploy --compose-file swarm-stack/feature.yml --prune --with-registry-auth ${params.VERSION}"
       }
     }
     stage('Update Images') {
       steps {
-        sh "docker service update ${params.STACK_NAME}_cmpbackend --image docker.pkg.github.com/skuzzle/cmp/backend-server:${params.VERSION} --force"
-        sh "docker service update ${params.STACK_NAME}_cmpfrontend --image docker.pkg.github.com/skuzzle/cmp/frontend-server:${params.VERSION} --force"
+        sh "docker service update ${params.VERSION}_cmpbackend --image docker.pkg.github.com/skuzzle/cmp/backend-server:${params.VERSION} --force"
+        sh "docker service update ${params.VERSION}_cmpfrontend --image docker.pkg.github.com/skuzzle/cmp/frontend-server:${params.VERSION} --force"
       }
     }
   }

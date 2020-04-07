@@ -59,7 +59,7 @@ services:
         traefik.enable: 'true'
         traefik.http.routers.cmp.tls: 'true'
         traefik.http.routers.cmp.tls.certresolver: le
-        traefik.http.routers.cmp.rule: Host(`${STACK_NAME:?STACK_NAME not set or empty}.pizza.taddiken.net`)
+        traefik.http.routers.cmp.rule: Host(`${VERSION:?VERSION not set or empty}.pizza.taddiken.net`)
         traefik.http.routers.cmp.entrypoints: https
         traefik.http.services.cmp.loadbalancer.server.port: 8080
       replicas: 1
