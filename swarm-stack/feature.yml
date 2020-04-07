@@ -3,12 +3,12 @@ services:
   cmpbackend:
     image: docker.pkg.github.com/skuzzle/cmp/backend-server:${VERSION:?VERSION property not defined or empty}
     secrets:
-    - cmp_mongo_pw
+    - mongo_admin_pw
     environment:
     - 'spring.data.mongodb.database=cmp'
     - 'spring.data.mongodb.host=cmpmongo'
-    - 'spring.data.mongodb.username=cmp'
-    - 'spring.data.mongodb.password=$${fileContents;/run/secrets/cmp_mongo_pw}'
+    - 'spring.data.mongodb.username=mongo'
+    - 'spring.data.mongodb.password=$${fileContents;/run/secrets/mongo_admin_pw}'
     - 'cmp.api.ratelimit.rps=1000'
     # Logging
 #    - 'logging.level.de.skuzzle.cmp.common.http=DEBUG'
@@ -127,8 +127,6 @@ secrets:
   cmp_google_client_secret:
     external: true
   cmp_redis_pw:
-    external: true
-  cmp_mongo_pw:
     external: true
   mongo_admin_pw:
     external: true
