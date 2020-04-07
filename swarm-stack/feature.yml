@@ -130,6 +130,8 @@ secrets:
     external: true
   cmp_mongo_pw:
     external: true
+  mongo_admin_pw:
+    external: true
   
 networks:
   cmp:
