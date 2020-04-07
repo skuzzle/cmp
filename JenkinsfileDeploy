@@ -5,7 +5,6 @@ pipeline {
   }
   environment {
     DOCKER_REGISTRY = credentials('github_docker_registry')
-    VERSION = "${params.Version}"
   }
   stages {
     stage('Login Docker') {
@@ -15,12 +14,13 @@ pipeline {
     }
     stage('Pull images') {
       steps {
-        sh "docker pull docker.pkg.github.com/skuzzle/cmp/backend-server:${VERSION}"
-        sh "docker pull docker.pkg.github.com/skuzzle/cmp/frontend-server:${VERSION}"
+        sh "docker pull docker.pkg.github.com/skuzzle/cmp/backend-server:${params.Version}"
+        sh "docker pull docker.pkg.github.com/skuzzle/cmp/frontend-server:${params.Version}"
       }
     }
     stage('Update Stack') {
       steps {
+        sh "export VERSION=${params.Version}"
         sh "docker stack deploy --compose-file swarm-stack/production.yml --prune cmp"
       }
     }
