@@ -104,8 +104,6 @@ services:
 
   cmpmongo:
     image: mongo
-    secrets:
-    - cmp_mongo_pw
     volumes:
     - 'data:/data/db'
     networks:
