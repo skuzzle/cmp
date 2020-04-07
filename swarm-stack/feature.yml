@@ -55,7 +55,7 @@ services:
         traefik.enable: 'true'
         traefik.http.routers.${VERSION}.tls: 'true'
         traefik.http.routers.${VERSION}.tls.certresolver: le
-        traefik.http.routers.${VERSION}.rule: Host(`${VERSION:?VERSION not set or empty}.pizza.taddiken.net`)
+        traefik.http.routers.${VERSION}.rule: Host(`${VERSION:?VERSION not set or empty}-cmp.taddiken.net`)
         traefik.http.routers.${VERSION}.entrypoints: https
         traefik.http.services.${VERSION}.loadbalancer.server.port: 8080
       replicas: 1
