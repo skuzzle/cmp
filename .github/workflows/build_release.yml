@@ -45,6 +45,6 @@ jobs:
           uses: satak/webrequest-action@v1.2.2
           with:
             url: ${{ secrets.trigger_deployment_url }}&Version=${{ steps.generateBuildNumber.outputs.global_build_number }}
-            method: GET
+            method: POST
             username: ${{ secrets.jenkins_username }}
             password: ${{ secrets.jenkins_password }}
