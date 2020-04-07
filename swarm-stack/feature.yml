@@ -57,11 +57,11 @@ services:
     deploy:
       labels:
         traefik.enable: 'true'
-        traefik.http.routers.cmp.tls: 'true'
-        traefik.http.routers.cmp.tls.certresolver: le
-        traefik.http.routers.cmp.rule: Host(`${VERSION:?VERSION not set or empty}.pizza.taddiken.net`)
-        traefik.http.routers.cmp.entrypoints: https
-        traefik.http.services.cmp.loadbalancer.server.port: 8080
+        traefik.http.routers.${VERSION}.tls: 'true'
+        traefik.http.routers.${VERSION}.tls.certresolver: le
+        traefik.http.routers.${VERSION}.rule: Host(`${VERSION:?VERSION not set or empty}.pizza.taddiken.net`)
+        traefik.http.routers.${VERSION}.entrypoints: https
+        traefik.http.services.${VERSION}.loadbalancer.server.port: 8080
       replicas: 1
       update_config:
         parallelism: 1
