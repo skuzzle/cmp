@@ -47,12 +47,12 @@ services:
     - 'spring.redis.password=$${fileContents;/run/secrets/cmp_redis_pw}'
     deploy:
       labels:
-        traefik.enable: 'true'
-        traefik.http.routers.${VERSION}.tls: 'true'
-        traefik.http.routers.${VERSION}.tls.certresolver: le
-        traefik.http.routers.${VERSION}.rule: Host(`${VERSION:?VERSION not set or empty}.countmy.pizza`)
-        traefik.http.routers.${VERSION}.entrypoints: https
-        traefik.http.services.${VERSION}.loadbalancer.server.port: 8080
+        - "traefik.enable=true"
+        - "traefik.http.routers.${VERSION}.tls=true"
+        - "traefik.http.routers.${VERSION}.tls.certresolver=le"
+        - "traefik.http.routers.${VERSION}.rule=Host(`${VERSION:?VERSION not set or empty}.countmy.pizza`)"
+        - "traefik.http.routers.${VERSION}.entrypoints=https"
+        - "traefik.http.services.${VERSION}.loadbalancer.server.port=8080"
       replicas: 1
       update_config:
         parallelism: 1
