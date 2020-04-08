@@ -5,9 +5,6 @@ import java.util.List;
 
 import com.google.common.base.Preconditions;
 
-import de.skuzzle.cmp.counter.domain.IncrementQueryResult;
-import de.skuzzle.cmp.counter.domain.TallyIncrement;
-
 public class RestIncrements {
 
     private final List<RestTallyIncrement> entries;
@@ -22,12 +19,6 @@ public class RestIncrements {
 
     public static RestIncrements empty(int total) {
         return new RestIncrements(Collections.emptyList(), 0, total);
-    }
-
-    public static RestIncrements all(List<TallyIncrement> increments) {
-        Preconditions.checkArgument(increments != null, "increments must not be null");
-        final List<RestTallyIncrement> restIncrements = RestTallyIncrement.fromDomainObjects(increments);
-        return new RestIncrements(restIncrements, 0, increments.size());
     }
 
     public static RestIncrements of(IncrementQueryResult result) {

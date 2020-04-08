@@ -8,7 +8,12 @@ import {
     faDizzy, 
     faPizzaSlice,
     faEdit,
-    faAngleDown
+    faAngleDown,
+    faQuestionCircle,
+    faShareAlt,
+    faTags,
+    faCommentAlt,
+    faListOl
 } from '@fortawesome/free-solid-svg-icons'
 
 
@@ -26,6 +31,11 @@ library.add(
     faDizzy, 
     faPizzaSlice,
     faAngleDown,
+    faQuestionCircle,
+    faShareAlt,
+    faTags,
+    faCommentAlt,
+    faListOl,
     
     // regular
     faEdit,

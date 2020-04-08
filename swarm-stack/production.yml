@@ -1,0 +1,133 @@
+version: '3.7'
+services:
+  cmpbackend:
+    image: docker.pkg.github.com/skuzzle/cmp/backend-server:${VERSION:?VERSION property not defined or empty}
+    secrets:
+    - cmp_mongo_pw
+    environment:
+    - 'spring.data.mongodb.database=cmp'
+    - 'spring.data.mongodb.host=mongo'
+    - 'spring.data.mongodb.username=cmp'
+    - 'spring.data.mongodb.password=$${fileContents;/run/secrets/cmp_mongo_pw}'
+    - 'cmp.api.ratelimit.rps=1000'
+    # Logging
+#    - 'logging.level.de.skuzzle.cmp.common.http=DEBUG'
+    healthcheck:
+      test: ["CMD", "curl" , "-f", "http://localhost:9000/actuator/health"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+    logging:
+      options:
+        loki-pipeline-stage-file: '/loki-pipeline.yml'
+    networks:
+    - cmp
+    - mongo
+    - monitoring
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        order: start-first
+        failure_action: rollback
+      resources:
+        limits:
+          memory: 1024M
+        reservations:
+          memory: 256M
+
+  cmpfrontend:
+    image: docker.pkg.github.com/skuzzle/cmp/frontend-server:${VERSION:?VERSION property not defined or empty}
+    secrets:
+    - cmp_google_client_secret
+    - cmp_google_client_id
+    - cmp_redis_pw
+    environment:
+    # backend
+    - 'cmp.backend.url=http://cmpbackend:8080'
+    - 'cmp.backend.healthUrl=http://cmpbackend:9000'
+    # Spring oauth
+    - 'spring.security.oauth2.client.registration.google.client-id=$${fileContents;/run/secrets/cmp_google_client_id}'
+    - 'spring.security.oauth2.client.registration.google.client-secret=$${fileContents;/run/secrets/cmp_google_client_secret}'
+    # redis session management
+    - 'server.servlet.session.timeout=3600'
+    - 'spring.session.store-type=redis'
+    - 'spring.session.redis.flush-mode=on-save'
+    - 'spring.session.redis.namespace=spring:session'
+    - 'spring.redis.host=cmpredis'
+    - 'spring.redis.password=$${fileContents;/run/secrets/cmp_redis_pw}'
+    deploy:
+      labels:
+        traefik.enable: 'true'
+        traefik.http.routers.cmp.tls: 'true'
+        traefik.http.routers.cmp.tls.certresolver: le
+        traefik.http.routers.cmp.rule: Host(`countmy.pizza`)
+        traefik.http.routers.cmp.entrypoints: https
+        traefik.http.services.cmp.loadbalancer.server.port: 8080
+      replicas: 2
+      update_config:
+        parallelism: 1
+        order: start-first
+        failure_action: rollback
+      resources:
+        limits:
+          memory: 1024M
+        reservations:
+          memory: 256M
+    healthcheck:
+      test: ["CMD", "curl" , "-f", "http://localhost:9000/actuator/health"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+    logging:
+      options:
+        loki-pipeline-stage-file: '/loki-pipeline.yml'
+
+    networks:
+    - cmp
+    - traefik_proxy
+    - monitoring
+
+  cmpredis:
+    image: redis
+    secrets:
+    - cmp_redis_pw
+    environment:
+    - 'REDIS_PASS_FILE=/run/secrets/cmp_redis_pw'
+    command: [
+      "bash", "-c",
+      '
+      docker-entrypoint.sh
+      --requirepass "$$(cat $$REDIS_PASS_FILE)"
+      '
+    ]
+    networks:
+    - cmp
+    deploy:
+      resources:
+        limits:
+          memory: 128m
+        reservations:
+          memory: 64m
+
+secrets:
+  cmp_google_client_id:
+    external: true
+  cmp_google_client_secret:
+    external: true
+  cmp_redis_pw:
+    external: true
+  cmp_mongo_pw:
+    external: true
+  
+networks:
+  cmp:
+  traefik_proxy:
+    external: true
+    name: traefik_proxy
+  mongo:
+    external: true
+    name: mongo
+  monitoring:
+    external: true
+    name: monitoring

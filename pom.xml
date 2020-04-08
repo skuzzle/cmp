@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.0.M3</version>
+        <version>2.3.0.M4</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
@@ -24,8 +24,7 @@
         <username>${deploy.username}</username>
         <password>${deploy.password}</password>
         
-        <!-- Injected into spring boot properties for being displayed on 
-            ui and metrics -->
+        <!-- Injected into spring boot properties for being displayed on ui and metrics -->
         <application.version.number>${project.version}</application.version.number>
 
         <!-- Runtime / Tools Versions -->
@@ -41,6 +40,7 @@
 		<resilience4j.version>1.3.0</resilience4j.version>
 		<guava.version>28.2-jre</guava.version>
 		<equalsverifier.version>3.1.11</equalsverifier.version>
+        <logstash-encoder.version>5.2</logstash-encoder.version>
 
         <!-- per default, skip docker build. Will be enabled in sub modules -->
         <jib.skip>true</jib.skip>
@@ -95,6 +95,8 @@
         <module>common/frontend-auth</module>
         <module>common/http</module>
         <module>common/collections</module>
+        <module>common/random</module>
+        <module>common/spring-boot</module>
         
         <!-- UI -->
         <module>ui/fragments</module>
@@ -135,6 +137,16 @@
                 <artifactId>collections</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>de.skuzzle.cmp.common</groupId>
+                <artifactId>random</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.skuzzle.cmp.common</groupId>
+                <artifactId>spring-boot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             
             <!-- counter -->
             <dependency>
@@ -146,6 +158,12 @@
                 <groupId>de.skuzzle.cmp.counter</groupId>
                 <artifactId>counter-rest</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.skuzzle.cmp.counter</groupId>
+                <artifactId>counter-rest</artifactId>
+                <version>${project.version}</version>
+                <classifier>stubs</classifier>
             </dependency>
             <dependency>
                 <groupId>de.skuzzle.cmp.counter</groupId>
@@ -177,6 +195,12 @@
                 <version>${project.version}</version>
             </dependency>
 
+
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>${logstash-encoder.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>

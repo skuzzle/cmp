@@ -3,17 +3,21 @@ package de.skuzzle.cmp.counter.tallypage;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.mobile.device.Device;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.common.base.Preconditions;
@@ -22,6 +26,7 @@ import de.skuzzle.cmp.auth.TallyUser;
 import de.skuzzle.cmp.counter.client.BackendClient;
 import de.skuzzle.cmp.counter.client.Filter;
 import de.skuzzle.cmp.counter.client.RestIncrements;
+import de.skuzzle.cmp.counter.client.RestShareInformation;
 import de.skuzzle.cmp.counter.client.RestTallyIncrement;
 import de.skuzzle.cmp.counter.client.RestTallyResponse;
 import de.skuzzle.cmp.counter.client.RestTallySheet;
@@ -31,6 +36,7 @@ import de.skuzzle.cmp.counter.tagcloud.TagCloud;
 import de.skuzzle.cmp.counter.timeline.Timeline;
 import de.skuzzle.cmp.counter.timeline.TimelineBuilder;
 import de.skuzzle.cmp.counter.urls.KnownUrls;
+import de.skuzzle.cmp.ui.socialcard.SocialCard;
 
 @Controller
 public class TallyPageController {
@@ -41,6 +47,20 @@ public class TallyPageController {
     public TallyPageController(BackendClient client, TallyUser currentUser) {
         this.client = client;
         this.currentUser = currentUser;
+    }
+
+    @ExceptionHandler(HttpStatusCodeException.class)
+    public ModelAndView handleClientError(HttpStatusCodeException e) {
+        final ModelAndView modelAndView = new ModelAndView();
+        final HttpStatus statusCode = e.getStatusCode();
+        if (statusCode == HttpStatus.NOT_FOUND) {
+            modelAndView.setViewName("error/404");
+        } else {
+            modelAndView.setViewName("error");
+        }
+        modelAndView.addObject("statusCode", statusCode);
+        modelAndView.setStatus(statusCode);
+        return modelAndView;
     }
 
     @ModelAttribute("user")
@@ -65,6 +85,10 @@ public class TallyPageController {
         final Graph graph = Graph.fromHistory(increments.getEntries());
         final Timeline timeline = TimelineBuilder.fromBackendResponse(response);
         final TagCloud tagCloud = TagCloud.fromBackendResponse(key, response, currentFilter);
+        final SocialCard socialCard = SocialCard.withTitle(tallySheet.getName())
+                .withDescription("Current count: " + tallySheet.getTotalCount())
+                .build();
+        final List<Share> shares = Share.fromBackendResponse(tallySheet);
 
         final boolean mobile = !device.isNormal();
         return new ModelAndView("tallypage/tally", Map.of(
@@ -75,10 +99,12 @@ public class TallyPageController {
                 "timeline", timeline,
                 "increments", increments,
                 "graph", graph,
-                "mobile", mobile));
+                "mobile", mobile,
+                "socialCard", socialCard,
+                "shares", shares));
     }
 
-    @PostMapping(KnownUrls.VIEW_COUNTER_STRING)
+    @PostMapping(path = KnownUrls.VIEW_COUNTER_STRING, params = "action=increment")
     public String incrementTallySheet(
             @PathVariable String key,
             @RequestParam String description,
@@ -129,6 +155,24 @@ public class TallyPageController {
     @GetMapping(path = KnownUrls.VIEW_COUNTER_STRING, params = { "action=changeName", "newName" })
     public String changeTitle(@PathVariable String key, @RequestParam String newName) {
         client.changeName(key, newName);
+        return KnownUrls.VIEW_COUNTER.redirectResolve(key);
+    }
+
+    @PostMapping(path = KnownUrls.VIEW_COUNTER_STRING, params = { "action=share" })
+    public String addShare(@PathVariable String key,
+            @RequestParam(name = "showIncrements", defaultValue = "false") boolean showIncrements,
+            @RequestParam(name = "showIncrementTags", defaultValue = "false") boolean showIncrementTags,
+            @RequestParam(name = "showIncrementDescription", defaultValue = "false") boolean showIncrementDescription) {
+
+        client.addShare(key, RestShareInformation.create(showIncrements, showIncrementTags, showIncrementDescription));
+        return KnownUrls.VIEW_COUNTER.redirectResolve(key);
+    }
+
+    @GetMapping(path = KnownUrls.VIEW_COUNTER_STRING, params = { "action=deleteShare", "shareId" })
+    public String deleteShare(@PathVariable String key,
+            @RequestParam("shareId") String shareId) {
+
+        client.deleteShare(key, shareId);
         return KnownUrls.VIEW_COUNTER.redirectResolve(key);
     }
 }

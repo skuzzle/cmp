@@ -1,6 +1,7 @@
 package de.skuzzle.cmp.counter.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 public interface ShallowTallySheet {
@@ -17,9 +18,9 @@ public interface ShallowTallySheet {
 
     Optional<String> getAdminKey();
 
-    String getPublicKey();
-
     LocalDateTime getCreateDateUTC();
 
     LocalDateTime getLastModifiedDateUTC();
+
+    List<ShareDefinition> getShareDefinitions();
 }

@@ -23,6 +23,10 @@
             <artifactId>collections</artifactId>
         </dependency>
         <dependency>
+            <groupId>de.skuzzle.cmp.common</groupId>
+            <artifactId>random</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>

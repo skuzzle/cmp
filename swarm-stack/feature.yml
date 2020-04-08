@@ -1,0 +1,118 @@
+version: '3.7'
+services:
+  cmpbackend:
+    image: docker.pkg.github.com/skuzzle/cmp/backend-server:${VERSION:?VERSION property not defined or empty}
+    environment:
+    - 'spring.data.mongodb.database=cmp'
+    - 'spring.data.mongodb.host=cmpmongo'
+    - 'cmp.api.ratelimit.rps=1000'
+    # Logging
+#    - 'logging.level.de.skuzzle.cmp.common.http=DEBUG'
+    healthcheck:
+      test: ["CMD", "curl" , "-f", "http://localhost:9000/actuator/health"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+    logging:
+      options:
+        loki-pipeline-stage-file: '/loki-pipeline.yml'
+    networks:
+    - cmp
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        order: start-first
+        failure_action: rollback
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 128M
+
+  cmpfrontend:
+    image: docker.pkg.github.com/skuzzle/cmp/frontend-server:${VERSION:?VERSION property not defined or empty}
+    secrets:
+    - cmp_redis_pw
+    environment:
+    # backend
+    - 'cmp.backend.url=http://cmpbackend:8080'
+    - 'cmp.backend.healthUrl=http://cmpbackend:9000'
+    # redis session management
+    - 'server.servlet.session.timeout=3600'
+    - 'spring.session.store-type=redis'
+    - 'spring.session.redis.flush-mode=on-save'
+    - 'spring.session.redis.namespace=spring:session'
+    - 'spring.redis.host=cmpredis'
+    - 'spring.redis.password=$${fileContents;/run/secrets/cmp_redis_pw}'
+    deploy:
+      labels:
+        traefik.enable: 'true'
+        traefik.http.routers.${VERSION}.tls: 'true'
+        traefik.http.routers.${VERSION}.tls.certresolver: le
+        traefik.http.routers.${VERSION}.rule: Host(`${VERSION:?VERSION not set or empty}.countmy.pizza`)
+        traefik.http.routers.${VERSION}.entrypoints: https
+        traefik.http.services.${VERSION}.loadbalancer.server.port: 8080
+      replicas: 1
+      update_config:
+        parallelism: 1
+        order: start-first
+        failure_action: rollback
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 128M
+    healthcheck:
+      test: ["CMD", "curl" , "-f", "http://localhost:9000/actuator/health"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+    logging:
+      options:
+        loki-pipeline-stage-file: '/loki-pipeline.yml'
+    networks:
+    - cmp
+    - traefik_proxy
+
+  cmpredis:
+    image: redis
+    secrets:
+    - cmp_redis_pw
+    environment:
+    - 'REDIS_PASS_FILE=/run/secrets/cmp_redis_pw'
+    command: [
+      "bash", "-c",
+      '
+      docker-entrypoint.sh
+      --requirepass "$$(cat $$REDIS_PASS_FILE)"
+      '
+    ]
+    networks:
+    - cmp
+    deploy:
+      resources:
+        limits:
+          memory: 128m
+        reservations:
+          memory: 64m
+
+  cmpmongo:
+    image: mongo
+    volumes:
+    - 'data:/data/db'
+    networks:
+    - cmp
+
+volumes:
+  data:
+
+secrets:
+  cmp_redis_pw:
+    external: true
+  
+networks:
+  cmp:
+  traefik_proxy:
+    external: true
+    name: traefik_proxy

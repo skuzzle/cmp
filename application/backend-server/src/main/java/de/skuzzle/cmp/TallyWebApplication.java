@@ -10,6 +10,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import de.skuzzle.cmp.common.http.RequestIdFilter;
+import de.skuzzle.cmp.common.http.RequestLoggingFilter;
 import de.skuzzle.cmp.common.http.ResponseSizeTrackingFilter;
 import io.micrometer.core.instrument.Metrics;
 
@@ -29,7 +31,17 @@ public class TallyWebApplication {
     }
 
     @Bean
+    public Filter requestIdFilter() {
+        return new RequestIdFilter();
+    }
+
+    @Bean
     public Filter trackResponseSizes() {
         return new ResponseSizeTrackingFilter();
+    }
+
+    @Bean
+    public Filter requestLoggingFilter() {
+        return new RequestLoggingFilter();
     }
 }

@@ -1,5 +1,8 @@
 pipeline {
   agent any
+  parameters {
+    string(name: 'VERSION', defaultValue: 'latest', description: 'The docker image version to deploy')
+  }
   environment {
     DOCKER_REGISTRY = credentials('github_docker_registry')
   }
@@ -9,16 +12,15 @@ pipeline {
         sh 'docker login -u ${DOCKER_REGISTRY_USR} -p ${DOCKER_REGISTRY_PSW} docker.pkg.github.com'
       }
     }
-    stage('Deploy Backend') {
+    stage('Update Stack') {
       steps {
-        sh 'docker pull docker.pkg.github.com/skuzzle/cmp/backend-server:latest'
-        sh 'docker service update --image docker.pkg.github.com/skuzzle/cmp/backend-server:latest cmp_cmpbackend'
+        sh 'docker stack deploy --compose-file swarm-stack/production.yml --prune --with-registry-auth cmp'
       }
     }
-    stage('Deploy Frontend') {
+    stage('Update Images') {
       steps {
-        sh 'docker pull docker.pkg.github.com/skuzzle/cmp/frontend-server:latest'
-        sh 'docker service update --image docker.pkg.github.com/skuzzle/cmp/frontend-server:latest cmp_cmpfrontend'
+        sh "docker service update cmp_cmpbackend --image docker.pkg.github.com/skuzzle/cmp/backend-server:${params.VERSION} --force"
+        sh "docker service update cmp_cmpfrontend --image docker.pkg.github.com/skuzzle/cmp/frontend-server:${params.VERSION} --force"
       }
     }
   }

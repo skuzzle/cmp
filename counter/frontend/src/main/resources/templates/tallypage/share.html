@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <th:block th:fragment="renderShares(shares, adminKey)">
+    
+        <nav class="panel">
+            <th:block th:each="share : ${shares}">
+                <div class="panel-block">
+                    <span class="panel-icon">
+                        <i class="fas fa-share"></i>
+                    </span>
+                    
+                    <a th:href="@{/counter/{publicKey}(publicKey=${share.shareId})}" th:text="${share.shareId}"></a>
+                    
+                    <span class="is-full-width has-text-right">
+                        <span class="icon" th:if="${share.showIncrements}" title="With timeline">
+                            <i class="fas fa-list-ol"></i>
+                        </span>
+        
+                        
+                        <span class="icon" th:if="${share.showIncrementTags}" title="With increment tags">
+                            <i class="fas fa-tags"></i>
+                        </span>
+        
+                        <span class="icon" th:if="${share.showIncrementDescription}" title="With increment description">
+                            <i class="fas fa-comment-alt"></i>
+                        </span>
+                        
+                        <a href="#" 
+                            th:href="@{/counter/{adminKey}?action=deleteShare&shareId={shareId}(adminKey=${adminKey}, shareId=${share.shareId})}" 
+                            class="delete confirmable" 
+                            title="Delete this share link. The counter will be no longer accessible using this id."></a>
+                    </span>
+                    
+                </div>
+            </th:block>
+            
+            <div class="panel-block">
+                <form th:action="@{/counter/{adminKey}?action=share(adminKey=${adminKey})}" method="post">
+                    <button class="button is-info is-small">
+                        <span class="icon is-small">
+                            <i class="fas fa-share-alt"></i>
+                        </span>
+                        <span>Share</span>
+                    </button>
+                    
+                    <label class="checkbox" title="Check if the timeline and the graph shall be visible in the new share">
+                        <input name="showIncrements" type="checkbox">
+                        <span class="icon">
+                            <i class="fas fa-list-ol"></i>
+                        </span>
+                    </label>
+                    <label class="checkbox" title="Check if tags and tag cloud shall be visible in the new share">
+                        <input name="showIncrementTags" type="checkbox">
+                        <span class="icon">
+                            <i class="fas fa-tags"></i>
+                        </span>
+                    </label>
+                    <label class="checkbox" title="Check if descriptions shall be visible in the new share">
+                        <input name="showIncrementDescription" type="checkbox">
+                        <span class="icon">
+                            <i class="fas fa-comment-alt"></i>
+                        </span>
+                    </label>
+    
+                </form>
+            </div>
+        </nav>
+    
+    </th:block>
+
+
+    <th:block th:fragment="renderShares2(shares, adminKey)">
+        <h2 th:if="!${shares.empty}"  class="subtitle is-marginless">Shares:</h2>
+        <div th:each="share : ${shares}">
+            <a class="is-family-monospace" 
+                th:href="@{/counter/{publicKey}(publicKey=${share.shareId})}" 
+                title="Read-Only Link to share with your friends" th:text="${share.shareId}" href="#">123547</a>
+
+            <fieldset style="display: inline" disabled>
+                <label class="checkbox">
+                    <input type="checkbox" th:checked="${share.showIncrements}" disabled>
+                    Increments
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" th:checked="${share.showIncrementTags}" disabled>
+                    Tags
+                </label>
+                <label class="checkbox">
+                    <input type="checkbox" th:checked="${share.showIncrementDescription}" disabled>
+                    Descriptions
+                </label>
+                <a href="#" 
+                    th:href="@{/counter/{adminKey}?action=deleteShare&shareId={shareId}(adminKey=${adminKey}, shareId=${share.shareId})}" 
+                    class="delete confirmable" 
+                    title="Delete this share link. The counter will be no longer accessible using this id."></a>
+            </fieldset>
+        </div>
+        
+        <form th:action="@{/counter/{adminKey}?action=share(adminKey=${adminKey})}" method="post">
+            <button class="button is-info is-small">
+                <span class="icon is-small">
+                    <i class="fas fa-share-alt"></i>
+                </span>
+                <span>New share with</span>
+            </button>
+            <label class="checkbox" title="When disabled the graph and the timeline will be empty">
+                <input name="showIncrements" type="checkbox">
+                Increments
+            </label>
+            <label class="checkbox" title="When disabled the tag cloud and the tags on single increments are not shown">
+                <input name="showIncrementTags" type="checkbox">
+                Tags
+            </label>
+            <label class="checkbox" title="When disabled the desciption of single increments is not shown">
+                <input name="showIncrementDescription" type="checkbox">
+                Descriptions
+            </label>
+        </form>
+    </th:block>
+</html>

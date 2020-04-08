@@ -71,6 +71,13 @@ public final class TallyIncrement implements Comparable<TallyIncrement> {
         return incrementDateUTC;
     }
 
+    public TallyIncrement wipedCopyFor(ShareInformation shareInformation) {
+        return new TallyIncrement(id,
+                shareInformation.getIncrementTags(tags),
+                shareInformation.getIncrementTitle(description),
+                createDateUTC, incrementDateUTC);
+    }
+
     @Override
     public int compareTo(TallyIncrement o) {
         return incrementDateUTC.compareTo(o.incrementDateUTC);

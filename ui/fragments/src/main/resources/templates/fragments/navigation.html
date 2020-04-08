@@ -1,19 +1,22 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <nav th:fragment="navigation(user)" class="navbar" role="navigation" aria-label="main navigation">
-	<div class="navbar-brand">
-		<a class="navbar-item" th:href="@{/}">
-		    <img th:src="@{/android-chrome-512x512.png}" ></img>
+    <div class="navbar-brand">
+        <a class="navbar-item" th:href="@{/}">
+            <img th:src="@{/android-chrome-512x512.png}" ></img>
             
-		</a>
-	</div>
+        </a>
+    </div>
     
     <a class="navbar-item" th:href="@{/}">countmy.pizza</a>
-    
-	<div class="navbar-end">
-		<div class="navbar-item" th:insert="fragments/login :: login(${user})"></div>
+
+    <div class="navbar-end">
+        <div class="navbar-item is-size-7">
+            <span>Follow <a href="https://twitter.com/CountMyPizza">@CountMyPizza</a> on Twitter</span>
+        </div>
+        <div class="navbar-item" th:insert="fragments/login :: login(${user})"></div>
         <div class="navbar-item" th:insert="fragments/login :: logout(${user})"></div>
-	</div>
+    </div>
 </nav>
 
 </html>

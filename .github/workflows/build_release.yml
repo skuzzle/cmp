@@ -21,6 +21,7 @@ jobs:
         
         - name: Generate build number
           uses: zyborg/gh-action-buildnum@v1
+          id: generateBuildNumber
           with:
               gist_token: ${{ secrets.gist_token }}
               set_env: true
@@ -43,7 +44,7 @@ jobs:
         - name: Trigger deployment
           uses: satak/webrequest-action@v1.2.2
           with:
-            url: ${{ secrets.trigger_deployment_url }}
+            url: ${{ secrets.trigger_deployment_url }}&VERSION=${{ steps.generateBuildNumber.outputs.global_build_number }}
             method: GET
             username: ${{ secrets.jenkins_username }}
             password: ${{ secrets.jenkins_password }}

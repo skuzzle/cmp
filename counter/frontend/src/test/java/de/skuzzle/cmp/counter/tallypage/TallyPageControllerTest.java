@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlTemplate;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 
 import de.skuzzle.cmp.counter.FrontendTestSlice;
@@ -37,15 +39,36 @@ public class TallyPageControllerTest {
     private MockMvc mockMvc;
 
     @Test
+    void testServerError() throws Exception {
+        testUser.anonymous();
+        clientConfigurer.configureServerErrorReply("publicKey", HttpStatus.INTERNAL_SERVER_ERROR);
+
+        mockMvc.perform(get(KnownUrls.VIEW_COUNTER_STRING, "publicKey"))
+                .andExpect(status().isInternalServerError())
+                .andExpect(view().name("error"));
+    }
+
+    @Test
+    void testViewNonExistentCounter() throws Exception {
+        testUser.anonymous();
+        clientConfigurer.configureClientErrorReply("publicKey", HttpStatus.NOT_FOUND);
+
+        mockMvc.perform(get(KnownUrls.VIEW_COUNTER_STRING, "publicKey"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("error/404"));
+    }
+
+    @Test
     void testViewEmptyCounter() throws Exception {
         // should give same result when logged in
         testUser.anonymous();
 
-        mockMvc.perform(get(KnownUrls.VIEW_COUNTER_STRING, clientConfigurer.getPublicKey()))
+        mockMvc.perform(get(KnownUrls.VIEW_COUNTER_STRING, clientConfigurer.getAdminKey()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("currentFilter", "tally", "timeline", "increments", "graph", "user",
                         "tagCloud",
-                        "version"));
+                        "version",
+                        "socialCard", "shares"));
     }
 
     @Test
@@ -78,6 +101,27 @@ public class TallyPageControllerTest {
     }
 
     @Test
+    void testAddShare() throws Exception {
+        testUser.anonymous();
+
+        final String adminKey = clientConfigurer.getAdminKey();
+        mockMvc.perform(post("/counter/{adminKey}?action=share", adminKey)
+                .content("showIncrements=on&showIncrementTags=on&showIncrementDescription=on"))
+                .andExpect(redirectedUrlTemplate(KnownUrls.VIEW_COUNTER_STRING, adminKey));
+    }
+
+    @Test
+    void testDeleteShare() throws Exception {
+        testUser.anonymous();
+
+        final String adminKey = clientConfigurer.getAdminKey();
+        final String shareId = "";
+
+        mockMvc.perform(get("/counter/{adminKey}?action=deleteShare&shareId={shareId}", adminKey, shareId))
+                .andExpect(redirectedUrlTemplate(KnownUrls.VIEW_COUNTER_STRING, adminKey));
+    }
+
+    @Test
     void testDeleteIncrement() throws Exception {
         testUser.anonymous();
 
@@ -100,7 +144,7 @@ public class TallyPageControllerTest {
         final String incrementDateUTC = "1987-12-09";
 
         mockMvc.perform(
-                post("/counter/{adminKey}?description={description}&tags={tags}&incrementDateUTC={incrementDateUTC}",
+                post("/counter/{adminKey}?action=increment&description={description}&tags={tags}&incrementDateUTC={incrementDateUTC}",
                         adminKey, description, tags, incrementDateUTC))
                 .andExpect(redirectedUrlTemplate("/counter/{adminKey}", adminKey));
 

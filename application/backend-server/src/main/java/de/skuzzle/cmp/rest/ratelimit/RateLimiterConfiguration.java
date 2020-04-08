@@ -13,7 +13,9 @@ import de.skuzzle.cmp.common.ratelimit.ApiClient;
 import de.skuzzle.cmp.common.ratelimit.ApiRateLimiter;
 import de.skuzzle.cmp.common.ratelimit.ClientIdentificator;
 import de.skuzzle.cmp.common.ratelimit.DisabledRateLimiter;
-import de.skuzzle.cmp.common.ratelimit.MemoryCacheRateLimiter;
+import de.skuzzle.cmp.common.ratelimit.GuavaRateLimiterCache;
+import de.skuzzle.cmp.common.ratelimit.CachedRateLimiter;
+import de.skuzzle.cmp.common.ratelimit.RateLimiterCache;
 import de.skuzzle.cmp.common.ratelimit.RemoteIpClientIdentificator;
 import de.skuzzle.cmp.rest.auth.TallyUser;
 import de.skuzzle.cmp.rest.ratelimit.RateLimitApiProperties.Ratelimit;
@@ -30,13 +32,19 @@ public class RateLimiterConfiguration {
     }
 
     @Bean
-    public ApiRateLimiter<HttpServletRequest> rateLimiter(TallyUser tallyUser) {
+    RateLimiterCache rateLimiterCache() {
+        final Ratelimit rateLimit = apiProperties.getRatelimit();
+        return new GuavaRateLimiterCache(rateLimit.getRps());
+    }
+
+    @Bean
+    public ApiRateLimiter<HttpServletRequest> rateLimiter(TallyUser tallyUser, RateLimiterCache rateLimiterCache) {
         final Ratelimit rateLimit = apiProperties.getRatelimit();
         if (rateLimit.isEnabled()) {
             logger.info("Configuring API rate limiter with a client dependent rate limit of {}", rateLimit.getRps());
-            return new MemoryCacheRateLimiter<>(
+            return new CachedRateLimiter<>(
                     new AuthenticationClientIdentificator(tallyUser),
-                    rateLimit.getRps());
+                    rateLimiterCache);
         } else {
             logger.warn("API rate limit is disabled");
             return new DisabledRateLimiter<>();

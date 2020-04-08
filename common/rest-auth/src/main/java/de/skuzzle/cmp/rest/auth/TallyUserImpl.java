@@ -36,7 +36,7 @@ final class TallyUserImpl implements TallyUser {
 
     @Override
     public int hashCode() {
-        return Objects.hash(source, id);
+        return Objects.hash(getSource(), getId());
     }
 
     @Override
@@ -48,6 +48,6 @@ final class TallyUserImpl implements TallyUser {
 
     @Override
     public String toString() {
-        return String.format("%s:%s", source, id);
+        return String.format("%s:%s", getSource(), getId());
     }
 }

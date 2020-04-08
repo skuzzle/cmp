@@ -24,4 +24,8 @@ public interface BackendClient {
 
     void changeName(String adminKey, String newTitle);
 
+    void addShare(String adminKey, RestShareInformation shareInformation);
+
+    void deleteShare(String adminKey, String shareId);
+
 }

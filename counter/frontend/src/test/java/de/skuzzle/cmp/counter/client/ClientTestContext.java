@@ -4,7 +4,12 @@ import static org.mockito.Mockito.when;
 
 import java.util.function.Consumer;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestContext;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+
+import com.google.common.base.Preconditions;
 
 import de.skuzzle.cmp.counter.client.TestResponses.TallySheetResponseBuilder;
 
@@ -28,7 +33,6 @@ class ClientTestContext {
     }
 
     private final BackendClient tallyClientMock;
-    private TallySheetResponseBuilder publicTallySheet;
     private TallySheetResponseBuilder adminTallySheet;
 
     ClientTestContext(BackendClient tallyClientMock) {
@@ -44,14 +48,6 @@ class ClientTestContext {
         return this;
     }
 
-    public ClientTestContext configurePublic(Consumer<TallySheetResponseBuilder> tallySheet) {
-        this.publicTallySheet = TestResponses.tallySheet().withAdminKey(null);
-        tallySheet.accept(publicTallySheet);
-        when(tallyClientMock.getTallySheet(publicTallySheet.getPublicKey(), Filter.all()))
-                .thenReturn(publicTallySheet.toResponse());
-        return this;
-    }
-
     public ClientTestContext configureAdminReply(Consumer<TallySheetResponseBuilder> tallySheet) {
         this.adminTallySheet = TestResponses.tallySheet();
         tallySheet.accept(adminTallySheet);
@@ -60,11 +56,24 @@ class ClientTestContext {
         return this;
     }
 
+    public ClientTestContext configureClientErrorReply(String key, HttpStatus status) {
+        Preconditions.checkArgument(status.is4xxClientError(), "Expected a Http Status in 4xx range, but got %s",
+                status);
+        final HttpClientErrorException exception = new HttpClientErrorException(status);
+        when(tallyClientMock.getTallySheet(key, Filter.all())).thenThrow(exception);
+        return this;
+    }
+
+    public ClientTestContext configureServerErrorReply(String key, HttpStatus status) {
+        Preconditions.checkArgument(status.is5xxServerError(), "Expected a Http Status in 5xx range, but got %s",
+                status);
+        final HttpServerErrorException exception = new HttpServerErrorException(status);
+        when(tallyClientMock.getTallySheet(key, Filter.all())).thenThrow(exception);
+        return this;
+    }
+
     public TallySheetResponseBuilder getAdminTallySheet() {
         return this.adminTallySheet;
     }
 
-    public TallySheetResponseBuilder getPublicTallySheet() {
-        return this.publicTallySheet;
-    }
 }

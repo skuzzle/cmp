@@ -29,21 +29,29 @@
             <groupId>de.skuzzle.cmp.common</groupId>
             <artifactId>http</artifactId>
         </dependency>
+        <dependency>
+            <groupId>de.skuzzle.cmp.common</groupId>
+            <artifactId>spring-boot</artifactId>
+        </dependency>
         
         <!-- Domain -->
         <dependency>
             <groupId>de.skuzzle.cmp.counter</groupId>
             <artifactId>counter-frontend</artifactId>
         </dependency>
-        <dependency>
+        <!-- <dependency>
             <groupId>de.skuzzle.cmp.collaborativeorder</groupId>
             <artifactId>collaborativeorder-frontend</artifactId>
-        </dependency>
+        </dependency> -->
 
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+        </dependency>
 
 		<!-- Spring Boot runtime relevant -->
 		<dependency>
@@ -130,8 +138,7 @@
     </dependencies>
 
 
-    <!-- Spring devtools must not be included when building the docker image. 
-        Must run with -Ddocker=true -->
+    <!-- Spring devtools must not be included when building the docker image. Must run with -Ddocker=true -->
     <profiles>
         <profile>
             <id>dev</id>
@@ -141,6 +148,7 @@
                 </property>
             </activation>
             <dependencies>
+                <!-- dont include dev tools in image -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
@@ -148,6 +156,24 @@
 			<optional>true</optional>
 		</dependency>
 	</dependencies>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <activation>
+                <property>
+                    <name>docker</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-data-redis</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.session</groupId>
+                    <artifactId>spring-session-data-redis</artifactId>
+                </dependency>
+            </dependencies>
         </profile>
     </profiles>
 

@@ -3,6 +3,7 @@ package de.skuzzle.cmp.counter.client;
 import java.util.function.Consumer;
 
 import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.TestExecutionListener;
 
@@ -19,7 +20,6 @@ public class TestTallyClientConfigurer implements TestExecutionListener {
     public void beforeTestMethod(TestContext testContext) throws Exception {
         ClientTestContext.initContext(testContext)
                 .configureAdminReply(defaultConfig())
-                .configurePublic(defaultConfig())
                 .configureMetaInfoResponse(RestTallyMetaInfoResponse.of(5));
     }
 
@@ -28,22 +28,23 @@ public class TestTallyClientConfigurer implements TestExecutionListener {
         ClientTestContext.cleanContext();
     }
 
-    public TestTallyClientConfigurer configurePublic(Consumer<TallySheetResponseBuilder> tallySheet) {
-        ClientTestContext.getContext().configurePublic(tallySheet);
-        return this;
-    }
-
     public TestTallyClientConfigurer configureAdminReply(Consumer<TallySheetResponseBuilder> tallySheet) {
         ClientTestContext.getContext().configureAdminReply(tallySheet);
         return this;
     }
 
-    public BackendClient getClient() {
-        return ClientTestContext.getContext().getTallyClientMock();
+    public TestTallyClientConfigurer configureClientErrorReply(String key, HttpStatus status) {
+        ClientTestContext.getContext().configureClientErrorReply(key, status);
+        return this;
     }
 
-    public String getPublicKey() {
-        return ClientTestContext.getContext().getPublicTallySheet().getPublicKey();
+    public TestTallyClientConfigurer configureServerErrorReply(String key, HttpStatus status) {
+        ClientTestContext.getContext().configureServerErrorReply(key, status);
+        return this;
+    }
+
+    public BackendClient getClient() {
+        return ClientTestContext.getContext().getTallyClientMock();
     }
 
     public String getAdminKey() {

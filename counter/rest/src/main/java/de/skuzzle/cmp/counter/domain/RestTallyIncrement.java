@@ -8,8 +8,6 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
-import de.skuzzle.cmp.counter.domain.TallyIncrement;
-
 public class RestTallyIncrement {
 
     private final String id;

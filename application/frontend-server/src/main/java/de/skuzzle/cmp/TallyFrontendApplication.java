@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.mobile.device.annotation.DeviceResolverConfiguration;
 
+import de.skuzzle.cmp.common.http.RequestIdFilter;
+import de.skuzzle.cmp.common.http.RequestLoggingFilter;
 import de.skuzzle.cmp.common.http.ResponseSizeTrackingFilter;
 
 @SpringBootApplication
@@ -19,8 +21,17 @@ public class TallyFrontendApplication {
     }
 
     @Bean
+    public Filter requestIdFilter() {
+        return new RequestIdFilter();
+    }
+
+    @Bean
     public Filter trackResponseSizes() {
         return new ResponseSizeTrackingFilter();
     }
 
+    @Bean
+    public Filter requestLoggingFilter() {
+        return new RequestLoggingFilter();
+    }
 }

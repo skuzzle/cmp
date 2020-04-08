@@ -8,6 +8,6 @@ public interface ApiClient {
         return new SimpleApiClient(key);
     }
 
-    boolean exceedsLimitOf(RateLimiter rateLimiter);
+    boolean exceedsLimitOf(RateLimiter rateLimiter, RateLimitedOperation operation);
 
 }

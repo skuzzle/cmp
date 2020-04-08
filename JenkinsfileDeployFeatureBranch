@@ -1,0 +1,27 @@
+pipeline {
+  agent any
+  parameters {
+    string(name: 'VERSION', defaultValue: 'latest', description: 'The docker image version to deploy')
+  }
+  environment {
+    DOCKER_REGISTRY = credentials('github_docker_registry')
+  }
+  stages {
+    stage('Login Docker') {
+      steps {
+        sh 'docker login -u ${DOCKER_REGISTRY_USR} -p ${DOCKER_REGISTRY_PSW} docker.pkg.github.com'
+      }
+    }
+    stage('Update Stack') {
+      steps {
+        sh "docker stack deploy --compose-file swarm-stack/feature.yml --prune --with-registry-auth ${params.VERSION}"
+      }
+    }
+    stage('Update Images') {
+      steps {
+        sh "docker service update ${params.VERSION}_cmpbackend --image docker.pkg.github.com/skuzzle/cmp/backend-server:${params.VERSION} --force"
+        sh "docker service update ${params.VERSION}_cmpfrontend --image docker.pkg.github.com/skuzzle/cmp/frontend-server:${params.VERSION} --force"
+      }
+    }
+  }
+}
