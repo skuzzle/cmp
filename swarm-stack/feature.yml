@@ -33,16 +33,11 @@ services:
   cmpfrontend:
     image: docker.pkg.github.com/skuzzle/cmp/frontend-server:${VERSION:?VERSION property not defined or empty}
     secrets:
-    - cmp_google_client_secret
-    - cmp_google_client_id
     - cmp_redis_pw
     environment:
     # backend
     - 'cmp.backend.url=http://cmpbackend:8080'
     - 'cmp.backend.healthUrl=http://cmpbackend:9000'
-    # Spring oauth
-    - 'spring.security.oauth2.client.registration.google.client-id=$${fileContents;/run/secrets/cmp_google_client_id}'
-    - 'spring.security.oauth2.client.registration.google.client-secret=$${fileContents;/run/secrets/cmp_google_client_secret}'
     # redis session management
     - 'server.servlet.session.timeout=3600'
     - 'spring.session.store-type=redis'
@@ -113,10 +108,6 @@ volumes:
   data:
 
 secrets:
-  cmp_google_client_id:
-    external: true
-  cmp_google_client_secret:
-    external: true
   cmp_redis_pw:
     external: true
   
