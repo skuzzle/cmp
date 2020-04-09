@@ -28,9 +28,8 @@
 
         <!-- Runtime / Tools Versions -->
         <java.version>13</java.version>
-        <node.version>v10.15.1</node.version>
-        <yarn.version>v1.13.0</yarn.version>
-        <npm.version>6.3.0</npm.version>
+        <node.version>v12.16.2</node.version>
+        <npm.version>6.14.4</npm.version>
 
         <!-- Dependency Versions -->
         <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
