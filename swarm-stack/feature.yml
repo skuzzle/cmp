@@ -38,6 +38,8 @@ services:
     # backend
     - 'cmp.backend.url=http://cmpbackend:8080'
     - 'cmp.backend.healthUrl=http://cmpbackend:9000'
+    # ui
+    - 'cmp.ui.testSystemWarning=true'
     # redis session management
     - 'server.servlet.session.timeout=3600'
     - 'spring.session.store-type=redis'
