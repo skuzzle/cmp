@@ -19,7 +19,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <!-- passed by commandline on deploy -->
+        <!-- passed by commandline to have the properties replaced within the deploy-settings.xml for deploying artifacts to GitHub package registry. -->
         <username>${deploy.username}</username>
         <password>${deploy.password}</password>
 
@@ -37,7 +37,7 @@
         <spring-mobile-device.version>2.0.0.M3</spring-mobile-device.version>
         <resilience4j.version>1.3.1</resilience4j.version>
         <guava.version>28.2-jre</guava.version>
-        <equalsverifier.version>3.1.11</equalsverifier.version>
+        <equalsverifier.version>3.1.13</equalsverifier.version>
         <logstash-encoder.version>6.3</logstash-encoder.version>
 
         <!-- per default, skip docker build. Will be enabled in sub modules -->
