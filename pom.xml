@@ -197,6 +197,23 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <!-- Users -->
+            <dependency>
+                <groupId>de.skuzzle.cmp.users</groupId>
+                <artifactId>users-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.skuzzle.cmp.users</groupId>
+                <artifactId>users-rest</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.skuzzle.cmp.users</groupId>
+                <artifactId>users-security</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <!-- UI -->
             <dependency>
                 <groupId>de.skuzzle.cmp.ui</groupId>
@@ -245,6 +262,12 @@
                 <groupId>org.springframework.mobile</groupId>
                 <artifactId>spring-mobile-device</artifactId>
                 <version>${spring-mobile-device.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-jwt</artifactId>
+                <version>${spring-security-jwt.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.nimbusds</groupId>
