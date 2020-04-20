@@ -99,6 +99,11 @@ public class RegisterUserService {
     public LoginAttempt changePassword(LoginRequest loginRequest, CharSequence newRawPassword) {
         return registeredUserRepository.findByEmail(loginRequest.email())
                 .map(registeredUser -> registeredUser.tryLogin(loginRequest, passwordEncoder))
+                .or(() -> {
+                    // Mitigate timing attack to find out whether a user might exist
+                    passwordEncoder.encode("randomString");
+                    return Optional.of(LoginAttempt.failed(loginRequest, LoginFailedReason.USER_DOSENT_EXIST));
+                })
                 .map(loginAttempt -> {
                     if (loginAttempt.isSuccessful()) {
                         final LocalDateTime nowUTC = dateTimeProvider.getNowLocal();
@@ -109,8 +114,7 @@ public class RegisterUserService {
                     }
                     return loginAttempt;
                 })
-                // TODO: throw different exception
-                .orElseThrow();
+                .orElseThrow(IllegalStateException::new);
     }
 
     public LoginAttempt login(LoginRequest loginRequest) {

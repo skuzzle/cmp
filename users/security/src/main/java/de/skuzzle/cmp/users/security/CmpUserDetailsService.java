@@ -13,7 +13,7 @@ import de.skuzzle.cmp.common.time.UTCDateTimeProvider;
 import de.skuzzle.cmp.users.registration.RegisterUserService;
 import de.skuzzle.cmp.users.registration.RegisteredUser;
 
-public class CmpUserDetailsService implements UserDetailsService {
+class CmpUserDetailsService implements UserDetailsService {
 
     private final RegisterUserService registeredUserService;
 
@@ -27,10 +27,10 @@ public class CmpUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(username));
         final LocalDateTime now = UTCDateTimeProvider.getInstance().getNowLocal();
         return User.builder()
-                .accountLocked(!user.block().isBlocked(now))
+                .accountLocked(user.block().isBlocked(now))
                 .authorities(user.authorities().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet()))
                 .disabled(!user.registrationConfirmation().isConfirmed())
-                .username(user.name())
+                .username(username)
                 .password(user.password().hashedPassword())
                 .build();
     }
