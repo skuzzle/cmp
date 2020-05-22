@@ -25,6 +25,11 @@ final class TallyUserFactory {
         final Object principal = authentication.getPrincipal();
         if (principal instanceof Jwt) {
             final Jwt jwt = (Jwt) principal;
+
+            if ("cmp".equals(jwt.getClaimAsString("client_id"))) {
+                return TallyUser.create("cmp", jwt.getClaimAsString("user_name"), false);
+            }
+
             return TallyUser.create("google", jwt.getClaimAsString("email"), false);
         } else if (authentication instanceof AnonymousAuthenticationToken) {
             return TallyUser.unknownWithId(UUID.randomUUID().toString());

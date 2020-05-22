@@ -24,8 +24,8 @@ class ClientId {
         this.request = request;
     }
 
-    public Optional<String> getOidToken() {
-        return tallyUser.getOidToken();
+    public Optional<String> getAccessToken() {
+        return tallyUser.getAccessToken();
     }
 
     public String getForwardedFor() {

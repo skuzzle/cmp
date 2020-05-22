@@ -6,8 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import de.skuzzle.cmp.common.time.UTCDateTimeProvider;
-
 @Configuration
 public class RegistrationSpringConfiguration {
 
@@ -17,14 +15,9 @@ public class RegistrationSpringConfiguration {
     }
 
     @Bean
-    public UTCDateTimeProvider dateTimeProvider() {
-        return UTCDateTimeProvider.getInstance();
-    }
-
-    @Bean
     public RegisterUserService registerUserService(RegisteredUserRepository repository,
             ApplicationEventPublisher eventPublisher) {
-        return new RegisterUserService(passwordEncoder(), dateTimeProvider(), repository, eventPublisher);
+        return new RegisterUserService(passwordEncoder(), repository, eventPublisher);
     }
 
 }

@@ -35,7 +35,7 @@ class ClientIdInterceptor implements ClientHttpRequestInterceptor {
         log.trace("Adding tracing information to backend request. X-Request-ID: {}, X-Real-Ip: {}, X-Forwarded-For: {}",
                 clientId.getRequestId(), clientId.getRealIp(), clientId.getForwardedFor());
 
-        clientId.getOidToken().ifPresent(token -> {
+        clientId.getAccessToken().ifPresent(token -> {
             request.getHeaders().add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
         });
 

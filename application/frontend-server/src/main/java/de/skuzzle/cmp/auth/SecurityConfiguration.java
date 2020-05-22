@@ -9,7 +9,19 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -31,8 +43,11 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .anyRequest().permitAll()
                 .and()
-                .oauth2Login().successHandler(successHandler)
-                .and()
+                .oauth2Login(oauth2Login -> oauth2Login
+                        .successHandler(successHandler)
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(oauth2UserService())))
+                .oauth2Client(oauth2Client -> oauth2Client.authorizationCodeGrant())
                 .csrf().disable()
                 .logout()
                 .logoutSuccessUrl("/")
@@ -40,8 +55,48 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    public OAuth2AuthorizedClientManager authorizedClientManager(
+            ClientRegistrationRepository clientRegistrationRepository,
+            OAuth2AuthorizedClientRepository authorizedClientRepository) {
+
+        final DefaultOAuth2AuthorizedClientManager authorizedClientManager = new DefaultOAuth2AuthorizedClientManager(
+                clientRegistrationRepository, authorizedClientRepository);
+
+        authorizedClientManager.setAuthorizedClientProvider(OAuth2AuthorizedClientProviderBuilder.builder()
+                .authorizationCode()
+                .refreshToken()
+                .build());
+        return authorizedClientManager;
+    }
+
+    @Bean
+    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService() {
+        final DefaultOAuth2UserService userService = new DefaultOAuth2UserService();
+        userService.setRequestEntityConverter(new CustomParameterOAuth2UserRequestEntityConverter("token"));
+        return userService;
+    }
+
+    @Bean
     @RequestScope
-    public TallyUser currentUser() {
+    public TallyUser currentUser(OAuth2AuthorizedClientService authorizedClientService,
+            OAuth2AuthorizedClientManager clientManager) {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication instanceof OAuth2AuthenticationToken) {
+            final OAuth2AuthenticationToken oauth = (OAuth2AuthenticationToken) authentication;
+            final OAuth2User principal = oauth.getPrincipal();
+            final OAuth2AuthorizedClient authorizedClient = authorizedClientService.loadAuthorizedClient(
+                    oauth.getAuthorizedClientRegistrationId(),
+                    oauth.getName());
+
+            if (authorizedClient == null) {
+                return AnonymousTallyUser.getInstance();
+            }
+
+            final String token = authorizedClient.getAccessToken().getTokenValue();
+            return new SimpleAuthenticatedTallyUser(principal.getName(), token);
+        }
+
         return Optional.of(SecurityContextHolder.getContext())
                 .map(SecurityContext::getAuthentication)
                 .map(Authentication::getPrincipal)

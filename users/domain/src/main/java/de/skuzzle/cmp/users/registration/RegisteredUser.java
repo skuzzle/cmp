@@ -71,6 +71,10 @@ public class RegisteredUser {
         return this.registrationTimeUTC;
     }
 
+    public String email() {
+        return this.email;
+    }
+
     public String name() {
         return this.name;
     }
