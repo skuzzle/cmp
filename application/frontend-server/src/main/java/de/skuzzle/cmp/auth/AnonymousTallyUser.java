@@ -15,7 +15,7 @@ class AnonymousTallyUser implements TallyUser {
     }
 
     @Override
-    public Optional<String> getOidToken() {
+    public Optional<String> getAccessToken() {
         return Optional.empty();
     }
 

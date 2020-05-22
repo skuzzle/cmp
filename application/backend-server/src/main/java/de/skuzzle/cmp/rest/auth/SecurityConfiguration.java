@@ -17,7 +17,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .anyRequest().permitAll().and()
                 .csrf().disable()
-                .oauth2ResourceServer().jwt().jwkSetUri("https://www.googleapis.com/oauth2/v3/certs").and()
+                .oauth2ResourceServer().jwt().jwkSetUri("http://localhost:8082/.well-known/jwks.json").and()
                 .and()
                 .anonymous();
     }

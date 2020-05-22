@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public interface TallyUser {
 
-    Optional<String> getOidToken();
+    Optional<String> getAccessToken();
 
     String getName();
 

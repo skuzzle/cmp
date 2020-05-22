@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import com.google.common.base.Preconditions;
 
-import de.skuzzle.cmp.common.time.UTCDateTimeProvider;
+import de.skuzzle.cmp.common.time.ApplicationClock;
 
 public final class TallyIncrement implements Comparable<TallyIncrement> {
 
@@ -38,7 +38,7 @@ public final class TallyIncrement implements Comparable<TallyIncrement> {
                 id,
                 Set.copyOf(tags),
                 description,
-                UTCDateTimeProvider.getInstance().getNowLocal(),
+                ApplicationClock.now(),
                 incrementDateUTC);
     }
 
@@ -49,7 +49,7 @@ public final class TallyIncrement implements Comparable<TallyIncrement> {
                 UUID.randomUUID().toString(),
                 Set.copyOf(tags),
                 description,
-                UTCDateTimeProvider.getInstance().getNowLocal(),
+                ApplicationClock.now(),
                 incrementDateUTC);
     }
 

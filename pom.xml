@@ -90,7 +90,7 @@
 
         <!-- Users -->
         <module>users/domain</module>
-        <module>users/security</module>
+        <module>users/authorization-server</module>
         <module>users/rest</module>
 
         <!-- Common -->

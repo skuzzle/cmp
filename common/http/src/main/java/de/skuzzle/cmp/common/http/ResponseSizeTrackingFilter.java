@@ -41,7 +41,8 @@ public class ResponseSizeTrackingFilter extends OncePerRequestFilter {
             if (response instanceof ResponseFacade) {
                 final ResponseFacade rspo = (ResponseFacade) response;
                 final long contentWritten = rspo.getContentWritten();
-                LOGGER.trace("{} bytes sent for {} {}", contentWritten, request.getMethod(), request.getRequestURL());
+                LOGGER.trace("{} bytes sent as response to {} {}", contentWritten, request.getMethod(),
+                        request.getRequestURL());
                 if (contentWritten > responseSizeWarningThreshold) {
                     LOGGER.warn("Response for request to {} {} exceed threshold of {} bytes. Response size: {}",
                             request.getMethod(), request.getRequestURI(), responseSizeWarningThreshold, contentWritten);

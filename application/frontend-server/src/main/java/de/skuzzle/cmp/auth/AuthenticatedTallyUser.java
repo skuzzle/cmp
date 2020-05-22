@@ -21,7 +21,7 @@ class AuthenticatedTallyUser implements TallyUser {
     }
 
     @Override
-    public Optional<String> getOidToken() {
+    public Optional<String> getAccessToken() {
         return Optional.of(openIdUser)
                 .map(OidcUser::getIdToken)
                 .map(OidcIdToken::getTokenValue)

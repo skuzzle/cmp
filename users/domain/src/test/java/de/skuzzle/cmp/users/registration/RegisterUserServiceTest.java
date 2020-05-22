@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.mail.javamail.JavaMailSender;
 
-import de.skuzzle.cmp.common.time.UTCDateTimeProvider;
+import de.skuzzle.cmp.common.time.ApplicationClock;
 import de.skuzzle.cmp.users.mailnotification.SystemOutMailSender;
 
 @SpringBootTest
@@ -32,7 +32,7 @@ public class RegisterUserServiceTest {
         }
     }
 
-    private final LocalDateTime now = UTCDateTimeProvider.getInstance().getNowLocal();
+    private final LocalDateTime now = ApplicationClock.now();
 
     @Autowired
     private RegisteredUserRepository userRepository;
@@ -101,7 +101,7 @@ public class RegisterUserServiceTest {
             void testTryLoginWithWrongEmail() throws Exception {
                 final LoginAttempt attempt = registerUserService.login(loginRequestWithWrongEmail);
                 assertThat(attempt.isSuccessful()).isFalse();
-                assertThat(attempt.reason()).isEqualTo(LoginFailedReason.USER_DOSENT_EXIST);
+                assertThat(attempt.reason()).isEqualTo(LoginFailedReason.USER_DOESNT_EXIST);
             }
 
             @Test

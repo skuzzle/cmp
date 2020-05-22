@@ -9,20 +9,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.google.common.base.Preconditions;
 
-import de.skuzzle.cmp.common.time.UTCDateTimeProvider;
+import de.skuzzle.cmp.common.time.ApplicationClock;
 
 public class RegisterUserService {
 
+    private static final String FAKE_PASSWORD_IF_USER_DOESNT_EXIST = "randomStringThatIsNotTooShort";
+
     private final PasswordEncoder passwordEncoder;
-    private final UTCDateTimeProvider dateTimeProvider;
     private final RegisteredUserRepository registeredUserRepository;
     private final ApplicationEventPublisher eventPublisher;
 
-    RegisterUserService(PasswordEncoder passwordEncoder, UTCDateTimeProvider dateTimeProvider,
+    RegisterUserService(PasswordEncoder passwordEncoder,
             RegisteredUserRepository registeredUserRepository,
             ApplicationEventPublisher eventPublisher) {
         this.passwordEncoder = passwordEncoder;
-        this.dateTimeProvider = dateTimeProvider;
         this.registeredUserRepository = registeredUserRepository;
         this.eventPublisher = eventPublisher;
     }
@@ -42,16 +42,16 @@ public class RegisterUserService {
             // again?
             throw new RegisterFailedException(email);
         }
-        final LocalDateTime nowUTC = dateTimeProvider.getNowLocal();
+        final LocalDateTime nowUTC = ApplicationClock.now();
         final String cryptedPassword = passwordEncoder.encode(rawPassword);
 
         final Password password = Password.create(cryptedPassword, nowUTC);
         final ConfirmationToken confirmationToken = ConfirmationToken.randomValidFor(Duration.ofDays(1), nowUTC);
 
-        eventPublisher.publishEvent(UserRegisteredEvent.create(name, confirmationToken.token(), email));
-
         final RegisteredUser newUser = RegisteredUser.newUser(name, email, password, confirmationToken, nowUTC);
         registeredUserRepository.save(newUser);
+
+        eventPublisher.publishEvent(UserRegisteredEvent.create(name, confirmationToken.token(), email));
         return confirmationToken;
     }
 
@@ -62,7 +62,7 @@ public class RegisterUserService {
                 .findByRegistrationConfirmation_confirmationToken_token(confirmationToken)
                 .orElseThrow(() -> new ConfirmationFailedException("confirmation token invalid/expired"));
 
-        final LocalDateTime nowUTC = dateTimeProvider.getNowLocal();
+        final LocalDateTime nowUTC = ApplicationClock.now();
         return registeredUserRepository.save(user.confirmRegistration(confirmationToken, nowUTC));
     }
 
@@ -71,13 +71,12 @@ public class RegisterUserService {
 
         // TODO: throw different exception
         final RegisteredUser registeredUser = registeredUserRepository.findByEmail(email).orElseThrow();
-        final LocalDateTime nowUTC = dateTimeProvider.getNowLocal();
+        final LocalDateTime nowUTC = ApplicationClock.now();
         final ConfirmationToken confirmationToken = ConfirmationToken.randomValidFor(Duration.ofHours(2), nowUTC);
 
+        registeredUserRepository.save(registeredUser.requestResetPassword(confirmationToken));
         eventPublisher.publishEvent(ResetPasswordRequestEvent.create(
                 registeredUser.name(), confirmationToken.token(), email));
-
-        registeredUserRepository.save(registeredUser.requestResetPassword(confirmationToken));
         return confirmationToken;
     }
 
@@ -89,7 +88,7 @@ public class RegisterUserService {
                 .findByResetPasswordConfirmation_confirmationToken_token(confirmationToken)
                 .orElseThrow(() -> new ConfirmationFailedException("confirmation token invalid/expired"));
 
-        final LocalDateTime nowUTC = dateTimeProvider.getNowLocal();
+        final LocalDateTime nowUTC = ApplicationClock.now();
         final String newCryptedPassword = passwordEncoder.encode(newRawPassword);
         final Password newPassword = Password.create(newCryptedPassword, nowUTC);
         return registeredUserRepository
@@ -99,14 +98,9 @@ public class RegisterUserService {
     public LoginAttempt changePassword(LoginRequest loginRequest, CharSequence newRawPassword) {
         return registeredUserRepository.findByEmail(loginRequest.email())
                 .map(registeredUser -> registeredUser.tryLogin(loginRequest, passwordEncoder))
-                .or(() -> {
-                    // Mitigate timing attack to find out whether a user might exist
-                    passwordEncoder.encode("randomString");
-                    return Optional.of(LoginAttempt.failed(loginRequest, LoginFailedReason.USER_DOSENT_EXIST));
-                })
                 .map(loginAttempt -> {
                     if (loginAttempt.isSuccessful()) {
-                        final LocalDateTime nowUTC = dateTimeProvider.getNowLocal();
+                        final LocalDateTime nowUTC = ApplicationClock.now();
                         final String newCryptedPassword = passwordEncoder.encode(newRawPassword);
                         final Password newPassword = Password.create(newCryptedPassword, nowUTC);
                         final RegisteredUser user = loginAttempt.registeredUser();
@@ -114,20 +108,26 @@ public class RegisterUserService {
                     }
                     return loginAttempt;
                 })
-                .orElseThrow(IllegalStateException::new);
+                .orElseGet(() -> {
+                    passwordEncoder.encode(FAKE_PASSWORD_IF_USER_DOESNT_EXIST);
+                    return LoginAttempt.failed(loginRequest, LoginFailedReason.USER_DOESNT_EXIST);
+                });
     }
 
     public LoginAttempt login(LoginRequest loginRequest) {
         Preconditions.checkArgument(loginRequest != null, "loginRequest must not be null");
         return registeredUserRepository.findByEmail(loginRequest.email())
                 .map(registeredUser -> registeredUser.tryLogin(loginRequest, passwordEncoder))
-                .orElseGet(() -> LoginAttempt.failed(loginRequest, LoginFailedReason.USER_DOSENT_EXIST));
+                .orElseGet(() -> {
+                    passwordEncoder.encode(FAKE_PASSWORD_IF_USER_DOESNT_EXIST);
+                    return LoginAttempt.failed(loginRequest, LoginFailedReason.USER_DOESNT_EXIST);
+                });
     }
 
     public void blockUser(String email, String reason, Duration duration) {
         final RegisteredUser registeredUser = registeredUserRepository.findByEmail(email)
                 .orElseThrow();
-        final LocalDateTime nowUTC = dateTimeProvider.getNowLocal();
+        final LocalDateTime nowUTC = ApplicationClock.now();
         final LocalDateTime blockedUntilUTC = nowUTC.plus(duration);
         registeredUser.blockUntil(blockedUntilUTC, nowUTC, reason);
         registeredUserRepository.save(registeredUser);
