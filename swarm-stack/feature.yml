@@ -57,7 +57,7 @@ services:
     # general api rate limit
     - 'cmp.api.ratelimit.rps=1000'
     # oauth
-    - "spring.security.oauth2.resourceserver.jwt.jwk-set-uri=https://${VERSION}acc.countmy.pizza/.well-known/jwks.json"
+    - 'spring.security.oauth2.resourceserver.jwt.jwk-set-uri=https://${VERSION}acc.countmy.pizza/.well-known/jwks.json'
     # Logging
 #    - 'logging.level.de.skuzzle.cmp.common.http=DEBUG'
     healthcheck:
@@ -88,12 +88,12 @@ services:
     - cmp_redis_pw
     environment:
     # oauth
-    - "spring.security.oauth2.client.registration.cmp.client-secret=abc"
-    - "spring.security.oauth2.client.registration.cmp.redirectUri=https://${VERSION}.countmy.pizza/login/oauth2/code/cmp"
-    - "spring.security.oauth2.client.provider.cmp.tokenUri=https://${VERSION}acc.countmy.pizza/oauth/token"
-    - "spring.security.oauth2.client.provider.cmp.authorizationUri=hhttps://${VERSION}acc.countmy.pizza/oauth/authorize"
-    - "spring.security.oauth2.client.provider.cmp.userInfoUri=https://${VERSION}acc.countmy.pizza/oauth/check_token"
-    - "spring.security.oauth2.client.provider.cmp.jwkSetUri=https://${VERSION}acc.countmy.pizza/.well-known/jwks.json"
+    - 'spring.security.oauth2.client.registration.cmp.client-secret=abc"
+    - 'spring.security.oauth2.client.registration.cmp.redirectUri=https://${VERSION}.countmy.pizza/login/oauth2/code/cmp'
+    - 'spring.security.oauth2.client.provider.cmp.tokenUri=https://${VERSION}acc.countmy.pizza/oauth/token'
+    - 'spring.security.oauth2.client.provider.cmp.authorizationUri=hhttps://${VERSION}acc.countmy.pizza/oauth/authorize'
+    - 'spring.security.oauth2.client.provider.cmp.userInfoUri=https://${VERSION}acc.countmy.pizza/oauth/check_token'
+    - 'spring.security.oauth2.client.provider.cmp.jwkSetUri=https://${VERSION}acc.countmy.pizza/.well-known/jwks.json'
     # backend
     - 'cmp.backend.url=http://cmpbackend:8080'
     - 'cmp.backend.healthUrl=http://cmpbackend:9000'
