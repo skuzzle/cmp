@@ -58,6 +58,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
                 // the customized userApprovalHandler. A first test revealed that
                 // autoApprove=true doesn't seem to prevent the Approval page to show up
                 // .autoApprove(true)
+
                 .secret(passwordEncoder.encode("abc"))
                 .authorizedGrantTypes("authorization_code", "refresh_token")
                 .scopes("read:user")
