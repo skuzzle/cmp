@@ -1,11 +1,45 @@
 version: '3.7'
 services:
+  cmpauthorization:
+    image: docker.pkg.github.com/skuzzle/cmp/authorization-server:${VERSION:?VERSION property not defined or empty}
+    healthcheck:
+      test: ["CMD", "curl" , "-f", "http://localhost:9000/actuator/health"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+    logging:
+      options:
+        loki-pipeline-stage-file: '/loki-pipeline.yml'
+    networks:
+    - cmp
+    - traefik_proxy
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.${VERSION}acc.tls=true"
+        - "traefik.http.routers.${VERSION}acc.tls.certresolver=le"
+        - "traefik.http.routers.${VERSION}acc.rule=Host(`${VERSION:?VERSION not set or empty}accounts.countmy.pizza`)"
+        - "traefik.http.routers.${VERSION}acc.entrypoints=https"
+        - "traefik.http.services.${VERSION}acc.loadbalancer.server.port=8080"
+      replicas: 1
+      update_config:
+        parallelism: 1
+        order: start-first
+        failure_action: rollback
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 128M
+          
   cmpbackend:
     image: docker.pkg.github.com/skuzzle/cmp/backend-server:${VERSION:?VERSION property not defined or empty}
     environment:
     - 'spring.data.mongodb.database=cmp'
     - 'spring.data.mongodb.host=cmpmongo'
     - 'cmp.api.ratelimit.rps=1000'
+    # oauth
+    - 'spring.security.oauth2.resourceserver.jwt.jwk-set-uri=https://${VERSION}acc.countmy.pizza/.well-known/jwks.json'
     # Logging
 #    - 'logging.level.de.skuzzle.cmp.common.http=DEBUG'
     healthcheck:
@@ -35,6 +69,13 @@ services:
     secrets:
     - cmp_redis_pw
     environment:
+    # oauth
+    - 'spring.security.oauth2.client.registration.cmp.client-secret=abc'
+    - 'spring.security.oauth2.client.registration.cmp.redirectUri=https://${VERSION}.countmy.pizza/login/oauth2/code/cmp'
+    - 'spring.security.oauth2.client.provider.cmp.tokenUri=https://${VERSION}acc.countmy.pizza/oauth/token'
+    - 'spring.security.oauth2.client.provider.cmp.authorizationUri=hhttps://${VERSION}acc.countmy.pizza/oauth/authorize'
+    - 'spring.security.oauth2.client.provider.cmp.userInfoUri=https://${VERSION}acc.countmy.pizza/oauth/check_token'
+    - 'spring.security.oauth2.client.provider.cmp.jwkSetUri=https://${VERSION}acc.countmy.pizza/.well-known/jwks.json'
     # backend
     - 'cmp.backend.url=http://cmpbackend:8080'
     - 'cmp.backend.healthUrl=http://cmpbackend:9000'
