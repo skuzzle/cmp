@@ -16,6 +16,10 @@
     <name>authorization-server</name>
     <packaging>jar</packaging>
 
+    <properties>
+        <jib.skip>false</jib.skip>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>de.skuzzle.cmp.users</groupId>
