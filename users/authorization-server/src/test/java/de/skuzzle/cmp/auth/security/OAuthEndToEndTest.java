@@ -155,10 +155,12 @@ public class OAuthEndToEndTest {
                     @Test
                     void testRetrieveTokenInfo() throws Exception {
                         final OAuth2AccessToken token = accessTokenResponse.getBody();
-                        flow
+                        final String tokenInfo = flow
                                 .fromOAuthClient()
                                 .obtainTokenInfo(token, "cmp", "abc")
-                                .expectStatus(HttpStatus.OK);
+                                .expectStatus(HttpStatus.OK)
+                                .getBody();
+                        System.out.println(tokenInfo);
                     }
 
                     @Test
