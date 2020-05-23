@@ -64,18 +64,6 @@ public class OAuthEndToEndTest {
                 .doesNotThrowAnyException();
     }
 
-    private OAuth2AccessToken quickLogin(AuthorizationRequest request,
-            String username, String password, String clientSecret) {
-        final AuthorizationCodeGrantFlow flow = new AuthorizationCodeGrantFlow(restTemplate, "authorization");
-        final AuthorizationServerResponse<?> initAuthorization = flow.initAuthorization(request);
-        final AuthorizationServerResponse<?> login = flow.login(initAuthorization.getSessionId(), username, password);
-        final AuthorizationServerResponse<?> finishAuthorization = flow.finishAuthorization(login.getSessionId(),
-                request);
-        return flow.obtainAccessTokenFromCodeGrant(finishAuthorization.getAuthorizationCode(), request, clientSecret)
-                .expectStatus(HttpStatus.OK)
-                .getBody();
-    }
-
     @Nested
     class InitAuthorization {
         final AuthorizationRequest authorizationRequest = new AuthorizationRequest()
