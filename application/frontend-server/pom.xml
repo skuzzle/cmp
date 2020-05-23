@@ -8,6 +8,7 @@
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
+    <groupId>de.skuzzle.cmp.application</groupId>
     <artifactId>frontend-server</artifactId>
     <name>frontend-server</name>
 

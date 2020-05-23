@@ -11,10 +11,9 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <groupId>de.skuzzle.cmp.users</groupId>
+    <groupId>de.skuzzle.cmp.application</groupId>
     <artifactId>authorization-server</artifactId>
     <name>authorization-server</name>
-    <packaging>jar</packaging>
 
     <properties>
         <jib.skip>false</jib.skip>
