@@ -44,7 +44,8 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()
                 .and()
                 .oauth2Login(oauth2Login -> oauth2Login
-                        .successHandler(successHandler)
+                        // TODO: the referer stuff is problematic with the oauth flow
+                        // .successHandler(successHandler)
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(oauth2UserService())))
                 .oauth2Client(oauth2Client -> oauth2Client.authorizationCodeGrant())
@@ -94,7 +95,8 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             }
 
             final String token = authorizedClient.getAccessToken().getTokenValue();
-            return new SimpleAuthenticatedTallyUser(principal.getName(), token);
+            final String userName = principal.getAttribute("sub");
+            return new SimpleAuthenticatedTallyUser(userName, token);
         }
 
         return Optional.of(SecurityContextHolder.getContext())

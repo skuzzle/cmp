@@ -100,7 +100,7 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
-        final JwtAccessTokenConverter converter = new CustomJwtAccee();
+        final JwtAccessTokenConverter converter = new CmpJwtAccessTokenEnhancer();
         converter.setKeyPair(keypair());
         return converter;
     }
