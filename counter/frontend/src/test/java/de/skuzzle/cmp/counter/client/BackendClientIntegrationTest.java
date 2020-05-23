@@ -27,7 +27,6 @@ import de.skuzzle.cmp.counter.TestUserConfigurer;
 @AutoConfigureStubRunner(
         ids = "de.skuzzle.cmp.counter:counter-rest:+:stubs:6565",
         stubsMode = StubRunnerProperties.StubsMode.LOCAL)
-
 public class BackendClientIntegrationTest {
 
     @Autowired
