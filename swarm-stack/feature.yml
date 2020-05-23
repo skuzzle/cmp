@@ -69,7 +69,6 @@ services:
         loki-pipeline-stage-file: '/loki-pipeline.yml'
     networks:
     - cmp
-    - traefik_proxy
     deploy:
       labels:
         - "traefik.enable=true"
