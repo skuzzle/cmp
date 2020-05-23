@@ -14,6 +14,13 @@ services:
     - cmp
     - traefik_proxy
     deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.${VERSION}acc.tls=true"
+        - "traefik.http.routers.${VERSION}acc.tls.certresolver=le"
+        - "traefik.http.routers.${VERSION}acc.rule=Host(`${VERSION:?VERSION not set or empty}accounts.countmy.pizza`)"
+        - "traefik.http.routers.${VERSION}acc.entrypoints=https"
+        - "traefik.http.services.${VERSION}acc.loadbalancer.server.port=8080"
       replicas: 1
       update_config:
         parallelism: 1
@@ -44,13 +51,6 @@ services:
     networks:
     - cmp
     deploy:
-      labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.${VERSION}acc.tls=true"
-        - "traefik.http.routers.${VERSION}acc.tls.certresolver=le"
-        - "traefik.http.routers.${VERSION}acc.rule=Host(`${VERSION:?VERSION not set or empty}accounts.countmy.pizza`)"
-        - "traefik.http.routers.${VERSION}acc.entrypoints=https"
-        - "traefik.http.services.${VERSION}acc.loadbalancer.server.port=8080"
       replicas: 1
       update_config:
         parallelism: 1
