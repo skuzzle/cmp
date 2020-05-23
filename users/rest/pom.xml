@@ -91,20 +91,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-contract-maven-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <packageWithBaseClasses>de.skuzzle.cmp.counter.domain</packageWithBaseClasses>
-                    <convertToYaml>true</convertToYaml>
-                    <testFramework>JUNIT5</testFramework>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>
