@@ -30,6 +30,7 @@ services:
     - cmp
     - traefik_proxy
     deploy:
+      endpoint_mode: dnsrr
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.${VERSION}acc.tls=true"
