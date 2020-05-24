@@ -15,6 +15,9 @@ services:
     - 'spring.session.redis.namespace=spring:session:auth'
     - 'spring.redis.host=cmpredis'
     - 'spring.redis.password=$${fileContents;/run/secrets/cmp_redis_pw}'
+    # logging
+    - 'logging.level.org.springframework.security=DEBUG'
+    - 'logging.level.de.skuzzle.cmp.common.http=TRACE'
     healthcheck:
       test: ["CMD", "curl" , "-f", "http://localhost:9000/actuator/health"]
       interval: 20s
@@ -103,6 +106,9 @@ services:
     - 'spring.session.redis.namespace=spring:session:frontend'
     - 'spring.redis.host=cmpredis'
     - 'spring.redis.password=$${fileContents;/run/secrets/cmp_redis_pw}'
+    # logging
+    - 'logging.level.org.springframework.security=DEBUG'
+    - 'logging.level.de.skuzzle.cmp.common.http=TRACE'
     deploy:
       labels:
         - "traefik.enable=true"
