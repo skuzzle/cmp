@@ -85,7 +85,6 @@ services:
 
   cmpfrontend:
     image: docker.pkg.github.com/skuzzle/cmp/frontend-server:${VERSION:?VERSION property not defined or empty}
-    endpoint_mode: dnsrr
     secrets:
     - cmp_redis_pw
     environment:
@@ -112,6 +111,7 @@ services:
     - 'logging.level.org.springframework.security=DEBUG'
     - 'logging.level.de.skuzzle.cmp.common.http=TRACE'
     deploy:
+      endpoint_mode: dnsrr
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.${VERSION}.tls=true"
