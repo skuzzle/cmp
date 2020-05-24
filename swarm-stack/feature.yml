@@ -30,7 +30,6 @@ services:
     - cmp
     - traefik_proxy
     deploy:
-      endpoint_mode: dnsrr
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.${VERSION}acc.tls=true"
@@ -111,6 +110,7 @@ services:
     - 'logging.level.org.springframework.security=DEBUG'
     - 'logging.level.de.skuzzle.cmp.common.http=TRACE'
     deploy:
+      endpoint_mode: dnsrr
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.${VERSION}.tls=true"
