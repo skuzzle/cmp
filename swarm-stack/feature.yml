@@ -2,6 +2,22 @@ version: '3.7'
 services:
   cmpauthorization:
     image: docker.pkg.github.com/skuzzle/cmp/authorization-server:${VERSION:?VERSION property not defined or empty}
+    secrets:
+    - cmp_redis_pw
+    environment:
+    # database
+    - 'spring.data.mongodb.database=cmp'
+    - 'spring.data.mongodb.host=cmpmongo'
+    # redis session management
+    - 'server.servlet.session.timeout=3600'
+    - 'spring.session.store-type=redis'
+    - 'spring.session.redis.flush-mode=on-save'
+    - 'spring.session.redis.namespace=spring:session:auth'
+    - 'spring.redis.host=cmpredis'
+    - 'spring.redis.password=$${fileContents;/run/secrets/cmp_redis_pw}'
+    # logging
+    - 'logging.level.org.springframework.security=DEBUG'
+    - 'logging.level.de.skuzzle.cmp.common.http=TRACE'
     healthcheck:
       test: ["CMD", "curl" , "-f", "http://localhost:9000/actuator/health"]
       interval: 20s
@@ -14,11 +30,12 @@ services:
     - cmp
     - traefik_proxy
     deploy:
+      endpoint_mode: dnsrr
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.${VERSION}acc.tls=true"
         - "traefik.http.routers.${VERSION}acc.tls.certresolver=le"
-        - "traefik.http.routers.${VERSION}acc.rule=Host(`${VERSION:?VERSION not set or empty}accounts.countmy.pizza`)"
+        - "traefik.http.routers.${VERSION}acc.rule=Host(`${VERSION:?VERSION not set or empty}acc.countmy.pizza`)"
         - "traefik.http.routers.${VERSION}acc.entrypoints=https"
         - "traefik.http.services.${VERSION}acc.loadbalancer.server.port=8080"
       replicas: 1
@@ -35,8 +52,10 @@ services:
   cmpbackend:
     image: docker.pkg.github.com/skuzzle/cmp/backend-server:${VERSION:?VERSION property not defined or empty}
     environment:
+    # data base
     - 'spring.data.mongodb.database=cmp'
     - 'spring.data.mongodb.host=cmpmongo'
+    # general api rate limit
     - 'cmp.api.ratelimit.rps=1000'
     # oauth
     - 'spring.security.oauth2.resourceserver.jwt.jwk-set-uri=https://${VERSION}acc.countmy.pizza/.well-known/jwks.json'
@@ -73,7 +92,7 @@ services:
     - 'spring.security.oauth2.client.registration.cmp.client-secret=abc'
     - 'spring.security.oauth2.client.registration.cmp.redirectUri=https://${VERSION}.countmy.pizza/login/oauth2/code/cmp'
     - 'spring.security.oauth2.client.provider.cmp.tokenUri=https://${VERSION}acc.countmy.pizza/oauth/token'
-    - 'spring.security.oauth2.client.provider.cmp.authorizationUri=hhttps://${VERSION}acc.countmy.pizza/oauth/authorize'
+    - 'spring.security.oauth2.client.provider.cmp.authorizationUri=https://${VERSION}acc.countmy.pizza/oauth/authorize'
     - 'spring.security.oauth2.client.provider.cmp.userInfoUri=https://${VERSION}acc.countmy.pizza/oauth/check_token'
     - 'spring.security.oauth2.client.provider.cmp.jwkSetUri=https://${VERSION}acc.countmy.pizza/.well-known/jwks.json'
     # backend
@@ -85,10 +104,14 @@ services:
     - 'server.servlet.session.timeout=3600'
     - 'spring.session.store-type=redis'
     - 'spring.session.redis.flush-mode=on-save'
-    - 'spring.session.redis.namespace=spring:session'
+    - 'spring.session.redis.namespace=spring:session:frontend'
     - 'spring.redis.host=cmpredis'
     - 'spring.redis.password=$${fileContents;/run/secrets/cmp_redis_pw}'
+    # logging
+    - 'logging.level.org.springframework.security=DEBUG'
+    - 'logging.level.de.skuzzle.cmp.common.http=TRACE'
     deploy:
+      endpoint_mode: dnsrr
       labels:
         - "traefik.enable=true"
         - "traefik.http.routers.${VERSION}.tls=true"
