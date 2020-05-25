@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.7'
 services:
   cmpauthorization:
     image: docker.pkg.github.com/skuzzle/cmp/authorization-server:${VERSION:?VERSION property not defined or empty}
