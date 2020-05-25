@@ -89,7 +89,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             }
 
             final String token = authorizedClient.getAccessToken().getTokenValue();
-            final String userName = principal.getAttribute("sub");
+            final String userName = principal.getAttribute("full_name");
             return new SimpleAuthenticatedTallyUser(userName, token);
         }
 

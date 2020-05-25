@@ -11,7 +11,9 @@ class CmpJwtAccessTokenEnhancer extends AdditionalClaimsJwtAccessTokenConverter<
 
     @Override
     protected Map<String, Object> getAdditionalClaims(CmpUserDetails userDetails) {
-        return Map.of("sub", userDetails.getFullName());
+        return Map.of(
+                "sub", userDetails.getUsername(),
+                "full_name", userDetails.getFullName());
     }
 
 }
