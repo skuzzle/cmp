@@ -27,7 +27,7 @@ final class TallyUserFactory {
             final Jwt jwt = (Jwt) principal;
 
             if ("cmp".equals(jwt.getClaimAsString("client_id"))) {
-                return TallyUser.create("cmp", jwt.getClaimAsString("user_name"), false);
+                return TallyUser.create("cmp", jwt.getSubject(), false);
             }
 
             return TallyUser.create("google", jwt.getClaimAsString("email"), false);
