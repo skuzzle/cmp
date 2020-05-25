@@ -1,5 +1,11 @@
 version: '3.7'
 services:
+  dnstest:
+    image: tutum/dnsutils
+    networks:
+    - cmp
+    - traefik_proxy
+    
   cmpauthorization:
     image: docker.pkg.github.com/skuzzle/cmp/authorization-server:${VERSION:?VERSION property not defined or empty}
     secrets:
