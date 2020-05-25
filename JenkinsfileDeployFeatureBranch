@@ -1,7 +1,7 @@
 pipeline {
   agent any
   parameters {
-    string(name: 'VERSION', defaultValue: 'latest', description: 'The docker image version to deploy')
+    gitParameter branchFilter: 'origin/(.*)', defaultValue: 'master', name: 'VERSION', type: 'PT_BRANCH'
   }
   environment {
     DOCKER_REGISTRY = credentials('github_docker_registry')
