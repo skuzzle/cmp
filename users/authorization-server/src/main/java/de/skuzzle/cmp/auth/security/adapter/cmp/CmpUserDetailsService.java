@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.auth.security;
+package de.skuzzle.cmp.auth.security.adapter.cmp;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import de.skuzzle.cmp.users.registration.RegisterUserService;
 import de.skuzzle.cmp.users.registration.RegisteredUser;
 
-class CmpUserDetailsService implements UserDetailsService {
+public class CmpUserDetailsService implements UserDetailsService {
 
     private final RegisterUserService registeredUserService;
 

@@ -1,39 +1,31 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
 <div th:fragment="login(user)" class="buttons">
-    <div class="field has-addons" th:if="!${user.isLoggedIn()}">
+    <div class="field" th:if="!${user.isLoggedIn()}">
         <p class="control">
-            <a class="button is-primary is-small" 
-                    th:href="@{/oauth2/authorization/cmp}">
-                <span class="icon">
-                    <i class="fab fa-google"></i>
-                </span>
-                <span>Login with Google</span>
+            <a class="button is-primary is-small" th:href="@{/oauth2/authorization/cmp}">
+                <span>Login</span> 
                 <span class="icon has-tooltip-bottom has-tooltip-multiline"
                     data-tooltip="countmy.pizza works perfectly fine without logging in! Logging in provides you a nice dashboard of the counters you created.">
                     <i class="fas fa-info-circle"></i>
                 </span>
             </a>
         </p>
-        <p class="control is-hidden-mobile">
-            <span class="button is-static is-small">to enjoy all features</span>
-        </p> 
     </div>
 </div>
- 
+
 <th:block th:fragment="logout(user)">
-    <div class="buttons"  th:if="${user.isLoggedIn()}">
-        <span class="button is-static is-small" th:text="'Hi ' + ${user.name}">
-        </span>
-    
+    <div class="buttons" th:if="${user.isLoggedIn()}">
+        <span class="button is-static is-small" th:text="'Hi ' + ${user.name}"> </span>
+
         <form th:replace="this :: logoutForm"></form>
     </div>
 </th:block>
 
-<form th:fragment="logoutForm" class="is-inline"  th:action="@{/logout}">
+<form th:fragment="logoutForm" class="is-inline" th:action="@{/logout}">
     <input th:replace="this :: submitLogout"></input>
 </form>
 
 <input th:fragment="submitLogout" type="submit" class="button is-danger is-outlined is-small" value="Logout"></input>
 
- </html>
+</html>

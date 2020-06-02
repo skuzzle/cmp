@@ -1,4 +1,4 @@
-package de.skuzzle.cmp.auth.security;
+package de.skuzzle.cmp.auth.security.adapter.cmp;
 
 import java.time.LocalDateTime;
 import java.util.Collection;

@@ -46,6 +46,7 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .oauth2Login(oauth2Login -> oauth2Login
                         // TODO: the referer stuff is problematic with the oauth flow
                         // .successHandler(successHandler)
+
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(oauth2UserService())))
                 .oauth2Client(oauth2Client -> oauth2Client.authorizationCodeGrant())
