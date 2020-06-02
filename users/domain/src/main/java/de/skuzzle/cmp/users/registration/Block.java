@@ -29,6 +29,14 @@ public final class Block {
         return new Block(nowUTC, blockedUntilUTC, reason);
     }
 
+    public LocalDateTime getBlockedSinceUTC() {
+        return this.blockedSinceUTC;
+    }
+
+    public String reason() {
+        return this.reason;
+    }
+
     public boolean isBlocked(LocalDateTime nowUTC) {
         return blockedUntilUTC != null && nowUTC.isBefore(blockedUntilUTC);
     }

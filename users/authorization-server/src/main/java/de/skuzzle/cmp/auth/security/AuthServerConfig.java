@@ -3,6 +3,7 @@ package de.skuzzle.cmp.auth.security;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,10 @@ import org.springframework.security.oauth2.provider.approval.UserApprovalHandler
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+
+import de.skuzzle.cmp.auth.security.adapter.AdditionalClaimsJwtAccessTokenConverter;
+import de.skuzzle.cmp.auth.security.adapter.cmp.CmpTokenAdapter;
+import de.skuzzle.cmp.auth.security.adapter.google.GoogleTokenAdapter;
 
 @Configuration
 @Import({ AuthorizationServerEndpointsConfiguration.class })
@@ -83,7 +88,6 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
         };
     }
 
-    // TODO: read from keystore file
     @Bean
     public KeyPair keypair() {
         try {
@@ -101,7 +105,8 @@ public class AuthServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
-        final JwtAccessTokenConverter converter = new CmpJwtAccessTokenEnhancer();
+        final JwtAccessTokenConverter converter = new AdditionalClaimsJwtAccessTokenConverter(
+                Arrays.asList(new CmpTokenAdapter(), new GoogleTokenAdapter()));
         converter.setKeyPair(keypair());
         return converter;
     }

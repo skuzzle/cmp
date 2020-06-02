@@ -1,39 +1,41 @@
-package de.skuzzle.cmp.auth.security;
+package de.skuzzle.cmp.auth.security.adapter;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
-public abstract class AdditionalClaimsJwtAccessTokenConverter<T extends UserDetails> extends JwtAccessTokenConverter {
+public class AdditionalClaimsJwtAccessTokenConverter extends JwtAccessTokenConverter {
 
-    private static final Logger logger = LoggerFactory.getLogger(AdditionalClaimsJwtAccessTokenConverter.class);
+    private final Collection<TokenAdapter> adapters;
 
-    protected abstract Class<T> getUserDetailsType();
-
-    protected abstract Map<String, Object> getAdditionalClaims(T userDetails);
+    public AdditionalClaimsJwtAccessTokenConverter(Collection<TokenAdapter> adapters) {
+        this.adapters = adapters;
+    }
 
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
         final DefaultOAuth2AccessToken token = prepareToken(accessToken, authentication);
         final Object principal = authentication.getUserAuthentication().getPrincipal();
 
-        if (getUserDetailsType().isInstance(principal)) {
-            final Map<String, Object> additionalClaims = getAdditionalClaims(getUserDetailsType().cast(principal));
-            token.getAdditionalInformation().putAll(additionalClaims);
-        } else {
-            logger.debug(
-                    "Principal '{}' wasn't elligible for being enhanced with additional claims because it is not of type {}",
-                    principal, getUserDetailsType());
-        }
+        final Map<String, Object> claims = selectAdapterFor(principal)
+                .map(adapter -> adapter.getAdditionalClaims(principal))
+                .orElseThrow(
+                        () -> new IllegalStateException("Could not enhance token claims for principal: " + principal));
+        token.getAdditionalInformation().putAll(claims);
 
         return super.enhance(token, authentication);
+    }
+
+    private Optional<TokenAdapter> selectAdapterFor(Object principal) {
+        return adapters.stream()
+                .filter(adapter -> adapter.getPrincipalType().isInstance(principal))
+                .findFirst();
     }
 
     private DefaultOAuth2AccessToken prepareToken(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
