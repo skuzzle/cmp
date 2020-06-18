@@ -26,8 +26,8 @@
         <!-- Injected into spring boot properties for being displayed on ui and metrics -->
         <application.version.number>${project.version}</application.version.number>
 
-        <!-- Java compiler Arguments -->
-        <compiler-args>--enable-preview</compiler-args>
+        <!-- Java compiler/jvm Arguments -->
+        <enable-preview>--enable-preview</enable-preview>
 
         <!-- Runtime / Tools Versions -->
         <java.version>15</java.version>
@@ -288,12 +288,25 @@
             <plugins>
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.1</version>
                     <configuration>
                         <parameters>true</parameters>
                         <compilerArgs>
-                            ${compiler-args}
+                            ${enable-preview}
                         </compilerArgs>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <configuration>
+                        <parameters>true</parameters>
+                        <argLine>${enable-preview}</argLine>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <configuration>
+                        <parameters>true</parameters>
+                        <argLine>${enable-preview}</argLine>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -322,6 +335,7 @@
                         </to>
                         <container>
                             <jvmFlags>
+                                <jvmFlag>${enable-preview}</jvmFlag>
                                 <jvmFlag>-XX:+UnlockExperimentalVMOptions</jvmFlag>
                                 <jvmFlag>-XX:+UseJVMCICompiler</jvmFlag>
                                 <jvmFlag>-XX:MaxRAMPercentage=70.0</jvmFlag>
