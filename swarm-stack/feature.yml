@@ -91,15 +91,12 @@ services:
     - 'spring.security.oauth2.client.registration.cmp.client-secret=abc'
     - 'spring.security.oauth2.client.registration.cmp.redirectUri=https://${VERSION}.countmy.pizza/login/oauth2/code/cmp'
     - 'spring.security.oauth2.client.provider.cmp.tokenUri=https://${VERSION}acc.countmy.pizza/oauth/token'
-    - 'spring.security.oauth2.client.provider.cmp.authorizationUri=hhttps://${VERSION}acc.countmy.pizza/oauth/authorize'
+    - 'spring.security.oauth2.client.provider.cmp.authorizationUri=https://${VERSION}acc.countmy.pizza/oauth/authorize'
     - 'spring.security.oauth2.client.provider.cmp.userInfoUri=https://${VERSION}acc.countmy.pizza/oauth/check_token'
     - 'spring.security.oauth2.client.provider.cmp.jwkSetUri=https://${VERSION}acc.countmy.pizza/.well-known/jwks.json'
     # backend
     - 'cmp.backend.url=http://cmpbackend:8080'
     - 'cmp.backend.healthUrl=http://cmpbackend:9000'
-    # Spring oauth
-    - 'spring.security.oauth2.client.registration.google.client-id=$${fileContents;/run/secrets/cmp_google_client_id}'
-    - 'spring.security.oauth2.client.registration.google.client-secret=$${fileContents;/run/secrets/cmp_google_client_secret}'
     # ui
     - 'cmp.ui.testSystemWarning=true'
     # redis session management
