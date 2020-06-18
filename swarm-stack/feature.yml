@@ -3,6 +3,8 @@ services:
   cmpauthorization:
     image: docker.pkg.github.com/skuzzle/cmp/authorization-server:${VERSION:?VERSION property not defined or empty}
     secrets:
+    - cmp_google_client_secret
+    - cmp_google_client_id
     - cmp_redis_pw
     environment:
     # database
@@ -18,6 +20,9 @@ services:
     # logging
     - 'logging.level.org.springframework.security=DEBUG'
     - 'logging.level.de.skuzzle.cmp.common.http=TRACE'
+    # Spring oauth
+    - 'spring.security.oauth2.client.registration.google.client-id=$${fileContents;/run/secrets/cmp_google_client_id}'
+    - 'spring.security.oauth2.client.registration.google.client-secret=$${fileContents;/run/secrets/cmp_google_client_secret}'
     healthcheck:
       test: ["CMD", "curl" , "-f", "http://localhost:9000/actuator/health"]
       interval: 20s
@@ -169,6 +174,10 @@ volumes:
   data:
 
 secrets:
+  cmp_google_client_id:
+    external: true
+  cmp_google_client_secret:
+    external: true
   cmp_redis_pw:
     external: true
   
