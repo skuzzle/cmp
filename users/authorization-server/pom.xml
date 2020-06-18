@@ -15,10 +15,6 @@
     <artifactId>authorization-server</artifactId>
     <name>authorization-server</name>
 
-    <properties>
-        <jib.skip>false</jib.skip>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>de.skuzzle.cmp.users</groupId>
