@@ -12,6 +12,7 @@
     <groupId>de.skuzzle.cmp.application</groupId>
     <artifactId>backend-server</artifactId>
     <name>backend-server</name>
+    <packaging>jar</packaging>
 
     <properties>
         <jib.skip>false</jib.skip>

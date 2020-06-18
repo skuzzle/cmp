@@ -10,6 +10,7 @@
     </parent>
     <artifactId>frontend-server</artifactId>
     <name>frontend-server</name>
+    <packaging>jar</packaging>
 
     <properties>
         <jib.skip>false</jib.skip>
@@ -45,7 +46,7 @@
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
         </dependency>
-        
+
         <!-- Spring Boot runtime relevant -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
