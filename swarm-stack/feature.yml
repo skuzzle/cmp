@@ -170,6 +170,10 @@ volumes:
   data:
 
 secrets:
+  cmp_google_client_id:
+    external: true
+  cmp_google_client_secret:
+    external: true
   cmp_redis_pw:
     external: true
   
