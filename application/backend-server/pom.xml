@@ -14,6 +14,10 @@
     <artifactId>backend-server</artifactId>
     <name>backend-server</name>
     <packaging>jar</packaging>
+    
+    <properties>
+        <jib.skip>false</jib.skip>
+    </properties>
 
     <dependencies>
         <dependency>

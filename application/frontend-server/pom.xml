@@ -14,6 +14,10 @@
     <name>frontend-server</name>
     <packaging>jar</packaging>
 
+    <properties>
+        <jib.skip>false</jib.skip>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>de.skuzzle.cmp.ui</groupId>
