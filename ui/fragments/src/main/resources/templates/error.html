@@ -8,14 +8,13 @@
         <div class="columns is-centered">
             <div class="column is-one-third">
                 <h1 class="title">Daaamn...</h1>
-                <h2 class="subtitle" th:if="${statusCode}" th:text="${statusCode.toString()}"></h2>
-
                 <div class="content">
                     <p class="is-size-3">
                         <i class="fas fa-dizzy"></i> Something went very wrong. We have recorded this error and will investigate shortly
                     </p>
                 </div>
-                
+
+                <h2 class="subtitle" th:if="${statusCode}" th:text="${statusCode.toString()}"></h2>
                 
                 <form th:action="@{/logout}" method="post">
                     <div class="field is-grouped">
