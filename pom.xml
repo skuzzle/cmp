@@ -43,6 +43,9 @@
         <equalsverifier.version>3.1.13</equalsverifier.version>
         <logstash-encoder.version>6.3</logstash-encoder.version>
         <josejwt.version>8.11</josejwt.version>
+
+        <!-- per default, skip docker build. Will be enabled in sub modules -->
+        <jib.skip>true</jib.skip>
     </properties>
 
     <distributionManagement>
