@@ -25,7 +25,7 @@ public class TallyWebApplication {
     }
 
     @Autowired
-    private void reportVersionNumber(@Value("${version.number}") String versionNumber) {
+    private void reportVersionNumber(@Value("${cmp.version}") String versionNumber) {
         LOGGER.info("Running version '{}'", versionNumber);
         Metrics.counter("version_name", "version", versionNumber).increment();
     }
