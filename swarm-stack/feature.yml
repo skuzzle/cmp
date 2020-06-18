@@ -39,7 +39,7 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.${VERSION}acc.tls=true"
         - "traefik.http.routers.${VERSION}acc.tls.certresolver=le"
-        - "traefik.http.routers.${VERSION}acc.rule=Host(`${VERSION:?VERSION not set or empty}accounts.countmy.pizza`)"
+        - "traefik.http.routers.${VERSION}acc.rule=Host(`${VERSION}acc.countmy.pizza`)"
         - "traefik.http.routers.${VERSION}acc.entrypoints=https"
         - "traefik.http.services.${VERSION}acc.loadbalancer.server.port=8080"
       replicas: 1
@@ -116,7 +116,7 @@ services:
         - "traefik.enable=true"
         - "traefik.http.routers.${VERSION}.tls=true"
         - "traefik.http.routers.${VERSION}.tls.certresolver=le"
-        - "traefik.http.routers.${VERSION}.rule=Host(`${VERSION:?VERSION not set or empty}.countmy.pizza`)"
+        - "traefik.http.routers.${VERSION}.rule=Host(`${VERSION}.countmy.pizza`)"
         - "traefik.http.routers.${VERSION}.entrypoints=https"
         - "traefik.http.services.${VERSION}.loadbalancer.server.port=8080"
       replicas: 1

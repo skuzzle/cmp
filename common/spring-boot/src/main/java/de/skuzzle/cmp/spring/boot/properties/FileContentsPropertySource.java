@@ -19,7 +19,7 @@ public class FileContentsPropertySource extends PropertySource<FileSystem> {
 
     private static final Logger log = LoggerFactory.getLogger(FileContentsPropertySource.class);
 
-    public static final String FILE_CONTENT_PROPERTY_SOURCE_NAME = "fileContents";
+    public static final String FILE_CONTENT_PROPERTY_SOURCE_NAME = "fileContents;";
 
     // property format: fileContent;'bytes'|['string'[;<encoding>]];<path
     private static final String PREFIX = "fileContents;";
