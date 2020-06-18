@@ -26,8 +26,11 @@
         <!-- Injected into spring boot properties for being displayed on ui and metrics -->
         <application.version.number>${project.version}</application.version.number>
 
+        <!-- Java compiler Arguments -->
+        <compiler-args>--enable-preview</compiler-args>
+
         <!-- Runtime / Tools Versions -->
-        <java.version>13</java.version>
+        <java.version>14</java.version>
         <node.version>v12.16.2</node.version>
         <npm.version>6.14.4</npm.version>
 
@@ -41,9 +44,6 @@
         <equalsverifier.version>3.1.13</equalsverifier.version>
         <logstash-encoder.version>6.3</logstash-encoder.version>
         <josejwt.version>8.11</josejwt.version>
-
-        <!-- per default, skip docker build. Will be enabled in sub modules -->
-        <jib.skip>true</jib.skip>
     </properties>
 
     <distributionManagement>
@@ -287,6 +287,16 @@
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <configuration>
+                        <parameters>true</parameters>
+                        <compilerArgs>
+                            ${compiler-args}
+                        </compilerArgs>
+                    </configuration>
+                </plugin>
                 <plugin>
                     <groupId>org.springframework.cloud</groupId>
                     <artifactId>spring-cloud-contract-maven-plugin</artifactId>
