@@ -32,7 +32,7 @@
         <npm.version>6.14.4</npm.version>
 
         <!-- Dependency Versions -->
-        <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
+        <spring-cloud.version>Hoxton.SR5</spring-cloud.version>
         <spring-metrics.version>0.5.1.RELEASE</spring-metrics.version>
         <spring-mobile-device.version>2.0.0.M3</spring-mobile-device.version>
         <spring-security-jwt.version>1.1.0.RELEASE</spring-security-jwt.version>
@@ -290,12 +290,12 @@
                 <plugin>
                     <groupId>org.springframework.cloud</groupId>
                     <artifactId>spring-cloud-contract-maven-plugin</artifactId>
-                    <version>2.2.2.RELEASE</version>
+                    <version>2.2.3.RELEASE</version>
                 </plugin>
                 <plugin>
                     <groupId>com.google.cloud.tools</groupId>
                     <artifactId>jib-maven-plugin</artifactId>
-                    <version>1.8.0</version>
+                    <version>2.4.0</version>
                     <configuration>
                         <from>
                             <image>openjdk:14</image>
@@ -315,6 +315,7 @@
                             <jvmFlags>
                                 <jvmFlag>-XX:+UnlockExperimentalVMOptions</jvmFlag>
                                 <jvmFlag>-XX:+UseJVMCICompiler</jvmFlag>
+                                <jvmFlag>-XX:MaxRAMPercentage=70.0</jvmFlag>
                             </jvmFlags>
                         </container>
                     </configuration>
