@@ -95,6 +95,7 @@
         <module>users/domain</module>
         <module>users/authorization-server</module>
         <module>users/rest</module>
+        <module>users/frontend</module>
 
         <!-- Common -->
         <module>common/rest-auth</module>
@@ -214,10 +215,15 @@
             </dependency>
             <dependency>
                 <groupId>de.skuzzle.cmp.users</groupId>
-                <artifactId>users-security</artifactId>
+                <artifactId>authorization-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>de.skuzzle.cmp.users</groupId>
+                <artifactId>users-frontend</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            
             <!-- UI -->
             <dependency>
                 <groupId>de.skuzzle.cmp.ui</groupId>

@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.MDC;
 import org.springframework.http.HttpHeaders;
 
+import com.google.common.base.Preconditions;
+
 import de.skuzzle.cmp.common.random.RandomKey;
 
 public final class RequestId {
@@ -23,6 +25,11 @@ public final class RequestId {
             MDC.put(REQUEST_ID_MDC, requestId);
         }
         return requestId;
+    }
+    
+    public static void overrideWith(String requestId) {
+        Preconditions.checkArgument(requestId != null, "requestId must not be null");
+        MDC.put(REQUEST_ID_MDC, requestId);
     }
 
     public static HttpHeaders addToHeaders(HttpHeaders headerMap) {

@@ -25,6 +25,10 @@
             <artifactId>users-domain</artifactId>
         </dependency>
         <dependency>
+            <groupId>de.skuzzle.cmp.users</groupId>
+            <artifactId>users-frontend</artifactId>
+        </dependency>
+        <dependency>
             <groupId>de.skuzzle.cmp.common</groupId>
             <artifactId>time</artifactId>
         </dependency>

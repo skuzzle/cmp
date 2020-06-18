@@ -12,7 +12,9 @@ import {
     faShareAlt,
     faTags,
     faCommentAlt,
-    faListOl
+    faListOl,
+    faEnvelope,
+    faUser
 } from '@fortawesome/free-solid-svg-icons'
 
 
@@ -34,6 +36,8 @@ library.add(
     faTags,
     faCommentAlt,
     faListOl,
+    faEnvelope,
+    faUser,
     
     // regular
     faEdit,
