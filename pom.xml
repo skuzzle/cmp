@@ -275,6 +275,7 @@
                             <jvmFlags>
                                 <jvmFlag>-XX:+UnlockExperimentalVMOptions</jvmFlag>
                                 <jvmFlag>-XX:+UseJVMCICompiler</jvmFlag>
+                                <jvmFlag>-XX:MaxRAMPercentage=70.0</jvmFlag>
                             </jvmFlags>
                         </container>
                     </configuration>
