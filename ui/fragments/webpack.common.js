@@ -14,11 +14,6 @@ module.exports = {
         filename: '[name].js',
         path: path.resolve(__dirname, 'target/classes/static'),
     },
-    optimization: {
-    	splitChunks: {
-    		chunks: 'all',
-    	}
-    },
 
     plugins: [new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
