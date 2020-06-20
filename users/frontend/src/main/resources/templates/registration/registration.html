@@ -22,13 +22,14 @@
         </div>
     </section>
 
+
     <section class="section">
         <div class="container">
             <form method="POST" th:action="@{/registration}">
                 <div class="field">
                     <label class="label">Username</label>
                     <div class="control has-icons-left">
-                        <input name="name" class="input" type="text" placeholder="Username" required>
+                        <input name="name" class="input" type="text" placeholder="Username" th:value="${name}" required>
                         <span class="icon is-small is-left">
                             <i class="fas fa-user"></i>
                         </span>
@@ -39,7 +40,7 @@
                 <div class="field">
                     <label class="label">Email</label>
                     <div class="control has-icons-left">
-                        <input name="email" class="input" type="email" placeholder="Email" required> 
+                        <input name="email" class="input" type="email" placeholder="Email" th:value="${email}" required> 
                         <span class="icon is-small is-left">
                             <i class="fas fa-envelope"></i>
                         </span>
@@ -50,7 +51,7 @@
                 <div class="field">
                     <label class="label">Password</label>
                     <div class="control">
-                        <input name="password" class="input" type="password" placeholder="Password" autocomplete="new-password" required> 
+                        <input name="password" class="input" type="password" placeholder="Password" th:value="${password}" autocomplete="new-password" required> 
                     </div>
                 </div>
                 <div class="field">
@@ -68,7 +69,14 @@
             </form>
         </div>
     </section>
-
+    
+    <section class="section" th:if="${failure}">
+        <div class="container">
+            <div class="notification is-danger is-radiusless is-marginless is-size-7">
+                <span th:text="${failureMessage}"></span>
+            </div>
+        </div>
+    </section>
     <footer th:replace="fragments/footer :: footer"></footer>
 </body>
 </html>
