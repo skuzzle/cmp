@@ -1,12 +1,46 @@
 @charset "utf-8";
 
 // Customized from default:  1.25rem 2.5rem 1.25rem 1.5rem 
-$notification-padding: 0.75rem 2.5rem 0.75rem 1.5rem;
+$notification-padding-ltr: 0.75rem 2.5rem 0.75rem 1.5rem;
+$notification-padding-rtl: 0.75rem 2.5rem 0.75rem 1.5rem;
 
-@import '../../../node_modules/bulma/bulma';
-@import '../../../node_modules/bulma-timeline/src/sass/index';
-@import '../../../node_modules/bulma-tagsinput/src/sass/index.sass';
-@import '../../../node_modules/bulma-tooltip/src/sass/index.sass';
+// bulma partial imports
+@import "bulma/sass/utilities/_all.sass";
+@import "bulma/sass/base/_all.sass";
+
+@import "bulma/sass/helpers/color.sass";
+//@import "bulma/sass/helpers/float.sass";
+//@import "bulma/sass/helpers/other.sass";
+//@import "bulma/sass/helpers/overflow.sass";
+//@import "bulma/sass/helpers/position.sass";
+@import "bulma/sass/helpers/spacing.sass";
+@import "bulma/sass/helpers/typography.sass";
+//@import "bulma/sass/helpers/visibility.sass";
+
+@import "bulma/sass/layout/section.sass";
+@import "bulma/sass/layout/footer.sass";
+
+@import "bulma/sass/grid/columns.sass";
+@import "bulma/sass/elements/button.sass";
+@import "bulma/sass/elements/box.sass";
+@import "bulma/sass/elements/container.sass";
+@import "bulma/sass/elements/content.sass";
+@import "bulma/sass/elements/notification.sass";
+@import "bulma/sass/elements/icon.sass";
+@import "bulma/sass/elements/tag.sass";
+@import "bulma/sass/elements/title.sass";
+@import "bulma/sass/elements/other.sass";
+@import "bulma/sass/components/navbar.sass";
+@import "bulma/sass/components/card.sass";
+@import "bulma/sass/components/level.sass";
+@import "bulma/sass/components/panel.sass";
+@import "bulma/sass/form/shared.sass";
+@import "bulma/sass/form/input-textarea.sass";
+@import "bulma/sass/form/tools.sass";
+
+@import "bulma-timeline/src/sass/index";
+@import "bulma-tagsinput/src/sass/index";
+@import "bulma-tooltip/src/sass/index";
 
 
 .is-size-0 {
