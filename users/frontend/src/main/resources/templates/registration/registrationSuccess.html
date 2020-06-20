@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head(socialCard=${socialCard})">
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tally</title>
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+<script defer src="https://code.jquery.com/jquery-3.4.0.slim.min.js"></script>
+
+<link rel="stylesheet" href="../../../../target/classes/static/css/main.css" />
+<link rel="shortcut icon" type="image/x-icon" href="@{/favicon.ico}" />
+</head>
+<body>
+
+    <section class="hero is-dark">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">Sign up for countmy.pizza</h1>
+                <h2 class="subtitle">Signing up gives you a lot of advantages - for free</h2>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="content">
+                Your registration was successful. We have sent you an E-Mail with a confirmation link. 
+            </div>
+        </div>
+    </section>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>
