@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head(socialCard=${socialCard})">
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tally</title>
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+<script defer src="https://code.jquery.com/jquery-3.4.0.slim.min.js"></script>
+
+<link rel="stylesheet" href="../../../../target/classes/static/css/main.css" />
+<link rel="shortcut icon" type="image/x-icon" href="@{/favicon.ico}" />
+</head>
+<body>
+    <section class="hero is-dark">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">Log in to countmy.pizza</h1>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column  is-one-quarter">
+                    <div class="box is-radiusless">
+                        <div class="content">
+                            <a class="button is-primary" th:href="@{/oauth2/authorization/google}">
+                                <span class="icon">
+                                    <i class="fab fa-google"></i>
+                                </span>
+                                <span>Login with Google</span> 
+                            </a>
+                        </div>
+                        <div class="content">
+                        ... or login with your dedicated countmy.pizza account (coming soon)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    </section>
+</body>
+</html>
