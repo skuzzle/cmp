@@ -194,11 +194,13 @@ public class TallySheet implements ShallowTallySheet {
         this.userId = userId.toString();
     }
 
-    public boolean deleteIncrementWithId(String incrementId) {
+    public void deleteIncrementWithId(String incrementId) {
         Preconditions.checkArgument(incrementId != null, "incrementId must not be null");
         final boolean removed = this.increments.removeIf(increment -> increment.getId().equals(incrementId));
+        if (!removed) {
+            throw new IncrementNotAvailableException(incrementId);
+        }
         this.totalCount = increments.size();
-        return removed;
     }
 
     public void incrementWith(TallyIncrement increment) {

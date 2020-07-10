@@ -177,16 +177,14 @@ public class TallyService {
         final TallySheet tallySheet = tallyRepository.findByAdminKey(adminKey)
                 .orElseThrow(() -> new TallySheetNotAvailableException(adminKey));
 
-        if (tallySheet.deleteIncrementWithId(incrementId)) {
-            final UserId user = tallySheet.getAssignedUser();
-            Metrics.counter("delete_increment", "user_id", user.getMetricsId()).increment();
-            log.info("User {} deleted an increment for counter named {}. New total count: {}", user.getMetricsId(),
-                    tallySheet.getName(), tallySheet.getTotalCount());
+        tallySheet.deleteIncrementWithId(incrementId);
 
-            tallyRepository.save(tallySheet);
-        } else {
-            throw new IncrementNotAvailableException(incrementId);
-        }
+        final UserId user = tallySheet.getAssignedUser();
+        Metrics.counter("delete_increment", "user_id", user.getMetricsId()).increment();
+        log.info("User {} deleted an increment for counter named {}. New total count: {}", user.getMetricsId(),
+                tallySheet.getName(), tallySheet.getTotalCount());
+
+        tallyRepository.save(tallySheet);
     }
 
 }
