@@ -32,9 +32,9 @@ services:
         failure_action: rollback
       resources:
         limits:
-          memory: 1024M
-        reservations:
           memory: 256M
+        reservations:
+          memory: 128M
 
   cmpfrontend:
     image: docker.pkg.github.com/skuzzle/cmp/frontend-server:${VERSION:?VERSION property not defined or empty}
@@ -71,9 +71,9 @@ services:
         failure_action: rollback
       resources:
         limits:
-          memory: 1024M
-        reservations:
           memory: 256M
+        reservations:
+          memory: 128M
     healthcheck:
       test: ["CMD", "curl" , "-f", "http://localhost:9000/actuator/health"]
       interval: 20s
