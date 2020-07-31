@@ -29,7 +29,7 @@ class TurbolinksView extends RedirectView {
 
     @Override
     public boolean isRedirectView() {
-        return false;
+        return !options.respondWithXhrJavaScript();
     }
 
     @Override

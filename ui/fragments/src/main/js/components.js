@@ -13,10 +13,10 @@ Turbolinks.start();
 import bulmaTagsinput from 'bulma-tagsinput';
 bulmaTagsinput.attach();
 
-import { attachConfirmation } from './components/confirmable.js';
-attachConfirmation();
+import { confirmAction } from './components/confirmable.js';
 
-import { postAjax, getAjax } from './components/postajax.js';
+import { postAjax, getAjax } from './components/ajax.js';
 
+global.confirmAction = confirmAction;
 global.postAjax = postAjax;
 global.getAjax = getAjax;

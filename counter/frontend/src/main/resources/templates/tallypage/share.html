@@ -28,8 +28,8 @@
                         
                         <a href="#" 
                             th:href="@{/counter/{adminKey}?action=deleteShare&shareId={shareId}(adminKey=${adminKey}, shareId=${share.shareId})}" 
-                            onclick="getAjax(event)"
-                            class="delete confirmable" 
+                            onclick="confirmAction(event, getAjax)"
+                            class="delete" 
                             title="Delete this share link. The counter will be no longer accessible using this id."></a>
                     </span>
                     
@@ -93,8 +93,8 @@
                 </label>
                 <a href="#" 
                     th:href="@{/counter/{adminKey}?action=deleteShare&shareId={shareId}(adminKey=${adminKey}, shareId=${share.shareId})}" 
-                    onclick="getAjax(event)"
-                    class="delete confirmable" 
+                    onclick="confirmAction(event, getAjax)"
+                    class="delete" 
                     title="Delete this share link. The counter will be no longer accessible using this id."></a>
             </fieldset>
         </div>
