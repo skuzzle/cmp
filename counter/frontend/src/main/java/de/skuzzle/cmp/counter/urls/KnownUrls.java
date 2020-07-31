@@ -1,8 +1,11 @@
 package de.skuzzle.cmp.counter.urls;
 
+import org.springframework.web.servlet.View;
 import org.springframework.web.util.UriTemplate;
 
 import com.google.common.base.Preconditions;
+
+import de.skuzzle.cmp.turbolinks.TurboRedirect;
 
 public enum KnownUrls {
     VIEW_COUNTER(KnownUrls.VIEW_COUNTER_STRING),
@@ -25,5 +28,9 @@ public enum KnownUrls {
 
     public String redirectResolve(Object... params) {
         return "redirect:" + resolve(params);
+    }
+
+    public View turboRedirectResolve(Object... params) {
+        return TurboRedirect.to(resolve(params));
     }
 }

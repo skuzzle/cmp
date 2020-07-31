@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 
 import com.google.common.base.Preconditions;
 
@@ -105,7 +106,7 @@ public class TallyPageController {
     }
 
     @PostMapping(path = KnownUrls.VIEW_COUNTER_STRING, params = "action=increment")
-    public String incrementTallySheet(
+    public View incrementTallySheet(
             @PathVariable String key,
             @RequestParam String description,
             @RequestParam String tags,
@@ -116,16 +117,16 @@ public class TallyPageController {
                 LocalDateTime.of(incrementDateUTC, LocalTime.now()), tagSet);
 
         client.increment(key, increment);
-        return KnownUrls.VIEW_COUNTER.redirectResolve(key);
+        return KnownUrls.VIEW_COUNTER.turboRedirectResolve(key);
     }
 
     @GetMapping(path = KnownUrls.VIEW_COUNTER_STRING, params = "action=addTag")
-    public String addFilterTag(@PathVariable String key) {
-        return "redirect:/counter/" + key;
+    public View addFilterTag(@PathVariable String key) {
+        return KnownUrls.VIEW_COUNTER.turboRedirectResolve(key);
     }
 
     @GetMapping(path = KnownUrls.INCREMENT_COUNTER_STRING, params = "action=updateIncrement")
-    public String updateIncrement(
+    public View updateIncrement(
             @PathVariable String key,
             @PathVariable String incrementId,
             @RequestParam String description,
@@ -136,43 +137,43 @@ public class TallyPageController {
         final RestTallyIncrement increment = RestTallyIncrement.createWithId(incrementId, description,
                 LocalDateTime.of(incrementDateUTC, LocalTime.now()), tagSet);
         client.updateIncrement(key, increment);
-        return KnownUrls.VIEW_COUNTER.redirectResolve(key);
+        return KnownUrls.VIEW_COUNTER.turboRedirectResolve(key);
     }
 
     @GetMapping(path = KnownUrls.VIEW_COUNTER_STRING, params = "action=assignToCurrentUser")
-    public String assignToCurrentUser(@PathVariable String key) {
+    public View assignToCurrentUser(@PathVariable String key) {
         Preconditions.checkState(this.currentUser.isLoggedIn(), "Can't assign to current user: user not logged in");
         client.assignToCurrentUser(key);
-        return KnownUrls.VIEW_COUNTER.redirectResolve(key);
+        return KnownUrls.VIEW_COUNTER.turboRedirectResolve(key);
     }
 
     @GetMapping(path = KnownUrls.INCREMENT_COUNTER_STRING, params = "action=delete")
-    public String deleteIncrement(@PathVariable String key, @PathVariable String incrementId) {
+    public View deleteIncrement(@PathVariable String key, @PathVariable String incrementId) {
         client.deleteIncrement(key, incrementId);
-        return KnownUrls.VIEW_COUNTER.redirectResolve(key);
+        return KnownUrls.VIEW_COUNTER.turboRedirectResolve(key);
     }
 
     @GetMapping(path = KnownUrls.VIEW_COUNTER_STRING, params = { "action=changeName", "newName" })
-    public String changeTitle(@PathVariable String key, @RequestParam String newName) {
+    public View changeTitle(@PathVariable String key, @RequestParam String newName) {
         client.changeName(key, newName);
-        return KnownUrls.VIEW_COUNTER.redirectResolve(key);
+        return KnownUrls.VIEW_COUNTER.turboRedirectResolve(key);
     }
 
     @PostMapping(path = KnownUrls.VIEW_COUNTER_STRING, params = { "action=share" })
-    public String addShare(@PathVariable String key,
+    public View addShare(@PathVariable String key,
             @RequestParam(name = "showIncrements", defaultValue = "false") boolean showIncrements,
             @RequestParam(name = "showIncrementTags", defaultValue = "false") boolean showIncrementTags,
             @RequestParam(name = "showIncrementDescription", defaultValue = "false") boolean showIncrementDescription) {
 
         client.addShare(key, RestShareInformation.create(showIncrements, showIncrementTags, showIncrementDescription));
-        return KnownUrls.VIEW_COUNTER.redirectResolve(key);
+        return KnownUrls.VIEW_COUNTER.turboRedirectResolve(key);
     }
 
     @GetMapping(path = KnownUrls.VIEW_COUNTER_STRING, params = { "action=deleteShare", "shareId" })
-    public String deleteShare(@PathVariable String key,
+    public View deleteShare(@PathVariable String key,
             @RequestParam("shareId") String shareId) {
 
         client.deleteShare(key, shareId);
-        return KnownUrls.VIEW_COUNTER.redirectResolve(key);
+        return KnownUrls.VIEW_COUNTER.turboRedirectResolve(key);
     }
 }

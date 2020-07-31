@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 
 import de.skuzzle.cmp.auth.TallyUser;
 import de.skuzzle.cmp.counter.client.BackendClient;
@@ -22,6 +23,7 @@ import de.skuzzle.cmp.counter.client.RestTallyResponse;
 import de.skuzzle.cmp.counter.client.RestTallySheet;
 import de.skuzzle.cmp.counter.client.RestTallySheetsReponse;
 import de.skuzzle.cmp.counter.graphs.Graph;
+import de.skuzzle.cmp.turbolinks.TurboRedirect;
 import de.skuzzle.cmp.ui.socialcard.SocialCard;
 
 @Controller
@@ -85,15 +87,15 @@ public class FrontpageController {
     }
 
     @PostMapping("/counter/_create")
-    public String createTallySheet(@RequestParam("name") String name) {
+    public View createTallySheet(@RequestParam("name") String name) {
         final RestTallyResponse response = client.createNewTallySheet(name);
-        return "redirect:/counter/" + response.getTallySheet().getAdminKey();
+        return TurboRedirect.to("/counter/" + response.getTallySheet().getAdminKey());
     }
 
     @GetMapping(path = "/counter/{key}", params = "action=delete")
-    public String deleteTallySheet(@PathVariable String key) {
+    public View deleteTallySheet(@PathVariable String key) {
         client.deleteTallySheet(key);
-        return "redirect:/";
+        return TurboRedirect.to("/");
     }
 
 }

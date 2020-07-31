@@ -64,7 +64,8 @@
             <div class="column">
                 <div class="card" th:if="${tally.admin}">
                     <div class="card-content has-text-centered">  
-                        <form method="post" 
+                        <form method="post"
+                                onsubmit="postAjax(event)"
                                 th:action="@{/counter/{adminKey}?action=increment(adminKey=${tally.adminKey})}" 
                                 th:insert="tallypage/createItem :: formContent(${tagCloud.names})">
                         </form>

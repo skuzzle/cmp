@@ -36,6 +36,7 @@
         "bulma-timeline": "^3.0.4",
         "bulma-tooltip": "^3.0.2",
         "chart.js": "^2.9.3",
-        "slim-js": "^4.0.7"
+        "slim-js": "^4.0.7",
+        "turbolinks": "^5.2.0"
     }
 }

@@ -28,6 +28,7 @@
                         
                         <a href="#" 
                             th:href="@{/counter/{adminKey}?action=deleteShare&shareId={shareId}(adminKey=${adminKey}, shareId=${share.shareId})}" 
+                            onclick="getAjax(event)"
                             class="delete confirmable" 
                             title="Delete this share link. The counter will be no longer accessible using this id."></a>
                     </span>
@@ -36,7 +37,7 @@
             </th:block>
             
             <div class="panel-block">
-                <form th:action="@{/counter/{adminKey}?action=share(adminKey=${adminKey})}" method="post">
+                <form th:action="@{/counter/{adminKey}?action=share(adminKey=${adminKey})}" method="post" onsubmit="postAjax(event)">
                     <button class="button is-info is-small">
                         <span class="icon is-small">
                             <i class="fas fa-share-alt"></i>
@@ -92,12 +93,13 @@
                 </label>
                 <a href="#" 
                     th:href="@{/counter/{adminKey}?action=deleteShare&shareId={shareId}(adminKey=${adminKey}, shareId=${share.shareId})}" 
+                    onclick="getAjax(event)"
                     class="delete confirmable" 
                     title="Delete this share link. The counter will be no longer accessible using this id."></a>
             </fieldset>
         </div>
         
-        <form th:action="@{/counter/{adminKey}?action=share(adminKey=${adminKey})}" method="post">
+        <form th:action="@{/counter/{adminKey}?action=share(adminKey=${adminKey})}" method="post" onsubmit="postAjax(event)">
             <button class="button is-info is-small">
                 <span class="icon is-small">
                     <i class="fas fa-share-alt"></i>

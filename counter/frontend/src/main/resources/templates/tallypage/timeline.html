@@ -46,7 +46,8 @@
                 
                 <div th:each="increment : ${day.increments}" class="notification box is-primary has-background-white has-text-black">
                     <a th:if="${timeline.admin}" 
-                        th:href="@{/counter/{adminKey}/increment/{incrementId}?action=delete(adminKey=${timeline.adminKey}, incrementId=${increment.id})}" 
+                        th:href="@{/counter/{adminKey}/increment/{incrementId}?action=delete(adminKey=${timeline.adminKey}, incrementId=${increment.id})}"
+                        onclick="getAjax(event)"
                         class="delete confirmable" 
                         title="Delete this increment..."></a>
                         
