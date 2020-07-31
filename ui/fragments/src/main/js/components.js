@@ -11,7 +11,9 @@ import Turbolinks from 'turbolinks';
 Turbolinks.start();
 
 import bulmaTagsinput from 'bulma-tagsinput';
-bulmaTagsinput.attach();
+document.addEventListener('turbolinks:load', () => {
+    bulmaTagsinput.attach();
+});
 
 import { confirmAction } from './components/confirmable.js';
 
