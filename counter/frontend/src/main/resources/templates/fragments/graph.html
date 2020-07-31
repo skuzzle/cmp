@@ -3,7 +3,7 @@
 <th:block th:fragment="graph(data)" th:with="graphId=${#strings.randomAlphanumeric(10)}, showYAxis=${showYAxis?:true}">
     <canvas class="is-tally-graph-new" th:id="${graphId}"></canvas>
     <script th:inline="javascript">
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('turbolinks:load', () => {
         new Chart(document.getElementById([[${graphId}]]), {
             type: 'line',
             data: [[${data}]],
