@@ -1,11 +1,11 @@
 package de.skuzzle.cmp.counter.tallypage;
 
+import static de.skuzzle.cmp.turbolinks.TurboRedirectResultMatchers.turboRedirectToUrlTemplate;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlTemplate;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -96,7 +96,7 @@ public class TallyPageControllerTest {
         final String adminKey = clientConfigurer.getAdminKey();
 
         mockMvc.perform(get("/counter/{key}?action=assignToCurrentUser", adminKey))
-                .andExpect(redirectedUrlTemplate(KnownUrls.VIEW_COUNTER_STRING, adminKey));
+                .andExpect(turboRedirectToUrlTemplate(KnownUrls.VIEW_COUNTER_STRING, adminKey));
         clientConfigurer.verify().assignToCurrentUser(adminKey);
     }
 
@@ -107,7 +107,7 @@ public class TallyPageControllerTest {
         final String adminKey = clientConfigurer.getAdminKey();
         mockMvc.perform(post("/counter/{adminKey}?action=share", adminKey)
                 .content("showIncrements=on&showIncrementTags=on&showIncrementDescription=on"))
-                .andExpect(redirectedUrlTemplate(KnownUrls.VIEW_COUNTER_STRING, adminKey));
+                .andExpect(turboRedirectToUrlTemplate(KnownUrls.VIEW_COUNTER_STRING, adminKey));
     }
 
     @Test
@@ -118,7 +118,7 @@ public class TallyPageControllerTest {
         final String shareId = "";
 
         mockMvc.perform(get("/counter/{adminKey}?action=deleteShare&shareId={shareId}", adminKey, shareId))
-                .andExpect(redirectedUrlTemplate(KnownUrls.VIEW_COUNTER_STRING, adminKey));
+                .andExpect(turboRedirectToUrlTemplate(KnownUrls.VIEW_COUNTER_STRING, adminKey));
     }
 
     @Test
@@ -129,7 +129,7 @@ public class TallyPageControllerTest {
         final String adminKey = clientConfigurer.getAdminKey();
 
         mockMvc.perform(get("/counter/{adminKey}/increment/{incrementId}?action=delete", adminKey, incrementId))
-                .andExpect(redirectedUrlTemplate(KnownUrls.VIEW_COUNTER_STRING, adminKey));
+                .andExpect(turboRedirectToUrlTemplate(KnownUrls.VIEW_COUNTER_STRING, adminKey));
 
         clientConfigurer.verify().deleteIncrement(adminKey, incrementId);
     }
@@ -146,7 +146,7 @@ public class TallyPageControllerTest {
         mockMvc.perform(
                 post("/counter/{adminKey}?action=increment&description={description}&tags={tags}&incrementDateUTC={incrementDateUTC}",
                         adminKey, description, tags, incrementDateUTC))
-                .andExpect(redirectedUrlTemplate("/counter/{adminKey}", adminKey));
+                .andExpect(turboRedirectToUrlTemplate("/counter/{adminKey}", adminKey));
 
         final ArgumentCaptor<RestTallyIncrement> incrementCaptor = ArgumentCaptor.forClass(RestTallyIncrement.class);
         clientConfigurer.verify().increment(eq(adminKey), incrementCaptor.capture());

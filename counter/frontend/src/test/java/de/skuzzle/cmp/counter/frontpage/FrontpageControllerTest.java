@@ -1,12 +1,12 @@
 package de.skuzzle.cmp.counter.frontpage;
 
+import static de.skuzzle.cmp.turbolinks.TurboRedirectResultMatchers.turboRedirectToUrl;
+import static de.skuzzle.cmp.turbolinks.TurboRedirectResultMatchers.turboRedirectToUrlTemplate;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlTemplate;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -73,7 +73,7 @@ public class FrontpageControllerTest {
                 .withAdminKey(expectedAdminKey)
                 .toResponse());
         mockMvc.perform(post("/counter/_create?name={name}", newCounterName))
-                .andExpect(redirectedUrlTemplate("/counter/{adminKey}", expectedAdminKey));
+                .andExpect(turboRedirectToUrlTemplate("/counter/{adminKey}", expectedAdminKey));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class FrontpageControllerTest {
 
         final String adminKeyToDelete = "adminKey";
         mockMvc.perform(get("/counter/{adminKey}?action=delete", adminKeyToDelete))
-                .andExpect(redirectedUrl("/"));
+                .andExpect(turboRedirectToUrl("/"));
         verify(tallyClient).deleteTallySheet("adminKey");
     }
 }

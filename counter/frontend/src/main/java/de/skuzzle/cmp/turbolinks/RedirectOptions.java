@@ -22,6 +22,11 @@ public class RedirectOptions {
         return this;
     }
 
+    public RedirectOptions withoutJavaScriptResponse() {
+        this.xhrResponse = false;
+        return this;
+    }
+
     public boolean respondWithXhrJavaScript() {
         return this.xhrResponse;
     }

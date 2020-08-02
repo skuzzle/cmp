@@ -30,17 +30,18 @@ public class TurboRedirectTest {
 
         @GetMapping("/redirectGet")
         public View redirectGet() {
-            return TurboRedirect.to("/target");
+            return TurboRedirect.to("/target", RedirectOptions.defaultOptions().withoutJavaScriptResponse());
         }
 
         @GetMapping("/redirectGetWithParameter")
         public View redirectGetWithParameter() {
-            return TurboRedirect.to("/target?someParameter=1");
+            return TurboRedirect.to("/target?someParameter=1",
+                    RedirectOptions.defaultOptions().withoutJavaScriptResponse());
         }
 
         @PostMapping("/redirectPost")
         public View redirectPost() {
-            return TurboRedirect.to("/target", RedirectOptions.defaultOptions().withJavaScriptResponse());
+            return TurboRedirect.to("/target", RedirectOptions.defaultOptions());
         }
     }
 
@@ -76,16 +77,11 @@ public class TurboRedirectTest {
     }
 
     @Test
-    void testNormalPostRequest() throws Exception {
-        throw new IllegalStateException("tbd;;;;;");
-    }
-
-    @Test
     void testTurbolinksXhrPostRequest() throws Exception {
         mockmvc.perform(post("/redirectPost"))
                 .andExpect(content().contentType("text/JavaScript"))
                 .andExpect(content().string(Matchers.containsString("Turbolinks.clearCache()")))
-                .andExpect(content().string(Matchers.containsString("Turbolinks.visit('/target'")));
+                .andExpect(content().string(Matchers.containsString("Turbolinks.visit(\"/target\"")));
     }
 
     private static RequestPostProcessor turbolinksReferrer(String referrer) {
