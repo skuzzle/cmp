@@ -7,6 +7,7 @@ export default class extends Controller {
     }
     
     connect() {
-        new BulmaTagsInput(this.tagsTarget);
+        BulmaTagsInput.attach(this.tagsTarget);
+        //new BulmaTagsInput(this.tagsTarget);
     }
 }
