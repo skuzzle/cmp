@@ -1,5 +1,6 @@
 import { utcToInputValue } from './utc.js'
-import bulmaTagsinput from 'bulma-tagsinput';
+import BulmaTagsInput from '@creativebulma/bulma-tagsinput';
+
 import { Slim } from 'slim-js';
 
 Slim.tag(
@@ -89,7 +90,7 @@ class EditIncrement extends Slim {
 	}
 	
 	startEdit() {
-		this.once || new bulmaTagsinput(this.tagsInput, {});
+		this.once || new BulmaTagsInput(this.tagsInput, {});
 		this.once = true;
 		this.editing = true;
 	}

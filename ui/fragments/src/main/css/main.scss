@@ -30,6 +30,7 @@ $notification-padding-rtl: 0.75rem 2.5rem 0.75rem 1.5rem;
 @import "bulma/sass/elements/tag.sass";
 @import "bulma/sass/elements/title.sass";
 @import "bulma/sass/elements/other.sass";
+@import "bulma/sass/components/dropdown.sass";
 @import "bulma/sass/components/navbar.sass";
 @import "bulma/sass/components/card.sass";
 @import "bulma/sass/components/level.sass";
@@ -39,7 +40,7 @@ $notification-padding-rtl: 0.75rem 2.5rem 0.75rem 1.5rem;
 @import "bulma/sass/form/tools.sass";
 
 @import "bulma-timeline/src/sass/index";
-@import "bulma-tagsinput/src/sass/index";
+@import '@creativebulma/bulma-tagsinput/src/sass/index';
 @import "bulma-tooltip/src/sass/index";
 
 

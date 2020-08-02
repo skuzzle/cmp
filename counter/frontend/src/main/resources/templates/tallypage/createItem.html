@@ -40,9 +40,15 @@
 
     <div class="field">
         <div class="control is-expanded">
-            <input list="tagnames" class="input" name="tags" type="tags" placeholder="Add some tags" 
-                    title="Comma separated tags, leading and trailing spaces will be trimmed (optional)" 
-                    autofocus="true"  >
+            <input
+                data-target="tagsinput.tags"
+                list="tagnames" 
+                class="input" 
+                name="tags" 
+                type="tags" 
+                placeholder="Add some tags" 
+                title="Comma separated tags, leading and trailing spaces will be trimmed (optional)" 
+                autofocus="true">
             <datalist id="tagnames">
                 <option th:each="tagName : ${tagNames}" th:value="${tagName}"></option>
             </datalist>

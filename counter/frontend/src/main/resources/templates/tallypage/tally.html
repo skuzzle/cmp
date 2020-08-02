@@ -48,7 +48,7 @@
                 </div>
                 
                 <div th:unless="${tagCloud.empty}" class="content">
-                    <div   class="card ">
+                    <div  class="card">
                         <div class="card-content has-text-centered">  
                             <div th:replace="tallypage/tagcloud :: tagCloud(${tagCloud})"></div>
                         </div>  
@@ -63,7 +63,7 @@
             
             <div class="column">
                 <div class="card" th:if="${tally.admin}">
-                    <div class="card-content has-text-centered">  
+                    <div class="card-content has-text-centered"  data-controller="tagsinput" >  
                         <form method="post"
                                 onsubmit="postAjax(event)"
                                 th:action="@{/counter/{adminKey}?action=increment(adminKey=${tally.adminKey})}" 
@@ -77,7 +77,6 @@
                 </div>
 
                 <div class="container" th:insert="tallypage/timeline:: timeline(${timeline}, ${mobile})"></div>
-                
             </div>
         </div>
     </div>

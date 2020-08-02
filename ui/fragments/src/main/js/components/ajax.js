@@ -1,12 +1,8 @@
 export function getAjax(event) {
     const url = event.currentTarget.getAttribute('href');
-    fetch(url, {
-        method: 'get'
-    })
+    fetch(url)
     .then(response => response.text())
     .then(body => {
-        console.log('Ceived response');
-        console.log(body);
         eval(body)
     });
     event.preventDefault();
@@ -21,8 +17,6 @@ export function postAjax(event) {
     })
     .then(response => response.text())
     .then(body => {
-        console.log('Ceived response');
-        console.log(body);
         eval(body)
     });
     

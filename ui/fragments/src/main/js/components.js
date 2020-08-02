@@ -7,16 +7,19 @@ import { EditableTitle } from './components/editable-title';
 import { DateLabel } from './components/date-label';
 import { InputNow } from './components/input-now';
 import { EditIncrement } from './components/edit-increment.js';
+
 import Turbolinks from 'turbolinks';
 Turbolinks.start();
 
-import bulmaTagsinput from 'bulma-tagsinput';
-document.addEventListener('turbolinks:load', () => {
-    bulmaTagsinput.attach();
-});
+import { Application } from "stimulus"
+import { definitionsFromContext } from "stimulus/webpack-helpers"
+
+const application = Application.start()
+const context = require.context("./controllers", true, /\.js$/)
+application.load(definitionsFromContext(context))
+
 
 import { confirmAction } from './components/confirmable.js';
-
 import { postAjax, getAjax } from './components/ajax.js';
 
 global.confirmAction = confirmAction;
