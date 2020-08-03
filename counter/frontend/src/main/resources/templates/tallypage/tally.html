@@ -63,7 +63,7 @@
             
             <div class="column">
                 <div class="card" th:if="${tally.admin}">
-                    <div class="card-content has-text-centered"  data-controller="tagsinput" >  
+                    <div class="card-content has-text-centered">  
                         <form method="post"
                                 onsubmit="postAjax(event)"
                                 th:action="@{/counter/{adminKey}?action=increment(adminKey=${tally.adminKey})}" 

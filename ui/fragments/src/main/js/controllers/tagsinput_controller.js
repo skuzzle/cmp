@@ -7,7 +7,9 @@ export default class extends Controller {
     }
     
     connect() {
-        BulmaTagsInput.attach(this.tagsTarget);
-        //new BulmaTagsInput(this.tagsTarget);
+        const lastTarget = this.tagsTargets[this.tagsTargets.length - 1];
+        console.log("Is this thing on?", this.tagsTargets)
+        //BulmaTagsInput.attach(this.tagsTarget);
+        //new BulmaTagsInput(lastTarget);
     }
 }

@@ -6,7 +6,7 @@
     
     
     document.addEventListener('turbolinks:load', () => {
-    	var ctx = document.getElementById([[${graphId}]]).getContext("2d");
+    	var ctx = document.getElementById([[${graphId}]]);
     	
         new Chart(ctx, {
             type: 'line',
