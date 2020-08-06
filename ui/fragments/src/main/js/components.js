@@ -3,7 +3,6 @@ import 'slim-js/directives/repeat.js'
 
 import '@webcomponents/webcomponentsjs/webcomponents-loader.js'
 
-import { EditableTitle } from './components/editable-title';
 import { InputNow } from './components/input-now';
 import { EditIncrement } from './components/edit-increment.js';
 

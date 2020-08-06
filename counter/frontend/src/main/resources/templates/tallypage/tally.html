@@ -34,9 +34,37 @@
         <div class="columns">
 
             <div class="column is-3 has-background-white-bis">
-                <editable-title th:text="${tally.name}" th:attr="name=${tally.name}, changeNameAction=@{/counter/{adminKey}?action=changeName&newName=(adminKey=${tally.adminKey})}, allowEdit=${tally.admin}">
-                    Pizza Count 2018
-                </editable-title>
+            
+            <div data-controller="edittitle" th:attr="data-edittitle-url=@{/counter/{adminKey}?action=changeName&newName=(adminKey=${tally.adminKey})}">
+                <h1 class="title is-capitalized" data-target="edittitle.title_section">
+                    <span th:text="${tally.name}" data-target="edittitle.title">Pizza Counter 2018</span>
+                    <a th:if="${tally.admin}" class="is-size-6" data-action="click->edittitle#startEditing" title="Change name">
+                        <span class="icon">
+                            <i class="fas fa-edit"></i>
+                        </span>
+                    </a>
+                </h1>
+                
+                <div class="is-hidden" data-target="edittitle.edit_section"  >
+                    <div class="field">
+                        <div class="control">
+                            <input data-target="edittitle.new_name" class="input" type="text" autofocus required title="Enter the new title" th:value="${tally.name}"></input>
+                        </div>
+                    </div>
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button class="button is-light is-small" data-action="click->edittitle#submitTitle" title="Change title">
+                                Save
+                            </button>
+                        </div>
+                        <div class="control">
+                            <button class="button is-outlined is-danger is-small" data-action="click->edittitle#finishEditing" title="Keep current title">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
                 <h2 class="subtitle">Total: <span th:text="${tally.totalCount}">10</span></h2>
                 
                 <div class="content">
