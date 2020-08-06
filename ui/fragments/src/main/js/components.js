@@ -4,19 +4,18 @@ import 'slim-js/directives/repeat.js'
 import '@webcomponents/webcomponentsjs/webcomponents-loader.js'
 
 import { EditableTitle } from './components/editable-title';
-import { DateLabel } from './components/date-label';
 import { InputNow } from './components/input-now';
 import { EditIncrement } from './components/edit-increment.js';
 
 import Turbolinks from 'turbolinks';
 Turbolinks.start();
 
-//import { Application } from "stimulus"
-//import { definitionsFromContext } from "stimulus/webpack-helpers"
+import { Application } from "stimulus"
+import { definitionsFromContext } from "stimulus/webpack-helpers"
 
-//const application = Application.start()
-//const context = require.context("./controllers", true, /\.js$/)
-//application.load(definitionsFromContext(context))
+const application = Application.start()
+const context = require.context("./controllers", true, /\.js$/)
+application.load(definitionsFromContext(context))
 
 
 import { confirmAction } from './components/confirmable.js';

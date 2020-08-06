@@ -40,7 +40,7 @@
             
             <div class="timeline-content">
                 <p class="heading">
-                    <date-label th:text="${day.dateUTC}">2019-09-09</date-label>
+                    <span data-controller="utcdate" th:text="${day.dateUTC}">2019-09-09</span>
                 </p>
                 <h6 th:unless="${day.increments.size() == 1}" class="subtitle is-6">Total: <span th:text="${day.totalCount}">10</span></h6>
                 
