@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:fragment="editTitle(counterMetaInfo)" >
+    <div data-controller="edittitle" th:attr="data-edittitle-url=@{/counter/{adminKey}?action=changeName&newName=(adminKey=${counterMetaInfo.adminKey})}">
+        <h1 class="title is-capitalized" data-target="edittitle.title_section">
+            <span th:text="${counterMetaInfo.name}" data-target="edittitle.title">Pizza Counter 2018</span>
+            <a th:if="${counterMetaInfo.admin}" class="is-size-6" data-action="click->edittitle#startEditing" title="Change name">
+                <span class="icon">
+                    <i class="fas fa-edit"></i>
+                </span>
+            </a>
+        </h1>
+        
+        <div class="is-hidden" data-target="edittitle.edit_section"  >
+            <div class="field">
+                <div class="control">
+                    <input data-target="edittitle.new_name" class="input" type="text" autofocus required title="Enter the new title" th:value="${counterMetaInfo.name}"></input>
+                </div>
+            </div>
+            <div class="field is-grouped">
+                <div class="control">
+                    <button class="button is-light is-small" data-action="click->edittitle#submitTitle" title="Change title">
+                        Save
+                    </button>
+                </div>
+                <div class="control">
+                    <button class="button is-outlined is-danger is-small" data-action="click->edittitle#finishEditing" title="Keep current title">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:fragment>
+</html>
