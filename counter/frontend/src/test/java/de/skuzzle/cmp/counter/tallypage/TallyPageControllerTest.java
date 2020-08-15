@@ -65,7 +65,8 @@ public class TallyPageControllerTest {
 
         mockMvc.perform(get(KnownUrls.VIEW_COUNTER_STRING, clientConfigurer.getAdminKey()))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("currentFilter", "tally", "timeline", "increments", "graph", "user",
+                .andExpect(model().attributeExists("currentFilter", "counterMetaInfo", "timeline", "increments",
+                        "graph", "user",
                         "tagCloud",
                         "version",
                         "socialCard", "shares"));
@@ -86,7 +87,8 @@ public class TallyPageControllerTest {
 
         mockMvc.perform(get(KnownUrls.VIEW_COUNTER_STRING, clientConfigurer.getAdminKey()))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("tally", "timeline", "increments", "graph", "user", "key"));
+                .andExpect(
+                        model().attributeExists("counterMetaInfo", "timeline", "increments", "graph", "user", "key"));
     }
 
     @Test

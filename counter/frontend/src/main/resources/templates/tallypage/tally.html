@@ -19,14 +19,14 @@
 </div>
 
 
-<div class="notification is-danger is-radiusless is-marginless is-size-7" th:if="${tally.admin}">
+<div class="notification is-danger is-radiusless is-marginless is-size-7" th:if="${counterMetaInfo.admin}">
     You are viewing your counter using its admin link. If you want to share this counter, create a new share link below. 
     <b>Everyone who knows the admin link will be able to update/delete this counter!</b>
 </div>
 
-<div class="notification is-warning is-radiusless is-marginless is-size-7" th:if="${tally.assignableToCurrentUser}">
+<div class="notification is-warning is-radiusless is-marginless is-size-7" th:if="${counterMetaInfo.assignableToCurrentUser}">
     The counter you are viewing has not been assigned to a user. Do you want to assign it to <span th:text="${user.name}">user name</span>?
-    <a th:href="@{/counter/{adminKey}?action=assignToCurrentUser(adminKey=${tally.adminKey})}" th:text="'Click here to assign to ' + ${user.name}">User Name</a>
+    <a th:href="@{/counter/{adminKey}?action=assignToCurrentUser(adminKey=${counterMetaInfo.adminKey})}" th:text="'Click here to assign to ' + ${user.name}">User Name</a>
 </div>
 
 <section class="section">
@@ -35,37 +35,9 @@
 
             <div class="column is-3 has-background-white-bis">
             
-            <div data-controller="edittitle" th:attr="data-edittitle-url=@{/counter/{adminKey}?action=changeName&newName=(adminKey=${tally.adminKey})}">
-                <h1 class="title is-capitalized" data-target="edittitle.title_section">
-                    <span th:text="${tally.name}" data-target="edittitle.title">Pizza Counter 2018</span>
-                    <a th:if="${tally.admin}" class="is-size-6" data-action="click->edittitle#startEditing" title="Change name">
-                        <span class="icon">
-                            <i class="fas fa-edit"></i>
-                        </span>
-                    </a>
-                </h1>
+                <th:block th:replace="tallypage/editTitle :: editTitle(${counterMetaInfo})"/>
                 
-                <div class="is-hidden" data-target="edittitle.edit_section"  >
-                    <div class="field">
-                        <div class="control">
-                            <input data-target="edittitle.new_name" class="input" type="text" autofocus required title="Enter the new title" th:value="${tally.name}"></input>
-                        </div>
-                    </div>
-                    <div class="field is-grouped">
-                        <div class="control">
-                            <button class="button is-light is-small" data-action="click->edittitle#submitTitle" title="Change title">
-                                Save
-                            </button>
-                        </div>
-                        <div class="control">
-                            <button class="button is-outlined is-danger is-small" data-action="click->edittitle#finishEditing" title="Keep current title">
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-                <h2 class="subtitle">Total: <span th:text="${tally.totalCount}">10</span></h2>
+                <h2 class="subtitle">Total: <span th:text="${counterMetaInfo.totalCount}">10</span></h2>
                 
                 <div class="content">
                     <div class="card ">
@@ -83,17 +55,17 @@
                     </div>  
                 </div>
                 
-                <div th:if="${tally.admin}" class="content">
-                    <th:block th:insert="tallypage/share :: renderShares(${shares}, ${tally.adminKey})"/>
+                <div th:if="${counterMetaInfo.admin}" class="content">
+                    <th:block th:insert="tallypage/share :: renderShares(${shares}, ${counterMetaInfo.adminKey})"/>
                 </div>
             </div>
             
             <div class="column">
-                <div class="card" th:if="${tally.admin}">
+                <div class="card" th:if="${counterMetaInfo.admin}">
                     <div class="card-content has-text-centered">  
                         <form method="post"
                                 onsubmit="postAjax(event)"
-                                th:action="@{/counter/{adminKey}?action=increment(adminKey=${tally.adminKey})}" 
+                                th:action="@{/counter/{adminKey}?action=increment(adminKey=${counterMetaInfo.adminKey})}" 
                                 th:insert="tallypage/createItem :: formContent(${tagCloud.names})">
                         </form>
                     </div>  

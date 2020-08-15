@@ -89,6 +89,7 @@ public class TallyPageController {
         final SocialCard socialCard = SocialCard.withTitle(tallySheet.getName())
                 .withDescription("Current count: " + tallySheet.getTotalCount())
                 .build();
+        final CounterMetaInfo counterMetaInfo = CounterMetaInfo.fromBackendResponse(response);
         final List<Share> shares = Share.fromBackendResponse(tallySheet);
 
         final boolean mobile = !device.isNormal();
@@ -96,7 +97,7 @@ public class TallyPageController {
                 "currentFilter", currentFilter,
                 "key", key,
                 "tagCloud", tagCloud,
-                "tally", tallySheet,
+                "counterMetaInfo", counterMetaInfo,
                 "timeline", timeline,
                 "increments", increments,
                 "graph", graph,
