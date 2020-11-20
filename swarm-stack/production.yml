@@ -25,7 +25,7 @@ services:
     - mongo
     - monitoring
     deploy:
-      replicas: 2
+      replicas: 1
       update_config:
         parallelism: 1
         order: start-first
@@ -64,7 +64,7 @@ services:
         traefik.http.routers.cmp.rule: Host(`countmy.pizza`)
         traefik.http.routers.cmp.entrypoints: https
         traefik.http.services.cmp.loadbalancer.server.port: 8080
-      replicas: 2
+      replicas: 1
       update_config:
         parallelism: 1
         order: start-first
