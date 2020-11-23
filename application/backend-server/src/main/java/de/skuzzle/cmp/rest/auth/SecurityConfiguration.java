@@ -29,7 +29,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowCredentials(true)
-                        .allowedOrigins(CorsConfiguration.ALL)
+                        .allowedOriginPatterns(CorsConfiguration.ALL)
                         .allowedMethods(CorsConfiguration.ALL)
                         .allowedHeaders(CorsConfiguration.ALL);
             }
