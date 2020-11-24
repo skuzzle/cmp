@@ -7,9 +7,11 @@ import java.util.stream.Collectors;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.catalina.connector.ResponseFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
@@ -23,13 +25,23 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestLoggingFilter.class);
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    private void doFilterWithLogging(HttpServletRequest request, HttpServletResponse response,
+            FilterChain filterChain)
             throws ServletException, IOException {
 
-        if (LOGGER.isDebugEnabled()) {
+        final long start = System.currentTimeMillis();
+        try {
+            filterChain.doFilter(request, response);
+        } finally {
+            final long duration = System.currentTimeMillis() - start;
+            final long bodySize = getBodySize(response);
+            final int contentLength = request.getContentLength();
             final StringBuilder logMessage = new StringBuilder()
-                    .append(request.getMethod()).append(" ").append(getUri(request));
+                    .append(response.getStatus()).append(" ")
+                    .append(contentLength >= 0 ? contentLength + " " : "")
+                    .append(request.getMethod()).append(" ").append(getUri(request))
+                    .append(" ").append(bodySize)
+                    .append(" ").append(duration).append("ms");
 
             if (LOGGER.isTraceEnabled()) {
                 logMessage
@@ -49,14 +61,40 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
                     logMessage.append(headerName).append(": ").append(headerValueString)
                             .append(System.lineSeparator());
                 });
+            }
 
+            if (LOGGER.isTraceEnabled()) {
                 LOGGER.trace("Request: {}", logMessage);
             } else {
                 LOGGER.debug("Request: {}", logMessage);
             }
         }
+    }
 
+    private void doFilterWithoutLogging(HttpServletRequest request, HttpServletResponse response,
+            FilterChain filterChain)
+            throws ServletException, IOException {
         filterChain.doFilter(request, response);
+    }
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
+        if (LOGGER.isDebugEnabled()) {
+            doFilterWithLogging(request, response, filterChain);
+        } else {
+            doFilterWithoutLogging(request, response, filterChain);
+        }
+
+    }
+
+    private long getBodySize(ServletResponse response) {
+        if (response instanceof ResponseFacade) {
+            final ResponseFacade rspo = (ResponseFacade) response;
+            return rspo.getContentWritten();
+        }
+        return -1L;
     }
 
     private String getUri(HttpServletRequest request) {
