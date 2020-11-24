@@ -20,7 +20,13 @@ class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         final SimpleUrlAuthenticationSuccessHandler successHandler = new SimpleUrlAuthenticationSuccessHandler();
-        successHandler.setUseReferer(true);
+        // https://github.com/skuzzle/cmp/issues/40
+        // If we setUseReferer(true) the user is again redirected to the Oauth provider's
+        // page because that is the referer of the last request that we received before
+        // authentication completes
+        // Need to find another way of redirecting the user to the page from where he came
+
+        // successHandler.setUseReferer(true);
 
         http.authorizeRequests()
                 .anyRequest().permitAll()
