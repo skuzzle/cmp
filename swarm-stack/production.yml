@@ -57,7 +57,7 @@ services:
 #    - 'spring.redis.host=cmpredis'
 #    - 'spring.redis.password=$${fileContents;/run/secrets/cmp_redis_pw}'
     # Logging
-    - 'logging.level.de.skuzzle.cmp.common.http=DEBUG'
+    - 'logging.level.de.skuzzle.cmp.common.http=TRACE'
     deploy:
       labels:
         traefik.enable: 'true'
