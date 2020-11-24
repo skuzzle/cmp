@@ -2,6 +2,7 @@ package de.skuzzle.cmp.common.http;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.stream.Collectors;
 
@@ -54,9 +55,17 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
                         .append(System.lineSeparator())
                         .append(System.lineSeparator());
 
-                logMessage.append("Headers: ").append(System.lineSeparator());
+                logMessage.append("Request Headers: ").append(System.lineSeparator());
                 request.getHeaderNames().asIterator().forEachRemaining(headerName -> {
                     final Enumeration<String> headerValues = request.getHeaders(headerName);
+                    final String headerValueString = getHeaderValueString(headerValues::asIterator);
+                    logMessage.append(headerName).append(": ").append(headerValueString)
+                            .append(System.lineSeparator());
+                });
+
+                logMessage.append("Response Headers: ").append(System.lineSeparator());
+                response.getHeaderNames().iterator().forEachRemaining(headerName -> {
+                    final Collection<String> headerValues = response.getHeaders(headerName);
                     final String headerValueString = getHeaderValueString(headerValues);
                     logMessage.append(headerName).append(": ").append(headerValueString)
                             .append(System.lineSeparator());
@@ -107,8 +116,8 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
         return requestURL.append("?").append(queryString).toString();
     }
 
-    private String getHeaderValueString(Enumeration<String> values) {
-        final String[] headerValues = Iterables.toArray(values::asIterator, String.class);
+    private String getHeaderValueString(Iterable<String> values) {
+        final String[] headerValues = Iterables.toArray(values, String.class);
         return Arrays.stream(headerValues)
                 .collect(Collectors.joining(", "));
     }
