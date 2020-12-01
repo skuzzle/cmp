@@ -27,7 +27,8 @@ public class RegistrationController {
 
     @GetMapping("/registration/confirm/{confirmationToken}")
     public String confirmRegistration(@PathVariable String confirmationToken) {
-        registerUserService.confirmRegistration(confirmationToken);
+        final RegisteredUser confirmRegistration = registerUserService.confirmRegistration(confirmationToken);
+        throw new UnsupportedOperationException("??");
 
     }
 
