@@ -35,11 +35,11 @@ org.springframework.cloud.contract.spec.Contract.make {
                     adminKey: 'adminKey1',
                     createDateUTC: $(
                         consumer('1987-09-12T11:11:00.123'),
-                        producer(matching(Helpers.ISO_DATE_TIME_WITH_NANOS))
+                        producer(regex(Helpers.ISO_DATE_TIME_WITH_NANOS))
                     ),
                     lastModifiedDateUTC: $(
                         consumer('1987-09-12T11:11:00.123'),
-                        producer(matching(Helpers.ISO_DATE_TIME_WITH_NANOS))
+                        producer(regex(Helpers.ISO_DATE_TIME_WITH_NANOS))
                     )
                 ]
             ]
