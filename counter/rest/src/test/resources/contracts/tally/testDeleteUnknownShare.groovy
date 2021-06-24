@@ -24,5 +24,6 @@ org.springframework.cloud.contract.spec.Contract.make {
     }
     response {
         status NOT_FOUND()
+        headers {}
     }
 }
