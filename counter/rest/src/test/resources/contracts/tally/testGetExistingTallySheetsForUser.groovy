@@ -39,7 +39,7 @@ org.springframework.cloud.contract.spec.Contract.make {
                     ),
                     lastModifiedDateUTC: $(
                         consumer('1987-09-12T11:11:00.123'),
-                        producer(regex(Helpers.ISO_DATE_TIME_WITH_NANOS))
+                        producer(matching(Helpers.ISO_DATE_TIME_WITH_NANOS))
                     )
                 ]
             ]
