@@ -35,7 +35,7 @@
         <spring-cloud.version>2020.0.3</spring-cloud.version>
         <spring-metrics.version>0.5.1.RELEASE</spring-metrics.version>
         <spring-mobile-device.version>2.0.0.M3</spring-mobile-device.version>
-        <resilience4j.version>1.6.1</resilience4j.version>
+        <resilience4j.version>1.7.0</resilience4j.version>
         <guava.version>30.1.1-jre</guava.version>
         <equalsverifier.version>3.1.13</equalsverifier.version>
         <logstash-encoder.version>6.3</logstash-encoder.version>
