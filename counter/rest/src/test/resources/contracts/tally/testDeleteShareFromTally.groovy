@@ -18,8 +18,10 @@ org.springframework.cloud.contract.spec.Contract.make {
     request {
         method DELETE()
         url '/adminKey1/share/shareId1'
+        headers {}
     }
     response {
         status OK()
+        headers {}
     }
 }

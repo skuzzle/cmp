@@ -11,6 +11,7 @@ org.springframework.cloud.contract.spec.Contract.make {
     }
     response {
         status BAD_REQUEST()
+        headers {}
         body([
             message: "Sheet with name 'existing2' is already assigned to: test:user1",
             origin: "UserAssignmentException"

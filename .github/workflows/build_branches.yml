@@ -8,14 +8,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Set Up JDK
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with: 
         java-version: 15
+        distribution: 'adopt'
+        architecture: x64
 
     - name: Cache m2
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: ~/.m2
         key: maven-cache
@@ -31,7 +33,7 @@ jobs:
       run: mvn -B versions:set -DnewVersion=${{ steps.extractBranch.outputs.branchName }}
 
     - name: Build with maven
-      run: mvn -B install
+      run: mvn -B -X install
 
     - name: Containerize
       run: mvn -B -DskipTests=true jib:build -Ddocker=true -Ddeploy.username=${{ secrets.deploy_username }} -Ddeploy.password=${{ secrets.deploy_password }}

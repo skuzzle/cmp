@@ -5,6 +5,7 @@ org.springframework.cloud.contract.spec.Contract.make {
     request {
         method PUT()
         url '/adminKey2/changeName/newName'
+        headers {}
     }
     response {
         status OK()
