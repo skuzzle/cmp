@@ -39,7 +39,9 @@
         <guava.version>30.1.1-jre</guava.version>
         <equalsverifier.version>3.1.13</equalsverifier.version>
         <logstash-encoder.version>6.3</logstash-encoder.version>
-
+        <!-- https://github.com/skuzzle/cmp/issues/90 Fixes problem with failing contract tests -->
+        <json-path.version>2.6.0</json-path.version>
+        
         <!-- per default, skip docker build. Will be enabled in sub modules -->
         <jib.skip>true</jib.skip>
     </properties>
