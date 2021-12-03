@@ -32,7 +32,7 @@
         <npm.version>6.14.4</npm.version>
 
         <!-- Dependency Versions -->
-        <spring-cloud.version>2020.0.4</spring-cloud.version>
+        <spring-cloud.version>2021.0.0-RC1</spring-cloud.version>
         <spring-metrics.version>0.5.1.RELEASE</spring-metrics.version>
         <spring-mobile-device.version>2.0.0.M3</spring-mobile-device.version>
         <resilience4j.version>1.7.0</resilience4j.version>
@@ -40,7 +40,6 @@
         <equalsverifier.version>3.1.13</equalsverifier.version>
         <logstash-encoder.version>6.6</logstash-encoder.version>
         <!-- https://github.com/skuzzle/cmp/issues/90 Fixes problem with failing contract tests -->
-        <json-path.version>2.6.0</json-path.version>
 
         <!-- per default, skip docker build. Will be enabled in sub modules -->
         <jib.skip>true</jib.skip>
