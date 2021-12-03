@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest(properties = "spring.mongodb.embedded.version=3.2.0")
 public class CollaborativeOrderServiceTest {
 
     private static final UserId SIMON = UserId.wellKnown("google", "Simon");
