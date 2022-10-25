@@ -63,7 +63,7 @@ services:
         traefik.enable: 'true'
         traefik.http.routers.cmp.tls: 'true'
         traefik.http.routers.cmp.tls.certresolver: le
-        traefik.http.routers.cmp.rule: Host(`countmy.pizza`)
+        traefik.http.routers.cmp.rule: Host(`countmy.pizza`, `cmp.skuzzle.de`)
         traefik.http.routers.cmp.entrypoints: https
         traefik.http.services.cmp.loadbalancer.server.port: 8080
       replicas: 1
